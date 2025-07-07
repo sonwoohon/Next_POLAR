@@ -1,25 +1,31 @@
 // 회원 정보 조회 및 수정 UseCase
-import { AuthRepository } from '../../domains/repositories/AuthRepository';
-import { CommonAuthEntity } from '../../domains/entities/CommonAuthEntity';
+import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
+import { IAuthRepository } from '@/app/(backend)/auths/domains/repositories/AuthRepository';
 
 // 모든 사용자 조회 UseCase
 export class GetAllUsersUseCase {
-  async execute(): Promise<any[]> {
-    return await AuthRepository.getAllUsers();
+  constructor(private readonly authRepository: IAuthRepository) {}
+
+  async execute(): Promise<CommonAuthEntity[]> {
+    return this.authRepository.getAllUsers();
   }
 }
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {
-  async execute(id: number): Promise<any | null> {
-    return await AuthRepository.getUserById(id);
+  constructor(private readonly authRepository: IAuthRepository) {}
+
+  async execute(id: number): Promise<CommonAuthEntity | null> {
+    return this.authRepository.getUserById(id);
   }
 }
 
 // 회원 정보 수정 UseCase
 export class UpdateUserInfoUseCase {
+  constructor(private readonly authRepository: IAuthRepository) {}
+
   async execute(id: number, updateData: any): Promise<any | null> {
-    return await AuthRepository.updateUser(id, updateData);
+    return this.authRepository.updateUser(id, updateData);
   }
 }
 
@@ -100,8 +106,29 @@ export interface UserProfileUpdate {
 
 // 공용 인증 Use Case
 export class CommonAuthUseCase {
+  constructor(private readonly authRepository: IAuthRepository) {}
+
+  // 모든 사용자 조회
+  async getAllUsers(): Promise<CommonAuthEntity[]> {
+    console.log('CommonAuthUseCase.getAllUsers() 호출됨');
+    const users = await this.authRepository.getAllUsers();
+    console.log('Repository에서 사용자 조회 완료:', users.length, '명');
+    return users;
+  }
+
+  // 특정 사용자 조회
+  async getUserById(id: number): Promise<CommonAuthEntity | null> {
+    return this.authRepository.getUserById(id);
+  }
+
   // 사용자 프로필 업데이트
-  static updateUserProfile(user: CommonAuthEntity, updates: UserProfileUpdate): CommonAuthEntity {
+  async updateUserProfile(id: number, updates: UserProfileUpdate): Promise<CommonAuthEntity> {
+    // 기존 사용자 조회
+    const existingUser = await this.authRepository.getUserById(id);
+    if (!existingUser) {
+      throw new ValidationError('사용자를 찾을 수 없습니다.');
+    }
+
     // 검증 수행
     if (updates.phone_number !== undefined) {
       UserValidator.validatePhoneNumber(updates.phone_number);
@@ -123,33 +150,36 @@ export class CommonAuthUseCase {
     }
 
     // 새로운 엔티티 생성 (불변성 유지)
-    return new CommonAuthEntity(
-      user.id,
-      updates.phone_number ?? user.phone_number,
-      user.password, // 비밀번호는 별도 메서드로 변경
-      updates.email ?? user.email,
-      updates.age ?? user.age,
-      updates.profile_img_url ?? user.profile_img_url,
-      updates.address ?? user.address,
-      updates.name ?? user.name,
-      user.created_at
+    const updatedUser = new CommonAuthEntity(
+      existingUser.id,
+      updates.phone_number ?? existingUser.phone_number,
+      existingUser.password, // 비밀번호는 별도 메서드로 변경
+      updates.email ?? existingUser.email,
+      updates.age ?? existingUser.age,
+      updates.profile_img_url ?? existingUser.profile_img_url,
+      updates.address ?? existingUser.address,
+      updates.name ?? existingUser.name,
+      existingUser.created_at
     );
+
+    // Repository를 통한 업데이트
+    const result = await this.authRepository.updateUser(id, updatedUser);
+    if (!result) {
+      throw new ValidationError('사용자 정보 수정에 실패했습니다.');
+    }
+
+    return result;
   }
 
   // 비밀번호 변경
-  static changePassword(user: CommonAuthEntity, newPassword: string): CommonAuthEntity {
+  async changePassword(id: number, newPassword: string): Promise<boolean> {
     UserValidator.validatePassword(newPassword);
     
-    return new CommonAuthEntity(
-      user.id,
-      user.phone_number,
-      newPassword,
-      user.email,
-      user.age,
-      user.profile_img_url,
-      user.address,
-      user.name,
-      user.created_at
-    );
+    const success = await this.authRepository.updatePassword(id, newPassword);
+    if (!success) {
+      throw new ValidationError('비밀번호 변경에 실패했습니다.');
+    }
+
+    return success;
   }
 }

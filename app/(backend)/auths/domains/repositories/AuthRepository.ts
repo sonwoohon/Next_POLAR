@@ -1,21 +1,30 @@
-import { SbAuthRepository } from '../../infrastructures/repositories/SbAuthRepository';
+import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
 
-export class AuthRepository {
-  // 모든 사용자 조회
-  static getAllUsers(): Promise<any[]> {
-    const sbAuthRepository = new SbAuthRepository();
-    return sbAuthRepository.getAllUsers();
+// Repository 인터페이스
+export interface IAuthRepository {
+  getAllUsers(): Promise<CommonAuthEntity[]>;
+  getUserById(id: number): Promise<CommonAuthEntity | null>;
+  updateUser(id: number, user: CommonAuthEntity): Promise<CommonAuthEntity | null>;
+  updatePassword(id: number, newPassword: string): Promise<boolean>;
+}
+
+// Repository 구현체
+export class AuthRepository implements IAuthRepository {
+  constructor(private readonly repository: IAuthRepository) {}
+
+  async getAllUsers(): Promise<CommonAuthEntity[]> {
+    return this.repository.getAllUsers();
   }
 
-  // 특정 사용자 조회
-  static getUserById(id: number): Promise<any | null> {
-    const sbAuthRepository = new SbAuthRepository();
-    return sbAuthRepository.getUserById(id);
+  async getUserById(id: number): Promise<CommonAuthEntity | null> {
+    return this.repository.getUserById(id);
   }
 
-  // 사용자 정보 수정
-  static updateUser(id: number, updateData: any): Promise<any | null> {
-    const sbAuthRepository = new SbAuthRepository();
-    return sbAuthRepository.updateUser(id, updateData);
+  async updateUser(id: number, user: CommonAuthEntity): Promise<CommonAuthEntity | null> {
+    return this.repository.updateUser(id, user);
+  }
+
+  async updatePassword(id: number, newPassword: string): Promise<boolean> {
+    return this.repository.updatePassword(id, newPassword);
   }
 } 

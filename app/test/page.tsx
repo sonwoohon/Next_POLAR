@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { CommonAuthUseCase, ValidationError } from '../(backend)/auths/applications/usecases/CommonAuthUseCase';
-import { CommonAuthEntity } from '../(backend)/auths/domains/entities/CommonAuthEntity';
+import { supabase } from '@/lib/supabase';
+import { CommonAuthUseCase, ValidationError } from '@/app/(backend)/auths/applications/usecases/CommonAuthUseCase';
+import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
 
 export default function TestPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -32,11 +32,13 @@ export default function TestPage() {
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from('users')
-        .select('*');
+      const response = await fetch('/api/auths');
       
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('사용자 목록을 불러오는데 실패했습니다.');
+      }
+      
+      const data = await response.json();
       setUsers(data || []);
     } catch (error) {
       console.error('사용자 조회 오류:', error);
@@ -58,35 +60,20 @@ export default function TestPage() {
       if (updateData.email !== '') updates.email = updateData.email;
       if (updateData.phone_number !== '') updates.phone_number = updateData.phone_number;
 
-      // 검증을 위한 임시 엔티티 생성
-      const tempUser = new CommonAuthEntity(
-        selectedUser.id,
-        selectedUser.phone_number || '',
-        selectedUser.password || '',
-        selectedUser.email,
-        selectedUser.age || 0,
-        selectedUser.profile_img_url || '',
-        selectedUser.address || '',
-        selectedUser.name,
-        new Date(selectedUser.created_at)
-      );
+      // API 호출
+      const response = await fetch(`/api/auths?id=${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates)
+      });
 
-      // CommonAuthUseCase를 사용한 검증
-      const validatedUser = CommonAuthUseCase.updateUserProfile(tempUser, updates);
+      const data = await response.json();
 
-      // Supabase 업데이트
-      const { data, error } = await supabase
-        .from('users')
-        .update({
-          name: validatedUser.name,
-          email: validatedUser.email,
-          phone_number: validatedUser.phone_number
-        })
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error(data.error || '사용자 정보 수정에 실패했습니다.');
+      }
       
       showErrors(['사용자 정보가 성공적으로 수정되었습니다!']);
       fetchUsers(); // 목록 새로고침
@@ -94,12 +81,7 @@ export default function TestPage() {
       setSelectedUser(null);
     } catch (error) {
       console.error('사용자 수정 오류:', error);
-      
-      if (error instanceof ValidationError) {
-        showErrors([error.message]);
-      } else {
-        showErrors(['사용자 정보 수정에 실패했습니다.']);
-      }
+      showErrors([error instanceof Error ? error.message : '사용자 정보 수정에 실패했습니다.']);
     } finally {
       setIsLoading(false);
     }
