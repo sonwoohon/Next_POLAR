@@ -1,4 +1,5 @@
 import { LoginDBResponse } from '../../LoginModel';
+import { LoginResponseDTO } from '../../applications/dtos/LoginResponse';
 import { LoginUserEntity } from '../../domains/entities/LoginUserEntity';
 
 export class LoginMapper {
@@ -7,14 +8,11 @@ export class LoginMapper {
     accessToken: string,
     refreshToken: string
   ) {
-    return {
-      user: {
-        id: user.id,
-        loginId: user.loginId,
-      },
+    return new LoginResponseDTO(
+      { id: user.id, loginId: user.loginId },
       accessToken,
-      refreshToken,
-    };
+      refreshToken
+    );
   }
 
   static toLoginUserEntity(user: LoginDBResponse) {

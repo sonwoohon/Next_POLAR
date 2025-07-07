@@ -1,8 +1,6 @@
-import { LoginDBResponse } from '../../LoginModel';
-
 export class LoginResponseDTO {
   constructor(
-    public user: LoginDBResponse,
+    public user: { id: number; loginId: string },
     public accessToken: string,
     public refreshToken: string
   ) {}

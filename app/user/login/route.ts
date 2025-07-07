@@ -1,4 +1,4 @@
-import { LoginRequestDTO } from '@/app/(backend)/auths/login/applications/dtos/LoginReqeust';
+import { LoginRequestDTO } from '@/app/(backend)/auths/login/applications/dtos/LoginRequest';
 import { LoginUseCase } from '@/app/(backend)/auths/login/applications/usecases/LoginUseCase';
 import { LoginRepository } from '@/app/(backend)/auths/login/infrastructures/LoginRepository';
 import { cookies } from 'next/headers';
