@@ -1,20 +1,13 @@
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
-import {
-  LoginRequest,
-  LoginResponseDTO,
-} from '../../domains/entities/login/LoginRequest';
-import { LoginRepositoryInterface } from '../repository/LoginRepositoryInterface';
-
-// 로그인 유스케이스 인터페이스
-export interface LoginUseCase {
-  execute(request: LoginRequest): Promise<LoginResponseDTO>;
-}
+import { LoginRequest, LoginResponseDTO } from '../../LoginModel';
+import { LoginRepositoryInterface } from '../../domains/repository/LoginRepositoryInterface';
+import { LoginMapper } from '../../infrastructures/mappers/LoginMapper';
 
 // 실제 구현
-export class LoginUseCaseImpl implements LoginUseCase {
-  private loginRepository: LoginRepositoryInterface | undefined;
+export class LoginUseCase {
+  private loginRepository: LoginRepositoryInterface;
 
-  constructor(loginRepository?: LoginRepositoryInterface) {
+  constructor(loginRepository: LoginRepositoryInterface) {
     this.loginRepository = loginRepository;
   }
 
@@ -30,13 +23,11 @@ export class LoginUseCaseImpl implements LoginUseCase {
     }
 
     // 2. 비밀번호 검증 (실제 서비스에서는 bcrypt 등으로 해시 비교)
-    // 여기서는 더미 비교
     if (user.password !== request.password) {
       throw new Error('비밀번호가 일치하지 않습니다.');
     }
 
     // 3. 토큰 발급
-
     const accessToken = generateAccessToken({
       id: user.id,
       loginId: user.loginId,
@@ -46,6 +37,7 @@ export class LoginUseCaseImpl implements LoginUseCase {
       loginId: user.loginId,
     });
 
-    return { user, accessToken, refreshToken };
+    // 비밀번호 등 민감 정보는 응답에서 제외
+    return LoginMapper.toLoginResponseDTO(user, accessToken, refreshToken);
   }
 }

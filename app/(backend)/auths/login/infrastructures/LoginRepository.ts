@@ -1,5 +1,6 @@
-import { supabase } from '../../../../lib/supabase';
-import { LoginDBResponse } from '../domains/entities/login/LoginRequest';
+import { supabase } from '../../../../../lib/supabase';
+import { LoginDBResponse } from '../LoginModel';
+import { LoginMapper } from './mappers/LoginMapper';
 
 // 로그인에 필요한 사용자 정보를 가져오는 Repository
 export class LoginRepository {
@@ -15,10 +16,10 @@ export class LoginRepository {
       .single();
     if (error || !data) return null;
 
-    return {
+    return LoginMapper.toLoginUserEntity({
       id: data.id,
       loginId: isPhone ? data.phone_number : data.email,
       password: data.password,
-    };
+    });
   }
 }
