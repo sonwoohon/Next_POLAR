@@ -1,11 +1,23 @@
-// Junior 사용자 인증 관련 유스케이스
-// 이 파일에는 Junior 사용자의 인증과 관련된 비즈니스 로직이 구현됩니다.
+// 회원 정보 조회 및 수정 UseCase
+import { AuthRepository } from '../../domains/repositories/AuthRepository';
 
-// 예시:
-// - RegisterJuniorUseCase: Junior 회원가입
-// - LoginJuniorUseCase: Junior 로그인
-// - LogoutJuniorUseCase: Junior 로그아웃
-// - UpdateJuniorProfileUseCase: Junior 프로필 수정
-// - ResetJuniorPasswordUseCase: Junior 비밀번호 재설정
+// 모든 사용자 조회 UseCase
+export class GetAllUsersUseCase {
+  async execute(): Promise<any[]> {
+    return await AuthRepository.getAllUsers();
+  }
+}
 
-// 유스케이스는 비즈니스 로직을 구현하며, 엔티티를 조작하고 비즈니스 규칙을 적용합니다.
+// 특정 사용자 조회 UseCase
+export class GetUserByIdUseCase {
+  async execute(id: number): Promise<any | null> {
+    return await AuthRepository.getUserById(id);
+  }
+}
+
+// 회원 정보 수정 UseCase
+export class UpdateUserInfoUseCase {
+  async execute(id: number, updateData: any): Promise<any | null> {
+    return await AuthRepository.updateUser(id, updateData);
+  }
+}
