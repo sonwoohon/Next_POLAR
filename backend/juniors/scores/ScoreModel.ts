@@ -1,11 +1,7 @@
+import { Category } from './domains/entities/Category';
+
 export interface ScoreDBResponse {
   scores: ScoreDBResponseSingle[];
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  point: number;
 }
 
 export interface ScoreDBResponseSingle {

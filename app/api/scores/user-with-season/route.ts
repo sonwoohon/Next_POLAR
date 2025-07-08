@@ -4,7 +4,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const authResult = await getAuthenticatedUser();
+  const authResult = getAuthenticatedUser(req);
   const userId = authResult.user?.id as number;
   const season = Number(req.nextUrl.searchParams.get('season'));
 
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
-    const scores = await scoreUseCase.executeByUserIdAndSeason(userId, season);
+    const scores = await scoreUseCase.executeByUserIdAndSeason(2, season);
     return NextResponse.json(scores);
   } catch (error) {
     console.error('점수 조회 중 오류:', error);

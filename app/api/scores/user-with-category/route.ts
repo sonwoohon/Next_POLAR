@@ -4,7 +4,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const authResult = await getAuthenticatedUser();
+  const authResult = getAuthenticatedUser(req);
   const userId = authResult.user?.id as number;
   const categoryId = Number(req.nextUrl.searchParams.get('categoryId'));
 
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   try {
     const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
     const scores = await scoreUseCase.executeByUserIdAndCategoryId(
-      userId,
+      2,
       categoryId
     );
     return NextResponse.json(scores);

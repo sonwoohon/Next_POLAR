@@ -29,93 +29,52 @@ categories (
 `;
 
 export class ScoreRepository implements ScoreRepositoryInterface {
-  async getScoresByUserId(userId: number): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('user_id', userId);
+  private async queryScores(filters: Record<string, number>): Promise<Score[]> {
+    let query = supabase.from('scores').select(scoreColumns);
+
+    for (const [key, value] of Object.entries(filters)) {
+      query = query.eq(key, value);
+    }
+
+    const { data, error } = await query;
 
     if (error || !data) return [];
 
     return ScoreMapper.toScoreEntity({
       scores: data,
     } as unknown as ScoreDBResponse);
+  }
+
+  async getScoresByUserId(userId: number): Promise<Score[]> {
+    return this.queryScores({ user_id: userId });
   }
 
   async getScoresByCategoryId(categoryId: number): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('category_id', categoryId);
-
-    if (error || !data) return [];
-
-    return ScoreMapper.toScoreEntity({
-      scores: data,
-    } as unknown as ScoreDBResponse);
+    return this.queryScores({ category_id: categoryId });
   }
 
   async getScoresBySeason(season: number): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('season', season);
-
-    if (error || !data) return [];
-
-    return ScoreMapper.toScoreEntity({
-      scores: data,
-    } as unknown as ScoreDBResponse);
+    return this.queryScores({ season });
   }
 
   async getScoresByUserIdAndSeason(
     userId: number,
     season: number
   ): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('user_id', userId)
-      .eq('season', season);
-
-    if (error || !data) return [];
-
-    return ScoreMapper.toScoreEntity({
-      scores: data,
-    } as unknown as ScoreDBResponse);
+    return this.queryScores({ user_id: userId, season });
   }
 
   async getScoresByCategoryIdAndSeason(
     categoryId: number,
     season: number
   ): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('category_id', categoryId)
-      .eq('season', season);
-
-    if (error || !data) return [];
-
-    return ScoreMapper.toScoreEntity({
-      scores: data,
-    } as unknown as ScoreDBResponse);
+    return this.queryScores({ category_id: categoryId, season });
   }
 
   async getScoresByUserIdAndCategoryId(
     userId: number,
     categoryId: number
   ): Promise<Score[]> {
-    const { data, error } = await supabase
-      .from('scores')
-      .select(`${scoreColumns}`)
-      .eq('user_id', userId)
-      .eq('category_id', categoryId);
-
-    if (error || !data) return [];
-
-    return ScoreMapper.toScoreEntity({
-      scores: data,
-    } as unknown as ScoreDBResponse);
+    return this.queryScores({ user_id: userId, category_id: categoryId });
   }
 }
