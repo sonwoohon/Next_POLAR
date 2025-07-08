@@ -8,15 +8,17 @@ export interface LoginRequest {
 
 export interface LoginDBResponse {
   id: number;
-  loginId: string;
+  loginId: string; // 실제 로그인에 사용된 ID (전화번호 또는 이메일)
   password: string;
 }
 
+export interface LoginResponseWithoutPassword {
+  id: number;
+  loginId: string;
+}
+
 export interface LoginResponseDTO {
-  user: {
-    id: number;
-    loginId: string;
-  };
+  user: LoginResponseWithoutPassword;
   accessToken: string;
   refreshToken: string;
 }

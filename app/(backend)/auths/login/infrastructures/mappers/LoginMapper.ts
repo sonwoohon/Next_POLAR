@@ -1,4 +1,7 @@
-import { LoginDBResponse } from '../../LoginModel';
+import {
+  LoginDBResponse,
+  LoginResponseWithoutPassword,
+} from '../../LoginModel';
 import { LoginResponseDTO } from '../../applications/dtos/LoginResponse';
 import { LoginUserEntity } from '../../domains/entities/LoginUserEntity';
 
@@ -8,8 +11,13 @@ export class LoginMapper {
     accessToken: string,
     refreshToken: string
   ) {
+    const LoginDataWithoutPassword: LoginResponseWithoutPassword = {
+      id: user.id,
+      loginId: user.loginId,
+    };
+
     return new LoginResponseDTO(
-      { id: user.id, loginId: user.loginId },
+      LoginDataWithoutPassword,
       accessToken,
       refreshToken
     );
