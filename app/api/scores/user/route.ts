@@ -4,10 +4,34 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const authResult = getAuthenticatedUser(req);
-  const userId = authResult.user?.id as number;
-  const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
-  const scores = await scoreUseCase.executeByUserId(2);
+  const authResult = await getAuthenticatedUser();
+  const userIdParam = authResult.user?.id as number;
 
-  return NextResponse.json(scores);
+  if (!userIdParam) {
+    return NextResponse.json(
+      { error: 'userId가 필요합니다.' },
+      { status: 400 }
+    );
+  }
+
+  const userId = Number(userIdParam);
+
+  if (isNaN(userId)) {
+    return NextResponse.json(
+      { error: '유효하지 않은 userId입니다.' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
+    const scores = await scoreUseCase.executeByUserId(userId);
+    return NextResponse.json(scores);
+  } catch (error) {
+    console.error('점수 조회 중 오류:', error);
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다.' },
+      { status: 500 }
+    );
+  }
 }
