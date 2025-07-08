@@ -13,3 +13,16 @@ export interface HelpListResponseDto {
   status: string;
   createdAt: Date;
 }
+
+// 헬프 상세 응답 DTO
+export interface HelpDetailResponseDto {
+  id: number;
+  seniorId: number;
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  category: number;
+  content: string;
+  status: string;
+  createdAt: Date;
+}
