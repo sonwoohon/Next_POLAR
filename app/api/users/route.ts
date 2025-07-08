@@ -2,19 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@supabase/supabase-js';
-import { SbAuthRepository } from '@/(backend)/uesrs/infrastructures/repositories/SbAuthRepository';
+import { SbAuthRepository } from '@/backend/uesrs/infrastructures/repositories/SbAuthRepository';
 import {
   CommonAuthUseCase,
   ValidationError,
-} from '@/(backend)/uesrs/applications/usecases/CommonAuthUseCase';
+} from '@/backend/uesrs/applications/usecases/CommonAuthUseCase';
 import {
   UserResponseDto,
   UserUpdateRequestDto,
-} from '@/(backend)/uesrs/applications/dtos/UserDtos';
+} from '@/backend/uesrs/applications/dtos/UserDtos';
 import {
   entitiesToUserResponseDtos,
   entityToUserResponseDto,
-} from '@/(backend)/uesrs/infrastructures/mappers/UserMapper';
+} from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
 export interface SignUpDto {
   name: string;
