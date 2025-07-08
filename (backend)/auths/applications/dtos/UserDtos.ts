@@ -4,9 +4,9 @@
 export interface UserUpdateRequestDto {
   name?: string;
   email?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   age?: number;
-  profile_img_url?: string;
+  profileImgUrl?: string;
   address?: string;
 }
 
@@ -17,9 +17,9 @@ export interface UserResponseDto {
   id: number;
   name: string;
   email: string;
-  phone_number: string;
+  phoneNumber: string;
   age: number;
-  profile_img_url: string;
+  profileImgUrl: string;
   address: string;
-  created_at: string;
+  createdAt: string;
 } 
