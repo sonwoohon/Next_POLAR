@@ -1,5 +1,5 @@
-// 공용 사용자 인증 엔티티
-export class CommonAuthEntity {
+// 로그인된 사용자 인증 엔티티
+export class CommonUserEntity {
   constructor(
     public readonly id: number, // int8 - 수정 불가능
     public phoneNumber: string, // varchar
@@ -25,4 +25,4 @@ export class CommonAuthEntity {
       createdAt: this.createdAt
     };
   }
-}
+} 
