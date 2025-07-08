@@ -14,32 +14,35 @@ import { ScoreRepositoryInterface } from '../../domains/repositories/ScoreReposi
 // 유스케이스는 비즈니스 로직을 구현하며, 엔티티를 조작하고 비즈니스 규칙을 적용합니다.
 
 export class GetUserScoresUseCase {
-  constructor(private rankRepository: ScoreRepositoryInterface) {}
+  constructor(private scoreRepository: ScoreRepositoryInterface) {}
 
   async executeByUserId(userId: number): Promise<Score[]> {
-    return await this.rankRepository.getScoresByUserId(userId);
+    return await this.scoreRepository.getScoresByUserId(userId);
   }
 
   async executeByCategoryId(categoryId: number): Promise<Score[]> {
-    return await this.rankRepository.getScoresByCategoryId(categoryId);
+    return await this.scoreRepository.getScoresByCategoryId(categoryId);
   }
 
   async executeBySeason(season: number): Promise<Score[]> {
-    return await this.rankRepository.getScoresBySeason(season);
+    return await this.scoreRepository.getScoresBySeason(season);
   }
 
   async executeByUserIdAndSeason(
     userId: number,
     season: number
   ): Promise<Score[]> {
-    return await this.rankRepository.getScoresByUserIdAndSeason(userId, season);
+    return await this.scoreRepository.getScoresByUserIdAndSeason(
+      userId,
+      season
+    );
   }
 
   async executeByCategoryIdAndSeason(
     categoryId: number,
     season: number
   ): Promise<Score[]> {
-    return await this.rankRepository.getScoresByCategoryIdAndSeason(
+    return await this.scoreRepository.getScoresByCategoryIdAndSeason(
       categoryId,
       season
     );
@@ -49,7 +52,7 @@ export class GetUserScoresUseCase {
     userId: number,
     categoryId: number
   ): Promise<Score[]> {
-    return await this.rankRepository.getScoresByUserIdAndCategoryId(
+    return await this.scoreRepository.getScoresByUserIdAndCategoryId(
       userId,
       categoryId
     );
