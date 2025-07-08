@@ -1,6 +1,8 @@
+import { LoginResponseWithoutPassword } from '../../LoginModel';
+
 export class LoginResponseDTO {
   constructor(
-    public user: { id: number; loginId: string },
+    public user: LoginResponseWithoutPassword,
     public accessToken: string,
     public refreshToken: string
   ) {}
