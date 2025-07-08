@@ -20,3 +20,19 @@ export function generateRefreshToken(payload: Record<string, unknown>) {
   }
   return jwt.sign(payload, REFRESH_SECRET as string, { expiresIn: '7d' });
 }
+
+export function verifyAccessToken(token: string): Record<string, unknown> {
+  try {
+    return jwt.verify(token, ACCESS_SECRET as string) as Record<string, unknown>;
+  } catch (error) {
+    throw new Error('유효하지 않은 액세스 토큰입니다.');
+  }
+}
+
+export function verifyRefreshToken(token: string): Record<string, unknown> {
+  try {
+    return jwt.verify(token, REFRESH_SECRET as string) as Record<string, unknown>;
+  } catch (error) {
+    throw new Error('유효하지 않은 리프레시 토큰입니다.');
+  }
+}

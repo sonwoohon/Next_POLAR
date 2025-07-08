@@ -8,6 +8,7 @@ import {
 import {
   entityToUserProfileResponseDto
 } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+import { verifyAccessToken } from '@/lib/jwt';
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createUseCase = () => {
@@ -15,11 +16,32 @@ const createUseCase = () => {
   return new CommonUserUseCase(repository);
 };
 
-// 쿠키에서 사용자 ID 추출 (임시 함수)
+// 쿠키에서 사용자 ID 추출
 const getUserIdFromCookie = (request: NextRequest): number | null => {
-  // 실제로는 쿠키에서 사용자 ID를 파싱하는 로직 필요
-  // 여기서는 임시로 고정된 사용자 ID를 반환한다고 가정
-  return 1; // 임시로 사용자 ID 1을 반환
+  try {
+    // 쿠키에서 access-token 가져오기
+    const accessToken = request.cookies.get('access-token')?.value;
+    
+    if (!accessToken) {
+      console.log('[API] access-token 쿠키가 없습니다.');
+      return null;
+    }
+
+    // JWT 토큰 검증 및 페이로드 추출
+    const payload = verifyAccessToken(accessToken);
+    const userId = payload.userId as number;
+    
+    if (!userId) {
+      console.log('[API] 토큰에서 userId를 찾을 수 없습니다.');
+      return null;
+    }
+
+    console.log(`[API] 토큰에서 추출한 사용자 ID: ${userId}`);
+    return userId;
+  } catch (error) {
+    console.error('[API] 토큰 검증 중 오류:', error);
+    return null;
+  }
 };
 
 // GET: 쿠키를 통한 로그인된 사용자 정보 조회
