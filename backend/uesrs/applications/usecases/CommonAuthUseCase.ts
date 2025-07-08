@@ -1,6 +1,6 @@
 // 회원 정보 조회 및 수정 UseCase
-import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
-import { IAuthRepository } from '@/(backend)/auths/domains/repositories/AuthRepository';
+import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
+import { IAuthRepository } from '@/app/(backend)/auths/domains/repositories/AuthRepository';
 
 // 모든 사용자 조회 UseCase
 export class GetAllUsersUseCase {
@@ -122,7 +122,10 @@ export class CommonAuthUseCase {
   }
 
   // 사용자 프로필 업데이트
-  async updateUserProfile(id: number, updates: UserProfileUpdate): Promise<CommonAuthEntity> {
+  async updateUserProfile(
+    id: number,
+    updates: UserProfileUpdate
+  ): Promise<CommonAuthEntity> {
     // 기존 사용자 조회
     const existingUser = await this.authRepository.getUserById(id);
     if (!existingUser) {
@@ -174,7 +177,7 @@ export class CommonAuthUseCase {
   // 비밀번호 변경
   async changePassword(id: number, newPassword: string): Promise<boolean> {
     UserValidator.validatePassword(newPassword);
-    
+
     const success = await this.authRepository.updatePassword(id, newPassword);
     if (!success) {
       throw new ValidationError('비밀번호 변경에 실패했습니다.');

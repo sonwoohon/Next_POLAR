@@ -1,12 +1,12 @@
 import { supabase } from '@/lib/supabase';
-import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
-import { IAuthRepository } from '@/(backend)/auths/domains/repositories/AuthRepository';
+import { CommonAuthEntity } from '../../domains/entities/CommonAuthEntity';
+import { IAuthRepository } from '../../domains/repositories/AuthRepository';
 
 export class SbAuthRepository implements IAuthRepository {
   // 모든 사용자 조회
   async getAllUsers(): Promise<CommonAuthEntity[]> {
     console.log('SbAuthRepository.getAllUsers() 호출됨');
-    
+
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -19,17 +19,20 @@ export class SbAuthRepository implements IAuthRepository {
       return [];
     }
 
-    const entities = (data || []).map(user => new CommonAuthEntity(
-      user.id,
-      user.phone_number || '',
-      user.password || '',
-      user.email,
-      user.age || 0,
-      user.profile_img_url || '',
-      user.address || '',
-      user.name,
-      new Date(user.created_at)
-    ));
+    const entities = (data || []).map(
+      (user) =>
+        new CommonAuthEntity(
+          user.id,
+          user.phone_number || '',
+          user.password || '',
+          user.email,
+          user.age || 0,
+          user.profile_img_url || '',
+          user.address || '',
+          user.name,
+          new Date(user.created_at)
+        )
+    );
 
     console.log('Entity 변환 완료:', entities.length, '개');
     return entities;
@@ -59,7 +62,10 @@ export class SbAuthRepository implements IAuthRepository {
   }
 
   // 사용자 정보 수정
-  async updateUser(id: number, user: CommonAuthEntity): Promise<CommonAuthEntity | null> {
+  async updateUser(
+    id: number,
+    user: CommonAuthEntity
+  ): Promise<CommonAuthEntity | null> {
     const { data, error } = await supabase
       .from('users')
       .update({
@@ -68,7 +74,7 @@ export class SbAuthRepository implements IAuthRepository {
         phone_number: user.phone_number,
         age: user.age,
         profile_img_url: user.profile_img_url,
-        address: user.address
+        address: user.address,
       })
       .eq('id', id)
       .select()
@@ -98,4 +104,4 @@ export class SbAuthRepository implements IAuthRepository {
 
     return !error;
   }
-} 
+}
