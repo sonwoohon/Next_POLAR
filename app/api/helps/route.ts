@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { GetHelpListUseCase, GetHelpDetailUseCase } from "@/backend/helps/applications/usecases/CommonHelpUseCases";
+import { NextResponse } from "next/server";
+import { GetHelpListUseCase, } from "@/backend/helps/applications/usecases/CommonHelpUseCases";
 import { SbCommonHelpRepository } from "@/backend/helps/infrastructures/repositories/SbCommonHelpRepository";
-import { HelpDetailResponseDto, HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+import { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createUseCase = () => {
