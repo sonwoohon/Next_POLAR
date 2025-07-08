@@ -35,6 +35,7 @@ export class GetHelpDetailUseCase {
   constructor(private readonly helpRepository: ICommonHelpRepository) { }
 
   async execute(id: number): Promise<HelpDetailResponseDto | null> {
+    console.log(id);
     const help: CommonHelpEntity | null = await this.helpRepository.getHelpById(id);
 
     if (help) {
