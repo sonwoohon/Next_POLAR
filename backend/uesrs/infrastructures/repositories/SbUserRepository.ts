@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
+import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
@@ -27,17 +28,7 @@ export class SbUserRepository implements IUserRepository {
       console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
 
       // 데이터를 Entity로 변환
-      const userEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const userEntity = fromDbObject(data);
 
       console.log(`[Repository] Entity 변환 완료 - ID: ${id}`, userEntity.toJSON());
       return userEntity;
@@ -51,16 +42,10 @@ export class SbUserRepository implements IUserRepository {
     console.log(`[Repository] 사용자 업데이트 시작 - ID: ${id}`, user.toJSON());
     
     try {
-      // 업데이트할 데이터 준비
-      const updateData = {
-        phoneNumber: user.phoneNumber,
-        password: user.password,
-        email: user.email,
-        age: user.age,
-        profileImgUrl: user.profileImgUrl,
-        address: user.address,
-        name: user.name
-      };
+      // 업데이트할 데이터 준비 (snake_case 변환)
+      const updateData = toDbObject(user);
+      delete updateData.id; // id는 업데이트 대상에서 제외
+      delete updateData.created_at; // created_at도 제외
 
       console.log(`[Repository] 업데이트 데이터 준비 완료:`, updateData);
 
@@ -84,17 +69,7 @@ export class SbUserRepository implements IUserRepository {
       console.log(`[Repository] 사용자 업데이트 성공 - ID: ${id}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
-      const updatedEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const updatedEntity = fromDbObject(data);
 
       console.log(`[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`, updatedEntity.toJSON());
       return updatedEntity;

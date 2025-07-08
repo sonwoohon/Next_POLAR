@@ -29,7 +29,7 @@ const getUserIdFromCookie = (request: NextRequest): number | null => {
 
     // JWT 토큰 검증 및 페이로드 추출
     const payload = verifyAccessToken(accessToken);
-    const userId = payload.userId as number;
+    const userId = payload.id as number;
     
     if (!userId) {
       console.log('[API] 토큰에서 userId를 찾을 수 없습니다.');
