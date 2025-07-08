@@ -1,4 +1,4 @@
-import { supabase } from '../../../../../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { LoginDBResponse } from '../LoginModel';
 import { LoginMapper } from './mappers/LoginMapper';
 
