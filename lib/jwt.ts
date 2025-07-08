@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { NextRequest } from 'next/server';
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
@@ -34,5 +35,33 @@ export function verifyRefreshToken(token: string): Record<string, unknown> {
     return jwt.verify(token, REFRESH_SECRET as string) as Record<string, unknown>;
   } catch (error) {
     throw new Error('유효하지 않은 리프레시 토큰입니다.');
+  }
+}
+
+// 쿠키에서 사용자 ID를 추출하는 함수
+export function getUserIdFromCookie(request: NextRequest): number | null {
+  try {
+    // 쿠키에서 access-token 가져오기
+    const accessToken = request.cookies.get('access-token')?.value;
+    
+    if (!accessToken) {
+      console.log('[JWT] access-token 쿠키가 없습니다.');
+      return null;
+    }
+
+    // JWT 토큰 검증 및 페이로드 추출
+    const payload = verifyAccessToken(accessToken);
+    const userId = payload.id as number;
+    
+    if (!userId) {
+      console.log('[JWT] 토큰에서 userId를 찾을 수 없습니다.');
+      return null;
+    }
+
+    console.log(`[JWT] 토큰에서 추출한 사용자 ID: ${userId}`);
+    return userId;
+  } catch (error) {
+    console.error('[JWT] 토큰 검증 중 오류:', error);
+    return null;
   }
 }
