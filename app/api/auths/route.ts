@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CommonAuthUseCase, ValidationError } from '@/app/(backend)/auths/applications/usecases/CommonAuthUseCase';
-import { SbAuthRepository } from '@/app/(backend)/auths/infrastructures/repositories/SbAuthRepository';
+import { CommonAuthUseCase, ValidationError } from '@/(backend)/auths/applications/usecases/CommonAuthUseCase';
+import { SbAuthRepository } from '@/(backend)/auths/infrastructures/repositories/SbAuthRepository';
 import { 
   UserUpdateRequestDto, 
   UserResponseDto
-} from '@/app/(backend)/auths/applications/dtos/UserDtos';
+} from '@/(backend)/auths/applications/dtos/UserDtos';
 import {
   entitiesToUserResponseDtos,
   entityToUserResponseDto
-} from '@/app/(backend)/auths/infrastructures/mappers/UserMapper';
+} from '@/(backend)/auths/infrastructures/mappers/UserMapper';
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createUseCase = () => {

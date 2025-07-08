@@ -1,6 +1,6 @@
 // 회원 정보 조회 및 수정 UseCase
-import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
-import { IAuthRepository } from '@/app/(backend)/auths/domains/repositories/AuthRepository';
+import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
+import { IAuthRepository } from '@/(backend)/auths/domains/repositories/AuthRepository';
 
 // 모든 사용자 조회 UseCase
 export class GetAllUsersUseCase {

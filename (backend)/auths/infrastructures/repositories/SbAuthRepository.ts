@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
-import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
-import { IAuthRepository } from '@/app/(backend)/auths/domains/repositories/AuthRepository';
+import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
+import { IAuthRepository } from '@/(backend)/auths/domains/repositories/AuthRepository';
 
 export class SbAuthRepository implements IAuthRepository {
   // 모든 사용자 조회

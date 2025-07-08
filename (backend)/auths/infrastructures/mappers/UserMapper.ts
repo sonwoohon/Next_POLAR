@@ -1,5 +1,5 @@
-import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
-import { UserResponseDto } from '@/app/(backend)/auths/applications/dtos/UserDtos';
+import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
+import { UserResponseDto } from '@/(backend)/auths/applications/dtos/UserDtos';
 
 // Entity를 UserResponseDto로 변환
 export function entityToUserResponseDto(entity: CommonAuthEntity): UserResponseDto {

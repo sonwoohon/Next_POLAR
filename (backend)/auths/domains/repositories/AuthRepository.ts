@@ -1,4 +1,4 @@
-import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
+import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
 
 // Repository 인터페이스
 export interface IAuthRepository {

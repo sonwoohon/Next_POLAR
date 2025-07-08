@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { CommonAuthUseCase, ValidationError } from '@/app/(backend)/auths/applications/usecases/CommonAuthUseCase';
-import { CommonAuthEntity } from '@/app/(backend)/auths/domains/entities/CommonAuthEntity';
+import { CommonAuthUseCase, ValidationError } from '@/(backend)/auths/applications/usecases/CommonAuthUseCase';
+import { CommonAuthEntity } from '@/(backend)/auths/domains/entities/CommonAuthEntity';
 
 export default function TestPage() {
   const [users, setUsers] = useState<any[]>([]);
