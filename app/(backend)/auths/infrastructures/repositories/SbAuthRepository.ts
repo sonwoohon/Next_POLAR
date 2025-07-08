@@ -1,9 +1,9 @@
 
-import { AuthRepository } from "../../domains/repositories/AuthRepository";
+import { AuthRepositoryInterface } from "../../domains/repositories/AuthRepositoryInterface";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { SignUpDto } from "@/app/api/auths/route";
 
-export class SbAuthRepository implements AuthRepository {
+export class SbAuthRepository implements AuthRepositoryInterface {
   private supabase: SupabaseClient;
 
   constructor(supabase: SupabaseClient) {

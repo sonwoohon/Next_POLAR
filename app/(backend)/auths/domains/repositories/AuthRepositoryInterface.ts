@@ -1,7 +1,7 @@
 import { SignUpDto } from '@/app/api/auths/route';
 
 
-export interface AuthRepository {
+export interface AuthRepositoryInterface {
   // 회원가입
   signUp(user: SignUpDto): Promise<SignUpDto | null>;
 
