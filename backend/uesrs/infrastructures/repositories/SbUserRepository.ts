@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
+import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
 // UserWithdrawalUseCase에서 사용하는 User 인터페이스
 interface User {
@@ -46,17 +47,7 @@ export class SbUserRepository implements IUserRepository, UserRepository {
       console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
 
       // 데이터를 Entity로 변환
-      const userEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const userEntity = fromDbObject(data);
 
       console.log(
         `[Repository] Entity 변환 완료 - ID: ${id}`,
@@ -109,17 +100,7 @@ export class SbUserRepository implements IUserRepository, UserRepository {
       console.log(`[Repository] 사용자 업데이트 성공 - ID: ${id}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
-      const updatedEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const updatedEntity = fromDbObject(data);
 
       console.log(
         `[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`,

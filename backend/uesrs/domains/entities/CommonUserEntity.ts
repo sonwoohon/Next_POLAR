@@ -1,15 +1,15 @@
-// 로그인된 사용자 인증 엔티티
+// 공통 사용자 엔티티
 export class CommonUserEntity {
   constructor(
-    public readonly id: number, // int8 - 수정 불가능
-    public phoneNumber: string, // varchar
-    public password: string, // varchar
-    public email: string, // varchar
-    public age: number, // int4
-    public profileImgUrl: string, // text
-    public address: string, // varchar
-    public name: string, // varchar
-    public readonly createdAt: Date // timestamp - 수정 불가능
+    public readonly id: number, // 사용자 고유 ID (수정 불가능)
+    public phoneNumber: string, // 전화번호
+    public password: string, // 비밀번호
+    public email: string, // 이메일
+    public age: number, // 나이
+    public profileImgUrl: string, // 프로필 이미지 URL
+    public address: string, // 주소
+    public name: string, // 이름
+    public readonly createdAt: Date // 생성일시 (수정 불가능)
   ) {}
 
   // 엔티티를 객체로 변환하는 메서드

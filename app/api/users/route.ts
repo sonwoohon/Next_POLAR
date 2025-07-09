@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+UserIdFromCookie } from '@/lib/jwt';
 import {
   CommonUserUseCase,
   ValidationError,
@@ -11,10 +12,11 @@ import {
 import { entityToUserProfileResponseDto } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 import { getAuthenticatedUser } from '@/lib/auth';
 
-// 의존성 주입을 위한 UseCase 인스턴스 생성
+// UseCase 인스턴스 생성 함수
 const createUseCase = () => {
-  const repository = new SbUserRepository();
-  return new CommonUserUseCase(repository);
+  const userRepository = new SbUserRepository();
+  return new CommonUserUseCase(userRepository);
+
 };
 
 // GET: 쿠키를 통한 로그인된 사용자 정보 조회
