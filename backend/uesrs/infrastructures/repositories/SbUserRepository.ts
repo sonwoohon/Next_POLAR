@@ -1,7 +1,20 @@
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
-import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+import { fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+
+// User 타입 정의 (임시)
+export interface User {
+  id: number;
+  phone_number: string;
+  password: string;
+  email: string;
+  age: number;
+  profile_img_url: string;
+  address: string;
+  name: string;
+  created_at: Date;
+}
 
 // User 인터페이스 정의 (UserWithdrawalUseCase용)
 interface User {
@@ -110,7 +123,7 @@ export class SbUserRepository implements IUserRepository {
   // UserWithdrawalUseCase용 메서드들
   async findById(id: number): Promise<User | null> {
     console.log(`[Repository] 사용자 조회 시작 (findById) - ID: ${id}`);
-    
+
     try {
       const { data, error } = await supabase
         .from('users')
@@ -152,7 +165,7 @@ export class SbUserRepository implements IUserRepository {
 
   async deleteById(id: number): Promise<void> {
     console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
-    
+
     try {
       const { error } = await supabase
         .from('users')
