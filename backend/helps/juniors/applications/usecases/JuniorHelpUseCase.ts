@@ -5,7 +5,7 @@ import { IJuniorHelpRepository } from "../../domains/repositories/IJuniorHelpRep
 export class GetJuniorAppliedHelpListUseCase {
   constructor(private readonly juniorHelpRepository: IJuniorHelpRepository) { }
 
-  async excute(juniorId: number): Promise<CommonHelpEntity[] | null> {
+  async execute(juniorId: number): Promise<CommonHelpEntity[] | null> {
     const helpList: CommonHelpEntity[] | null = await this.juniorHelpRepository.getJuniorAppliedHelpList(juniorId);
 
     if (helpList) {
@@ -19,7 +19,7 @@ export class GetJuniorAppliedHelpListUseCase {
 export class ApplyHelpUseCase {
   constructor(private readonly juniorHelpRepository: IJuniorHelpRepository) { }
 
-  async excute(juniorId: number, helpId: number): Promise<void | null> {
+  async execute(juniorId: number, helpId: number): Promise<void | null> {
     return await this.juniorHelpRepository.applyHelp(juniorId, helpId);
   }
 }
@@ -27,7 +27,7 @@ export class ApplyHelpUseCase {
 export class CancelJuniorHelpUseCase {
   constructor(private readonly juniorHelpRepository: IJuniorHelpRepository) { }
 
-  async excute(juniorId: number, helpId: number): Promise<void | null> {
+  async execute(juniorId: number, helpId: number): Promise<void | null> {
     return await this.juniorHelpRepository.cancelJuniorlHelp(juniorId, helpId);
   }
 }
