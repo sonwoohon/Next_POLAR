@@ -3,27 +3,8 @@ import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEnt
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
 import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
-// UserWithdrawalUseCase에서 사용하는 User 인터페이스
-interface User {
-  id: number;
-  phone_number: string;
-  password: string;
-  email: string;
-  age: number;
-  profile_img_url: string;
-  address: string;
-  name: string;
-  created_at: Date;
-}
-
-// UserRepository 인터페이스 (UserWithdrawalUseCase용)
-interface UserRepository {
-  findById(id: number): Promise<User | null>;
-  deleteById(id: number): Promise<void>;
-}
-
 // Supabase 인증 Repository 구현체
-export class SbUserRepository implements IUserRepository, UserRepository {
+export class SbUserRepository implements IUserRepository {
   async getUserById(id: number): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 조회 시작 - ID: ${id}`);
 
