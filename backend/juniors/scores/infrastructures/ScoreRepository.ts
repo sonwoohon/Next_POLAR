@@ -15,28 +15,31 @@ import { Score } from '../domains/entities/Score';
 import { ScoreMapper } from './mappers/ScoreMapper';
 import { ScoreDBResponse } from '../ScoreModel';
 
-const scoreColumns = `
-user_id,
-category_id,
-season,
-category_score,
-updated_at,
-categories (
-  id,
-  name,
-  point
-)
-`;
-
 export class ScoreRepository implements ScoreRepositoryInterface {
   private async queryScores(filters: Record<string, number>): Promise<Score[]> {
-    let query = supabase.from('scores').select(scoreColumns);
+    const scoreColumns = `
+      user_id,
+      category_id,
+      season,
+      category_score,
+      updated_at,
+      categories (
+        id,
+        name,
+        point
+      )
+      `;
+    // eq 반복 방식
+    // let query = supabase.from('scores').select(scoreColumns);
+    // for (const [key, value] of Object.entries(filters)) {
+    //   query = query.eq(key, value);
+    // }
 
-    for (const [key, value] of Object.entries(filters)) {
-      query = query.eq(key, value);
-    }
-
-    const { data, error } = await query;
+    // match 방식 (여러 조건 동시 필터링)
+    const { data, error } = await supabase
+      .from('scores')
+      .select(scoreColumns)
+      .match(filters);
 
     if (error || !data) return [];
 
