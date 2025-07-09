@@ -1,0 +1,71 @@
+import { supabase } from '@/lib/supabase';
+import { ContactMessageEntity } from '@/backend/chats/messages/domains/entities/contactMessage';
+import { IContactMessageRepository } from '@/backend/chats/messages/domains/repositories/ContactMessageRepository';
+
+export class SbContactMessageRepository implements IContactMessageRepository {
+  // 메시지 저장
+  async create(message: Omit<ContactMessageEntity, 'id' | 'createdAt'>): Promise<ContactMessageEntity> {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .insert({
+        sender_id: message.senderId,
+        contact_room_id: message.contactRoomId,
+        is_read: message.isRead,
+        message: message.message,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    if (!data) throw new Error('메시지 생성 실패');
+
+    return this.toEntity(data);
+  }
+
+  // 메시지 리스트 조회
+  async findByContactRoomId(contactRoomId: number): Promise<ContactMessageEntity[]> {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .eq('contact_room_id', contactRoomId)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map((row: any) => this.toEntity(row));
+  }
+
+  // 실시간 구독 (프론트엔드에서 주로 사용)
+  subscribeToMessages(
+    contactRoomId: number,
+    onMessage: (message: ContactMessageEntity) => void
+  ) {
+    return supabase
+      .channel('contact_messages')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'contact_messages',
+          filter: `contact_room_id=eq.${contactRoomId}`
+        },
+        (payload) => {
+          onMessage(this.toEntity(payload.new));
+        }
+      )
+      .subscribe();
+  }
+
+  private toEntity(row: any): ContactMessageEntity {
+    return new ContactMessageEntity(
+      row.id,
+      row.sender_id,
+      row.contact_room_id,
+      row.is_read,
+      row.message,
+      new Date(row.created_at)
+    );
+  }
+} 
