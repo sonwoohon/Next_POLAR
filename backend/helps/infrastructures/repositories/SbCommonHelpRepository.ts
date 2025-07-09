@@ -16,25 +16,17 @@ interface HelpData {
 };
 
 export class SbCommonHelpRepository implements ICommonHelpRepository {
-  
+
   async getHelpList(): Promise<CommonHelpEntity[] | null> {
     try {
       const { data, error } = await supabase
         .from('helps')
         .select('*');
 
-      if (error) {
+
+      if (!data || error) {
         console.error('[Repository] Supabase 헬프 리스트 조회 오류:', error);
-        return null;
-      }
-
-      if (!data) {
-        console.log('[Repository] 헬프 리스트를 찾을 수 없음');
-      }
-
-      // data가 없으면 null 반환
-      if (!data) {
-        return null;
+        return Promise.reject(null);
       }
 
       return data.map((help: HelpData) => new CommonHelpEntity(
@@ -50,18 +42,18 @@ export class SbCommonHelpRepository implements ICommonHelpRepository {
       ));
 
     } catch (error) {
-      console.error('[Repository] 헬프 리스트 조회 오류:', error);
-      throw new Error('헬프 리스트 조회 오류');
+      console.error('[SbCommonHelpRepository] 헬프 리스트 조회 오류:', error);
+      throw new Error(`헬프 리스트 조회 오류: ${error}`);
     }
   }
 
   async getHelpById(id: number): Promise<CommonHelpEntity | null> {
     try {
       const { data, error } = await supabase
-      .from('helps')
-      .select('*')
-      .eq('id', id)
-      .single();
+        .from('helps')
+        .select('*')
+        .eq('id', id)
+        .single();
 
       if (error || !data) return null;
 
@@ -77,7 +69,7 @@ export class SbCommonHelpRepository implements ICommonHelpRepository {
         new Date(data.created_at)
       );
 
-    } catch(error) {
+    } catch (error) {
       console.error('[Repository] 헬프 상세 조회 오류:', error);
       throw new Error('헬프 상세 조회 오류');
     }
