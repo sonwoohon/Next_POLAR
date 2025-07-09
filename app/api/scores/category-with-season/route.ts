@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
       categoryId,
       season
     );
-    return NextResponse.json(scores);
+    return NextResponse.json(scores, { status: 200 });
   } catch (error) {
     console.error('점수 조회 중 오류:', error);
     return NextResponse.json(
