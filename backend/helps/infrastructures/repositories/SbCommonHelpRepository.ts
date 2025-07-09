@@ -1,19 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { CommonHelpEntity } from "../../domains/entities/CommonHelpEntity";
 import { ICommonHelpRepository } from "../../domains/repositories/ICommonHelpRepository";
-
-// 헬프 데이터 인터페이스
-interface HelpData {
-  id: number;
-  senior_id: number;
-  title: string;
-  start_date: string;
-  end_date: string;
-  category: number;
-  content: string;
-  status: string;
-  created_at: string;
-};
+import { HelpData } from "../mappers/CommonHelpDataMapper";
 
 export class SbCommonHelpRepository implements ICommonHelpRepository {
 
