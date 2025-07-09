@@ -1,8 +1,55 @@
-// helps 리스트를 조회, help의 상세 데이터를 조회 하는 유스케이스
-// 이 파일에는 helps 리스트와 상세를 조회 하는 비즈니스 로직이 구현됩니다.
+import { CommonHelpEntity } from "../../domains/entities/CommonHelpEntity";
+import { ICommonHelpRepository } from "../../domains/repositories/ICommonHelpRepository";
+import { HelpListResponseDto, HelpDetailResponseDto } from "../dtos/HelpDTO";
 
-// 예시:
-// - GetHelpsUseCase: helps 리스트를 조회 하는 유스케이스
-// - GetHelpDetailUseCase: help의 상세 데이터를 조회 하는 유스케이스
 
-// 유스케이스는 비즈니스 로직을 구현하며, 엔티티를 조작하고 비즈니스 규칙을 적용합니다.
+// 헬프 리스트 조회 UseCase
+export class GetHelpListUseCase {
+  constructor(private readonly helpRepository: ICommonHelpRepository) { }
+
+  async execute(): Promise<HelpListResponseDto[] | null> {
+    const helpList: CommonHelpEntity[] | null = await this.helpRepository.getHelpList();
+
+    if (helpList) {
+      return helpList.map((help) => ({
+        id: help.id,
+        seniorInfo: {
+          id: help.seniorId,
+          //TODO: 기타 시니어 정보 필요시 추가 - FE 디자인 확정시 추가
+        },
+        title: help.title,
+        startDate: help.startDate,
+        endDate: help.endDate,
+        category: help.category,
+        content: help.content,
+        status: help.status,
+        createdAt: help.createdAt,
+      }));
+    }
+    return null;
+  }
+}
+
+// 헬프 상세 조회 UseCase
+export class GetHelpDetailUseCase {
+  constructor(private readonly helpRepository: ICommonHelpRepository) { }
+
+  async execute(id: number): Promise<HelpDetailResponseDto | null> {
+    const help: CommonHelpEntity | null = await this.helpRepository.getHelpById(id);
+
+    if (help) {
+      return {
+        id: help.id,
+        seniorId: help.seniorId,
+        title: help.title,
+        startDate: help.startDate,
+        endDate: help.endDate,
+        category: help.category,
+        content: help.content,
+        status: help.status,
+        createdAt: help.createdAt,
+      };
+    }
+    return null;
+  }
+}
