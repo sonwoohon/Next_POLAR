@@ -3,7 +3,7 @@ import { getUserIdFromCookie } from '@/lib/jwt';
 import { UploadImageUseCase, GetImageByUrlUseCase, DeleteImageUseCase } from '@/backend/images/applications/usecases/ImageUseCase';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
 import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
+import { UpdateProfileImageUseCase } from '@/backend/images/applications/usecases/UpdateProfileImageUseCase';
 
 // 이미지 업로드 (POST)
 export async function POST(request: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     if (!userId) {
       return NextResponse.json(
         { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -56,25 +56,15 @@ export async function POST(request: NextRequest) {
     const imageUrl = await uploadUseCase.execute(file, bucketName, userId);
 
     // 업로드된 이미지 URL을 user 테이블에 업데이트
-    const updatedUser = new CommonUserEntity(
-      user.id,
-      user.phoneNumber,
-      user.password,
-      user.email,
-      user.age,
-      imageUrl.url, // 프로필 이미지 URL 업데이트
-      user.address,
-      user.name,
-      user.createdAt
-    );
-    await userRepository.updateUser(userId, updatedUser);
+    const updateProfileImageUseCase = new UpdateProfileImageUseCase();
+    await updateProfileImageUseCase.execute(user, userId, imageUrl.url);
 
     console.log('[API] 이미지 업로드 및 프로필 이미지 업데이트 성공');
     return NextResponse.json({
       success: true,
       message: '이미지가 성공적으로 업로드되고 프로필 이미지가 업데이트되었습니다.',
       image: imageUrl
-    });
+    }, { status: 200 });
 
   } catch (error: any) {
     console.error('[API] 이미지 업로드 중 오류 발생:', error);
@@ -94,7 +84,7 @@ export async function GET(request: NextRequest) {
     if (!userId) {
       return NextResponse.json(
         { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -120,7 +110,7 @@ export async function GET(request: NextRequest) {
             success: true,
             message: '프로필 이미지를 성공적으로 조회했습니다.',
             image: imageInfo
-          });
+          }, { status: 200 });
         }
       } catch (error) {
         console.warn('[API] 이미지 조회 실패, 기본 URL 반환:', error);
@@ -132,7 +122,7 @@ export async function GET(request: NextRequest) {
       success: true,
       message: '프로필 이미지 URL을 성공적으로 조회했습니다.',
       image: { url: user.profileImgUrl || '' }
-    });
+    }, { status: 200 });
   } catch (error: any) {
     console.error('[API] 프로필 이미지 URL 조회 중 오류 발생:', error);
     return NextResponse.json(
@@ -153,7 +143,7 @@ export async function DELETE(request: NextRequest) {
       console.error('[API] 유효하지 않은 사용자 ID입니다.');
       return NextResponse.json(
         { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -174,7 +164,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({
         success: true,
         message: '삭제할 프로필 이미지가 없습니다.'
-      });
+      }, { status: 200 });
     }
 
     // 이미지 삭제 UseCase 실행
@@ -193,19 +183,8 @@ export async function DELETE(request: NextRequest) {
     console.log('[API] Supabase Storage 이미지 삭제 성공');
 
     // 유저 테이블의 profileImgUrl을 빈 문자열로 업데이트
-    const updatedUser = new CommonUserEntity(
-      user.id,
-      user.phoneNumber,
-      user.password,
-      user.email,
-      user.age,
-      '', // 빈 문자열로 설정
-      user.address,
-      user.name,
-      user.createdAt
-    );
-
-    const updateResult = await userRepository.updateUser(userId, updatedUser);
+    const updateProfileImageUseCase = new UpdateProfileImageUseCase();
+    const updateResult = await updateProfileImageUseCase.execute(user, userId, '');
     if (!updateResult) {
       console.error('[API] 유저 테이블 업데이트 실패');
       return NextResponse.json(
@@ -219,7 +198,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: '프로필 이미지가 성공적으로 삭제되었습니다.',
       user: updateResult.toJSON()
-    });
+    }, { status: 200 });
 
   } catch (error: any) {
     console.error('[API] 이미지 삭제 중 오류 발생:', error);
