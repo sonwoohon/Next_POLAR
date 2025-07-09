@@ -1,18 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { IJuniorHelpRepository } from "../domains/repositories/IJuniorHelpRepository";
-import { CommonHelpEntity } from "../../domains/entities/CommonHelpEntity";
+import { HelpData } from "@/backend/helps/infrastructures/mappers/CommonHelpDataMapper";
+import { IJuniorHelpRepository } from "../../domains/repositories/IJuniorHelpRepository";
+import { CommonHelpEntity } from "@/backend/helps/domains/entities/CommonHelpEntity";
 
-interface HelpData {
-  id: number;
-  senior_id: number;
-  title: string;
-  start_date: string;
-  end_date: string;
-  category: number;
-  content: string;
-  status: string;
-  created_at: string;
-};
 
 export class SbJuniorHelpRepository implements IJuniorHelpRepository {
   async getJuniorAppliedHelpList(juniorId: number): Promise<CommonHelpEntity[] | null> {
