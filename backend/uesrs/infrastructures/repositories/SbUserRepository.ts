@@ -3,19 +3,6 @@ import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEnt
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
 import { fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
-// User 타입 정의 (임시)
-export interface User {
-  id: number;
-  phone_number: string;
-  password: string;
-  email: string;
-  age: number;
-  profile_img_url: string;
-  address: string;
-  name: string;
-  created_at: Date;
-}
-
 // User 인터페이스 정의 (UserWithdrawalUseCase용)
 interface User {
   id: number;
@@ -76,11 +63,11 @@ export class SbUserRepository implements IUserRepository {
     try {
       // 업데이트할 데이터 준비
       const updateData = {
-        phoneNumber: user.phoneNumber,
+        phone_number: user.phoneNumber,
         password: user.password,
         email: user.email,
         age: user.age,
-        profileImgUrl: user.profileImgUrl,
+        profile_img_url: user.profileImgUrl,
         address: user.address,
         name: user.name,
       };
@@ -121,47 +108,6 @@ export class SbUserRepository implements IUserRepository {
   }
 
   // UserWithdrawalUseCase용 메서드들
-  async findById(id: number): Promise<User | null> {
-    console.log(`[Repository] 사용자 조회 시작 (findById) - ID: ${id}`);
-
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) {
-        console.error('[Repository] Supabase 사용자 조회 오류:', error);
-        return null;
-      }
-
-      if (!data) {
-        console.log(`[Repository] 사용자를 찾을 수 없음 - ID: ${id}`);
-        return null;
-      }
-
-      console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
-
-      // 데이터를 User 인터페이스에 맞게 변환
-      const user: User = {
-        id: data.id,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
-        email: data.email,
-        age: data.age,
-        profileImgUrl: data.profileImgUrl,
-        address: data.address,
-        name: data.name,
-        createdAt: new Date(data.createdAt)
-      };
-
-      return user;
-    } catch (error) {
-      console.error('[Repository] 사용자 조회 중 예외 발생:', error);
-      return null;
-    }
-  }
 
   async deleteById(id: number): Promise<void> {
     console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);

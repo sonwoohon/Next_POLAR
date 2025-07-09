@@ -47,23 +47,74 @@ export class SbContactReadStatusRepository implements IContactReadStatusReposito
   }
 
   async updateReadStatus(contactRoomId: number, readerId: number, lastReadMessageId: number): Promise<ContactReadStatusEntity> {
-    const { data, error } = await this.supabase
-      .from(this.table)
-      .update({
-        last_read_message_id: lastReadMessageId,
-        updated_at: new Date().toISOString()
-      })
-      .eq('contact_room_id', contactRoomId)
-      .eq('reader_id', readerId)
-      .select()
-      .single();
-    if (error || !data) throw new Error('읽음 상태 update 실패');
-    return new ContactReadStatusEntity(
-      data.id,
-      data.contact_room_id,
-      data.reader_id,
-      data.last_read_message_id,
-      data.updated_at ? new Date(data.updated_at) : undefined
-    );
+    console.log(`[Repository] 읽음 상태 업데이트/생성 시작: contactRoomId=${contactRoomId}, readerId=${readerId}, lastReadMessageId=${lastReadMessageId}`);
+    
+    // 먼저 기존 레코드가 있는지 확인
+    const existingRecord = await this.findByRoomAndReader(contactRoomId, readerId);
+    
+    if (existingRecord) {
+      // 기존 레코드가 있으면 업데이트 (더 큰 메시지 ID로만 갱신)
+      console.log(`[Repository] 기존 레코드 발견, 업데이트 수행`);
+      console.log(`[Repository] 기존 last_read_message_id: ${existingRecord.lastReadMessageId}, 새로운 메시지 ID: ${lastReadMessageId}`);
+      
+      // 새로운 메시지 ID가 기존보다 클 때만 업데이트
+      if (lastReadMessageId > existingRecord.lastReadMessageId) {
+        const { data, error } = await this.supabase
+          .from(this.table)
+          .update({
+            last_read_message_id: lastReadMessageId,
+            updated_at: new Date().toISOString()
+          })
+          .eq('contact_room_id', contactRoomId)
+          .eq('reader_id', readerId)
+          .select()
+          .single();
+        
+        if (error || !data) {
+          console.error(`[Repository] 읽음 상태 업데이트 실패:`, error);
+          throw new Error('읽음 상태 update 실패');
+        }
+        
+        console.log(`[Repository] 읽음 상태 업데이트 성공:`, data);
+        return new ContactReadStatusEntity(
+          data.id,
+          data.contact_room_id,
+          data.reader_id,
+          data.last_read_message_id,
+          data.updated_at ? new Date(data.updated_at) : undefined
+        );
+      } else {
+        // 새로운 메시지 ID가 기존보다 작거나 같으면 업데이트하지 않음
+        console.log(`[Repository] 새로운 메시지 ID(${lastReadMessageId})가 기존(${existingRecord.lastReadMessageId})보다 작거나 같아 업데이트 건너뜀`);
+        return existingRecord;
+      }
+    } else {
+      // 기존 레코드가 없으면 새로 생성
+      console.log(`[Repository] 기존 레코드 없음, 새로 생성`);
+      const { data, error } = await this.supabase
+        .from(this.table)
+        .insert({
+          contact_room_id: contactRoomId,
+          reader_id: readerId,
+          last_read_message_id: lastReadMessageId,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (error || !data) {
+        console.error(`[Repository] 읽음 상태 생성 실패:`, error);
+        throw new Error('읽음 상태 create 실패');
+      }
+      
+      console.log(`[Repository] 읽음 상태 생성 성공:`, data);
+      return new ContactReadStatusEntity(
+        data.id,
+        data.contact_room_id,
+        data.reader_id,
+        data.last_read_message_id,
+        data.updated_at ? new Date(data.updated_at) : undefined
+      );
+    }
   }
 } 
