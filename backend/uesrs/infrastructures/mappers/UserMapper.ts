@@ -1,8 +1,35 @@
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { UserProfileResponseDto } from '@/backend/uesrs/applications/dtos/UserDtos';
 
-// 기본 프로필 이미지 URL
-const DEFAULT_PROFILE_IMAGE_URL = '/images/default-profile.png'; // 또는 실제 기본 이미지 URL
+// Entity -> DB object (snake_case)
+export function toDbObject(entity: CommonUserEntity): any {
+  return {
+    id: entity.id,
+    phone_number: entity.phoneNumber,
+    password: entity.password,
+    email: entity.email,
+    age: entity.age,
+    profile_img_url: entity.profileImgUrl,
+    address: entity.address,
+    name: entity.name,
+    created_at: entity.createdAt instanceof Date ? entity.createdAt.toISOString() : entity.createdAt
+  };
+}
+
+// DB object (snake_case) -> Entity
+export function fromDbObject(dbObj: any): CommonUserEntity {
+  return new CommonUserEntity(
+    dbObj.id,
+    dbObj.phone_number,
+    dbObj.password,
+    dbObj.email,
+    dbObj.age,
+    dbObj.profile_img_url,
+    dbObj.address,
+    dbObj.name,
+    new Date(dbObj.created_at)
+  );
+}
 
 // Entity를 UserProfileResponseDto로 변환
 export function entityToUserProfileResponseDto(entity: CommonUserEntity): UserProfileResponseDto {
@@ -40,9 +67,7 @@ export function entityToUserProfileResponseDto(entity: CommonUserEntity): UserPr
     email: entity.email,
     phoneNumber: entity.phoneNumber,
     age: entity.age,
-    profileImgUrl: entity.profileImgUrl && entity.profileImgUrl.trim() !== '' 
-      ? entity.profileImgUrl 
-      : DEFAULT_PROFILE_IMAGE_URL,
+    profileImgUrl: entity.profileImgUrl || '',
     address: entity.address,
     createdAt: createdAtString
   };

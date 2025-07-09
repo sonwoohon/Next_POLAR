@@ -1,31 +1,13 @@
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
-
-// UserWithdrawalUseCase에서 사용하는 User 인터페이스
-interface User {
-  id: number;
-  phone_number: string;
-  password: string;
-  email: string;
-  age: number;
-  profile_img_url: string;
-  address: string;
-  name: string;
-  created_at: Date;
-}
-
-// UserRepository 인터페이스 (UserWithdrawalUseCase용)
-interface UserRepository {
-  findById(id: number): Promise<User | null>;
-  deleteById(id: number): Promise<void>;
-}
+import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
 // Supabase 인증 Repository 구현체
-export class SbUserRepository implements IUserRepository, UserRepository {
+export class SbUserRepository implements IUserRepository {
   async getUserById(id: number): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 조회 시작 - ID: ${id}`);
-    
+
     try {
       const { data, error } = await supabase
         .from('users')
@@ -46,19 +28,12 @@ export class SbUserRepository implements IUserRepository, UserRepository {
       console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
 
       // 데이터를 Entity로 변환
-      const userEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const userEntity = fromDbObject(data);
 
-      console.log(`[Repository] Entity 변환 완료 - ID: ${id}`, userEntity.toJSON());
+      console.log(
+        `[Repository] Entity 변환 완료 - ID: ${id}`,
+        userEntity.toJSON()
+      );
       return userEntity;
     } catch (error) {
       console.error('[Repository] 사용자 조회 중 예외 발생:', error);
@@ -66,9 +41,12 @@ export class SbUserRepository implements IUserRepository, UserRepository {
     }
   }
 
-  async updateUser(id: number, user: CommonUserEntity): Promise<CommonUserEntity | null> {
+  async updateUser(
+    id: number,
+    user: CommonUserEntity
+  ): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 업데이트 시작 - ID: ${id}`, user.toJSON());
-    
+
     try {
       // 업데이트할 데이터 준비
       const updateData = {
@@ -78,7 +56,7 @@ export class SbUserRepository implements IUserRepository, UserRepository {
         age: user.age,
         profileImgUrl: user.profileImgUrl,
         address: user.address,
-        name: user.name
+        name: user.name,
       };
 
       console.log(`[Repository] 업데이트 데이터 준비 완료:`, updateData);
@@ -103,25 +81,20 @@ export class SbUserRepository implements IUserRepository, UserRepository {
       console.log(`[Repository] 사용자 업데이트 성공 - ID: ${id}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
-      const updatedEntity = new CommonUserEntity(
-        data.id,
-        data.phoneNumber,
-        data.password,
-        data.email,
-        data.age,
-        data.profileImgUrl,
-        data.address,
-        data.name,
-        new Date(data.createdAt)
-      );
+      const updatedEntity = fromDbObject(data);
 
-      console.log(`[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`, updatedEntity.toJSON());
+      console.log(
+        `[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`,
+        updatedEntity.toJSON()
+      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 사용자 업데이트 중 예외 발생:', error);
       return null;
     }
   }
+}
+
 
   // UserWithdrawalUseCase용 메서드들
   async findById(id: number): Promise<User | null> {
