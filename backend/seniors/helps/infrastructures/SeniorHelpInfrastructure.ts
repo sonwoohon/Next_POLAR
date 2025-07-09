@@ -50,6 +50,17 @@ const deleteHelpCategories = async (helpId: number): Promise<void> => {
   }
 };
 
+const deleteHelpApplicant = async (helpId: number): Promise<void> => {
+  const { error } = await supabase
+    .from('help_applicants')
+    .delete()
+    .eq('help_id', helpId);
+
+  if (error) {
+    handleSupabaseError(error, '주니어 삭제');
+  }
+};
+
 export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
   async createHelp(help: SeniorHelp, seniorId: number): Promise<number> {
     // 1. helps 테이블에 데이터 삽입
@@ -121,6 +132,7 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
   async deleteHelp(id: number): Promise<boolean> {
     // 1. help_categories 관계 먼저 삭제 (외래키 제약조건 때문에)
     await deleteHelpCategories(id);
+    await deleteHelpApplicant(id);
 
     // 2. helps 테이블에서 삭제
     const { error } = await supabase.from('helps').delete().eq('id', id);
