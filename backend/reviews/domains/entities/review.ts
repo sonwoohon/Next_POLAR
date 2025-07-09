@@ -1,10 +1,23 @@
-// 리뷰 관련 엔티티
-// 이 파일에는 리뷰와 관련된 도메인 엔티티들이 정의됩니다.
+export class ReviewEntity {
+  constructor(
+    public readonly id: number,           // 리뷰 고유 ID
+    public helpId: number,                // 도움 요청 ID
+    public writerId: number,              // 작성자 ID
+    public receiverId: number,            // 피드백 받는 사람 ID
+    public rating: number,                // 평점
+    public text: string,                  // 리뷰 내용
+    public readonly createdAt: Date       // 생성일시
+  ) {}
 
-// 예시:
-// - Review: 리뷰 정보
-// - ReviewRating: 리뷰 평점 정보
-// - ReviewComment: 리뷰 댓글 정보
-// - ReviewCategory: 리뷰 카테고리 정보
-
-// 도메인 엔티티는 비즈니스 규칙을 포함하며, 외부 의존성이 없는 순수한 객체여야 합니다.
+  toJSON() {
+    return {
+      id: this.id,
+      helpId: this.helpId,
+      writerId: this.writerId,
+      receiverId: this.receiverId,
+      rating: this.rating,
+      text: this.text,
+      createdAt: this.createdAt
+    };
+  }
+}
