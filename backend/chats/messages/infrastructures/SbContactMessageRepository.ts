@@ -4,13 +4,12 @@ import { IContactMessageRepository } from '@/backend/chats/messages/domains/repo
 
 export class SbContactMessageRepository implements IContactMessageRepository {
   // 메시지 저장
-  async create(message: Omit<ContactMessageEntity, 'id' | 'createdAt'>): Promise<ContactMessageEntity> {
+  async create(message: ContactMessageEntity): Promise<ContactMessageEntity> {
     const { data, error } = await supabase
       .from('contact_messages')
       .insert({
         sender_id: message.senderId,
         contact_room_id: message.contactRoomId,
-        is_read: message.isRead,
         message: message.message,
       })
       .select()
@@ -63,7 +62,6 @@ export class SbContactMessageRepository implements IContactMessageRepository {
       row.id,
       row.sender_id,
       row.contact_room_id,
-      row.is_read,
       row.message,
       new Date(row.created_at)
     );
