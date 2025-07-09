@@ -1,29 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CommonUserUseCase } from '@/backend/uesrs/applications/usecases/CommonUserUseCase';
+UserIdFromCookie } from '@/lib/jwt';
+import {
+  CommonUserUseCase,
+  ValidationError,
+} from '@/backend/uesrs/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
-import { 
-  UserUpdateRequestDto, 
-  UserProfileResponseDto
+import {
+  UserUpdateRequestDto,
+  UserProfileResponseDto,
 } from '@/backend/uesrs/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
-import { ValidationError } from '@/backend/uesrs/applications/usecases/CommonUserUseCase';
-import { getUserIdFromCookie } from '@/lib/jwt';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 // UseCase 인스턴스 생성 함수
 const createUseCase = () => {
   const userRepository = new SbUserRepository();
   return new CommonUserUseCase(userRepository);
+
 };
 
 // GET: 쿠키를 통한 로그인된 사용자 정보 조회
-export async function GET(request: NextRequest): Promise<NextResponse<UserProfileResponseDto | any>> {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<UserProfileResponseDto | any>> {
   console.log('[API] GET /api/users 호출됨');
-  
+
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
+    const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
-    
+
     if (!userId) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
@@ -31,14 +38,14 @@ export async function GET(request: NextRequest): Promise<NextResponse<UserProfil
         { status: 401 }
       );
     }
-    
+
     console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
-    
+
     console.log(`[API] 사용자 조회 시작 - ID: ${userId}`);
     const user = await useCase.getUserById(userId);
-    
+
     if (!user) {
       console.error(`[API] 사용자를 찾을 수 없음 - ID: ${userId}`);
       return NextResponse.json(
@@ -46,7 +53,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<UserProfil
         { status: 404 }
       );
     }
-    
+
     console.log(`[API] 사용자 조회 완료 - ID: ${user.id}`);
 
     // Entity를 DTO로 변환
@@ -66,17 +73,20 @@ export async function GET(request: NextRequest): Promise<NextResponse<UserProfil
 }
 
 // PUT: 쿠키를 통한 로그인된 사용자 정보 수정 (비밀번호 포함)
-export async function PUT(request: NextRequest): Promise<NextResponse<UserProfileResponseDto | any>> {
+export async function PUT(
+  request: NextRequest
+): Promise<NextResponse<UserProfileResponseDto | any>> {
   console.log('[API] PUT /api/users 호출됨');
-  
+
   try {
     const body: UserUpdateRequestDto = await request.json();
     console.log('[API] 요청 본문:', body);
-    
+
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
+    const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
-    
+
     if (!userId) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
@@ -88,7 +98,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse<UserProfil
     console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
-    
+
     // 모든 정보 수정 (비밀번호 포함)
     console.log(`[API] 사용자 프로필 업데이트 시작 - ID: ${userId}`);
     const updatedUser = await useCase.updateUserProfile(userId, body);
@@ -98,19 +108,15 @@ export async function PUT(request: NextRequest): Promise<NextResponse<UserProfil
     console.log('[API] DTO 변환 시작');
     const userDto = entityToUserProfileResponseDto(updatedUser);
     console.log('[API] DTO 변환 완료', userDto);
-    
+
     console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
-
   } catch (error) {
     console.error('[API] 사용자 수정 중 오류 발생:', error);
-    
+
     if (error instanceof ValidationError) {
       console.error('[API] 검증 오류:', error.message);
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json(
@@ -121,14 +127,17 @@ export async function PUT(request: NextRequest): Promise<NextResponse<UserProfil
 }
 
 // DELETE: 프로필 이미지 삭제 (빈 프로필로 설정)
-export async function DELETE(request: NextRequest): Promise<NextResponse<UserProfileResponseDto | any>> {
+export async function DELETE(
+  request: NextRequest
+): Promise<NextResponse<UserProfileResponseDto | any>> {
   console.log('[API] DELETE /api/users 호출됨');
-  
+
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
+    const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
-    
+
     if (!userId) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
@@ -140,7 +149,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<UserPro
     console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
-    
+
     // 프로필 이미지 삭제
     console.log(`[API] 프로필 이미지 삭제 시작 - ID: ${userId}`);
     const updatedUser = await useCase.deleteProfileImage(userId);
@@ -150,19 +159,15 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<UserPro
     console.log('[API] DTO 변환 시작');
     const userDto = entityToUserProfileResponseDto(updatedUser);
     console.log('[API] DTO 변환 완료', userDto);
-    
+
     console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
-
   } catch (error) {
     console.error('[API] 프로필 이미지 삭제 중 오류 발생:', error);
-    
+
     if (error instanceof ValidationError) {
       console.error('[API] 검증 오류:', error.message);
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json(
@@ -170,4 +175,4 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<UserPro
       { status: 500 }
     );
   }
-} 
+}
