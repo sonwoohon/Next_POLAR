@@ -5,49 +5,62 @@ import { SbImageRepository } from '@/backend/images/infrastructures/repositories
 import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
 import { UpdateProfileImageUseCase } from '@/backend/images/applications/usecases/UpdateProfileImageUseCase';
 
+// 공통 헬퍼 함수들
+async function authenticateAndGetUser(request: NextRequest) {
+  const userId = getUserIdFromCookie(request);
+  if (!userId) {
+    return { error: '유효하지 않은 사용자 ID입니다.', status: 401 };
+  }
+
+  const userRepository = new SbUserRepository();
+  const user = await userRepository.getUserById(Number(userId));
+  if (!user) {
+    return { error: '사용자를 찾을 수 없습니다.', status: 404 };
+  }
+
+  return { userId: Number(userId), user };
+}
+
+function createErrorResponse(message: string, status: number = 500) {
+  return NextResponse.json({ error: message }, { status });
+}
+
+function createSuccessResponse(data: any, message: string, status: number = 200) {
+  return NextResponse.json({
+    success: true,
+    message,
+    ...data
+  }, { status });
+}
+
 // 이미지 업로드 (POST)
 export async function POST(request: NextRequest) {
   console.log('[API] 이미지 업로드 요청 시작');
   
   try {
-    // 쿠키에서 userId 추출
-    const userId = getUserIdFromCookie(request);
-    if (!userId) {
-      return NextResponse.json(
-        { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 401 }
-      );
+    // 사용자 인증 및 조회
+    const authResult = await authenticateAndGetUser(request);
+    if ('error' in authResult) {
+      return createErrorResponse(authResult.error, authResult.status);
     }
+    const { userId, user } = authResult;
 
     // FormData에서 파일 추출
     const formData = await request.formData();
     const file = formData.get('image') as File;
     
     if (!file) {
-      return NextResponse.json(
-        { error: '업로드할 이미지 파일이 없습니다.' },
-        { status: 400 }
-      );
+      return createErrorResponse('업로드할 이미지 파일이 없습니다.', 400);
     }
 
     // 버킷명 설정 (프로필 이미지용)
     const bucketName = 'profile-images';
 
-    // 유저 조회
-    const userRepository = new SbUserRepository();
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-      return NextResponse.json(
-        { error: '사용자를 찾을 수 없습니다.' },
-        { status: 404 }
-      );
-    }
-
     // 기존 프로필 이미지가 있으면 삭제
     if (user.profileImgUrl && user.profileImgUrl.trim() !== '') {
       const imageRepository = new SbImageRepository();
       const deleteImageUseCase = new DeleteImageUseCase(imageRepository);
-      await deleteImageUseCase.execute(user.profileImgUrl, bucketName);
+      await deleteImageUseCase.execute(user.profileImgUrl!, bucketName);
     }
 
     // 새 이미지 업로드
@@ -60,18 +73,14 @@ export async function POST(request: NextRequest) {
     await updateProfileImageUseCase.execute(user, userId, imageUrl.url);
 
     console.log('[API] 이미지 업로드 및 프로필 이미지 업데이트 성공');
-    return NextResponse.json({
-      success: true,
-      message: '이미지가 성공적으로 업로드되고 프로필 이미지가 업데이트되었습니다.',
-      image: imageUrl
-    }, { status: 200 });
+    return createSuccessResponse(
+      { image: imageUrl },
+      '이미지가 성공적으로 업로드되고 프로필 이미지가 업데이트되었습니다.'
+    );
 
   } catch (error: any) {
     console.error('[API] 이미지 업로드 중 오류 발생:', error);
-    return NextResponse.json(
-      { error: '이미지 업로드에 실패했습니다.' },
-      { status: 500 }
-    );
+    return createErrorResponse('이미지 업로드에 실패했습니다.');
   }
 }
 
@@ -79,24 +88,12 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   console.log('[API] 프로필 이미지 URL 조회 요청 시작');
   try {
-    // 쿠키에서 userId 추출
-    const userId = getUserIdFromCookie(request);
-    if (!userId) {
-      return NextResponse.json(
-        { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 401 }
-      );
+    // 사용자 인증 및 조회
+    const authResult = await authenticateAndGetUser(request);
+    if ('error' in authResult) {
+      return createErrorResponse(authResult.error, authResult.status);
     }
-
-    // 사용자 조회
-    const userRepository = new SbUserRepository();
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-      return NextResponse.json(
-        { error: '사용자를 찾을 수 없습니다.' },
-        { status: 404 }
-      );
-    }
+    const { userId, user } = authResult;
 
     // 프로필 이미지가 있는 경우에만 이미지 조회 UseCase 실행
     if (user.profileImgUrl && user.profileImgUrl.trim() !== '') {
@@ -104,13 +101,12 @@ export async function GET(request: NextRequest) {
       const getImageUseCase = new GetImageByUrlUseCase(imageRepository);
       
       try {
-        const imageInfo = await getImageUseCase.execute(user.profileImgUrl, 'profile-images');
+        const imageInfo = await getImageUseCase.execute(user.profileImgUrl!, 'profile-images');
         if (imageInfo) {
-          return NextResponse.json({
-            success: true,
-            message: '프로필 이미지를 성공적으로 조회했습니다.',
-            image: imageInfo
-          }, { status: 200 });
+          return createSuccessResponse(
+            { image: imageInfo },
+            '프로필 이미지를 성공적으로 조회했습니다.'
+          );
         }
       } catch (error) {
         console.warn('[API] 이미지 조회 실패, 기본 URL 반환:', error);
@@ -118,17 +114,13 @@ export async function GET(request: NextRequest) {
     }
 
     // 이미지가 없거나 조회 실패 시 기본 URL 반환
-    return NextResponse.json({
-      success: true,
-      message: '프로필 이미지 URL을 성공적으로 조회했습니다.',
-      image: { url: user.profileImgUrl || '' }
-    }, { status: 200 });
+    return createSuccessResponse(
+      { image: { url: user.profileImgUrl || '' } },
+      '프로필 이미지 URL을 성공적으로 조회했습니다.'
+    );
   } catch (error: any) {
     console.error('[API] 프로필 이미지 URL 조회 중 오류 발생:', error);
-    return NextResponse.json(
-      { error: '프로필 이미지 URL 조회에 실패했습니다.' },
-      { status: 500 }
-    );
+    return createErrorResponse('프로필 이미지 URL 조회에 실패했습니다.');
   }
 }
 
@@ -137,47 +129,30 @@ export async function DELETE(request: NextRequest) {
   console.log('[API] 이미지 삭제 요청 시작');
   
   try {
-    // 쿠키에서 userId 추출
-    const userId = getUserIdFromCookie(request);
-    if (!userId) {
-      console.error('[API] 유효하지 않은 사용자 ID입니다.');
-      return NextResponse.json(
-        { error: '유효하지 않은 사용자 ID입니다.' },
-        { status: 401 }
-      );
+    // 사용자 인증 및 조회
+    const authResult = await authenticateAndGetUser(request);
+    if ('error' in authResult) {
+      return createErrorResponse(authResult.error, authResult.status);
     }
-
-    // 사용자 조회
-    const userRepository = new SbUserRepository();
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-      console.error('[API] 사용자를 찾을 수 없습니다.');
-      return NextResponse.json(
-        { error: '사용자를 찾을 수 없습니다.' },
-        { status: 404 }
-      );
-    }
+    const { userId, user } = authResult;
 
     // 프로필 이미지 URL이 있는지 확인
     if (!user.profileImgUrl || user.profileImgUrl.trim() === '') {
       console.log('[API] 삭제할 프로필 이미지가 없습니다.');
-      return NextResponse.json({
-        success: true,
-        message: '삭제할 프로필 이미지가 없습니다.'
-      }, { status: 200 });
+      return createSuccessResponse(
+        {},
+        '삭제할 프로필 이미지가 없습니다.'
+      );
     }
 
     // 이미지 삭제 UseCase 실행
     const imageRepository = new SbImageRepository();
     const deleteImageUseCase = new DeleteImageUseCase(imageRepository);
     
-    const deleteSuccess = await deleteImageUseCase.execute(user.profileImgUrl, 'profile-images');
+    const deleteSuccess = await deleteImageUseCase.execute(user.profileImgUrl!, 'profile-images');
     if (!deleteSuccess) {
       console.error('[API] 이미지 파일 삭제에 실패했습니다.');
-      return NextResponse.json(
-        { error: '이미지 파일 삭제에 실패했습니다.' },
-        { status: 500 }
-      );
+      return createErrorResponse('이미지 파일 삭제에 실패했습니다.');
     }
 
     console.log('[API] Supabase Storage 이미지 삭제 성공');
@@ -187,24 +162,17 @@ export async function DELETE(request: NextRequest) {
     const updateResult = await updateProfileImageUseCase.execute(user, userId, '');
     if (!updateResult) {
       console.error('[API] 유저 테이블 업데이트 실패');
-      return NextResponse.json(
-        { error: '유저 정보 업데이트에 실패했습니다.' },
-        { status: 500 }
-      );
+      return createErrorResponse('유저 정보 업데이트에 실패했습니다.');
     }
 
     console.log('[API] 이미지 삭제 및 유저 정보 업데이트 성공');
-    return NextResponse.json({
-      success: true,
-      message: '프로필 이미지가 성공적으로 삭제되었습니다.',
-      user: updateResult.toJSON()
-    }, { status: 200 });
+    return createSuccessResponse(
+      { user: updateResult.toJSON() },
+      '프로필 이미지가 성공적으로 삭제되었습니다.'
+    );
 
   } catch (error: any) {
     console.error('[API] 이미지 삭제 중 오류 발생:', error);
-    return NextResponse.json(
-      { error: '이미지 삭제에 실패했습니다.' },
-      { status: 500 }
-    );
+    return createErrorResponse('이미지 삭제에 실패했습니다.');
   }
 } 
