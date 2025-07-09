@@ -5,3 +5,18 @@
 // - SeniorHelp: Senior 도움 생성, 수정, 연결, 완료, help 조건부 삭제 정보
 
 // 도메인 엔티티는 비즈니스 규칙을 포함하며, 외부 의존성이 없는 순수한 객체여야 합니다.
+
+export class SeniorHelp {
+  constructor(
+    public title: string,
+    public startDate: string,
+    public content: string,
+    public category: number | number[],
+    public endDate?: string,
+    public seniorId?: number,
+    public id?: number,
+    public status?: string,
+    public createdAt?: string,
+    public updatedAt?: string
+  ) {}
+}
