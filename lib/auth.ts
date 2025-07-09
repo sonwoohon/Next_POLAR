@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import { NextRequest } from 'next/server';
 
 export interface DecodedToken {
   id: number;
@@ -7,61 +8,33 @@ export interface DecodedToken {
 }
 
 export interface AuthResult {
-  success: boolean;
   user?: DecodedToken;
   error?: string;
 }
 
 /**
- * 쿠키에서 access token을 추출하고 검증하여 사용자 정보를 반환합니다.
- * @returns AuthResult - 인증 결과 (성공 시 사용자 정보, 실패 시 에러 메시지)
+ * NextRequest에서 access-token을 추출해 사용자 정보를 반환
  */
-export async function getAuthenticatedUser(): Promise<AuthResult> {
+export function getAuthenticatedUser(request: NextRequest): AuthResult {
   try {
-    const cookieStore = await cookies();
-
-    // 쿠키에서 토큰 읽기
-    const accessToken = cookieStore.get('access-token');
-
+    // 1. 쿠키에서 access-token 추출
+    const accessToken = request.cookies.get('access-token')?.value;
     if (!accessToken) {
-      return {
-        success: false,
-        error: '인증 토큰이 없습니다.',
-      };
+      return { error: '인증 토큰이 없습니다.' };
     }
 
-    // JWT 토큰 검증
+    // 2. JWT 시크릿 키 확인
     const ACCESS_SECRET = process.env.ACCESS_SECRET;
     if (!ACCESS_SECRET) {
-      return {
-        success: false,
-        error: 'JWT 시크릿 키가 설정되지 않았습니다.',
-      };
+      return { error: 'JWT 시크릿 키가 설정되지 않았습니다.' };
     }
 
-    try {
-      const decoded = jwt.verify(
-        accessToken.value,
-        ACCESS_SECRET
-      ) as DecodedToken;
+    // 3. 토큰 검증 및 디코딩
+    const decoded = jwt.verify(accessToken, ACCESS_SECRET) as DecodedToken;
 
-      return {
-        success: true,
-        user: decoded,
-      };
-    } catch {
-      return {
-        success: false,
-        error: '유효하지 않은 토큰입니다.',
-      };
-    }
-  } catch (e: unknown) {
-    const errorMessage =
-      e instanceof Error ? e.message : '인증 처리 중 오류가 발생했습니다.';
-    return {
-      success: false,
-      error: errorMessage,
-    };
+    return { user: decoded };
+  } catch (e) {
+    return { error: '유효하지 않은 토큰입니다.' };
   }
 }
 
