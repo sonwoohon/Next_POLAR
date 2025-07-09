@@ -1,25 +1,6 @@
 // 회원탈퇴 유스케이스 (users 테이블 기준)
-
-// users 테이블의 주요 필드
-export interface User {
-    id: number;
-    phone_number: string;
-    password: string;
-    email: string;
-    age: number;
-    profile_img_url: string;
-    address: string;
-    name: string;
-    created_at: Date;
-    // is_active?: boolean; // soft delete용(필요시)
-}
-
-    // UserRepository 인터페이스 (DB 연동용)
-export interface UserRepository {
-    findById(id: number): Promise<User | null>;
-    deleteById(id: number): Promise<void>; // 하드 삭제
-    // softDeleteById(id: number): Promise<void>; // 소프트 삭제용(필요시)
-}
+import { User } from '@/backend/uesrs/auths/withdrawal/domains/entities/User';
+import { UserRepository } from '@/backend/uesrs/auths/withdrawal/domains/repository/UserRepository';
 
     // 회원탈퇴 유스케이스
 export class UserWithdrawalUseCase {

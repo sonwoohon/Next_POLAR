@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserWithdrawalUseCase } from '../../../../backend/uesrs/withdrawal/applications/usecases/UserWithdrawalUseCase';
-import { SbUserRepository } from '../../../../backend/uesrs/infrastructures/repositories/SbUserRepository';
+import { UserWithdrawalUseCase } from '@/backend/uesrs/auths/withdrawal/applications/usecases/UserWithdrawalUseCase';
+import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
 
 export async function POST(req: NextRequest) {
     const { userId, type } = await req.json();
