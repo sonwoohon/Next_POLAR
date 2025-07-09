@@ -15,7 +15,7 @@ export class GetHelpListUseCase {
         id: help.id,
         seniorInfo: {
           id: help.seniorId,
-          // 기타 시니어 정보 필요시 추가
+          //TODO: 기타 시니어 정보 필요시 추가 - FE 디자인 확정시 추가
         },
         title: help.title,
         startDate: help.startDate,
@@ -35,7 +35,6 @@ export class GetHelpDetailUseCase {
   constructor(private readonly helpRepository: ICommonHelpRepository) { }
 
   async execute(id: number): Promise<HelpDetailResponseDto | null> {
-    console.log(id);
     const help: CommonHelpEntity | null = await this.helpRepository.getHelpById(id);
 
     if (help) {
