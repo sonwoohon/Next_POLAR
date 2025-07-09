@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
-import { SbReviewRepository } from '@/backend/reviews/infrastructures/SbReviewRepository';
+import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
 import { CreateReviewDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());

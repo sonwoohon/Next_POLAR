@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ContactMessageUseCases } from '@/backend/chats/messages/applications/usecases/ContactMessageUseCases';
-import { SbContactMessageRepository } from '@/backend/chats/messages/infrastructures/SbContactMessageRepository';
+import { SbContactMessageRepository } from '@/backend/chats/messages/infrastructures/repositories/SbContactMessageRepository';
 import { ContactReadStatusUseCases } from '@/backend/chats/read_statuses/applications/usecases/ContactReadStatusUseCases';
 import { SbContactReadStatusRepository } from '@/backend/chats/read_statuses/infrastructures/SbContactReadStatusRepository';
 import { getUserIdFromCookie } from '@/lib/jwt';

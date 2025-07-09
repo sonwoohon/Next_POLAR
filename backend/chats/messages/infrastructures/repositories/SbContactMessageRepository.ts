@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { ContactMessageEntity } from '@/backend/chats/messages/domains/entities/contactMessage';
 import { IContactMessageRepository } from '@/backend/chats/messages/domains/repositories/ContactMessageRepository';
+import { ContactMessageMapper } from '@/backend/chats/messages/infrastructures/mappers/ContactMessageMapper';
 
 export class SbContactMessageRepository implements IContactMessageRepository {
   // 메시지 저장
@@ -18,7 +19,7 @@ export class SbContactMessageRepository implements IContactMessageRepository {
     if (error) throw error;
     if (!data) throw new Error('메시지 생성 실패');
 
-    return this.toEntity(data);
+    return ContactMessageMapper.toEntity(data);
   }
 
   // 메시지 리스트 조회
@@ -32,7 +33,7 @@ export class SbContactMessageRepository implements IContactMessageRepository {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((row: any) => this.toEntity(row));
+    return data.map((row: any) => ContactMessageMapper.toEntity(row));
   }
 
   // 실시간 구독 (프론트엔드에서 주로 사용)
@@ -51,19 +52,10 @@ export class SbContactMessageRepository implements IContactMessageRepository {
           filter: `contact_room_id=eq.${contactRoomId}`
         },
         (payload) => {
-          onMessage(this.toEntity(payload.new));
+          onMessage(ContactMessageMapper.toEntity(payload.new));
         }
       )
       .subscribe();
   }
 
-  private toEntity(row: any): ContactMessageEntity {
-    return new ContactMessageEntity(
-      row.id,
-      row.sender_id,
-      row.contact_room_id,
-      row.message,
-      new Date(row.created_at)
-    );
-  }
 } 
