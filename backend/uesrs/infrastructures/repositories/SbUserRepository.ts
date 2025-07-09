@@ -6,7 +6,7 @@ import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserReposi
 export class SbUserRepository implements IUserRepository {
   async getUserById(id: number): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 조회 시작 - ID: ${id}`);
-    
+
     try {
       const { data, error } = await supabase
         .from('users')
@@ -39,7 +39,10 @@ export class SbUserRepository implements IUserRepository {
         new Date(data.createdAt)
       );
 
-      console.log(`[Repository] Entity 변환 완료 - ID: ${id}`, userEntity.toJSON());
+      console.log(
+        `[Repository] Entity 변환 완료 - ID: ${id}`,
+        userEntity.toJSON()
+      );
       return userEntity;
     } catch (error) {
       console.error('[Repository] 사용자 조회 중 예외 발생:', error);
@@ -47,9 +50,12 @@ export class SbUserRepository implements IUserRepository {
     }
   }
 
-  async updateUser(id: number, user: CommonUserEntity): Promise<CommonUserEntity | null> {
+  async updateUser(
+    id: number,
+    user: CommonUserEntity
+  ): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 업데이트 시작 - ID: ${id}`, user.toJSON());
-    
+
     try {
       // 업데이트할 데이터 준비
       const updateData = {
@@ -59,7 +65,7 @@ export class SbUserRepository implements IUserRepository {
         age: user.age,
         profileImgUrl: user.profileImgUrl,
         address: user.address,
-        name: user.name
+        name: user.name,
       };
 
       console.log(`[Repository] 업데이트 데이터 준비 완료:`, updateData);
@@ -96,11 +102,14 @@ export class SbUserRepository implements IUserRepository {
         new Date(data.createdAt)
       );
 
-      console.log(`[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`, updatedEntity.toJSON());
+      console.log(
+        `[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`,
+        updatedEntity.toJSON()
+      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 사용자 업데이트 중 예외 발생:', error);
       return null;
     }
   }
-} 
+}

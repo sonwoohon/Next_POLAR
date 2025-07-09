@@ -17,14 +17,6 @@ const createUseCase = () => {
   return new CommonUserUseCase(repository);
 };
 
-const getUserIdFromCookie = (request: NextRequest): number | undefined => {
-  const authResult = getAuthenticatedUser(request);
-  if (authResult.user) {
-    return authResult.user.id;
-  }
-  return undefined;
-};
-
 // GET: 쿠키를 통한 로그인된 사용자 정보 조회
 export async function GET(
   request: NextRequest
@@ -33,7 +25,7 @@ export async function GET(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const getUserId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
     const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
@@ -89,7 +81,8 @@ export async function PUT(
     console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
+    const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
@@ -139,7 +132,8 @@ export async function DELETE(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const getUserId = getAuthenticatedUser(request);
+    const userId = Number(getUserId);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
