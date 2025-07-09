@@ -3,6 +3,19 @@ import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEnt
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
 import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
 
+// User 인터페이스 정의 (UserWithdrawalUseCase용)
+interface User {
+  id: number;
+  phoneNumber: string;
+  password: string;
+  email: string;
+  age: number;
+  profileImgUrl: string | null;
+  address: string;
+  name: string;
+  createdAt: Date;
+}
+
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
   async getUserById(id: number): Promise<CommonUserEntity | null> {
@@ -93,8 +106,6 @@ export class SbUserRepository implements IUserRepository {
       return null;
     }
   }
-}
-
 
   // UserWithdrawalUseCase용 메서드들
   async findById(id: number): Promise<User | null> {
@@ -122,14 +133,14 @@ export class SbUserRepository implements IUserRepository {
       // 데이터를 User 인터페이스에 맞게 변환
       const user: User = {
         id: data.id,
-        phone_number: data.phoneNumber,
+        phoneNumber: data.phoneNumber,
         password: data.password,
         email: data.email,
         age: data.age,
-        profile_img_url: data.profileImgUrl,
+        profileImgUrl: data.profileImgUrl,
         address: data.address,
         name: data.name,
-        created_at: new Date(data.createdAt)
+        createdAt: new Date(data.createdAt)
       };
 
       return user;

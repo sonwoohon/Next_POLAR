@@ -7,13 +7,36 @@ export class SbContactReadStatusRepository implements IContactReadStatusReposito
   private table = 'contact_read_statuses';
 
   async findByRoomAndReader(contactRoomId: number, readerId: number): Promise<ContactReadStatusEntity | null> {
+    console.log(`[Repository] 읽음 상태 조회 시작: contactRoomId=${contactRoomId}, readerId=${readerId}`);
+    
+    // 먼저 전체 데이터 확인
+    const { data: allData, error: allError } = await this.supabase
+      .from(this.table)
+      .select('*');
+    
+    console.log(`[Repository] 전체 데이터:`, allData);
+    
     const { data, error } = await this.supabase
       .from(this.table)
       .select('*')
       .eq('contact_room_id', contactRoomId)
       .eq('reader_id', readerId)
       .single();
-    if (error || !data) return null;
+    
+    console.log(`[Repository] Supabase 응답:`, { data, error });
+    
+    if (error) {
+      console.error(`[Repository] Supabase 오류:`, error);
+      return null;
+    }
+    
+    if (!data) {
+      console.log(`[Repository] 데이터 없음`);
+      return null;
+    }
+    
+    console.log(`[Repository] 데이터 조회 성공:`, data);
+    
     return new ContactReadStatusEntity(
       data.id,
       data.contact_room_id,
@@ -23,17 +46,18 @@ export class SbContactReadStatusRepository implements IContactReadStatusReposito
     );
   }
 
-  async upsertReadStatus(contactRoomId: number, readerId: number, lastReadMessageId: number): Promise<ContactReadStatusEntity> {
+  async updateReadStatus(contactRoomId: number, readerId: number, lastReadMessageId: number): Promise<ContactReadStatusEntity> {
     const { data, error } = await this.supabase
       .from(this.table)
-      .upsert({
-        contact_room_id: contactRoomId,
-        reader_id: readerId,
-        last_read_message_id: lastReadMessageId
-      }, { onConflict: 'contact_room_id,reader_id' })
+      .update({
+        last_read_message_id: lastReadMessageId,
+        updated_at: new Date().toISOString()
+      })
+      .eq('contact_room_id', contactRoomId)
+      .eq('reader_id', readerId)
       .select()
       .single();
-    if (error || !data) throw new Error('읽음 상태 upsert 실패');
+    if (error || !data) throw new Error('읽음 상태 update 실패');
     return new ContactReadStatusEntity(
       data.id,
       data.contact_room_id,
