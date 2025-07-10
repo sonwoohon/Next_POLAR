@@ -5,6 +5,7 @@ import {
   getVerificationExpiryTime,
 } from '@/lib/verify';
 import { createVerificationCode } from '../../infrastructures/SeniorHelpStatusInfrastructure';
+import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
 
 export class SeniorHelpCompletionUseCase {
   constructor(private helpStatusRepository: IHelpStatusRepository) {}
@@ -17,9 +18,9 @@ export class SeniorHelpCompletionUseCase {
     }
 
     // CONNECTING 상태에서만 완료 요청 가능
-    // if (currentStatus !== HelpStatus.CONNECTING) {
-    //   throw new Error('CONNECTING 상태에서만 완료를 요청할 수 있습니다.');
-    // }
+    if (currentStatus !== HelpStatus.CONNECTING) {
+      throw new Error('CONNECTING 상태에서만 완료를 요청할 수 있습니다.');
+    }
 
     // 인증 코드 생성
     const verificationCode = generateVerificationCode();

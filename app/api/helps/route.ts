@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { GetHelpListUseCase, } from "@/backend/helps/applications/usecases/CommonHelpUseCases";
-import { SbCommonHelpRepository } from "@/backend/helps/infrastructures/repositories/SbCommonHelpRepository";
-import { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+import { GetHelpListUseCase } from '@/backend/helps/applications/usecases/CommonHelpUseCases';
+import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
+import { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createHelpListUseCase = () => {
@@ -10,10 +10,10 @@ const createHelpListUseCase = () => {
   return new GetHelpListUseCase(repository);
 };
 
-
-
 // 헬프 리스트 조회 API
-export async function GET(): Promise<NextResponse<HelpListResponseDto[] | null>> {
+export async function GET(): Promise<
+  NextResponse<HelpListResponseDto[] | null>
+> {
   console.log('[API] GET /api/helps 호출됨');
 
   try {
@@ -21,7 +21,7 @@ export async function GET(): Promise<NextResponse<HelpListResponseDto[] | null>>
     const helpList: HelpListResponseDto[] | null = await useCase.execute();
 
     if (helpList) {
-      return NextResponse.json(helpList);
+      return NextResponse.json(helpList, { status: 200 });
     }
 
     return NextResponse.json(null, { status: 404 });
@@ -30,4 +30,3 @@ export async function GET(): Promise<NextResponse<HelpListResponseDto[] | null>>
     return NextResponse.json(null, { status: 500 });
   }
 }
-
