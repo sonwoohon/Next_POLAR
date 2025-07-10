@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import { LoginRequestDTO } from '@/backend/auths/login/applications/dtos/LoginRequest';
 import { LoginUseCase } from '@/backend/auths/login/applications/usecases/LoginUseCase';
 import { LoginRepository } from '@/backend/auths/login/infrastructures/LoginRepository';
-=======
-import { LoginRequestDTO } from '@/backend/users/auths/login/applications/dtos/LoginRequest';
-import { LoginUseCase } from '@/backend/users/auths/login/applications/usecases/LoginUseCase';
-import { LoginRepository } from '@/backend/users/auths/login/infrastructures/LoginRepository';
->>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 

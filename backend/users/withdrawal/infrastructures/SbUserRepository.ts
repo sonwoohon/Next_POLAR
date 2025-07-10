@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/backend/common/utils/supabaseClient';
 import { User } from '@/backend/users/withdrawal/domains/entities/User';
 import { UserRepository } from '@/backend/users/withdrawal/domains/repository/UserRepository';
 import { SbUserMapper } from '@/backend/users/withdrawal/infrastructures/mappers/SbUserMapper';

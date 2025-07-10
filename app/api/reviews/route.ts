@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
 import { CreateReviewDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
+import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
@@ -45,7 +46,18 @@ export async function POST(request: NextRequest) {
       text: String(text),
     };
 
-    const review = await reviewUseCases.createReview(createReviewDto);
+    // DTO를 Entity로 변환
+    const reviewEntity = new ReviewEntity(
+      undefined, // id는 DB에서 자동 생성
+      createReviewDto.helpId,
+      createReviewDto.writerId,
+      createReviewDto.receiverId,
+      createReviewDto.rating,
+      createReviewDto.text,
+      undefined // createdAt은 DB에서 자동 생성
+    );
+
+    const review = await reviewUseCases.createReview(reviewEntity);
 
     return NextResponse.json({ success: true, review }, { status: 201 });
   } catch (error) {

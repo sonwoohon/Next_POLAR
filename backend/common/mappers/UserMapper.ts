@@ -1,10 +1,5 @@
-<<<<<<<< HEAD:backend/users/user/infrastructures/mappers/UserMapper.ts
-import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUserEntity';
-import { UserProfileResponseDto } from '@/backend/users/user/applications/dtos/UserDtos';
-========
 import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
 import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
->>>>>>>> 714e74345bf047750ce28a37052b6141b2547621:backend/common/mappers/UserMapper.ts
 
 // Entity -> DB object (snake_case)
 export function toDbObject(entity: CommonUserEntity): {

@@ -1,26 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromCookie } from '@/lib/jwt';
-import { CommonUserUseCase } from '@/backend/users/applications/usecases/CommonUserUseCase';
-import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
-import {
-<<<<<<< HEAD
-  CommonUserUseCase,
-  ValidationError,
-} from '@/backend/users/user/applications/usecases/CommonUserUseCase';
+import { CommonUserUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
 import {
   UserUpdateRequestDto,
   UserProfileResponseDto,
 } from '@/backend/users/user/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';
-import { getAuthenticatedUser } from '@/lib/auth';
-=======
-  UserProfileResponseDto,
-  UserUpdateRequestDto,
-} from '@/backend/common/dtos/UserDto';
-import { entityToUserProfileResponseDto } from '@/backend/common/mappers/UserMapper';
 import { ValidationError } from '@/backend/common/errors/ValidationError';
->>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 // UseCase 인스턴스 생성 함수
 const createUseCase = () => {
@@ -87,7 +74,7 @@ export async function PUT(
   console.log('[API] PUT /api/users 호출됨');
 
   try {
-    const body: UserUpdateRequestDto = await request.json();
+    const body = await request.json();
     console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출

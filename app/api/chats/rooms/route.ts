@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GetChatRoomsUseCase } from '@/backend/chats/applications/usecases/GetChatRoomsUseCase';
-import { ChatRoomRepository } from '@/backend/chats/infrastructures/ChatRoomRepository';
+import { GetChatRoomsUseCase } from '@/backend/chats/chatrooms/applications/usecases/GetChatRoomsUseCase';
+import { ChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/ChatRoomRepository';
 import { getUserIdFromCookie } from '@/lib/jwt';
 
 // GET /api/chats/rooms

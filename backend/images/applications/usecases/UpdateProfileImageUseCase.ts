@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUserEntity';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
-=======
-import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
-import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
->>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 /**
  * 사용자의 프로필 이미지 URL을 업데이트하는 UseCase

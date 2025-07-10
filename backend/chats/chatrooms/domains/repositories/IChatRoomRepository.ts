@@ -1,4 +1,4 @@
-import { ChatRoom } from '@/backend/chats/domains/entities/ChatRoom';
+import { ChatRoom } from '@/backend/chats/chatrooms/domains/entities/ChatRoom';
 
 export interface IChatRoomRepository {
   // userId가 참여한 모든 대화방(helps) 리스트 조회

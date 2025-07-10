@@ -1,5 +1,4 @@
-<<<<<<<< HEAD:backend/users/user/infrastructures/repositories/SbUserRepository.ts
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/backend/common/utils/supabaseClient';
 import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/users/user/domains/repositories/UserRepository';
 import { fromDbObject } from '@/backend/users/user/infrastructures/mappers/UserMapper';
@@ -16,12 +15,6 @@ interface User {
   name: string;
   createdAt: Date;
 }
-========
-import { supabase } from '@/backend/common/utils/supabaseClient';
-import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
-import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
-import { fromDbObject } from '@/backend/common/mappers/UserMapper';
->>>>>>>> 714e74345bf047750ce28a37052b6141b2547621:backend/users/infrastructures/repositories/SbUserRepository.ts
 
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {

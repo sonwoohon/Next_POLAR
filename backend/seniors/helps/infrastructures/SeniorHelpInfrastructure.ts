@@ -1,17 +1,10 @@
 // Senior 도움 생성, 수정, 연결, 완료, help 조건부 삭제 관련 인프라스트럭처
 // 이 파일에는 Senior 사용자의 도움 생성, 수정, 연결, 완료, help 조건부 삭제 관련 외부 의존성 구현이 포함됩니다.
 
-<<<<<<< HEAD
-import { supabase } from '@/lib/supabase';
-import { SeniorHelp } from '@/backend/seniors/helps/domains/entities/SeniorHelp';
-import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInteface';
-import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
-=======
 import { supabase } from '@/backend/common/utils/supabaseClient';
 import { SeniorHelp } from '../domains/entities/SeniorHelp';
 import { ISeniorHelpRepositoryInterface } from '../domains/repositories/SeniorHelpRepositoryInteface';
 import { UpdateHelpRequestWithHelpId } from '../SeniorHelpModel';
->>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 type CategoryInput = number | number[];
 
