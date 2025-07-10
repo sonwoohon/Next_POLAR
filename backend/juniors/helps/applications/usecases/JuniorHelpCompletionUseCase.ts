@@ -1,6 +1,6 @@
 // 주니어 Help 완료 처리 유스케이스
-import { IHelpStatusRepository } from '../../../../helps/domains/repositories/IHelpStatusRepository';
-import { HelpStatus } from '../../../../helps/domains/entities/HelpStatus';
+import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatusRepository';
+import { HelpStatus } from '@/backend/common/entities/HelpStatus';
 import { IJuniorHelpStatusRepository } from '../../domains/repositories/IJuniorHelpStatusRepository';
 
 export class JuniorHelpCompletionUseCase {
