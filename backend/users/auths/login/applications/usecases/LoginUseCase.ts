@@ -1,7 +1,7 @@
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
-import { LoginRequest, LoginResponseDTO } from '../../LoginModel';
 import { LoginRepositoryInterface } from '../../domains/repository/LoginRepositoryInterface';
-import { LoginMapper } from '../../infrastructures/mappers/LoginMapper';
+import { LoginResponseDTO } from '../dtos/LoginResponse';
+import { LoginRequestDTO } from '../dtos/LoginRequest';
 
 // 실제 구현
 export class LoginUseCase {
@@ -11,8 +11,7 @@ export class LoginUseCase {
     this.loginRepository = loginRepository;
   }
 
-  async execute(request: LoginRequest): Promise<LoginResponseDTO> {
-    // 입력 검증
+  async execute(request: LoginRequestDTO): Promise<LoginResponseDTO> {
     if (!request.loginId || !request.password) {
       throw new Error('로그인 ID와 비밀번호를 입력해주세요.');
     }
@@ -31,29 +30,21 @@ export class LoginUseCase {
       throw new Error('로그인 ID와 비밀번호를 입력해주세요.');
     }
 
-    if (!this.loginRepository) {
-      throw new Error('LoginRepository가 초기화되지 않았습니다.');
-    }
-
-    // 1. 유저 조회 (phoneNumber 또는 email)
     const user = await this.loginRepository.findUserByLoginId(request.loginId);
 
-    // 2. 유효성 검증
     if (!user || user.password !== request.password) {
       throw new Error('로그인 정보가 올바르지 않습니다.');
     }
 
-    // 3. 토큰 발급
     const accessToken = generateAccessToken({
       id: user.id,
-      loginId: user.loginId,
+      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
     });
     const refreshToken = generateRefreshToken({
       id: user.id,
-      loginId: user.loginId,
+      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
     });
 
-    // 비밀번호 등 민감 정보는 응답에서 제외
-    return LoginMapper.toLoginResponseDTO(user, accessToken, refreshToken);
+    return new LoginResponseDTO(accessToken, refreshToken);
   }
 }
