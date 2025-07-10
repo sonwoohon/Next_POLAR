@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-UserIdFromCookie } from '@/lib/jwt';
+import { getUserIdFromCookie } from '@/lib/jwt';
 import {
   CommonUserUseCase,
   ValidationError,
@@ -27,8 +27,7 @@ export async function GET(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const getUserId = getAuthenticatedUser(request);
-    const userId = Number(getUserId);
+    const userId = getUserIdFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
@@ -83,8 +82,7 @@ export async function PUT(
     console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출
-    const getUserId = getAuthenticatedUser(request);
-    const userId = Number(getUserId);
+    const userId = getUserIdFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
@@ -134,8 +132,7 @@ export async function DELETE(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const getUserId = getAuthenticatedUser(request);
-    const userId = Number(getUserId);
+    const userId = getUserIdFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {

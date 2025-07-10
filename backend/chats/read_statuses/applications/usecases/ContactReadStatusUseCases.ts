@@ -9,6 +9,6 @@ export class ContactReadStatusUseCases {
   }
 
   async updateReadStatus(contactRoomId: number, readerId: number, lastReadMessageId: number): Promise<ContactReadStatusEntity> {
-    return this.repo.upsertReadStatus(contactRoomId, readerId, lastReadMessageId);
+    return this.repo.updateReadStatus(contactRoomId, readerId, lastReadMessageId);
   }
 } 

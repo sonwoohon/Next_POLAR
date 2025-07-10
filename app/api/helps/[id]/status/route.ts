@@ -74,7 +74,7 @@ export async function PATCH(
     );
 
     return NextResponse.json({
-      success,
+      status: success ? 200 : 500,
       message: success
         ? `Help 상태가 성공적으로 ${status}로 변경되었습니다.`
         : 'Help 상태 변경에 실패했습니다.',
