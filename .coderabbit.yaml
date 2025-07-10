@@ -1,0 +1,28 @@
+reviews:
+  # 자동 리뷰를 허용할 브랜치 목록
+  branches:
+    include:
+      - main
+      - develop
+      - feat/*
+      - refactor/*
+      - bug/*
+
+  # "Review skipped" 상태 메시지 숨기기
+  review_status: false
+  language: ko
+
+  # 리뷰 룰 설정 (원하는 대로 조정 가능)
+  rules:
+    - code-quality
+    - performance
+    - security
+    - readability
+    - best-practices
+
+  # 리뷰 설명 스타일
+  comments:
+    style: concise # 또는: detailed
+
+  # 각 리뷰에 AI 요약 포함 여부
+  summary: true
