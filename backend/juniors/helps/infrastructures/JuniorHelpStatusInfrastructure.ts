@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/backend/common/utils/supabaseClient';
 import { IJuniorHelpStatusRepository } from '../domains/repositories/IJuniorHelpStatusRepository';
 
 export class JuniorHelpStatusInfrastructure

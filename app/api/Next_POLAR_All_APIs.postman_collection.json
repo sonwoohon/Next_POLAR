@@ -1,0 +1,223 @@
+{
+  "info": {
+    "name": "Next_POLAR All APIs (with Params & Body)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Helps",
+      "item": [
+        {
+          "name": "Get Help List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/helps",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps"]
+            }
+          }
+        },
+        {
+          "name": "Get Help Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/helps/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Junior Helps",
+      "item": [
+        {
+          "name": "Get Junior Applied Help List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/helps/junior?juniorId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps", "junior"],
+              "query": [
+                {
+                  "key": "juniorId",
+                  "value": "1",
+                  "description": "주니어의 ID"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Apply Help",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"juniorId\": 1,\n  \"helpId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/helps/junior",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps", "junior"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Junior Help",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"juniorId\": 1,\n  \"helpId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/helps/junior",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps", "junior"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get Reviews by HelpId",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews?helpId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"],
+              "query": [
+                { "key": "helpId", "value": "1", "description": "헬프 ID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"helpId\": 1,\n  \"writerId\": 2,\n  \"receiverId\": 3,\n  \"rating\": 5,\n  \"text\": \"좋은 도움 감사합니다!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"홍길동\",\n  \"email\": \"hong@example.com\",\n  \"phoneNumber\": \"010-1234-5678\",\n  \"age\": 25,\n  \"profileImgUrl\": \"https://...\",\n  \"address\": \"서울시 강남구\",\n  \"password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"loginId\": \"hong@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "Upload Profile Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "multipart/form-data" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/images",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile Image",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/images",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images"]
+            }
+          }
+        },
+        {
+          "name": "Delete Profile Image",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/images",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
