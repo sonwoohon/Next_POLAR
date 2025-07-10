@@ -9,13 +9,6 @@ export class SbContactReadStatusRepository implements IContactReadStatusReposito
   async findByRoomAndReader(contactRoomId: number, readerId: number): Promise<ContactReadStatusEntity | null> {
     console.log(`[Repository] 읽음 상태 조회 시작: contactRoomId=${contactRoomId}, readerId=${readerId}`);
     
-    // 먼저 전체 데이터 확인
-    const { data: allData, error: allError } = await this.supabase
-      .from(this.table)
-      .select('*');
-    
-    console.log(`[Repository] 전체 데이터:`, allData);
-    
     const { data, error } = await this.supabase
       .from(this.table)
       .select('*')
