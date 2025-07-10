@@ -34,13 +34,11 @@ export async function GET(request: NextRequest) {
     const readStatus = await readStatusUseCases.getReadStatus(roomId, readerId);
     console.log('읽음 상태 조회 결과:', readStatus);
     
-    // 메시지가 있고 읽음 상태가 있으면 가장 최근 메시지 ID로 갱신
-    if (messages.length > 0 && readStatus) {
-      const lastMessage = messages[messages.length - 1];
-      if (lastMessage.id) {
-        await readStatusUseCases.updateReadStatus(roomId, readerId, lastMessage.id);
-        console.log('[API][GET /api/chats/messages] 읽음 상태 갱신 완료:', { lastMessageId: lastMessage.id });
-      }
+    // 메시지 조회 시 읽음 상태 업데이트 (채팅방의 최대 메시지 ID로)
+    if (messages.length > 0) {
+      const maxMessageId = Math.max(...messages.map(msg => msg.id || 0));
+      await readStatusUseCases.updateReadStatus(roomId, readerId, maxMessageId);
+      console.log('[API][GET /api/chats/messages] 읽음 상태 갱신 완료:', { maxMessageId });
     }
     
     // 각 메시지에 읽음/안읽음 상태 추가
@@ -88,7 +86,7 @@ export async function POST(request: NextRequest) {
       message,
     });
 
-    // 메시지 생성 후 읽음 상태 업데이트 (없으면 추가, 있으면 갱신)
+    // 메시지 생성 후 읽음 상태 업데이트 (생성된 메시지 ID로)
     if (created && created.id) {
       await readStatusUseCases.updateReadStatus(contactRoomId, senderId, created.id);
       console.log('[API][POST /api/chats/messages] 읽음 상태 업데이트 완료:', { messageId: created.id });

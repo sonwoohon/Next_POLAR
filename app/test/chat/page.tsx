@@ -91,9 +91,31 @@ export default function ChatTestPage() {
       
       if (response.ok) {
         setNewMessage('');
-        // 새 메시지 추가
-        setMessages(prev => [...prev, data.message]);
+        // 새 메시지 추가 (올바른 형식으로)
+        const newMessageObj = {
+          id: data.message.id,
+          senderId: data.message.senderId,
+          contactRoomId: data.message.contactRoomId,
+          message: data.message.message,
+          createdAt: data.message.createdAt,
+          isRead: true // 내가 보낸 메시지는 읽음으로 처리
+        };
+        setMessages(prev => [...prev, newMessageObj]);
+        
+        // 읽음 상태도 업데이트
+        if (data.message.id) {
+          setReadStatus(prev => prev ? {
+            ...prev,
+            lastReadMessageId: Math.max(prev.lastReadMessageId, data.message.id)
+          } : null);
+        }
+        
         console.log('메시지 전송 성공:', data);
+        
+        // 메시지 전송 후 잠시 후 메시지 목록 새로고침 (실시간 구독이 안 될 경우를 대비)
+        setTimeout(() => {
+          fetchMessages();
+        }, 500);
       } else {
         setError(data.error || '메시지 전송 실패');
         console.error('메시지 전송 실패:', data);
@@ -106,10 +128,10 @@ export default function ChatTestPage() {
     }
   };
 
-  // 실시간 메시지 구독
+  // 실시간 구독 (메시지 + 읽음 상태)
   useEffect(() => {
     const channel = supabase
-      .channel('contact_messages')
+      .channel('chat_updates')
       .on(
         'postgres_changes',
         {
@@ -120,8 +142,55 @@ export default function ChatTestPage() {
         },
         (payload) => {
           console.log('실시간 메시지 수신:', payload);
-          const newMessage = payload.new as Message;
-          setMessages(prev => [...prev, newMessage]);
+          const newMessage = {
+            id: payload.new.id,
+            senderId: payload.new.sender_id,
+            contactRoomId: payload.new.contact_room_id,
+            message: payload.new.message,
+            createdAt: payload.new.created_at,
+            isRead: false // 새로 받은 메시지는 안읽음으로 처리
+          } as Message;
+          
+          // 중복 메시지 방지
+          setMessages(prev => {
+            const exists = prev.some(msg => msg.id === newMessage.id);
+            if (!exists) {
+              return [...prev, newMessage];
+            }
+            return prev;
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'contact_read_statuses',
+          filter: `contact_room_id=eq.${roomId}`
+        },
+        (payload) => {
+          console.log('실시간 읽음 상태 변경:', payload);
+          // 읽음 상태가 변경되면 메시지 목록 새로고침
+          setTimeout(() => {
+            fetchMessages();
+          }, 100);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'contact_read_statuses',
+          filter: `contact_room_id=eq.${roomId}`
+        },
+        (payload) => {
+          console.log('실시간 읽음 상태 생성:', payload);
+          // 읽음 상태가 생성되면 메시지 목록 새로고침
+          setTimeout(() => {
+            fetchMessages();
+          }, 100);
         }
       )
       .subscribe();
