@@ -1,15 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { SbCommonHelpRepository } from "@/backend/helps/infrastructures/repositories/SbCommonHelpRepository";
-import { GetHelpDetailUseCase } from "@/backend/helps/applications/usecases/CommonHelpUseCases";
-import { HelpDetailResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
-
+import { NextRequest, NextResponse } from 'next/server';
+import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
+import { GetHelpDetailUseCase } from '@/backend/helps/applications/usecases/CommonHelpUseCases';
+import { HelpDetailResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 const createHelpDetailUseCase = () => {
   const repository = new SbCommonHelpRepository();
   return new GetHelpDetailUseCase(repository);
 };
 
-export async function GET(request: NextRequest): Promise<NextResponse<HelpDetailResponseDto | null>> {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<HelpDetailResponseDto | null>> {
   console.log('[API] GET /api/helps/:id 호출됨');
   const id: number = parseInt(request.nextUrl.pathname.split('/').pop() || '0');
 
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<HelpDetail
 
     if (helpDetail) {
       console.log('[API] 헬프 상세 조회 성공:', helpDetail);
-      return NextResponse.json(helpDetail);
+      return NextResponse.json(helpDetail, { status: 200 });
     }
 
     return NextResponse.json(null, { status: 404 });
