@@ -6,6 +6,12 @@ import { ContactMessageMapper } from '@/backend/chats/messages/infrastructures/m
 export class SbContactMessageRepository implements IContactMessageRepository {
   // 메시지 저장
   async create(message: ContactMessageEntity): Promise<ContactMessageEntity> {
+    console.log('[Repository] 메시지 생성 시작:', {
+      senderId: message.senderId,
+      contactRoomId: message.contactRoomId,
+      message: message.message
+    });
+
     const { data, error } = await supabase
       .from('contact_messages')
       .insert({
@@ -16,8 +22,26 @@ export class SbContactMessageRepository implements IContactMessageRepository {
       .select()
       .single();
 
-    if (error) throw error;
-    if (!data) throw new Error('메시지 생성 실패');
+    if (error) {
+      console.error('[Repository] 메시지 생성 오류:', error);
+      throw error;
+    }
+    
+    if (!data) {
+      console.error('[Repository] 메시지 생성 실패 - 데이터 없음');
+      throw new Error('메시지 생성 실패');
+    }
+
+    console.log('[Repository] 메시지 생성 성공:', {
+      id: data.id,
+      senderId: data.sender_id,
+      contactRoomId: data.contact_room_id,
+      message: data.message,
+      createdAt: data.created_at
+    });
+
+    console.log('[Repository] Supabase Realtime 이벤트 발생 예상 - contact_messages 테이블 INSERT');
+    console.log('[Repository] 구독자들이 이 이벤트를 받아야 함');
 
     return ContactMessageMapper.toEntity(data);
   }

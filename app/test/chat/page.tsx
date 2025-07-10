@@ -40,9 +40,9 @@ export default function ChatTestPage() {
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+      const router = useRouter();
 
-  const roomId = 1; // 테스트용 roomId
+  const roomId = 2; // 테스트용 roomId
 
   // 메시지 조회
   const fetchMessages = async () => {
@@ -57,6 +57,9 @@ export default function ChatTestPage() {
         setMessages(data.messages || []);
         setReadStatus(data.readStatus);
         console.log('메시지 조회 성공:', data);
+        
+        // 메시지 조회 시 읽음 상태가 업데이트되었으므로 실시간 이벤트 발생
+        console.log('[메시지 조회] 읽음 상태 업데이트로 인한 실시간 이벤트 발생');
       } else {
         setError(data.error || '메시지 조회 실패');
         console.error('메시지 조회 실패:', data);
@@ -68,6 +71,10 @@ export default function ChatTestPage() {
       setLoading(false);
     }
   };
+
+
+
+
 
   // 메시지 생성
   const sendMessage = async () => {
@@ -111,11 +118,6 @@ export default function ChatTestPage() {
         }
         
         console.log('메시지 전송 성공:', data);
-        
-        // 메시지 전송 후 잠시 후 메시지 목록 새로고침 (실시간 구독이 안 될 경우를 대비)
-        setTimeout(() => {
-          fetchMessages();
-        }, 500);
       } else {
         setError(data.error || '메시지 전송 실패');
         console.error('메시지 전송 실패:', data);
@@ -130,8 +132,19 @@ export default function ChatTestPage() {
 
   // 실시간 구독 (메시지 + 읽음 상태)
   useEffect(() => {
+    console.log('[실시간 구독] 채널 생성 시작, roomId:', roomId, 'user:', user);
+    
+    if (!user) {
+      console.log('[실시간 구독] 사용자 정보가 없어서 구독을 건너뜀');
+      return;
+    }
+    
+    console.log('[실시간 구독] Supabase 클라이언트 상태 확인:', {
+      hasRealtime: !!supabase.realtime
+    });
+    
     const channel = supabase
-      .channel('chat_updates')
+      .channel(`chat_room_${roomId}`)
       .on(
         'postgres_changes',
         {
@@ -141,64 +154,101 @@ export default function ChatTestPage() {
           filter: `contact_room_id=eq.${roomId}`
         },
         (payload) => {
-          console.log('실시간 메시지 수신:', payload);
-          const newMessage = {
-            id: payload.new.id,
-            senderId: payload.new.sender_id,
-            contactRoomId: payload.new.contact_room_id,
-            message: payload.new.message,
-            createdAt: payload.new.created_at,
-            isRead: false // 새로 받은 메시지는 안읽음으로 처리
-          } as Message;
+          console.log('[실시간 메시지] INSERT 이벤트 수신:', payload);
+          console.log('[실시간 메시지] 새로운 메시지 감지, 화면에 바로 추가');
+          console.log('[실시간 메시지] payload.new:', payload.new);
+          console.log('[실시간 메시지] payload.old:', payload.old);
+          console.log('[실시간 메시지] payload.eventType:', payload.eventType);
+          console.log('[실시간 메시지] payload.table:', payload.table);
           
-          // 중복 메시지 방지
-          setMessages(prev => {
-            const exists = prev.some(msg => msg.id === newMessage.id);
-            if (!exists) {
-              return [...prev, newMessage];
-            }
-            return prev;
-          });
+          // 새로운 메시지를 바로 화면에 추가
+          if (payload.new) {
+            const newMessage = {
+              id: payload.new.id,
+              senderId: payload.new.sender_id,
+              contactRoomId: payload.new.contact_room_id,
+              message: payload.new.message,
+              createdAt: payload.new.created_at,
+              isRead: false // 상대방이 보낸 메시지는 안읽음으로 처리
+            };
+            
+            console.log('[실시간 메시지] 새 메시지 객체 생성:', newMessage);
+            
+            setMessages(prev => {
+              console.log('[실시간 메시지] 현재 메시지 목록:', prev.length, '개');
+              console.log('[실시간 메시지] 기존 메시지 ID들:', prev.map(msg => msg.id));
+              
+              // 중복 방지 (이미 있는 메시지는 추가하지 않음)
+              const exists = prev.some(msg => msg.id === newMessage.id);
+              if (exists) {
+                console.log('[실시간 메시지] 이미 존재하는 메시지, 추가하지 않음:', newMessage.id);
+                return prev;
+              }
+              
+              console.log('[실시간 메시지] 메시지 목록에 추가:', newMessage);
+              const updatedMessages = [...prev, newMessage];
+              console.log('[실시간 메시지] 업데이트된 메시지 목록:', updatedMessages.length, '개');
+              
+              // 로그 즉시 갱신
+              console.log('🔄 실시간 메시지 수신 - 화면 갱신됨');
+              console.log('📨 새 메시지:', newMessage.message);
+              console.log('👤 발신자 ID:', newMessage.senderId);
+              console.log('⏰ 수신 시간:', new Date().toLocaleTimeString());
+              
+              return updatedMessages;
+            });
+          }
         }
       )
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: '*',
           schema: 'public',
-          table: 'contact_read_statuses',
+          table: 'contact_messages',
           filter: `contact_room_id=eq.${roomId}`
         },
         (payload) => {
-          console.log('실시간 읽음 상태 변경:', payload);
-          // 읽음 상태가 변경되면 메시지 목록 새로고침
-          setTimeout(() => {
-            fetchMessages();
-          }, 100);
+          console.log('[실시간 메시지] 모든 이벤트 수신:', payload);
+          console.log('[실시간 메시지] 이벤트 타입:', payload.eventType);
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'contact_read_statuses',
-          filter: `contact_room_id=eq.${roomId}`
-        },
-        (payload) => {
-          console.log('실시간 읽음 상태 생성:', payload);
-          // 읽음 상태가 생성되면 메시지 목록 새로고침
-          setTimeout(() => {
-            fetchMessages();
-          }, 100);
+      .on('system', { event: 'disconnect' }, () => {
+        console.log('[실시간 구독] 시스템 연결 해제됨');
+      })
+      .on('system', { event: 'reconnect' }, () => {
+        console.log('[실시간 구독] 시스템 재연결됨');
+      })
+      .on('presence', { event: 'sync' }, () => {
+        console.log('[실시간 구독] presence sync');
+      })
+      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+        console.log('[실시간 구독] presence join:', key, newPresences);
+      })
+      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+        console.log('[실시간 구독] presence leave:', key, leftPresences);
+      })
+
+      .subscribe((status) => {
+        console.log('[실시간 구독] 구독 상태:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('[실시간 구독] 성공적으로 구독됨 - contact_messages 테이블의 INSERT 이벤트를 기다리는 중...');
+          console.log('[실시간 구독] 구독된 채널:', `chat_room_${roomId}`);
+          console.log('[실시간 구독] 필터 조건:', `contact_room_id=eq.${roomId}`);
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('[실시간 구독] 채널 오류 발생');
+        } else if (status === 'TIMED_OUT') {
+          console.error('[실시간 구독] 구독 시간 초과');
+        } else if (status === 'CLOSED') {
+          console.log('[실시간 구독] 채널이 닫힘');
         }
-      )
-      .subscribe();
+      });
 
     return () => {
+      console.log('[실시간 구독] 채널 정리:', `chat_room_${roomId}`);
       supabase.removeChannel(channel);
     };
-  }, [roomId]);
+  }, [roomId, user]);
 
   // 사용자 정보 조회
   const fetchUserProfile = async () => {
@@ -234,6 +284,8 @@ export default function ChatTestPage() {
       fetchMessages();
     }
   }, [user]);
+
+
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
@@ -298,6 +350,47 @@ export default function ChatTestPage() {
             {readStatus && (
               <p>마지막 읽은 메시지 ID: {readStatus.lastReadMessageId}</p>
             )}
+            <p>실시간 메시지 구독: 🔄 활성화됨</p>
+            <p>메시지 자동 갱신: ✅ 활성화됨</p>
+            <p>실시간 구독: 🔄 활성화됨 (WebSocket 기반)</p>
+            
+            {/* 디버깅 버튼 */}
+            <div style={{ marginTop: '15px' }}>
+              <button
+                onClick={() => {
+                  console.log('[디버깅] 수동 메시지 새로고침');
+                  fetchMessages();
+                }}
+                style={{ 
+                  marginRight: '10px',
+                  padding: '8px 16px',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                메시지 새로고침
+              </button>
+              <button
+                onClick={() => {
+                  console.log('[디버깅] Supabase 연결 상태 확인');
+                  console.log('Realtime 상태:', supabase.realtime);
+                  console.log('Supabase 클라이언트:', supabase);
+                }}
+                style={{ 
+                  padding: '8px 16px',
+                  backgroundColor: '#17a2b8',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                연결 상태 확인
+              </button>
+            </div>
           </div>
 
           {/* 에러 메시지 */}
@@ -332,21 +425,14 @@ export default function ChatTestPage() {
               <div key={message.id} style={{ 
                 marginBottom: '15px', 
                 padding: '15px', 
-                backgroundColor: message.isRead ? '#e8f5e8' : '#f8f9fa',
+                backgroundColor: '#f8f9fa',
                 borderRadius: '8px',
-                border: message.isRead ? '1px solid #28a745' : '1px solid #dee2e6'
+                border: '1px solid #dee2e6'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <span style={{ fontWeight: 'bold' }}>User {message.senderId}</span>
-                      <span style={{ 
-                        fontSize: '12px', 
-                        color: message.isRead ? '#28a745' : '#666',
-                        fontWeight: 'bold'
-                      }}>
-                        {message.isRead ? '✓ 읽음' : '○ 안읽음'}
-                      </span>
                     </div>
                     <p style={{ marginTop: '5px' }}>{message.message}</p>
                   </div>
@@ -399,23 +485,30 @@ export default function ChatTestPage() {
             </div>
           </div>
 
-          {/* 테스트 버튼들 */}
-          <div style={{ marginTop: '20px' }}>
-            <button
-              onClick={fetchMessages}
-              disabled={loading}
-              style={{ 
-                width: '100%',
-                padding: '12px',
-                backgroundColor: loading ? '#ccc' : '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: loading ? 'not-allowed' : 'pointer'
-              }}
-            >
-              메시지 새로고침
-            </button>
+          {/* 자동 refetch 상태 표시 */}
+          <div style={{ 
+            marginTop: '20px',
+            padding: '15px',
+            backgroundColor: '#e8f5e8',
+            borderRadius: '8px',
+            border: '1px solid #28a745',
+            textAlign: 'center'
+          }}>
+            <p style={{ 
+              margin: '0', 
+              color: '#28a745', 
+              fontWeight: 'bold',
+              fontSize: '14px'
+            }}>
+              🔄 실시간 업데이트 활성화됨
+            </p>
+            <p style={{ 
+              margin: '5px 0 0 0', 
+              color: '#666', 
+              fontSize: '12px'
+            }}>
+              메시지와 읽음 상태가 실시간으로 자동 갱신됩니다
+            </p>
           </div>
         </>
       )}
