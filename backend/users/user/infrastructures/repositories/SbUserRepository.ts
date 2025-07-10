@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:backend/users/user/infrastructures/repositories/SbUserRepository.ts
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/users/user/domains/repositories/UserRepository';
@@ -15,6 +16,12 @@ interface User {
   name: string;
   createdAt: Date;
 }
+========
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
+import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
+import { fromDbObject } from '@/backend/common/mappers/UserMapper';
+>>>>>>>> 714e74345bf047750ce28a37052b6141b2547621:backend/users/infrastructures/repositories/SbUserRepository.ts
 
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
@@ -113,10 +120,7 @@ export class SbUserRepository implements IUserRepository {
     console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
 
     try {
-      const { error } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('users').delete().eq('id', id);
 
       if (error) {
         console.error('[Repository] Supabase 사용자 삭제 오류:', error);
@@ -129,4 +133,4 @@ export class SbUserRepository implements IUserRepository {
       throw error;
     }
   }
-} 
+}

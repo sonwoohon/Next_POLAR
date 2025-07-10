@@ -17,7 +17,6 @@ export class CommonUserEntity {
     return {
       id: this.id,
       phoneNumber: this.phoneNumber,
-      password: this.password,
       email: this.email,
       age: this.age,
       profileImgUrl: this.profileImgUrl,

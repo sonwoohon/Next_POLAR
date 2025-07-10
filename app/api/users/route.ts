@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromCookie } from '@/lib/jwt';
+import { CommonUserUseCase } from '@/backend/users/applications/usecases/CommonUserUseCase';
+import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
 import {
+<<<<<<< HEAD
   CommonUserUseCase,
   ValidationError,
 } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
@@ -11,18 +14,24 @@ import {
 } from '@/backend/users/user/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';
 import { getAuthenticatedUser } from '@/lib/auth';
+=======
+  UserProfileResponseDto,
+  UserUpdateRequestDto,
+} from '@/backend/common/dtos/UserDto';
+import { entityToUserProfileResponseDto } from '@/backend/common/mappers/UserMapper';
+import { ValidationError } from '@/backend/common/errors/ValidationError';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 // UseCase 인스턴스 생성 함수
 const createUseCase = () => {
   const userRepository = new SbUserRepository();
   return new CommonUserUseCase(userRepository);
-
 };
 
 // GET: 쿠키를 통한 로그인된 사용자 정보 조회
 export async function GET(
   request: NextRequest
-): Promise<NextResponse<UserProfileResponseDto | any>> {
+): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
   console.log('[API] GET /api/users 호출됨');
 
   try {
@@ -74,7 +83,7 @@ export async function GET(
 // PUT: 쿠키를 통한 로그인된 사용자 정보 수정 (비밀번호 포함)
 export async function PUT(
   request: NextRequest
-): Promise<NextResponse<UserProfileResponseDto | any>> {
+): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
   console.log('[API] PUT /api/users 호출됨');
 
   try {
@@ -127,7 +136,7 @@ export async function PUT(
 // DELETE: 프로필 이미지 삭제 (빈 프로필로 설정)
 export async function DELETE(
   request: NextRequest
-): Promise<NextResponse<UserProfileResponseDto | any>> {
+): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
   console.log('[API] DELETE /api/users 호출됨');
 
   try {

@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
 import { CommonHelpStatusUseCase } from '@/backend/helps/applications/usecases/CommonHelpStatusUseCases';
 import { HelpStatusRepository } from '@/backend/helps/infrastructures/HelpStatusInfrastructure';
 import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
+=======
+import { CommonHelpStatusUseCase } from '../../../../../backend/helps/applications/usecases/CommonHelpStatusUseCases';
+import { HelpStatusRepository } from '../../../../../backend/helps/infrastructures/HelpStatusInfrastructure';
+import { HelpStatus } from '@/backend/common/entities/HelpStatus';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 // 공통 Help 상태 관리 API
 const commonHelpStatusUseCase = new CommonHelpStatusUseCase(

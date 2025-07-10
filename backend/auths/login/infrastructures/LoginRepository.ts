@@ -1,6 +1,12 @@
+<<<<<<< HEAD:backend/auths/login/infrastructures/LoginRepository.ts
 import { supabase } from '@/lib/supabase';
 import { LoginDBResponse } from '@/backend/auths/login/LoginModel';
 import { LoginMapper } from '@/backend/auths/login/infrastructures/mappers/LoginMapper';
+=======
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { LoginDBResponse } from '../LoginModel';
+import { LoginMapper } from './mappers/LoginMapper';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621:backend/users/auths/login/infrastructures/LoginRepository.ts
 
 // 로그인에 필요한 사용자 정보를 가져오는 Repository
 export class LoginRepository {

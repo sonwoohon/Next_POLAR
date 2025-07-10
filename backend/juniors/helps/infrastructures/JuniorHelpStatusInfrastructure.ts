@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { supabase } from '@/lib/supabase';
 import { IJuniorHelpStatusRepository } from '@/backend/juniors/helps/domains/repositories/IJuniorHelpStatusRepository';
+=======
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { IJuniorHelpStatusRepository } from '../domains/repositories/IJuniorHelpStatusRepository';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 export class JuniorHelpStatusInfrastructure
   implements IJuniorHelpStatusRepository

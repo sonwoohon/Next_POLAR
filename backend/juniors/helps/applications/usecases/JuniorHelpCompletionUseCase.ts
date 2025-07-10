@@ -1,7 +1,13 @@
 // 주니어 Help 완료 처리 유스케이스
+<<<<<<< HEAD
 import { IHelpStatusRepository } from '@/backend/helps/domains/repositories/IHelpStatusRepository';
 import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
 import { IJuniorHelpStatusRepository } from '@/backend/juniors/helps/domains/repositories/IJuniorHelpStatusRepository';
+=======
+import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatusRepository';
+import { HelpStatus } from '@/backend/common/entities/HelpStatus';
+import { IJuniorHelpStatusRepository } from '../../domains/repositories/IJuniorHelpStatusRepository';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 export class JuniorHelpCompletionUseCase {
   constructor(

@@ -9,11 +9,19 @@
 // - AnalyticsService: 분석 서비스
 
 // 인프라스트럭처는 외부 의존성의 실제 구현을 담당하며, 인터페이스를 구현합니다.
+<<<<<<< HEAD
 import { supabase } from '@/lib/supabase';
 import { ScoreRepositoryInterface } from '@/backend/juniors/scores/domains/repositories/ScoreRepositoryInterface';
 import { Score } from '@/backend/juniors/scores/domains/entities/Score';
 import { ScoreMapper } from '@/backend/juniors/scores/infrastructures/mappers/ScoreMapper';
 import { ScoreDBResponse } from '@/backend/juniors/scores/ScoreModel';
+=======
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { ScoreRepositoryInterface } from '../domains/repositories/ScoreRepositoryInterface';
+import { Score } from '../domains/entities/Score';
+import { ScoreMapper } from './mappers/ScoreMapper';
+import { ScoreDBResponse } from '../ScoreModel';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 export class ScoreRepository implements ScoreRepositoryInterface {
   private async queryScores(filters: Record<string, number>): Promise<Score[]> {

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { supabase } from '@/lib/supabase';
 import { IHelpStatusRepository } from '@/backend/helps/domains/repositories/IHelpStatusRepository';
 import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
+=======
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatusRepository';
+import { HelpStatus } from '@/backend/common/entities/HelpStatus';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 // 에러 처리 헬퍼 함수
 const handleSupabaseError = (error: unknown, operation: string): never => {

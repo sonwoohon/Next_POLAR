@@ -1,11 +1,20 @@
 // 시니어 Help 완료 요청 유스케이스
+<<<<<<< HEAD
 import { IHelpStatusRepository } from '@/backend/helps/domains/repositories/IHelpStatusRepository';
+=======
+import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatusRepository';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 import {
   generateVerificationCode,
   getVerificationExpiryTime,
 } from '@/lib/verify';
+<<<<<<< HEAD
 import { createVerificationCode } from '@/backend/seniors/helps/infrastructures/SeniorHelpStatusInfrastructure';
 import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
+=======
+import { createVerificationCode } from '../../infrastructures/SeniorHelpStatusInfrastructure';
+import { HelpStatus } from '@/backend/common/entities/HelpStatus';
+>>>>>>> 714e74345bf047750ce28a37052b6141b2547621
 
 export class SeniorHelpCompletionUseCase {
   constructor(private helpStatusRepository: IHelpStatusRepository) {}
