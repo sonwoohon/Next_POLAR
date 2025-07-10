@@ -1,4 +1,4 @@
-import { ISeniorHelpRepositoryInterface } from '../../domains/repositories/SeniorHelpRepositoryInteface';
+import { ISeniorHelpRepositoryInterface } from '../../domains/repositories/SeniorHelpRepositoryInterface';
 import {
   CreateSeniorHelpRequestDto,
   UpdateSeniorHelpRequestDto,

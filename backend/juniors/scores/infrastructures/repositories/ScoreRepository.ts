@@ -10,13 +10,23 @@
 
 // 인프라스트럭처는 외부 의존성의 실제 구현을 담당하며, 인터페이스를 구현합니다.
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { ScoreRepositoryInterface } from '../domains/repositories/ScoreRepositoryInterface';
-import { Score } from '../domains/entities/Score';
-import { ScoreMapper } from './mappers/ScoreMapper';
-import { ScoreDBResponse } from '../ScoreModel';
+import { Score } from '../../domains/entities/Score';
+import { ScoreMapper } from '../mappers/ScoreMapper';
+import { ScoreDBResponse } from '../../ScoreModel';
+import { ScoreRepositoryInterface } from '../../domains/repositories/ScoreRepositoryInterface';
+import {
+  ScoreRequestDtoWithCategoryId,
+  ScoreRequestDtoWithCategoryIdAndSeason,
+  ScoreRequestDtoWithSeason,
+  ScoreRequestDtoWithUserId,
+  ScoreRequestDtoWithUserIdAndCategoryId,
+  ScoreRequestDtoWithUserIdAndSeason,
+} from '../../applications/dtos/ScoreRequestDto';
 
 export class ScoreRepository implements ScoreRepositoryInterface {
-  private async queryScores(filters: Record<string, number>): Promise<Score[]> {
+  private async queryScores(
+    filters: Record<string, number | string>
+  ): Promise<Score[]> {
     const scoreColumns = `
       user_id,
       category_id,
@@ -48,36 +58,48 @@ export class ScoreRepository implements ScoreRepositoryInterface {
     } as unknown as ScoreDBResponse);
   }
 
-  async getScoresByUserId(userId: number): Promise<Score[]> {
-    return this.queryScores({ user_id: userId });
+  async getScoresByUserId(
+    request: ScoreRequestDtoWithUserId
+  ): Promise<Score[]> {
+    return this.queryScores({ user_id: request.userId });
   }
 
-  async getScoresByCategoryId(categoryId: number): Promise<Score[]> {
-    return this.queryScores({ category_id: categoryId });
+  async getScoresByCategoryId(
+    request: ScoreRequestDtoWithCategoryId
+  ): Promise<Score[]> {
+    return this.queryScores({ category_id: request.categoryId });
   }
 
-  async getScoresBySeason(season: number): Promise<Score[]> {
-    return this.queryScores({ season });
+  async getScoresBySeason(
+    request: ScoreRequestDtoWithSeason
+  ): Promise<Score[]> {
+    return this.queryScores({ season: request.season });
   }
 
   async getScoresByUserIdAndSeason(
-    userId: number,
-    season: number
+    request: ScoreRequestDtoWithUserIdAndSeason
   ): Promise<Score[]> {
-    return this.queryScores({ user_id: userId, season });
+    return this.queryScores({
+      user_id: request.userId,
+      season: request.season,
+    });
   }
 
   async getScoresByCategoryIdAndSeason(
-    categoryId: number,
-    season: number
+    request: ScoreRequestDtoWithCategoryIdAndSeason
   ): Promise<Score[]> {
-    return this.queryScores({ category_id: categoryId, season });
+    return this.queryScores({
+      category_id: request.categoryId,
+      season: request.season,
+    });
   }
 
   async getScoresByUserIdAndCategoryId(
-    userId: number,
-    categoryId: number
+    request: ScoreRequestDtoWithUserIdAndCategoryId
   ): Promise<Score[]> {
-    return this.queryScores({ user_id: userId, category_id: categoryId });
+    return this.queryScores({
+      user_id: request.userId,
+      category_id: request.categoryId,
+    });
   }
 }

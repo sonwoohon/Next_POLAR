@@ -2,9 +2,9 @@
 // 이 파일에는 Senior 사용자의 도움 생성, 수정, 연결, 완료, help 조건부 삭제 관련 외부 의존성 구현이 포함됩니다.
 
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { SeniorHelp } from '../domains/entities/SeniorHelp';
-import { ISeniorHelpRepositoryInterface } from '../domains/repositories/SeniorHelpRepositoryInteface';
-import { UpdateHelpRequestWithHelpId } from '../SeniorHelpModel';
+import { SeniorHelp } from '../../domains/entities/SeniorHelp';
+import { ISeniorHelpRepositoryInterface } from '../../domains/repositories/SeniorHelpRepositoryInterface';
+import { UpdateHelpRequestWithHelpId } from '../../SeniorHelpModel';
 
 type CategoryInput = number | number[];
 

@@ -4,7 +4,7 @@ import {
   generateVerificationCode,
   getVerificationExpiryTime,
 } from '@/lib/verify';
-import { createVerificationCode } from '../../infrastructures/SeniorHelpStatusInfrastructure';
+import { createVerificationCode } from '../../infrastructures/repositories/SeniorHelpStatusRepositories';
 import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
 
 export class SeniorHelpCompletionUseCase {
