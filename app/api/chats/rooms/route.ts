@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GetChatRoomsUseCase } from '@/backend/chats/applications/usecases/GetChatRoomsUseCase';
-import { ChatRoomRepository } from '@/backend/chats/infrastructures/ChatRoomRepository';
+import { ChatRoomRepository } from '@/backend/chats/infrastructures/repositories/IChatRoomRepository';
 import { getUserIdFromCookie } from '@/lib/jwt';
 
 // GET /api/chats/rooms
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   // 유스케이스 실행
   const usecase = new GetChatRoomsUseCase(new ChatRoomRepository());
-  const rooms = await usecase.execute(userId);
+  const rooms = await usecase.execute({ userId });
 
   // 결과 반환
   return NextResponse.json(rooms);
