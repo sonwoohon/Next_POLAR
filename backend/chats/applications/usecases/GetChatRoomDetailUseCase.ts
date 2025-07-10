@@ -1,4 +1,5 @@
-import { IChatRoomRepository } from '../../domains/repositories/IChatRoomRepository';
+import { IChatRoomRepository } from '@backend/chats/domains/repositories/IChatRoomRepository';
+import { ChatRoom } from '@backend/chats/domains/entities/ChatRoom';
 import { 
   GetChatRoomDetailRequestDto, 
   ChatRoomDetailResponseDto 
@@ -15,7 +16,11 @@ export class GetChatRoomDetailUseCase {
       return null;
     }
 
-    // TODO: 실제 구현에서는 사용자 정보와 헬프 정보를 가져와야 함
+    return this.mapRoomToResponseDto(room);
+  }
+
+  // ChatRoom 엔티티를 응답 DTO로 매핑하는 private 메서드
+  private mapRoomToResponseDto(room: ChatRoom): ChatRoomDetailResponseDto {
     return {
       helpId: room.helpId,
       juniorId: room.juniorId,
