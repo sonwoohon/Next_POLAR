@@ -1,120 +1,170 @@
 // 회원 정보 조회 및 수정 UseCase
-import { UserEntity } from '../../domains/entities/CommonAuthEntity';
-import { IUserRepository } from '../../domains/repositories/IUserRepository';
-
-// 모든 사용자 조회 UseCase
-export class GetAllUsersUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
-
-  async execute(): Promise<UserEntity[]> {
-    return this.userRepository.getAllUsers();
-  }
-}
+import { CommonUserEntity as UserEntity } from '@/backend/common/entities/UserEntity';
+import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
+import { ValidationError } from '@/backend/common/errors/ValidationError';
+import { UserValidator } from '@/backend/common/validators/UserValidator';
+import { UserProfileUpdate } from '@/backend/common/dtos/UserDto';
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(id: number): Promise<UserEntity | null> {
     return this.userRepository.getUserById(id);
   }
 }
 
-// 회원 정보 수정 UseCase
-export class UpdateUserInfoUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+// 사용자 정보 수정 UseCase
+export class UpdateUserUseCase {
+  constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: number, updateData: any): Promise<any | null> {
-    return this.userRepository.updateUser(id, updateData);
+  async execute(id: number, user: UserEntity): Promise<UserEntity | null> {
+    return this.userRepository.updateUser(id, user);
   }
 }
 
-// 검증 에러 클래스
-export class ValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ValidationError';
+// 사용자 프로필 업데이트 UseCase
+export class UpdateUserProfileUseCase {
+  constructor(private readonly userRepository: IUserRepository) {}
+
+  async updateUserProfile(
+    id: number,
+    updates: UserProfileUpdate
+  ): Promise<UserEntity> {
+    console.log(`[UseCase] 사용자 프로필 업데이트 시작 - ID: ${id}`, updates);
+
+    try {
+      // 기존 사용자 정보 조회
+      const existingUser = await this.userRepository.getUserById(id);
+      if (!existingUser) {
+        console.error(
+          `[UseCase] 사용자 프로필 업데이트 실패 - 사용자를 찾을 수 없음 - ID: ${id}`
+        );
+        throw new ValidationError('사용자를 찾을 수 없습니다.');
+      }
+
+      console.log(
+        `[UseCase] 기존 사용자 정보 - ID: ${id}`,
+        existingUser.toJSON()
+      );
+
+      // 업데이트할 필드 검증
+      if (updates.phoneNumber) {
+        UserValidator.validatePhoneNumber(updates.phoneNumber);
+      }
+      if (updates.email) {
+        UserValidator.validateEmail(updates.email);
+      }
+      if (updates.age) {
+        UserValidator.validateAge(updates.age);
+      }
+      if (updates.profileImgUrl) {
+        UserValidator.validateProfileImageUrl(updates.profileImgUrl);
+      }
+      if (updates.address) {
+        UserValidator.validateAddress(updates.address);
+      }
+      if (updates.name) {
+        UserValidator.validateName(updates.name);
+      }
+
+      // 업데이트된 사용자 엔티티 생성
+      const updatedUser = new UserEntity(
+        existingUser.id,
+        updates.phoneNumber || existingUser.phoneNumber,
+        existingUser.password,
+        updates.email || existingUser.email,
+        updates.age || existingUser.age,
+        updates.profileImgUrl || existingUser.profileImgUrl,
+        updates.address || existingUser.address,
+        updates.name || existingUser.name,
+        existingUser.createdAt
+      );
+
+      console.log(
+        `[UseCase] 업데이트할 사용자 정보 - ID: ${id}`,
+        updatedUser.toJSON()
+      );
+
+      // 사용자 정보 업데이트
+      const result = await this.userRepository.updateUser(id, updatedUser);
+      if (!result) {
+        console.error(
+          `[UseCase] 사용자 프로필 업데이트 실패 - 업데이트 실패 - ID: ${id}`
+        );
+        throw new ValidationError('사용자 정보 수정에 실패했습니다.');
+      }
+
+      console.log(
+        `[UseCase] 사용자 프로필 업데이트 성공 - ID: ${id}`,
+        result.toJSON()
+      );
+      return result;
+    } catch (error) {
+      console.error(
+        `[UseCase] 사용자 프로필 업데이트 중 오류 발생 - ID: ${id}`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  // 비밀번호 변경 UseCase
+  async changePassword(id: number, newPassword: string): Promise<UserEntity> {
+    console.log(`[UseCase] 비밀번호 변경 시작 - ID: ${id}`);
+
+    try {
+      // 기존 사용자 정보 조회
+      const existingUser = await this.userRepository.getUserById(id);
+      if (!existingUser) {
+        console.error(
+          `[UseCase] 비밀번호 변경 실패 - 사용자를 찾을 수 없음 - ID: ${id}`
+        );
+        throw new ValidationError('사용자를 찾을 수 없습니다.');
+      }
+
+      // 새 비밀번호 검증
+      UserValidator.validatePassword(newPassword);
+
+      // 업데이트된 사용자 엔티티 생성
+      const updatedUser = new UserEntity(
+        existingUser.id,
+        existingUser.phoneNumber,
+        newPassword,
+        existingUser.email,
+        existingUser.age,
+        existingUser.profileImgUrl,
+        existingUser.address,
+        existingUser.name,
+        existingUser.createdAt
+      );
+
+      console.log(
+        `[UseCase] 업데이트할 사용자 정보 - ID: ${id}`,
+        updatedUser.toJSON()
+      );
+
+      // 사용자 정보 업데이트
+      const result = await this.userRepository.updateUser(id, updatedUser);
+      if (!result) {
+        console.error(
+          `[UseCase] 비밀번호 변경 실패 - 업데이트 실패 - ID: ${id}`
+        );
+        throw new ValidationError('비밀번호 변경에 실패했습니다.');
+      }
+
+      console.log(`[UseCase] 비밀번호 변경 성공 - ID: ${id}`, result.toJSON());
+      return result;
+    } catch (error) {
+      console.error(`[UseCase] 비밀번호 변경 중 오류 발생 - ID: ${id}`, error);
+      throw error;
+    }
   }
 }
 
-// 사용자 정보 검증 클래스
-export class UserValidator {
-  static validatePhoneNumber(phoneNumber: string): void {
-    if (!phoneNumber || phoneNumber.trim().length === 0) {
-      throw new ValidationError('전화번호는 비어있을 수 없습니다.');
-    }
-    // 전화번호 형식 검증 (숫자만 허용, 하이픈 제거)
-    const cleanPhoneNumber = phoneNumber.replace(/[-\s]/g, '');
-    if (!/^\d+$/.test(cleanPhoneNumber)) {
-      throw new ValidationError('전화번호는 숫자만 입력 가능합니다.');
-    }
-    if (cleanPhoneNumber.length < 10 || cleanPhoneNumber.length > 11) {
-      throw new ValidationError('전화번호는 10-11자리여야 합니다.');
-    }
-  }
-
-  static validatePassword(password: string): void {
-    if (!password || password.length < 6) {
-      throw new ValidationError('비밀번호는 최소 6자 이상이어야 합니다.');
-    }
-  }
-
-  static validateEmail(email: string): void {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new ValidationError('유효한 이메일 형식이 아닙니다.');
-    }
-  }
-
-  static validateAge(age: number): void {
-    if (age < 0 || age > 150) {
-      throw new ValidationError('나이는 0-150 사이의 값이어야 합니다.');
-    }
-  }
-
-  static validateProfileImageUrl(url: string): void {
-    if (url && !url.startsWith('http')) {
-      throw new ValidationError('프로필 이미지 URL은 http로 시작해야 합니다.');
-    }
-  }
-
-  static validateAddress(address: string): void {
-    if (!address || address.trim().length === 0) {
-      throw new ValidationError('주소는 비어있을 수 없습니다.');
-    }
-  }
-
-  static validateName(name: string): void {
-    if (!name || name.trim().length === 0) {
-      throw new ValidationError('이름은 비어있을 수 없습니다.');
-    }
-    if (name.length > 50) {
-      throw new ValidationError('이름은 50자를 초과할 수 없습니다.');
-    }
-  }
-}
-
-// 사용자 정보 업데이트 인터페이스
-export interface UserProfileUpdate {
-  phone_number?: string;
-  email?: string;
-  age?: number;
-  profile_img_url?: string;
-  address?: string;
-  name?: string;
-}
-
-// 공용 인증 Use Case
+// 공용 사용자 Use Case
 export class UserUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
-
-  // 모든 사용자 조회
-  async getAllUsers(): Promise<UserEntity[]> {
-    console.log('CommonAuthUseCase.getAllUsers() 호출됨');
-    const users = await this.userRepository.getAllUsers();
-    console.log('Repository에서 사용자 조회 완료:', users.length, '명');
-    return users;
-  }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   // 특정 사용자 조회
   async getUserById(id: number): Promise<UserEntity | null> {
@@ -122,64 +172,17 @@ export class UserUseCase {
   }
 
   // 사용자 프로필 업데이트
-  async updateUserProfile(id: number, updates: UserProfileUpdate): Promise<UserEntity> {
-    // 기존 사용자 조회
-    const existingUser = await this.userRepository.getUserById(id);
-    if (!existingUser) {
-      throw new ValidationError('사용자를 찾을 수 없습니다.');
-    }
-
-    // 검증 수행
-    if (updates.phone_number !== undefined) {
-      UserValidator.validatePhoneNumber(updates.phone_number);
-    }
-    if (updates.email !== undefined) {
-      UserValidator.validateEmail(updates.email);
-    }
-    if (updates.age !== undefined) {
-      UserValidator.validateAge(updates.age);
-    }
-    if (updates.profile_img_url !== undefined) {
-      UserValidator.validateProfileImageUrl(updates.profile_img_url);
-    }
-    if (updates.address !== undefined) {
-      UserValidator.validateAddress(updates.address);
-    }
-    if (updates.name !== undefined) {
-      UserValidator.validateName(updates.name);
-    }
-
-    // 새로운 엔티티 생성 (불변성 유지)
-    const updatedUser = new UserEntity(
-      existingUser.id,
-      updates.phone_number ?? existingUser.phoneNumber,
-      existingUser.password, // 비밀번호는 별도 메서드로 변경
-      updates.email ?? existingUser.email,
-      updates.age ?? existingUser.age,
-      updates.profile_img_url ?? existingUser.profileImgUrl,
-      updates.address ?? existingUser.address,
-      updates.name ?? existingUser.name,
-      existingUser.createdAt
-    );
-
-    // Repository를 통한 업데이트
-    const result = await this.userRepository.updateUser(id, updatedUser);
-    if (!result) {
-      throw new ValidationError('사용자 정보 수정에 실패했습니다.');
-    }
-
-    return result;
+  async updateUserProfile(
+    id: number,
+    updates: UserProfileUpdate
+  ): Promise<UserEntity> {
+    const updateUseCase = new UpdateUserProfileUseCase(this.userRepository);
+    return updateUseCase.updateUserProfile(id, updates);
   }
 
   // 비밀번호 변경
-  async changePassword(id: number, newPassword: string): Promise<boolean> {
-    UserValidator.validatePassword(newPassword);
-
-    const success = await this.userRepository.updatePassword(id, newPassword);
-    if (!success) {
-      throw new ValidationError('비밀번호 변경에 실패했습니다.');
-    }
-
-    return success;
+  async changePassword(id: number, newPassword: string): Promise<UserEntity> {
+    const updateUseCase = new UpdateUserProfileUseCase(this.userRepository);
+    return updateUseCase.changePassword(id, newPassword);
   }
 }

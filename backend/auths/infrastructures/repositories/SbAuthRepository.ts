@@ -1,6 +1,6 @@
-import { supabase } from '@/lib/supabase';
-import { UserEntity } from '../../domains/entities/CommonAuthEntity';
-import { IUserRepository } from '../../domains/repositories/IUserRepository';
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { CommonUserEntity as UserEntity } from '@/backend/common/entities/UserEntity';
+import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 
 export class SbAuthRepository implements IUserRepository {
   // 모든 사용자 조회
@@ -19,17 +19,30 @@ export class SbAuthRepository implements IUserRepository {
       return [];
     }
 
-    const entities = (data || []).map((user: any) => new UserEntity(
-      user.id,
-      user.phone_number || '',
-      user.password || '',
-      user.email,
-      user.age || 0,
-      user.profile_img_url || '',
-      user.address || '',
-      user.name,
-      new Date(user.created_at)
-    ));
+    const entities = (data || []).map(
+      (user: {
+        id: number;
+        phone_number: string;
+        password: string;
+        email: string;
+        age: number;
+        profile_img_url: string;
+        address: string;
+        name: string;
+        created_at: string;
+      }) =>
+        new UserEntity(
+          user.id,
+          user.phone_number || '',
+          user.password || '',
+          user.email || '',
+          user.age || 0,
+          user.profile_img_url || '',
+          user.address || '',
+          user.name,
+          new Date(user.created_at)
+        )
+    );
 
     console.log('Entity 변환 완료:', entities.length, '개');
     return entities;
@@ -68,7 +81,7 @@ export class SbAuthRepository implements IUserRepository {
         phone_number: user.phoneNumber,
         age: user.age,
         profile_img_url: user.profileImgUrl,
-        address: user.address
+        address: user.address,
       })
       .eq('id', id)
       .select()
@@ -98,4 +111,4 @@ export class SbAuthRepository implements IUserRepository {
 
     return !error;
   }
-} 
+}
