@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
-import { User } from '@/backend/uesrs/auths/withdrawal/domains/entities/User';
-import { UserRepository } from '@/backend/uesrs/auths/withdrawal/domains/repository/UserRepository';
+import { User } from '@/backend/users/auths/withdrawal/domains/entities/User';
+import { UserRepository } from '@/backend/users/auths/withdrawal/domains/repository/UserRepository';
 import { SbUserMapper } from './mappers/SbUserMapper';
 
 // Supabase 회원탈퇴 Repository 구현체 

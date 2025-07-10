@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromCookie } from '@/lib/jwt';
 import { UploadImageUseCase, GetImageByUrlUseCase, DeleteImageUseCase } from '@/backend/images/applications/usecases/ImageUseCase';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
-import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
+import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
 import { UpdateProfileImageUseCase } from '@/backend/images/applications/usecases/UpdateProfileImageUseCase';
 
 // 공통 헬퍼 함수들

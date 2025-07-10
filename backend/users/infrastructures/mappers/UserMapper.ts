@@ -1,5 +1,5 @@
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
-import { UserProfileResponseDto } from '@/backend/uesrs/applications/dtos/UserDtos';
+import { CommonUserEntity } from '@/backend/users/domains/entities/CommonUserEntity';
+import { UserProfileResponseDto } from '@/backend/users/applications/dtos/UserDtos';
 
 // Entity -> DB object (snake_case)
 export function toDbObject(entity: CommonUserEntity): any {

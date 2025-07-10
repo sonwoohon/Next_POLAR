@@ -1,6 +1,6 @@
 // 회원탈퇴 유스케이스 (users 테이블 기준)
-import { User } from '@/backend/uesrs/auths/withdrawal/domains/entities/User';
-import { UserRepository } from '@/backend/uesrs/auths/withdrawal/domains/repository/UserRepository';
+import { User } from '@/backend/users/auths/withdrawal/domains/entities/User';
+import { UserRepository } from '@/backend/users/auths/withdrawal/domains/repository/UserRepository';
 
     // 회원탈퇴 유스케이스
 export class UserWithdrawalUseCase {

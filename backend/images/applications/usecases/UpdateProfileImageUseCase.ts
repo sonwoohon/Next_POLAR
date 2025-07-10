@@ -1,5 +1,5 @@
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
-import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
+import { CommonUserEntity } from '@/backend/users/domains/entities/CommonUserEntity';
+import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
 
 /**
  * 사용자의 프로필 이미지 URL을 업데이트하는 UseCase

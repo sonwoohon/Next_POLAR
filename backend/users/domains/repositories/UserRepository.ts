@@ -1,4 +1,4 @@
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
+import { CommonUserEntity } from '@/backend/users/domains/entities/CommonUserEntity';
 
 // Repository 인터페이스
 export interface IUserRepository {

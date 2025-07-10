@@ -1,4 +1,4 @@
-import { User } from '@/backend/uesrs/auths/withdrawal/domains/entities/User';
+import { User } from '@/backend/users/auths/withdrawal/domains/entities/User';
 
 // Supabase 사용자 데이터를 User 엔티티로 변환하는 매퍼
 export class SbUserMapper {

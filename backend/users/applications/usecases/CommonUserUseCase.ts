@@ -1,6 +1,6 @@
 // 회원 정보 조회 및 수정 UseCase
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
-import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
+import { CommonUserEntity } from '@/backend/users/domains/entities/CommonUserEntity';
+import { IUserRepository } from '@/backend/users/domains/repositories/UserRepository';
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {

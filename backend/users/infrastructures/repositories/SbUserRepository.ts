@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
-import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
-import { fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+import { CommonUserEntity } from '@/backend/users/domains/entities/CommonUserEntity';
+import { IUserRepository } from '@/backend/users/domains/repositories/UserRepository';
+import { fromDbObject } from '@/backend/users/infrastructures/mappers/UserMapper';
 
 // User 인터페이스 정의 (UserWithdrawalUseCase용)
 interface User {
