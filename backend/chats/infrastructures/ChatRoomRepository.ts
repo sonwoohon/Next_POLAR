@@ -1,8 +1,8 @@
 // ===== 외부 라이브러리 및 인터페이스 import =====
 import { supabase } from '@/lib/supabase';
-import { IChatRoomRepository } from '../domains/repositories/IChatRoomRepository';
-import { ChatRoom } from '../domains/entities/ChatRoom';
-import { ChatRoomMapper, HelpApplicantRow } from './mappers/ChatRoomMapper';
+import { IChatRoomRepository } from '@/backend/chats/domains/repositories/IChatRoomRepository';
+import { ChatRoom } from '@/backend/chats/domains/entities/ChatRoom';
+import { ChatRoomMapper, HelpApplicantRow } from '@/backend/chats/infrastructures/mappers/ChatRoomMapper';
 
 // ===== Repository 구현체 =====
 // IChatRoomRepository 인터페이스를 구현하는 실제 데이터베이스 접근 클래스

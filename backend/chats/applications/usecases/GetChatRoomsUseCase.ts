@@ -1,4 +1,4 @@
-import { IChatRoomRepository } from '../../domains/repositories/IChatRoomRepository';
+import { IChatRoomRepository } from '@/backend/chats/domains/repositories/IChatRoomRepository';
 import { 
   GetUserChatRoomsRequestDto, 
   ChatRoomListResponseDto,

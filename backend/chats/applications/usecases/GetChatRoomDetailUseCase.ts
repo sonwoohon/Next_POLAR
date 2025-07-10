@@ -1,5 +1,5 @@
-import { IChatRoomRepository } from '@backend/chats/domains/repositories/IChatRoomRepository';
-import { ChatRoom } from '@backend/chats/domains/entities/ChatRoom';
+import { IChatRoomRepository } from '@/backend/chats/domains/repositories/IChatRoomRepository';
+import { ChatRoom } from '@/backend/chats/domains/entities/ChatRoom';
 import { 
   GetChatRoomDetailRequestDto, 
   ChatRoomDetailResponseDto 
