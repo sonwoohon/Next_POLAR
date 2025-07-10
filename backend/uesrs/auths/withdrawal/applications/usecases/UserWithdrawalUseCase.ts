@@ -6,18 +6,17 @@ import { UserRepository } from '@/backend/uesrs/auths/withdrawal/domains/reposit
 export class UserWithdrawalUseCase {
     constructor(private userRepository: UserRepository) {}
 
-    async execute(userId: number, type: 'SOFT' | 'HARD' = 'HARD'): Promise<void> {
+    async execute(userId: number): Promise<void> {
         // 1. 사용자 존재 확인
         const user = await this.userRepository.findById(userId);
         if (!user) {
-        throw new Error('사용자를 찾을 수 없습니다.');
+            throw new Error('사용자를 찾을 수 없습니다.');
         }
-        // 2. 실제 사용자 삭제 (하드/소프트)
-        if (type === 'HARD') {
+        
+        // 2. 사용자 삭제 (하드 삭제)
         await this.userRepository.deleteById(userId);
-        } else {
-        // await this.userRepository.softDeleteById(userId);
-        throw new Error('소프트 삭제는 현재 지원하지 않습니다.');
-        }
+        
+        // 3. 탈퇴 성공 로그 출력
+        console.log(`사용자 ID ${userId} 탈퇴가 성공적으로 완료되었습니다.`);
     }
 }

@@ -1,8 +1,9 @@
 import { supabase } from '@/lib/supabase';
 import { User } from '@/backend/uesrs/auths/withdrawal/domains/entities/User';
 import { UserRepository } from '@/backend/uesrs/auths/withdrawal/domains/repository/UserRepository';
+import { SbUserMapper } from './mappers/SbUserMapper';
 
-// Supabase 회원탈퇴 Repository 구현체
+// Supabase 회원탈퇴 Repository 구현체 
 export class SbWithdrawalUserRepository implements UserRepository {
     async findById(id: number): Promise<User | null> {
         console.log(`[Repository] 사용자 조회 시작 (findById) - ID: ${id}`);
@@ -26,18 +27,8 @@ export class SbWithdrawalUserRepository implements UserRepository {
 
         console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
 
-        // 데이터를 User 인터페이스에 맞게 변환
-        const user: User = {
-            id: data.id,
-            phone_number: data.phoneNumber,
-            password: data.password,
-            email: data.email,
-            age: data.age,
-            profile_img_url: data.profileImgUrl,
-            address: data.address,
-            name: data.name,
-            created_at: new Date(data.createdAt)
-        };
+        // 매퍼를 사용하여 데이터를 User 엔티티로 변환
+        const user = SbUserMapper.toUserEntity(data);
 
         return user;
         } catch (error) {
@@ -67,3 +58,4 @@ export class SbWithdrawalUserRepository implements UserRepository {
         }
     }
 } 
+/* API에서 type 파라미터를 전달해도 UseCase에서는 무시하고 항상 하드 삭제 */
