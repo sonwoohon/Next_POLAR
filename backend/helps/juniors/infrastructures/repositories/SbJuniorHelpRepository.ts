@@ -1,53 +1,62 @@
-import { supabase } from "@/lib/supabase";
-import { HelpData } from "@/backend/helps/infrastructures/mappers/CommonHelpDataMapper";
-import { IJuniorHelpRepository } from "../../domains/repositories/IJuniorHelpRepository";
-import { CommonHelpEntity } from "@/backend/helps/domains/entities/CommonHelpEntity";
-
+import { supabase } from '@/backend/common/utils/supabaseClient';
+import { HelpData } from '@/backend/helps/infrastructures/mappers/CommonHelpDataMapper';
+import { IJuniorHelpRepository } from '../../domains/repositories/IJuniorHelpRepository';
+import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
 
 export class SbJuniorHelpRepository implements IJuniorHelpRepository {
-  async getJuniorAppliedHelpList(juniorId: number): Promise<CommonHelpEntity[] | null> {
+  async getJuniorAppliedHelpList(
+    juniorId: number
+  ): Promise<CommonHelpEntity[] | null> {
     try {
       const { data, error } = await supabase
         .from('help_applicants')
-        .select(`
+        .select(
+          `
           *,
           helps (*)
-        `)
+        `
+        )
         .eq('junior_id', juniorId);
 
       if (error || !data) {
-        console.error('[SbJuniorHelpRepository] 주니어가 지원한 헬프 목록 조회 오류:', error);
+        console.error(
+          '[SbJuniorHelpRepository] 주니어가 지원한 헬프 목록 조회 오류:',
+          error
+        );
         return Promise.reject(null);
       }
 
-      return data.map((help: HelpData) => new CommonHelpEntity(
-        help.id,
-        help.senior_id,
-        help.title,
-        new Date(help.start_date),
-        new Date(help.end_date),
-        help.category,
-        help.content,
-        help.status,
-        new Date(help.created_at)
-      ));
+      return data.map(
+        (help: HelpData) =>
+          new CommonHelpEntity(
+            help.id,
+            help.senior_id,
+            help.title,
+            new Date(help.start_date),
+            new Date(help.end_date),
+            help.category,
+            help.content,
+            help.status,
+            new Date(help.created_at)
+          )
+      );
     } catch (error) {
-      console.error('[SbJuniorHelpRepository] 주니어가 지원한 헬프 목록 조회 오류:', error);
+      console.error(
+        '[SbJuniorHelpRepository] 주니어가 지원한 헬프 목록 조회 오류:',
+        error
+      );
       throw new Error(`주니어가 지원한 헬프 목록 조회 오류: ${error}`);
     }
   }
 
   async applyHelp(juniorId: number, helpId: number): Promise<void | null> {
     try {
-      const { error } = await supabase
-        .from('help_applicants')
-        .insert({
-          junior_id: juniorId,
-          help_id: helpId,
-          is_accepted: false,
-          applied_at: new Date().toISOString()
-        });
-
+      const { error } = await supabase.from('help_applicants').insert({
+        junior_id: juniorId,
+        help_id: helpId,
+        is_accepted: false,
+        applied_at: new Date().toISOString(),
+      });
 
       if (error) {
         console.error('[SbJuniorHelpRepository] 헬프 지원 오류:', error);
@@ -55,14 +64,16 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
       }
 
       return Promise.resolve();
-
     } catch (error) {
       console.error('[SbJuniorHelpRepository] 헬프 지원 오류:', error);
       return Promise.reject(null);
     }
   }
 
-  async cancelJuniorlHelp(juniorId: number, helpId: number): Promise<void | null> {
+  async cancelJuniorlHelp(
+    juniorId: number,
+    helpId: number
+  ): Promise<void | null> {
     try {
       const { error } = await supabase
         .from('help_applicants')
@@ -78,6 +89,5 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
     } catch (error) {
       return Promise.reject(error);
     }
-
   }
 }

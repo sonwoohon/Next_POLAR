@@ -1,9 +1,9 @@
 // 공통 Help 상태 관리 유스케이스 (모든 상태 변경 지원)
-import { IHelpStatusRepository } from '../../domains/repositories/IHelpStatusRepository';
+import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatusRepository';
 import {
   HelpStatus,
   STATUS_TRANSITIONS,
-} from '../../domains/entities/HelpStatus';
+} from '@/backend/common/entities/HelpStatus';
 
 export class CommonHelpStatusUseCase {
   constructor(private helpStatusRepository: IHelpStatusRepository) {}
