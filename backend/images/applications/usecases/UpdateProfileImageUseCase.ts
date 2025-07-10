@@ -1,5 +1,5 @@
-import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
-import { SbUserRepository } from '@/backend/uesrs/infrastructures/repositories/SbUserRepository';
+import { CommonUserEntity } from '@/backend/users/domains/entities/UserEntity';
+import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
 
 /**
  * 사용자의 프로필 이미지 URL을 업데이트하는 UseCase
@@ -18,34 +18,58 @@ export class UpdateProfileImageUseCase {
    * @param newImageUrl - 새로운 이미지 URL (삭제 시 빈 문자열)
    * @returns 업데이트된 사용자 정보
    */
-  async execute(user: any, userId: number, newImageUrl: string): Promise<CommonUserEntity | null> {
-    console.log(`[UseCase] 프로필 이미지 업데이트 시작 - UserID: ${userId}, NewImageUrl: ${newImageUrl}`);
-    
+  async execute(
+    userId: number,
+    imageUrl: string
+  ): Promise<CommonUserEntity | null> {
+    console.log(
+      `[UseCase] 프로필 이미지 업데이트 시작 - 사용자 ID: ${userId}, 이미지 URL: ${imageUrl}`
+    );
+
     try {
-      const updatedUser = new CommonUserEntity(
-        user.id,
-        user.phoneNumber,
-        user.password,
-        user.email,
-        Number(user.age), // age를 명시적으로 number로 변환
-        newImageUrl,
-        user.address,
-        user.name,
-        user.createdAt
-      );
-      
-      const result = await this.userRepository.updateUser(userId, updatedUser);
-      
-      if (result) {
-        console.log(`[UseCase] 프로필 이미지 업데이트 성공 - UserID: ${userId}`);
-      } else {
-        console.error(`[UseCase] 프로필 이미지 업데이트 실패 - UserID: ${userId}`);
+      // 기존 사용자 정보 조회
+      const existingUser = await this.userRepository.getUserById(userId);
+      if (!existingUser) {
+        console.error(`[UseCase] 사용자를 찾을 수 없음 - ID: ${userId}`);
+        return null;
       }
-      
+
+      // 프로필 이미지 URL 업데이트
+      const updatedUser = new CommonUserEntity(
+        existingUser.id,
+        existingUser.phoneNumber,
+        existingUser.password,
+        existingUser.email,
+        existingUser.age,
+        imageUrl, // 새로운 이미지 URL로 업데이트
+        existingUser.address,
+        existingUser.name,
+        existingUser.createdAt
+      );
+
+      console.log(
+        `[UseCase] 업데이트할 사용자 정보 - ID: ${userId}`,
+        updatedUser.toJSON()
+      );
+
+      // 사용자 정보 업데이트
+      const result = await this.userRepository.updateUser(userId, updatedUser);
+      if (!result) {
+        console.error(`[UseCase] 프로필 이미지 업데이트 실패 - ID: ${userId}`);
+        return null;
+      }
+
+      console.log(
+        `[UseCase] 프로필 이미지 업데이트 성공 - ID: ${userId}`,
+        result.toJSON()
+      );
       return result;
     } catch (error) {
-      console.error(`[UseCase] 프로필 이미지 업데이트 중 오류 발생 - UserID: ${userId}:`, error);
-      throw error;
+      console.error(
+        `[UseCase] 프로필 이미지 업데이트 중 오류 발생 - ID: ${userId}`,
+        error
+      );
+      return null;
     }
   }
-} 
+}

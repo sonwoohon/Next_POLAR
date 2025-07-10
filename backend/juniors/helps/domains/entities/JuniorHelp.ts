@@ -1,7 +1,8 @@
-// user가 help에 지원하는 엔티티
-// 이 파일에는 user가 help에 지원하는 도메인 엔티티들이 정의됩니다.
-
-// 예시:
-// - Help: help에서 연결된 applicants 테이블
-
-// 도메인 엔티티는 비즈니스 규칙을 포함하며, 외부 의존성이 없는 순수한 객체여야 합니다.
+export class JuniorHelp {
+  constructor(
+    public readonly helpId: number,
+    public readonly code: number,
+    public readonly expiresAt: number,
+    public readonly createdAt: Date
+  ) {}
+}

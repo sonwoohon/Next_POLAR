@@ -1,6 +1,6 @@
-import { LoginRequestDTO } from '@/backend/uesrs/auths/login/applications/dtos/LoginRequest';
-import { LoginUseCase } from '@/backend/uesrs/auths/login/applications/usecases/LoginUseCase';
-import { LoginRepository } from '@/backend/uesrs/auths/login/infrastructures/LoginRepository';
+import { LoginRequestDTO } from '@/backend/users/auths/login/applications/dtos/LoginRequest';
+import { LoginUseCase } from '@/backend/users/auths/login/applications/usecases/LoginUseCase';
+import { LoginRepository } from '@/backend/users/auths/login/infrastructures/repositories/LoginRepository';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     cookieStore.set('refresh-token', result.refreshToken);
 
     return NextResponse.json({
-      user: result.user,
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
     });
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest) {
     const errorMessage =
       e instanceof Error ? e.message : '로그인 처리 중 오류가 발생했습니다.';
 
-    // 보안을 위해 모든 인증 실패는 동일한 메시지와 상태 코드 사용
     if (errorMessage.includes('로그인 정보가 올바르지 않습니다')) {
       return NextResponse.json(
         { error: '로그인 정보가 올바르지 않습니다.' },
@@ -42,7 +40,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 입력 검증 오류
     if (
       errorMessage.includes('로그인 ID와 비밀번호를 입력해주세요') ||
       errorMessage.includes('잘못된 입력 형식입니다')
