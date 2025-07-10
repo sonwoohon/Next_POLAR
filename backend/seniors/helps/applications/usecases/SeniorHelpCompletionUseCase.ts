@@ -5,7 +5,7 @@ import {
   getVerificationExpiryTime,
 } from '@/lib/verify';
 import { createVerificationCode } from '../../infrastructures/SeniorHelpStatusInfrastructure';
-import { HelpStatus } from '@/backend/common/entities/HelpStatus';
+import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
 
 export class SeniorHelpCompletionUseCase {
   constructor(private helpStatusRepository: IHelpStatusRepository) {}

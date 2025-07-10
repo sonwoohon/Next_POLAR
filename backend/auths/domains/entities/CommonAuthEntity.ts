@@ -1,10 +1,5 @@
-<<<<<<< HEAD:backend/uesrs/domains/entities/CommonUserEntity.ts
 // 로그인된 사용자 인증 엔티티
-export class CommonUserEntity {
-=======
-// 공용 사용자 인증 엔티티
-export class UserEntity {
->>>>>>> dev:backend/auths/domains/entities/CommonAuthEntity.ts
+export class CommonAuthEntity {
   constructor(
     public readonly id: number, // int8 - 수정 불가능
     public phoneNumber: string, // varchar
@@ -27,7 +22,7 @@ export class UserEntity {
       profileImgUrl: this.profileImgUrl,
       address: this.address,
       name: this.name,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
     };
   }
-} 
+}

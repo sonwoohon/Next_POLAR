@@ -1,4 +1,4 @@
-import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
+import { CommonUserEntity } from '@/backend/users/domains/entities/UserEntity';
 import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
 
 /**

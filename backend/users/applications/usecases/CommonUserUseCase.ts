@@ -1,5 +1,5 @@
 // 회원 정보 조회 및 수정 UseCase
-import { CommonUserEntity as UserEntity } from '@/backend/common/entities/UserEntity';
+import { CommonUserEntity as UserEntity } from '@/backend/users/domains/entities/UserEntity';
 import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 import { ValidationError } from '@/backend/common/errors/ValidationError';
 import { UserValidator } from '@/backend/common/validators/UserValidator';
@@ -14,19 +14,6 @@ export class GetUserByIdUseCase {
   }
 }
 
-// 회원 정보 수정 UseCase
-export class UpdateUserInfoUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
-
-  async execute(
-    id: number,
-    updateData: UserProfileUpdate
-  ): Promise<UserEntity | null> {
-    return this.userRepository.updateUser(id, updateData);
-  }
-}
-
-// 공용 사용자 Use Case
 export class CommonUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 

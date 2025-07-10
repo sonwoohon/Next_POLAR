@@ -1,5 +1,5 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { CommonUserEntity as UserEntity } from '@/backend/common/entities/UserEntity';
+import { CommonUserEntity as UserEntity } from '@/backend/users/domains/entities/UserEntity';
 import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 
 export class SbAuthRepository implements IUserRepository {
