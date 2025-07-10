@@ -10,18 +10,18 @@
 
 // 유스케이스는 비즈니스 로직을 구현하며, 엔티티를 조작하고 비즈니스 규칙을 적용합니다.
 
-import { ISeniorHelpRepositoryInterface } from '../../domains/repositories/SeniorHelpRepositoryInteface';
+import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInteface';
 import {
   CreateSeniorHelpRequestDto,
   UpdateSeniorHelpRequestDto,
-} from '../dtos/SeniorRequest';
+} from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import {
   CreateSeniorHelpResponseDto,
   DeleteSeniorHelpResponseDto,
-} from '../dtos/SeniorResponse';
-import { SeniorHelpMapper } from '../../infrastructures/mappers/SeniorHelpMapper';
+} from '@/backend/seniors/helps/applications/dtos/SeniorResponse';
+import { SeniorHelpMapper } from '@/backend/seniors/helps/infrastructures/mappers/SeniorHelpMapper';
 import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
-import { UpdateHelpRequestWithHelpId } from '../../SeniorHelpModel';
+import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
 
 export class SeniorHelpUseCase {
   constructor(

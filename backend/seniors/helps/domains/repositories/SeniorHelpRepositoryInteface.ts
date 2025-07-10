@@ -1,5 +1,5 @@
-import { UpdateHelpRequestWithHelpId } from '../../SeniorHelpModel';
-import { SeniorHelp } from '../entities/SeniorHelp';
+import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
+import { SeniorHelp } from '@/backend/seniors/helps/domains/entities/SeniorHelp';
 
 export interface ISeniorHelpRepositoryInterface {
   createHelp(help: SeniorHelp, seniorId: number): Promise<number>; // 생성된 help의 id 반환

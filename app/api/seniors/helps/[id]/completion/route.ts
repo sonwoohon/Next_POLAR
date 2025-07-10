@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SeniorHelpCompletionUseCase } from '../../../../../../backend/seniors/helps/applications/usecases/SeniorHelpCompletionUseCase';
-import { HelpStatusRepository } from '../../../../../../backend/helps/infrastructures/HelpStatusInfrastructure';
+import { SeniorHelpCompletionUseCase } from '@/backend/seniors/helps/applications/usecases/SeniorHelpCompletionUseCase';
+import { HelpStatusRepository } from '@/backend/helps/infrastructures/HelpStatusInfrastructure';
 
 // 시니어 Help 완료 요청 API
 const seniorHelpCompletionUseCase = new SeniorHelpCompletionUseCase(

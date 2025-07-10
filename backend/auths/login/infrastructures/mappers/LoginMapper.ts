@@ -1,9 +1,9 @@
 import {
   LoginDBResponse,
   LoginResponseWithoutPassword,
-} from '../../LoginModel';
-import { LoginResponseDTO } from '../../applications/dtos/LoginResponse';
-import { LoginUserEntity } from '../../domains/entities/LoginUserEntity';
+} from '@/backend/auths/login/LoginModel';
+import { LoginResponseDTO } from '@/backend/auths/login/applications/dtos/LoginResponse';
+import { LoginUserEntity } from '@/backend/auths/login/domains/entities/LoginUserEntity';
 
 export class LoginMapper {
   static toLoginResponseDTO(

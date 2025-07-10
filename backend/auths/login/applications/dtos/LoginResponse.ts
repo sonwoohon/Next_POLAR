@@ -1,4 +1,4 @@
-import { LoginResponseWithoutPassword } from '../../LoginModel';
+import { LoginResponseWithoutPassword } from '@/backend/auths/login/LoginModel';
 
 export class LoginResponseDTO {
   constructor(

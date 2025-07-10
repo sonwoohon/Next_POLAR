@@ -3,13 +3,13 @@ import { getUserIdFromCookie } from '@/lib/jwt';
 import {
   CommonUserUseCase,
   ValidationError,
-} from '@/backend/users/applications/usecases/CommonUserUseCase';
-import { SbUserRepository } from '@/backend/users/infrastructures/repositories/SbUserRepository';
+} from '@/backend/users/user/applications/usecases/CommonUserUseCase';
+import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
 import {
   UserUpdateRequestDto,
   UserProfileResponseDto,
-} from '@/backend/users/applications/dtos/UserDtos';
-import { entityToUserProfileResponseDto } from '@/backend/users/infrastructures/mappers/UserMapper';
+} from '@/backend/users/user/applications/dtos/UserDtos';
+import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';
 import { getAuthenticatedUser } from '@/lib/auth';
 
 // UseCase 인스턴스 생성 함수

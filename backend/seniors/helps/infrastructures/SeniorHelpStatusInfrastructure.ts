@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { ISeniorHelpStatusRepository } from '../domains/repositories/SeniorHelpRepositoryInteface';
+import { ISeniorHelpStatusRepository } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInteface';
 
 export async function createVerificationCode(
   helpId: number,

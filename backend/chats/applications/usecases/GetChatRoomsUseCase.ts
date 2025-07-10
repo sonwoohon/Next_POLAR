@@ -3,7 +3,7 @@ import {
   GetUserChatRoomsRequestDto, 
   ChatRoomListResponseDto,
   ChatRoomResponseDto 
-} from '../dtos/ChatRoomDtos';
+} from '@/backend/chats/applications/dtos/ChatRoomDtos';
 
 export class GetChatRoomsUseCase {
   constructor(private chatRoomRepo: IChatRoomRepository) {}

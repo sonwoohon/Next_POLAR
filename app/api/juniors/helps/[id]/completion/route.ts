@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { JuniorHelpCompletionUseCase } from '../../../../../../backend/juniors/helps/applications/usecases/JuniorHelpCompletionUseCase';
-import { HelpStatusRepository } from '../../../../../../backend/helps/infrastructures/HelpStatusInfrastructure';
-import { JuniorHelpStatusInfrastructure } from '../../../../../../backend/juniors/helps/infrastructures/JuniorHelpStatusInfrastructure';
+import { JuniorHelpCompletionUseCase } from '@/backend/juniors/helps/applications/usecases/JuniorHelpCompletionUseCase';
+import { HelpStatusRepository } from '@/backend/helps/infrastructures/HelpStatusInfrastructure';
+import { JuniorHelpStatusInfrastructure } from '@/backend/juniors/helps/infrastructures/JuniorHelpStatusInfrastructure';
 
 // 주니어 Help 완료 처리 API
 const juniorHelpCompletionUseCase = new JuniorHelpCompletionUseCase(

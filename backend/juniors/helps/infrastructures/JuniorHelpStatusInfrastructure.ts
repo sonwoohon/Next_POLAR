@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { IJuniorHelpStatusRepository } from '../domains/repositories/IJuniorHelpStatusRepository';
+import { IJuniorHelpStatusRepository } from '@/backend/juniors/helps/domains/repositories/IJuniorHelpStatusRepository';
 
 export class JuniorHelpStatusInfrastructure
   implements IJuniorHelpStatusRepository

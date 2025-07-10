@@ -1,8 +1,8 @@
 // Junior 랭킹 관련 유스케이스
 // 이 파일에는 Junior 사용자의 랭킹과 관련된 비즈니스 로직이 구현됩니다.
 
-import { Score } from '../../domains/entities/Score';
-import { ScoreRepositoryInterface } from '../../domains/repositories/ScoreRepositoryInterface';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
+import { ScoreRepositoryInterface } from '@/backend/juniors/scores/domains/repositories/ScoreRepositoryInterface';
 
 // 예시:
 // - CalculateJuniorRankUseCase: Junior 랭킹 계산

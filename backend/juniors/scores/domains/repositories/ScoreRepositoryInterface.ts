@@ -1,4 +1,4 @@
-import { Score } from '../entities/Score';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
 
 export interface ScoreRepositoryInterface {
   getScoresByUserId(userId: number): Promise<Score[]>;

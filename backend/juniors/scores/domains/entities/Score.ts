@@ -1,4 +1,4 @@
-import { Category } from './Category';
+import { Category } from '@/backend/juniors/scores/domains/entities/Category';
 
 export class Score {
   constructor(
