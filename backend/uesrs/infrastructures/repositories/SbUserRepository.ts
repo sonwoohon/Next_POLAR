@@ -1,7 +1,20 @@
 import { supabase } from '@/lib/supabase';
 import { CommonUserEntity } from '@/backend/uesrs/domains/entities/CommonUserEntity';
 import { IUserRepository } from '@/backend/uesrs/domains/repositories/UserRepository';
-import { toDbObject, fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+import { fromDbObject } from '@/backend/uesrs/infrastructures/mappers/UserMapper';
+
+// User 인터페이스 정의 (UserWithdrawalUseCase용)
+interface User {
+  id: number;
+  phoneNumber: string;
+  password: string;
+  email: string;
+  age: number;
+  profileImgUrl: string | null;
+  address: string;
+  name: string;
+  createdAt: Date;
+}
 
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
@@ -50,11 +63,11 @@ export class SbUserRepository implements IUserRepository {
     try {
       // 업데이트할 데이터 준비
       const updateData = {
-        phoneNumber: user.phoneNumber,
+        phone_number: user.phoneNumber,
         password: user.password,
         email: user.email,
         age: user.age,
-        profileImgUrl: user.profileImgUrl,
+        profile_img_url: user.profileImgUrl,
         address: user.address,
         name: user.name,
       };
@@ -91,6 +104,29 @@ export class SbUserRepository implements IUserRepository {
     } catch (error) {
       console.error('[Repository] 사용자 업데이트 중 예외 발생:', error);
       return null;
+    }
+  }
+
+  // UserWithdrawalUseCase용 메서드들
+
+  async deleteById(id: number): Promise<void> {
+    console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('[Repository] Supabase 사용자 삭제 오류:', error);
+        throw new Error(`사용자 삭제 실패: ${error.message}`);
+      }
+
+      console.log(`[Repository] 사용자 삭제 성공 - ID: ${id}`);
+    } catch (error) {
+      console.error('[Repository] 사용자 삭제 중 예외 발생:', error);
+      throw error;
     }
   }
 } 
