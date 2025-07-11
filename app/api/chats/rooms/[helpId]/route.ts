@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GetChatRoomDetailUseCase } from '@/backend/chats/applications/usecases/GetChatRoomDetailUseCase';
-import { ChatRoomRepository } from '@/backend/chats/infrastructures/repositories/IChatRoomRepository';
+import { GetChatRoomDetailUseCase } from '@/backend/chats/chatrooms/applications/usecases/GetChatRoomDetailUseCase';
+import { SbChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/repositories/SbChatRoomRepository';
 
 // GET /api/chats/rooms/[helpId]
 export async function GET(req: NextRequest, { params }: { params: Promise<{ helpId: string }> }) {
@@ -9,8 +9,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ help
   if (isNaN(helpIdNum)) return NextResponse.json({ error: 'Invalid helpId' }, { status: 400 });
 
   // 유스케이스 실행
+
   const usecase = new GetChatRoomDetailUseCase(new ChatRoomRepository());
   const room = await usecase.execute({ helpId: helpIdNum });
+
 
   if (!room) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 

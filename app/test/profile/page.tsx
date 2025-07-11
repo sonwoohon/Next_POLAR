@@ -210,6 +210,7 @@ export default function ProfilePage() {
       formData.append("bucketName", "profile-images");
       formData.append("userId", user.id.toString());
 
+
       const response = await fetch("/api/images", {
         method: "POST",
         body: formData,
@@ -225,7 +226,9 @@ export default function ProfilePage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+
             profileImgUrl: data.image.url,
+
           }),
         });
 

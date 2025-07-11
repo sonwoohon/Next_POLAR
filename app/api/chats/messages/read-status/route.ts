@@ -1,3 +1,5 @@
+// 임시로 비활성화된 API - 현재 사용하지 않음
+/*
 import { NextRequest, NextResponse } from 'next/server';
 import { ContactReadStatusUseCases } from '@/backend/chats/read_statuses/applications/usecases/ContactReadStatusUseCases';
 import { SbContactReadStatusRepository } from '@/backend/chats/read_statuses/infrastructures/SbContactReadStatusRepository';
@@ -38,4 +40,5 @@ export async function POST(request: NextRequest) {
     console.error('[API][POST /api/chats/messages/read-status] 읽음 상태 업데이트 중 오류 발생:', error);
     return NextResponse.json({ error: '읽음 상태 업데이트 중 오류 발생', detail: String(error) }, { status: 500 });
   }
-} 
+}
+*/ 

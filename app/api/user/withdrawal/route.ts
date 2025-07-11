@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserWithdrawalUseCase } from '@/backend/users/auths/withdrawal/applications/usecases/UserWithdrawalUseCase';
-import { SbWithdrawalUserRepository } from '@/backend/users/auths/withdrawal/infrastructures/repository/SbUserRepository';
-import { WithdrawalRequestDto } from '@/backend/users/auths/withdrawal/applications/dtos/WithdrawalRequestDto';
+import { UserWithdrawalUseCase } from '@/backend/users/withdrawal/applications/usecases/UserWithdrawalUseCase';
+import { SbWithdrawalUserRepository } from '@/backend/users/withdrawal/infrastructures/SbUserRepository';
 
 export async function POST(req: NextRequest) {
   try {
+
     const { userId, confirmPassword, reason }: WithdrawalRequestDto = await req.json();
 
     const userRepository = new SbWithdrawalUserRepository();

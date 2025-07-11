@@ -7,7 +7,7 @@ import {
   ScoreRequestDtoWithUserId,
   ScoreRequestDtoWithUserIdAndCategoryId,
   ScoreRequestDtoWithUserIdAndSeason,
-} from '../dtos/ScoreRequestDto';
+} from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
 
 export class GetUserScoresUseCase {
   constructor(private scoreRepository: ScoreRepositoryInterface) {}

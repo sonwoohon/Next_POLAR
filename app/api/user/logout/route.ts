@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { NextRequest } from 'next/server';
@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     // 인증 확인 (선택사항 - 로그아웃은 인증 없이도 가능)
     const authResult = await getAuthenticatedUser(request);
+
 
     const cookieStore = await cookies();
 

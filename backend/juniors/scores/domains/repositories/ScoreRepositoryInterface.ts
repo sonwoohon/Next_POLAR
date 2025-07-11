@@ -6,7 +6,7 @@ import {
   ScoreRequestDtoWithUserIdAndSeason,
   ScoreRequestDtoWithCategoryIdAndSeason,
   ScoreRequestDtoWithUserIdAndCategoryId,
-} from '../../applications/dtos/ScoreRequestDto';
+} from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
 
 export interface ScoreRepositoryInterface {
   getScoresByUserId(request: ScoreRequestDtoWithUserId): Promise<Score[]>;
