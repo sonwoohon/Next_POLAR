@@ -1,7 +1,7 @@
 import {
   HelpStatus,
   STATUS_TRANSITIONS,
-} from '@/backend/common/entities/HelpStatus';
+} from '@/backend/helps/domains/entities/HelpStatus';
 
 // 인증 코드 생성 함수
 export function generateVerificationCode(): number {

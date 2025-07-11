@@ -1,29 +1,29 @@
-import {
-  LoginDBResponse,
-  LoginResponseWithoutPassword,
-} from '@/backend/auths/login/LoginModel';
-import { LoginResponseDTO } from '@/backend/auths/login/applications/dtos/LoginResponse';
-import { LoginUserEntity } from '@/backend/auths/login/domains/entities/LoginUserEntity';
+import { LoginEntity } from '@/backend/auths/login/domains/entities/LoginEntity';
+
+interface LoginUserData {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  age: number;
+  address: string;
+  profileImgUrl: string;
+  password: string;
+  createdAt: string;
+}
 
 export class LoginMapper {
-  static toLoginResponseDTO(
-    user: LoginUserEntity,
-    accessToken: string,
-    refreshToken: string
-  ) {
-    const LoginDataWithoutPassword: LoginResponseWithoutPassword = {
-      id: user.id,
-      loginId: user.loginId,
-    };
-
-    return new LoginResponseDTO(
-      LoginDataWithoutPassword,
-      accessToken,
-      refreshToken
+  static toLoginEntity(userData: LoginUserData): LoginEntity {
+    return new LoginEntity(
+      userData.id,
+      userData.name,
+      userData.email,
+      userData.phoneNumber,
+      userData.age,
+      userData.address,
+      userData.profileImgUrl,
+      userData.password,
+      new Date(userData.createdAt)
     );
-  }
-
-  static toLoginUserEntity(user: LoginDBResponse) {
-    return new LoginUserEntity(user.id, user.loginId, user.password);
   }
 }

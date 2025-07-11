@@ -1,5 +1,5 @@
 import { GetUserScoresUseCase } from '@/backend/juniors/scores/applications/usecases/ScoreUseCases';
-import { ScoreRepository } from '@/backend/juniors/scores/infrastructures/ScoreRepository';
+import { ScoreRepository } from '@/backend/juniors/scores/infrastructures/repositories/ScoreRepository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -23,7 +23,9 @@ export async function GET(req: NextRequest) {
 
   try {
     const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
-    const scores = await scoreUseCase.executeByCategoryId(categoryId);
+    const scores = await scoreUseCase.executeByCategoryId({
+      categoryId,
+    });
     return NextResponse.json(scores, { status: 200 });
   } catch (error) {
     console.error('점수 조회 중 오류:', error);

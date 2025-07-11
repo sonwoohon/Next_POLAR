@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GetChatRoomDetailUseCase } from '@/backend/chats/chatrooms/applications/usecases/GetChatRoomDetailUseCase';
-import { ChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/ChatRoomRepository';
+import { SbChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/repositories/SbChatRoomRepository';
 
 // GET /api/chats/rooms/[helpId]
 export async function GET(req: NextRequest, { params }: { params: { helpId: string } }) {
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, { params }: { params: { helpId: stri
   if (isNaN(helpId)) return NextResponse.json({ error: 'Invalid helpId' }, { status: 400 });
 
   // 유스케이스 실행
-  const usecase = new GetChatRoomDetailUseCase(new ChatRoomRepository());
+  const usecase = new GetChatRoomDetailUseCase(new SbChatRoomRepository());
   const room = await usecase.execute({ helpId });
 
   if (!room) return NextResponse.json({ error: 'Not found' }, { status: 404 });

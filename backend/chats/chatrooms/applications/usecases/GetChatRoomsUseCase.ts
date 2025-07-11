@@ -1,9 +1,6 @@
 import { IChatRoomRepository } from '@/backend/chats/chatrooms/domains/repositories/IChatRoomRepository';
-import { 
-  GetUserChatRoomsRequestDto, 
-  ChatRoomListResponseDto,
-  ChatRoomResponseDto 
-} from '@/backend/chats/chatrooms/applications/dtos/ChatRoomDtos';
+import { GetUserChatRoomsRequestDto } from '@/backend/chats/chatrooms/applications/dtos/ChatRoomRequestDtos';
+import { ChatRoomListResponseDto, ChatRoomResponseDto } from '@/backend/chats/chatrooms/applications/dtos/ChatRoomResponseDtos';
 
 export class GetChatRoomsUseCase {
   constructor(private chatRoomRepo: IChatRoomRepository) {}

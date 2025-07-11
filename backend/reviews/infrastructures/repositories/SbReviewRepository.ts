@@ -1,7 +1,7 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
 import { ReviewMapper } from '@/backend/reviews/infrastructures/mappers/ReviewMapper';
-import { IReviewRepository } from '../../domains/repositories/ReviewRepository';
-import { ReviewEntity } from '../../domains/entities/review';
+import { IReviewRepository } from '@/backend/reviews/domains/repositories/ReviewRepository';
+import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 
 export class SbReviewRepository implements IReviewRepository {
   // helpId로 리뷰 리스트 조회

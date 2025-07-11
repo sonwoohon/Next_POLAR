@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GetChatRoomsUseCase } from '@/backend/chats/chatrooms/applications/usecases/GetChatRoomsUseCase';
-import { ChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/ChatRoomRepository';
+import { SbChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/repositories/SbChatRoomRepository';
 import { getUserIdFromCookie } from '@/lib/jwt';
 
 // GET /api/chats/rooms
@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   // 유스케이스 실행
-  const usecase = new GetChatRoomsUseCase(new ChatRoomRepository());
-  const rooms = await usecase.execute(userId);
+  const usecase = new GetChatRoomsUseCase(new SbChatRoomRepository());
+  const rooms = await usecase.execute({ userId });
 
   // 결과 반환
   return NextResponse.json(rooms);

@@ -9,7 +9,7 @@ import {
 
 // ===== Repository 구현체 =====
 // IChatRoomRepository 인터페이스를 구현하는 실제 데이터베이스 접근 클래스
-export class ChatRoomRepository implements IChatRoomRepository {
+export class SbChatRoomRepository implements IChatRoomRepository {
   // ===== 사용자 ID로 참여한 모든 채팅방 조회 =====
   // 1. help_applicants 테이블에서 is_accepted=true인 데이터 조회
   // 2. helps 테이블과 조인하여 시니어 정보 가져오기
@@ -55,4 +55,4 @@ export class ChatRoomRepository implements IChatRoomRepository {
     // ChatRoom 엔티티 형태로 변환하여 반환
     return ChatRoomMapper.toChatRoom(row);
   }
-}
+} 

@@ -3,12 +3,15 @@ import { UserWithdrawalUseCase } from '@/backend/users/withdrawal/applications/u
 import { SbWithdrawalUserRepository } from '@/backend/users/withdrawal/infrastructures/SbUserRepository';
 
 export async function POST(req: NextRequest) {
-  const { userId, type } = await req.json();
-  const userRepository = new SbWithdrawalUserRepository();
-  const usecase = new UserWithdrawalUseCase(userRepository);
   try {
-    await usecase.execute(userId, type);
-    return NextResponse.json({ success: true });
+    const { userId, confirmPassword, reason } = await req.json();
+    
+    const userRepository = new SbWithdrawalUserRepository();
+    const usecase = new UserWithdrawalUseCase(userRepository);
+    
+    const result = await usecase.execute({ userId, confirmPassword, reason });
+    
+    return NextResponse.json(result, { status: 200 });
   } catch (e: any) {
     return NextResponse.json(
       { success: false, error: e.message },

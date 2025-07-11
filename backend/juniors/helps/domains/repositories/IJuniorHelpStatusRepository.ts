@@ -1,7 +1,9 @@
+import { JuniorHelpVerificationCodeEntity } from '@/backend/juniors/helps/domains/entities/JuniorHelp';
+
 export interface IJuniorHelpStatusRepository {
   // 상태 관리
   getVerificationCode(
     helpId: number
-  ): Promise<{ code: number; expires_at: number }>;
+  ): Promise<JuniorHelpVerificationCodeEntity>;
   deleteVerificationCode(helpId: number): Promise<boolean>;
 }

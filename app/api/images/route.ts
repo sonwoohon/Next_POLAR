@@ -13,6 +13,7 @@ import {
   GetImageRequestDto,
   DeleteImageRequestDto,
 } from '@/backend/images/applications/dtos/ImageDtos';
+import { urlToUrlWithoutFlightMarker } from 'next/dist/client/components/router-reducer/fetch-server-response';
 
 // 공통 헬퍼 함수들
 type AuthResult = 
@@ -162,7 +163,7 @@ export async function DELETE(
       url: searchParams.get('url') || '',
       bucketName: searchParams.get('bucketName') || '',
     };
-
+    console.log(requestData)
     if (!requestData.url || !requestData.bucketName) {
       console.error('[API] 필수 파라미터 누락');
       return NextResponse.json(

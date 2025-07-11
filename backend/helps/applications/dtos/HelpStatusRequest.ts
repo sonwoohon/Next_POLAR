@@ -4,10 +4,6 @@ export interface SelectJuniorRequestDto {
   juniorId: number;
 }
 
-export interface CloseHelpRequestDto {
-  helpId: number;
-}
-
 export interface RequestCompletionRequestDto {
   helpId: number;
 }

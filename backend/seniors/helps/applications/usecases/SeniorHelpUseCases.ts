@@ -10,7 +10,8 @@
 
 // 유스케이스는 비즈니스 로직을 구현하며, 엔티티를 조작하고 비즈니스 규칙을 적용합니다.
 
-import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInteface';
+import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInterface';
+import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
 import {
   CreateSeniorHelpRequestDto,
   UpdateSeniorHelpRequestDto,
@@ -20,7 +21,6 @@ import {
   DeleteSeniorHelpResponseDto,
 } from '@/backend/seniors/helps/applications/dtos/SeniorResponse';
 import { SeniorHelpMapper } from '@/backend/seniors/helps/infrastructures/mappers/SeniorHelpMapper';
-import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
 import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
 
 export class SeniorHelpUseCase {
@@ -51,12 +51,10 @@ export class SeniorHelpUseCase {
     const help = await this.helpRepository?.getHelpById(helpId);
     if (!help) throw new Error('해당 help를 찾을 수 없습니다.');
 
-    // 2. 소유자 검증
     if (help.seniorId !== seniorId) {
       throw new Error('수정 권한이 없습니다.');
     }
 
-    // 수정
     const entity: UpdateHelpRequestWithHelpId = {
       helpId,
       title: dto.title ?? '',
