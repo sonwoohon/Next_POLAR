@@ -1,4 +1,4 @@
-import { LoginEntity } from '../../domains/entities/LoginEntity';
+import { LoginEntity } from '@/backend/users/auths/login/domains/entities/LoginEntity';
 
 export class LoginMapper {
   static toLoginEntity(user: LoginEntity) {
@@ -11,8 +11,7 @@ export class LoginMapper {
       user.address,
       user.profileImgUrl,
       user.password,
-      user.createdAt,
-      user.updatedAt
+      user.createdAt
     );
   }
 }

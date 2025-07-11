@@ -1,6 +1,6 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { LoginMapper } from '../mappers/LoginMapper';
-import { LoginEntity } from '../../domains/entities/LoginEntity';
+import { LoginMapper } from '@/backend/users/auths/login/infrastructures/mappers/LoginMapper';
+import { LoginEntity } from '@/backend/users/auths/login/domains/entities/LoginEntity';
 
 // 로그인에 필요한 사용자 정보를 가져오는 Repository
 export class LoginRepository {
@@ -26,7 +26,6 @@ export class LoginRepository {
       profileImgUrl: data.profile_img_url,
       password: data.password,
       createdAt: data.created_at,
-      updatedAt: data.updated_at,
     });
   }
 }
