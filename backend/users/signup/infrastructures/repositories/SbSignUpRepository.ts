@@ -11,6 +11,7 @@ export class SbAuthRepository implements SignUpRepositoryInterface {
 
   // 회원가입
   async signUp(user: SignUpDto): Promise<SignUpDto | null> {
+    console.log(user.uuid);
     const { data, error } = await this.supabase
       .from('users')
       .insert(user)
