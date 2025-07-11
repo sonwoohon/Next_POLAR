@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const authResult = getAuthenticatedUser(req);
+  // 미사용 변수 주석처리
   const userId = authResult.user?.id as number;
   const categoryId = Number(req.nextUrl.searchParams.get('categoryId'));
 
