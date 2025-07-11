@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { NextRequest } from 'next/server';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     // 인증 확인 (선택사항 - 로그아웃은 인증 없이도 가능)
-    const authResult = await getAuthenticatedUser();
+    const authResult = await getAuthenticatedUser(request);
 
     const cookieStore = await cookies();
 
@@ -15,7 +16,7 @@ export async function POST() {
 
     return NextResponse.json({
       message: '로그아웃되었습니다.',
-      wasAuthenticated: authResult.success,
+      wasAuthenticated: !!authResult.user,
     });
   } catch (e: unknown) {
     const errorMessage =

@@ -6,10 +6,11 @@ const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const reviewId = Number(params.id);
+    const { id } = await params;
+    const reviewId = Number(id);
     if (isNaN(reviewId)) {
       return NextResponse.json({ error: '잘못된 리뷰 id입니다.' }, { status: 400 });
     }

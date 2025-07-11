@@ -16,8 +16,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, reviews }, { status: 200 });
     }
     return NextResponse.json({ error: 'helpId 쿼리 파라미터가 필요합니다.' }, { status: 400 });
-  } catch (error) {
-    return NextResponse.json({ error: '리뷰 조회 중 오류 발생', detail: String(error) }, { status: 500 });
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      return NextResponse.json({ error: '리뷰 조회 중 오류 발생', detail: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json({ error: '리뷰 조회 중 오류 발생', detail: String(error) }, { status: 500 });
+    }
   }
 }
 
@@ -37,18 +42,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '필수 값이 누락되었습니다.' }, { status: 400 });
     }
 
-    const createReviewDto: CreateReviewDto = {
-      helpId: Number(helpId),
-      writerId: Number(writerId),
-      receiverId: Number(receiverId),
-      rating: Number(rating),
-      text: String(text),
-    };
+    const createReviewDto = new CreateReviewDto(
+      Number(helpId),
+      Number(writerId),
+      Number(receiverId),
+      Number(rating),
+      String(text)
+    );
 
     const review = await reviewUseCases.createReview(createReviewDto);
 
     return NextResponse.json({ success: true, review }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: '리뷰 생성 중 오류 발생', detail: String(error) }, { status: 500 });
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      return NextResponse.json({ error: '리뷰 생성 중 오류 발생', detail: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json({ error: '리뷰 생성 중 오류 발생', detail: String(error) }, { status: 500 });
+    }
   }
 } 

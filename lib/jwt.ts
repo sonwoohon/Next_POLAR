@@ -25,16 +25,46 @@ export function generateRefreshToken(payload: Record<string, unknown>) {
 export function verifyAccessToken(token: string): Record<string, unknown> {
   try {
     return jwt.verify(token, ACCESS_SECRET as string) as Record<string, unknown>;
-  } catch (error) {
-    throw new Error('유효하지 않은 액세스 토큰입니다.');
+  } catch (error: unknown) {
+    // JWT 관련 에러 타입 체크
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new Error('유효하지 않은 액세스 토큰입니다.');
+    }
+
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('액세스 토큰이 만료되었습니다.');
+    }
+
+    if (error instanceof jwt.NotBeforeError) {
+      throw new Error('액세스 토큰이 아직 유효하지 않습니다.');
+    }
+
+    // 기타 예상치 못한 에러
+    console.error('Access token verification error:', error);
+    throw new Error('액세스 토큰 검증 중 오류가 발생했습니다.');
   }
 }
 
 export function verifyRefreshToken(token: string): Record<string, unknown> {
   try {
     return jwt.verify(token, REFRESH_SECRET as string) as Record<string, unknown>;
-  } catch (error) {
-    throw new Error('유효하지 않은 리프레시 토큰입니다.');
+  } catch (error: unknown) {
+    // JWT 관련 에러 타입 체크
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new Error('유효하지 않은 리프레시 토큰입니다.');
+    }
+
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('리프레시 토큰이 만료되었습니다.');
+    }
+
+    if (error instanceof jwt.NotBeforeError) {
+      throw new Error('리프레시 토큰이 아직 유효하지 않습니다.');
+    }
+
+    // 기타 예상치 못한 에러
+    console.error('Refresh token verification error:', error);
+    throw new Error('리프레시 토큰 검증 중 오류가 발생했습니다.');
   }
 }
 
@@ -43,7 +73,7 @@ export function getUserIdFromCookie(request: NextRequest): number | null {
   try {
     // 쿠키에서 access-token 가져오기
     const accessToken = request.cookies.get('access-token')?.value;
-    
+
     if (!accessToken) {
       console.log('[JWT] access-token 쿠키가 없습니다.');
       return null;
@@ -52,7 +82,7 @@ export function getUserIdFromCookie(request: NextRequest): number | null {
     // JWT 토큰 검증 및 페이로드 추출
     const payload = verifyAccessToken(accessToken);
     const userId = payload.id as number;
-    
+
     if (!userId) {
       console.log('[JWT] 토큰에서 userId를 찾을 수 없습니다.');
       return null;
@@ -60,8 +90,13 @@ export function getUserIdFromCookie(request: NextRequest): number | null {
 
     console.log(`[JWT] 토큰에서 추출한 사용자 ID: ${userId}`);
     return userId;
-  } catch (error) {
-    console.error('[JWT] 토큰 검증 중 오류:', error);
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[JWT] 토큰 검증 중 오류:', error.message);
+    } else {
+      console.error('[JWT] 토큰 검증 중 예상치 못한 오류:', error);
+    }
     return null;
   }
 }

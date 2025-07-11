@@ -47,8 +47,13 @@ export async function POST(
 
     console.log('[API] 이미지 업로드 성공:', result.url);
     return NextResponse.json(result);
-  } catch (error) {
-    console.error('[API] 이미지 업로드 중 오류 발생:', error);
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[API] 이미지 업로드 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 이미지 업로드 중 예상치 못한 오류:', error);
+    }
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
@@ -92,8 +97,13 @@ export async function GET(
 
     console.log('[API] 이미지 조회 성공:', result.url);
     return NextResponse.json(result);
-  } catch (error) {
-    console.error('[API] 이미지 조회 중 오류 발생:', error);
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[API] 이미지 조회 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 이미지 조회 중 예상치 못한 오류:', error);
+    }
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
@@ -137,8 +147,13 @@ export async function DELETE(
 
     console.log('[API] 이미지 삭제 성공');
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('[API] 이미지 삭제 중 오류 발생:', error);
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[API] 이미지 삭제 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 이미지 삭제 중 예상치 못한 오류:', error);
+    }
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
