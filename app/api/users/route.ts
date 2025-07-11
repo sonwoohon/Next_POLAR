@@ -3,7 +3,6 @@ import { getUserIdFromCookie } from '@/lib/jwt';
 import { CommonUserUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
 import {
-  UserUpdateRequestDto,
   UserProfileResponseDto,
 } from '@/backend/users/user/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';

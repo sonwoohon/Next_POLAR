@@ -6,19 +6,19 @@ import {
 } from '@/backend/images/applications/usecases/ImageUseCase';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
-import { UpdateProfileImageUseCase } from '@/backend/images/applications/usecases/UpdateProfileImageUseCase';
+// import { UpdateProfileImageUseCase } from '@/backend/images/applications/usecases/UpdateProfileImageUseCase';
 import { getUserIdFromCookie } from '@/lib/jwt';
 import {
   UploadImageRequestDto,
   GetImageRequestDto,
   DeleteImageRequestDto,
 } from '@/backend/images/applications/dtos/ImageDtos';
-import { urlToUrlWithoutFlightMarker } from 'next/dist/client/components/router-reducer/fetch-server-response';
+// import { urlToUrlWithoutFlightMarker } from 'next/dist/client/components/router-reducer/fetch-server-response';
 
 // 공통 헬퍼 함수들
 type AuthResult = 
   | { error: string; status: number }
-  | { userId: number; user: any };
+  | { userId: number; user: unknown };
 
 async function authenticateAndGetUser(request: NextRequest): Promise<AuthResult> {
   const userId = getUserIdFromCookie(request);
@@ -39,13 +39,13 @@ function createErrorResponse(message: string, status: number = 500) {
   return NextResponse.json({ error: message }, { status });
 }
 
-function createSuccessResponse(data: any, message: string, status: number = 200) {
-  return NextResponse.json({
-    success: true,
-    message,
-    ...data
-  }, { status });
-}
+// function createSuccessResponse(data: any, message: string, status: number = 200) {
+//   return NextResponse.json({
+//     success: true,
+//     message,
+//     ...data
+//   }, { status });
+// }
 
 // 이미지 업로드 (POST)
 export async function POST(
