@@ -5,7 +5,6 @@ import {
 } from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import { SeniorHelpUseCase } from '@/backend/seniors/helps/applications/usecases/SeniorHelpUseCases';
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
-import { getUserIdFromCookie } from '@/lib/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
