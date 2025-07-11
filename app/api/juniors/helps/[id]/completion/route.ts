@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { JuniorHelpCompletionUseCase } from '../../../../../../backend/juniors/helps/applications/usecases/JuniorHelpCompletionUseCase';
-import { HelpStatusRepository } from '../../../../../../backend/helps/infrastructures/HelpStatusInfrastructure';
-import { JuniorHelpStatusInfrastructure } from '../../../../../../backend/juniors/helps/infrastructures/JuniorHelpStatusInfrastructure';
+import { JuniorHelpCompletionUseCase } from '@/backend/juniors/helps/applications/usecases/JuniorHelpCompletionUseCase';
+import { HelpStatusRepository } from '@/backend/helps/infrastructures/repositories/SbHelpStatusRepository';
+import { JuniorHelpStatusInfrastructure } from '@/backend/juniors/helps/infrastructures/repositories/JuniorHelpStatusInfrastructure';
+import { JuniorsHelpCompletionDto } from '@/backend/juniors/helps/applications/dtos/JuniorsHelpCompletionDto';
 
 // 주니어 Help 완료 처리 API
 const juniorHelpCompletionUseCase = new JuniorHelpCompletionUseCase(
@@ -33,17 +34,11 @@ export async function POST(
     }
 
     // 주니어: 인증 코드 입력 및 완료 처리
-    const success = await juniorHelpCompletionUseCase.completeHelp(
-      helpId,
-      verificationCode
+    const result = await juniorHelpCompletionUseCase.completeHelp(
+      new JuniorsHelpCompletionDto(helpId, Number(verificationCode))
     );
 
-    return NextResponse.json({
-      success,
-      message: success
-        ? 'Help가 성공적으로 완료되었습니다!'
-        : '완료 처리에 실패했습니다.',
-    });
+    return NextResponse.json(result);
   } catch (error) {
     console.error('주니어 Help 완료 처리 오류:', error);
     return NextResponse.json(

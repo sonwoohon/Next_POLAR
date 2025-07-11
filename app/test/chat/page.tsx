@@ -263,8 +263,6 @@ export default function ChatTestPage() {
           console.error('[실시간 구독] 채널 오류 발생');
         } else if (status === 'TIMED_OUT') {
           console.error('[실시간 구독] 구독 시간 초과');
-        } else if (status === 'CLOSED') {
-          console.log('[실시간 구독] 채널이 닫힘');
         }
       });
 

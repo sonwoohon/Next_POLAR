@@ -1,7 +1,7 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { CommonHelpEntity } from '../../domains/entities/CommonHelpEntity';
-import { ICommonHelpRepository } from '../../domains/repositories/ICommonHelpRepository';
-import { HelpData } from '../mappers/CommonHelpDataMapper';
+import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
+import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
+import { HelpData } from '@/backend/helps/infrastructures/mappers/CommonHelpDataMapper';
 
 export class SbCommonHelpRepository implements ICommonHelpRepository {
   async getHelpList(): Promise<CommonHelpEntity[] | null> {
