@@ -181,9 +181,7 @@ export default function ProfilePage() {
     try {
       // 이미지 업로드 API 호출
       const formData = new FormData();
-      formData.append('image', selectedImageFile);
-      formData.append('bucketName', 'profile-images');
-      formData.append('userId', user.id.toString());
+      formData.append('file', selectedImageFile);
 
       const response = await fetch('/api/images', {
         method: 'POST',
@@ -200,7 +198,7 @@ export default function ProfilePage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            profileImgUrl: data.image.url
+            profileImgUrl: data.url
           }),
         });
 

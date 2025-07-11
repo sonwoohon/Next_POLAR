@@ -1,5 +1,5 @@
-import { SignUpUsecase } from '@/backend/auths/signup/applications/usecases/SignUpUseCase';
-import { SbAuthRepository } from '@/backend/auths/signup/infrastructures/repositories/SbSignUpRepository';
+import { SignUpUsecase } from '@/backend/users/signup/applications/usecases/SignUpUseCase';
+import { SbAuthRepository } from '@/backend/users/signup/infrastructures/repositories/SbSignUpRepository';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
