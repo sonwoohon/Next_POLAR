@@ -31,6 +31,13 @@ export class SbChatRoomRepository implements IChatRoomRepository {
     return ChatRoomMapper.toChatRooms(data ?? []);
   }
 
+  // ===== chatRoomId로 특정 채팅방 상세 정보 조회 =====
+  async findRoomByChatRoomId(chatRoomId: number): Promise<ChatRoom | null> {
+    // TODO: chat_rooms 테이블이 생성되면 이 메서드를 구현
+    // 현재는 helpId를 chatRoomId로 사용하는 임시 구현
+    return this.findRoomByHelpId(chatRoomId);
+  }
+
   // ===== 헬프 ID로 특정 채팅방 상세 정보 조회 =====
   // 1. help_applicants 테이블에서 특정 helpId의 수락된 데이터 조회
   // 2. helps 테이블과 조인하여 시니어 정보 가져오기
@@ -53,6 +60,46 @@ export class SbChatRoomRepository implements IChatRoomRepository {
     const row = data as HelpApplicantRow;
 
     // ChatRoom 엔티티 형태로 변환하여 반환
+    return ChatRoomMapper.toChatRoom(row);
+  }
+
+  // ===== 시니어-주니어 조합으로 기존 채팅방 조회 =====
+  async findRoomByParticipants(juniorId: number, seniorId: number): Promise<ChatRoom | null> {
+    // Supabase 쿼리 실행
+    const { data, error } = await supabase
+      .from('help_applicants')
+      .select(
+        `help_id, junior_id, is_accepted, helps!inner(id, senior_id, created_at)`
+      )
+      .eq('is_accepted', true)
+      .eq('junior_id', juniorId)
+      .eq('helps.senior_id', seniorId)
+      .single();
+
+    if (error || !data) return null;
+
+    const row = data as HelpApplicantRow;
+    return ChatRoomMapper.toChatRoom(row);
+  }
+
+  // ===== 새로운 채팅방 생성 =====
+  async createRoom(room: Omit<ChatRoom, 'chatRoomId' | 'createdAt'>): Promise<ChatRoom> {
+    // TODO: chat_rooms 테이블이 생성되면 이 메서드를 구현
+    // 현재는 임시로 help_applicants 테이블에 데이터를 삽입하는 방식
+    const { data, error } = await supabase
+      .from('help_applicants')
+      .insert({
+        help_id: room.helpId,
+        junior_id: room.juniorId,
+        is_accepted: true
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // 생성된 데이터를 ChatRoom 엔티티로 변환
+    const row = data as HelpApplicantRow;
     return ChatRoomMapper.toChatRoom(row);
   }
 } 
