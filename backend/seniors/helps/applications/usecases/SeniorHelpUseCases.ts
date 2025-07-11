@@ -1,15 +1,15 @@
-import { ISeniorHelpRepositoryInterface } from '../../domains/repositories/SeniorHelpRepositoryInterface';
+import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInterface';
+import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
 import {
   CreateSeniorHelpRequestDto,
   UpdateSeniorHelpRequestDto,
-} from '../dtos/SeniorRequest';
+} from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import {
   CreateSeniorHelpResponseDto,
   DeleteSeniorHelpResponseDto,
-} from '../dtos/SeniorResponse';
-import { SeniorHelpMapper } from '../../infrastructures/mappers/SeniorHelpMapper';
-import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
-import { UpdateHelpRequestWithHelpId } from '../../SeniorHelpModel';
+} from '@/backend/seniors/helps/applications/dtos/SeniorResponse';
+import { SeniorHelpMapper } from '@/backend/seniors/helps/infrastructures/mappers/SeniorHelpMapper';
+import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
 
 export class SeniorHelpUseCase {
   constructor(

@@ -1,7 +1,7 @@
 import { generateAccessToken, generateRefreshToken } from '@/lib/jwt';
-import { LoginRepositoryInterface } from '../../domains/repository/LoginRepositoryInterface';
-import { LoginResponseDTO } from '../dtos/LoginResponse';
-import { LoginRequestDTO } from '../dtos/LoginRequest';
+import { LoginRepositoryInterface } from '@/backend/users/auths/login/domains/repository/LoginRepositoryInterface';
+import { LoginResponseDTO } from '@/backend/users/auths/login/applications/dtos/LoginResponse';
+import { LoginRequestDTO } from '@/backend/users/auths/login/applications/dtos/LoginRequest';
 
 // 실제 구현
 export class LoginUseCase {

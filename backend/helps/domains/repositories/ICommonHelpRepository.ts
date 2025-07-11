@@ -1,4 +1,4 @@
-import { CommonHelpEntity } from "../entities/CommonHelpEntity";
+import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
 
 export interface ICommonHelpRepository {
   getHelpList(): Promise<CommonHelpEntity[] | null>;

@@ -1,6 +1,9 @@
-import { Category } from '../../domains/entities/Category';
-import { Score } from '../../domains/entities/Score';
-import { ScoreDBResponse, ScoreDBResponseSingle } from '../../ScoreModel';
+import { Category } from '@/backend/juniors/scores/domains/entities/Category';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
+import {
+  ScoreDBResponse,
+  ScoreDBResponseSingle,
+} from '@/backend/juniors/scores/ScoreModel';
 
 export class ScoreMapper {
   static toScoreEntity({ scores }: ScoreDBResponse) {

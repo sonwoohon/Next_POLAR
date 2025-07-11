@@ -1,6 +1,6 @@
 // 로그인 Repository 인터페이스
 
-import { LoginEntity } from '../entities/LoginEntity';
+import { LoginEntity } from '@/backend/users/auths/login/domains/entities/LoginEntity';
 
 // 도메인 계층과 인프라스트럭처 계층 간의 결합도를 낮추기 위한 추상화
 export interface LoginRepositoryInterface {

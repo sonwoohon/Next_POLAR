@@ -1,14 +1,17 @@
-import { CommonHelpEntity } from "../../domains/entities/CommonHelpEntity";
-import { ICommonHelpRepository } from "../../domains/repositories/ICommonHelpRepository";
-import { HelpListResponseDto, HelpDetailResponseDto } from "../dtos/HelpDTO";
-
+import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
+import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
+import {
+  HelpListResponseDto,
+  HelpDetailResponseDto,
+} from '@/backend/helps/applications/dtos/HelpDTO';
 
 // 헬프 리스트 조회 UseCase
 export class GetHelpListUseCase {
-  constructor(private readonly helpRepository: ICommonHelpRepository) { }
+  constructor(private readonly helpRepository: ICommonHelpRepository) {}
 
   async execute(): Promise<HelpListResponseDto[] | null> {
-    const helpList: CommonHelpEntity[] | null = await this.helpRepository.getHelpList();
+    const helpList: CommonHelpEntity[] | null =
+      await this.helpRepository.getHelpList();
 
     if (helpList) {
       return helpList.map((help) => ({
@@ -32,10 +35,12 @@ export class GetHelpListUseCase {
 
 // 헬프 상세 조회 UseCase
 export class GetHelpDetailUseCase {
-  constructor(private readonly helpRepository: ICommonHelpRepository) { }
+  constructor(private readonly helpRepository: ICommonHelpRepository) {}
 
   async execute(id: number): Promise<HelpDetailResponseDto | null> {
-    const help: CommonHelpEntity | null = await this.helpRepository.getHelpById(id);
+    const help: CommonHelpEntity | null = await this.helpRepository.getHelpById(
+      id
+    );
 
     if (help) {
       return {

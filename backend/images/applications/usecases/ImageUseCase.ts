@@ -1,5 +1,5 @@
 import { ValidationError } from '@/backend/common/errors/ValidationError';
-import { IImageRepository } from '../../domains/repositories/ImageRepository';
+import { IImageRepository } from '@/backend/images/domains/repositories/ImageRepository';
 
 // 이미지 파일 검증 클래스
 export class ImageValidator {

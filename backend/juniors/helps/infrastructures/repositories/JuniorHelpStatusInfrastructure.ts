@@ -1,6 +1,6 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { IJuniorHelpStatusRepository } from '../../domains/repositories/IJuniorHelpStatusRepository';
-import { StatusMapper } from '../mappers/StatusMapper';
+import { IJuniorHelpStatusRepository } from '@/backend/juniors/helps/domains/repositories/IJuniorHelpStatusRepository';
+import { StatusMapper } from '@/backend/juniors/helps/infrastructures/mappers/StatusMapper';
 
 export class JuniorHelpStatusInfrastructure
   implements IJuniorHelpStatusRepository

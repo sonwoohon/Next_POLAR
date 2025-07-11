@@ -10,10 +10,10 @@
 
 // 인프라스트럭처는 외부 의존성의 실제 구현을 담당하며, 인터페이스를 구현합니다.
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { Score } from '../../domains/entities/Score';
-import { ScoreMapper } from '../mappers/ScoreMapper';
-import { ScoreDBResponse } from '../../ScoreModel';
-import { ScoreRepositoryInterface } from '../../domains/repositories/ScoreRepositoryInterface';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
+import { ScoreMapper } from '@/backend/juniors/scores/infrastructures/mappers/ScoreMapper';
+import { ScoreDBResponse } from '@/backend/juniors/scores/ScoreModel';
+import { ScoreRepositoryInterface } from '@/backend/juniors/scores/domains/repositories/ScoreRepositoryInterface';
 import {
   ScoreRequestDtoWithCategoryId,
   ScoreRequestDtoWithCategoryIdAndSeason,
@@ -21,7 +21,7 @@ import {
   ScoreRequestDtoWithUserId,
   ScoreRequestDtoWithUserIdAndCategoryId,
   ScoreRequestDtoWithUserIdAndSeason,
-} from '../../applications/dtos/ScoreRequestDto';
+} from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
 
 export class ScoreRepository implements ScoreRepositoryInterface {
   private async queryScores(

@@ -1,5 +1,5 @@
-import { Score } from '../../domains/entities/Score';
-import { ScoreRepositoryInterface } from '../../domains/repositories/ScoreRepositoryInterface';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
+import { ScoreRepositoryInterface } from '@/backend/juniors/scores/domains/repositories/ScoreRepositoryInterface';
 import {
   ScoreRequestDtoWithCategoryId,
   ScoreRequestDtoWithCategoryIdAndSeason,

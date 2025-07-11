@@ -1,4 +1,4 @@
-export class JuniorHelp {
+export class JuniorHelpVerificationCodeEntity {
   constructor(
     public readonly helpId: number,
     public readonly code: number,

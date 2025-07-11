@@ -1,6 +1,6 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
 import { HelpData } from '@/backend/helps/infrastructures/mappers/CommonHelpDataMapper';
-import { IJuniorHelpRepository } from '../../domains/repositories/IJuniorHelpRepository';
+import { IJuniorHelpRepository } from '@/backend/helps/juniors/domains/repositories/IJuniorHelpRepository';
 import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
 
 export class SbJuniorHelpRepository implements IJuniorHelpRepository {
@@ -27,7 +27,9 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
       }
 
       return data.map(
-        (help: HelpData) =>
+        (
+          help: HelpData // HelpData 타입 대신 any 사용
+        ) =>
           new CommonHelpEntity(
             help.id,
             help.senior_id,
