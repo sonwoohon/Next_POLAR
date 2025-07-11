@@ -8,6 +8,7 @@ export class LoginEntity {
     public address: string,
     public profileImgUrl: string,
     public password: string,
-    public createdAt: Date
-  ) {}
+    public createdAt: Date,
+    public uuid: string,
+  ) { }
 }
