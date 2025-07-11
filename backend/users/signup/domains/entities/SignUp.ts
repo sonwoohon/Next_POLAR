@@ -1,5 +1,6 @@
 export class SignUpEntity {
   public readonly id: bigint;
+  public uuid: string;
   public name: string;
   public phoneNumber: bigint;
   public password: string;
@@ -10,6 +11,7 @@ export class SignUpEntity {
 
   constructor(params: {
     id: bigint;
+    uuid: string;
     name: string;
     phoneNumber: bigint;
     password: string;
@@ -19,6 +21,7 @@ export class SignUpEntity {
     address?: string;
   }) {
     this.id = params.id;
+    this.uuid = params.uuid;
     this.name = params.name;
     this.phoneNumber = params.phoneNumber;
     this.password = params.password;
