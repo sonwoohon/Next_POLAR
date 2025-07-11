@@ -18,5 +18,5 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ chat
   console.log('GET /api/chats/rooms/[chatRoomId] - Status: 200 OK');
 
   // 결과 반환
-  return NextResponse.json(room);
+  return NextResponse.json(room, {status: 200})
 } 
