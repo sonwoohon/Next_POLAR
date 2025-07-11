@@ -38,10 +38,34 @@ export async function POST() {
     });
 
     return NextResponse.json({ message: '토큰이 갱신되었습니다.' });
-  } catch (e) {
+  } catch (error: unknown) {
+    // JWT 관련 에러 타입 체크
+    if (error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json(
+        { error: '유효하지 않은 리프레시 토큰입니다.' },
+        { status: 401 }
+      );
+    }
+
+    if (error instanceof jwt.TokenExpiredError) {
+      return NextResponse.json(
+        { error: '리프레시 토큰이 만료되었습니다.' },
+        { status: 401 }
+      );
+    }
+
+    if (error instanceof jwt.NotBeforeError) {
+      return NextResponse.json(
+        { error: '리프레시 토큰이 아직 유효하지 않습니다.' },
+        { status: 401 }
+      );
+    }
+
+    // 기타 예상치 못한 에러
+    console.error('Token refresh error:', error);
     return NextResponse.json(
-      { error: '유효하지 않은 리프레시 토큰입니다.' },
-      { status: 401 }
+      { error: '토큰 갱신 중 오류가 발생했습니다.' },
+      { status: 500 }
     );
   }
 }

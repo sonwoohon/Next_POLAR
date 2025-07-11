@@ -58,8 +58,13 @@ export async function GET(
 
     console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
-  } catch (error) {
-    console.error('[API] 사용자 조회 중 오류 발생:', error);
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[API] 사용자 조회 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 사용자 조회 중 예상치 못한 오류:', error);
+    }
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
@@ -105,12 +110,17 @@ export async function PUT(
 
     console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
-  } catch (error) {
-    console.error('[API] 사용자 수정 중 오류 발생:', error);
-
+  } catch (error: unknown) {
+    // 에러 타입 검증
     if (error instanceof ValidationError) {
       console.error('[API] 검증 오류:', error.message);
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error instanceof Error) {
+      console.error('[API] 사용자 수정 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 사용자 수정 중 예상치 못한 오류:', error);
     }
 
     return NextResponse.json(
@@ -155,12 +165,17 @@ export async function DELETE(
 
     console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
-  } catch (error) {
-    console.error('[API] 프로필 이미지 삭제 중 오류 발생:', error);
-
+  } catch (error: unknown) {
+    // 에러 타입 검증
     if (error instanceof ValidationError) {
       console.error('[API] 검증 오류:', error.message);
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error instanceof Error) {
+      console.error('[API] 프로필 이미지 삭제 중 오류 발생:', error.message);
+    } else {
+      console.error('[API] 프로필 이미지 삭제 중 예상치 못한 오류:', error);
     }
 
     return NextResponse.json(

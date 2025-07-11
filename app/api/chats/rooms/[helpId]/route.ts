@@ -3,19 +3,22 @@ import { GetChatRoomDetailUseCase } from '@/backend/chats/chatrooms/applications
 import { SbChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/repositories/SbChatRoomRepository';
 
 // GET /api/chats/rooms/[helpId]
-export async function GET(req: NextRequest, { params }: { params: { helpId: string } }) {
-  const helpId = Number(params.helpId);
-  if (isNaN(helpId)) return NextResponse.json({ error: 'Invalid helpId' }, { status: 400 });
+export async function GET(req: NextRequest, { params }: { params: Promise<{ helpId: string }> }) {
+  const { helpId } = await params;
+  const helpIdNum = Number(helpId);
+  if (isNaN(helpIdNum)) return NextResponse.json({ error: 'Invalid helpId' }, { status: 400 });
 
   // 유스케이스 실행
-  const usecase = new GetChatRoomDetailUseCase(new SbChatRoomRepository());
-  const room = await usecase.execute({ helpId });
+
+  const usecase = new GetChatRoomDetailUseCase(new ChatRoomRepository());
+  const room = await usecase.execute({ helpId: helpIdNum });
+
 
   if (!room) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
   // 성공 시 HTTP 상태 코드 콘솔 출력
   console.log('GET /api/chats/rooms/[helpId] - Status: 200 OK');
-  
+
   // 결과 반환
   return NextResponse.json(room);
 } 
