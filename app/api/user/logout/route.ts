@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getAuthenticatedUser } from '@/lib/auth';
-import { NextRequest } from 'next/server';
+;
 
 export async function POST(request: NextRequest) {
   try {
