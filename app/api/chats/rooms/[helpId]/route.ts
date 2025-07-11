@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ help
 
   // 유스케이스 실행
 
-  const usecase = new GetChatRoomDetailUseCase(new ChatRoomRepository());
+  const usecase = new GetChatRoomDetailUseCase(new SbChatRoomRepository());
   const room = await usecase.execute({ helpId: helpIdNum });
 
 
