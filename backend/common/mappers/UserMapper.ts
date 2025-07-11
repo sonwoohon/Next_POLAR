@@ -1,4 +1,4 @@
-import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
+import { CommonUserEntity } from '@/backend/users/domains/entities/UserEntity';
 import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
 
 // Entity -> DB object (snake_case)

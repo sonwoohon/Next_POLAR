@@ -1,4 +1,4 @@
-import { Category } from './domains/entities/Category';
+import { Category } from '@/backend/juniors/scores/domains/entities/Category';
 
 export interface ScoreDBResponse {
   scores: ScoreDBResponseSingle[];

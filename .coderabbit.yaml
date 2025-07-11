@@ -8,10 +8,6 @@ reviews:
       - refactor/*
       - bug/*
 
-  # "Review skipped" 상태 메시지 숨기기
-  review_status: false
-  language: ko
-
   # 리뷰 룰 설정 (원하는 대로 조정 가능)
   rules:
     - code-quality

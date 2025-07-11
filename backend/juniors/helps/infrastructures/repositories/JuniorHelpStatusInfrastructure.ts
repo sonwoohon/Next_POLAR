@@ -1,5 +1,6 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { IJuniorHelpStatusRepository } from '../domains/repositories/IJuniorHelpStatusRepository';
+import { IJuniorHelpStatusRepository } from '@/backend/juniors/helps/domains/repositories/IJuniorHelpStatusRepository';
+import { StatusMapper } from '@/backend/juniors/helps/infrastructures/mappers/StatusMapper';
 
 export class JuniorHelpStatusInfrastructure
   implements IJuniorHelpStatusRepository
@@ -8,7 +9,7 @@ export class JuniorHelpStatusInfrastructure
   async getVerificationCode(helpId: number) {
     const { data, error } = await supabase
       .from('help_verification_codes')
-      .select('code, expires_at')
+      .select('*')
       .eq('help_id', helpId)
       .single();
 
@@ -18,7 +19,7 @@ export class JuniorHelpStatusInfrastructure
       throw new Error('인증 코드 조회에 실패했습니다.');
     }
 
-    return data as { code: number; expires_at: number };
+    return StatusMapper.toJuniorHelp(data);
   }
 
   async deleteVerificationCode(helpId: number) {

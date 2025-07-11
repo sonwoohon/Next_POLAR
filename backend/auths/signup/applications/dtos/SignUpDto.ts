@@ -1,4 +1,4 @@
-import { SignUpRepositoryInterface } from '../../domains/repositories/SignUpRepositoryInterface';
+import { SignUpRepositoryInterface } from '@/backend/auths/signup/domains/repositories/SignUpRepositoryInterface';
 import { SignUpDto } from '@/app/api/user/signup/route';
 
 export class SignUpUsecase {

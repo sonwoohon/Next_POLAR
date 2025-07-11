@@ -3,7 +3,7 @@ import { IHelpStatusRepository } from '@/backend/common/repositories/IHelpStatus
 import {
   HelpStatus,
   STATUS_TRANSITIONS,
-} from '@/backend/common/entities/HelpStatus';
+} from '@/backend/helps/domains/entities/HelpStatus';
 
 export class CommonHelpStatusUseCase {
   constructor(private helpStatusRepository: IHelpStatusRepository) {}

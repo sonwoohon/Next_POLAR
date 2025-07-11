@@ -1,5 +1,5 @@
-import { SeniorHelp } from '../../domains/entities/SeniorHelp';
-import { CreateSeniorHelpRequestDto } from '../../applications/dtos/SeniorRequest';
+import { SeniorHelp } from '@/backend/seniors/helps/domains/entities/SeniorHelp';
+import { CreateSeniorHelpRequestDto } from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 
 export class SeniorHelpMapper {
   static toEntity(dto: CreateSeniorHelpRequestDto): SeniorHelp {

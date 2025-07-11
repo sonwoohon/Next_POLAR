@@ -1,16 +1,26 @@
-import { Score } from '../entities/Score';
+import { Score } from '@/backend/juniors/scores/domains/entities/Score';
+import {
+  ScoreRequestDtoWithCategoryId,
+  ScoreRequestDtoWithSeason,
+  ScoreRequestDtoWithUserId,
+  ScoreRequestDtoWithUserIdAndSeason,
+  ScoreRequestDtoWithCategoryIdAndSeason,
+  ScoreRequestDtoWithUserIdAndCategoryId,
+} from '../../applications/dtos/ScoreRequestDto';
 
 export interface ScoreRepositoryInterface {
-  getScoresByUserId(userId: number): Promise<Score[]>;
-  getScoresByCategoryId(categoryId: number): Promise<Score[]>;
-  getScoresBySeason(season: number): Promise<Score[]>;
-  getScoresByUserIdAndSeason(userId: number, season: number): Promise<Score[]>;
+  getScoresByUserId(request: ScoreRequestDtoWithUserId): Promise<Score[]>;
+  getScoresByCategoryId(
+    request: ScoreRequestDtoWithCategoryId
+  ): Promise<Score[]>;
+  getScoresBySeason(request: ScoreRequestDtoWithSeason): Promise<Score[]>;
+  getScoresByUserIdAndSeason(
+    request: ScoreRequestDtoWithUserIdAndSeason
+  ): Promise<Score[]>;
   getScoresByCategoryIdAndSeason(
-    categoryId: number,
-    season: number
+    request: ScoreRequestDtoWithCategoryIdAndSeason
   ): Promise<Score[]>;
   getScoresByUserIdAndCategoryId(
-    userId: number,
-    categoryId: number
+    request: ScoreRequestDtoWithUserIdAndCategoryId
   ): Promise<Score[]>;
 }

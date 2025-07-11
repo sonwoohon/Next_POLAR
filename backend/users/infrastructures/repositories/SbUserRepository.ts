@@ -1,5 +1,5 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
-import { CommonUserEntity } from '@/backend/common/entities/UserEntity';
+import { CommonUserEntity } from '@/backend/users/domains/entities/UserEntity';
 import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 import { fromDbObject } from '@/backend/common/mappers/UserMapper';
 

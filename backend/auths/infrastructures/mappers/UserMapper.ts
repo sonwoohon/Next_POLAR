@@ -1,8 +1,10 @@
-import { UserEntity } from '../../domains/entities/CommonAuthEntity';
-import { UserResponseDto } from '../../applications/dtos/UserDtos';
+import { CommonUserEntity } from '@/backend/users/domains/entities/UserEntity';
+import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
 
 // Entity를 UserResponseDto로 변환
-export function entityToUserResponseDto(entity: UserEntity): UserResponseDto {
+export function entityToUserResponseDto(
+  entity: CommonUserEntity
+): UserProfileResponseDto {
   return {
     id: entity.id,
     name: entity.name,
@@ -11,11 +13,13 @@ export function entityToUserResponseDto(entity: UserEntity): UserResponseDto {
     age: entity.age,
     profileImgUrl: entity.profileImgUrl,
     address: entity.address,
-    createdAt: entity.createdAt.toISOString()
+    createdAt: entity.createdAt.toISOString(),
   };
 }
 
 // Entity 배열을 UserResponseDto 배열로 변환
-export function entitiesToUserResponseDtos(entities: UserEntity[]): UserResponseDto[] {
+export function entitiesToUserResponseDtos(
+  entities: CommonUserEntity[]
+): UserProfileResponseDto[] {
   return entities.map(entityToUserResponseDto);
-} 
+}
