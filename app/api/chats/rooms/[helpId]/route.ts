@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GetChatRoomDetailUseCase } from '@/backend/chats/applications/usecases/GetChatRoomDetailUseCase';
-import { ChatRoomRepository } from '@/backend/chats/infrastructures/ChatRoomRepository';
+import { ChatRoomRepository } from '@/backend/chats/infrastructures/repositories/IChatRoomRepository';
 
 // GET /api/chats/rooms/[helpId]
 export async function GET(req: NextRequest, { params }: { params: { helpId: string } }) {

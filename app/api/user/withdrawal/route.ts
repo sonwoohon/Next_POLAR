@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UserWithdrawalUseCase } from '@/backend/users/auths/withdrawal/applications/usecases/UserWithdrawalUseCase';
-import { SbWithdrawalUserRepository } from '@/backend/users/auths/withdrawal/infrastructures/SbUserRepository';
+import { SbWithdrawalUserRepository } from '@/backend/users/auths/withdrawal/infrastructures/repository/SbUserRepository';
+import { WithdrawalRequestDto } from '@/backend/users/auths/withdrawal/applications/dtos/WithdrawalRequestDto';
 
 export async function POST(req: NextRequest) {
-  const { userId, type } = await req.json();
-  const userRepository = new SbWithdrawalUserRepository();
-  const usecase = new UserWithdrawalUseCase(userRepository);
   try {
-    await usecase.execute(userId, type);
-    return NextResponse.json({ success: true });
+    const { userId, confirmPassword, reason }: WithdrawalRequestDto = await req.json();
+    
+    const userRepository = new SbWithdrawalUserRepository();
+    const usecase = new UserWithdrawalUseCase(userRepository);
+    
+    const result = await usecase.execute({ userId, confirmPassword, reason });
+    
+    return NextResponse.json(result, { status: 200 });
   } catch (e: any) {
     return NextResponse.json(
       { success: false, error: e.message },
