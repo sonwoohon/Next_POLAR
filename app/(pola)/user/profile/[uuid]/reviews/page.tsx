@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { use } from 'react';
+import styles from './UserReviews.module.css';
 
 interface Review {
   id: number;
@@ -24,7 +25,7 @@ export default function UserReviewsPage({ params }: { params: Promise<{ uuid: st
       try {
         setLoading(true);
         setError(null);
-        // UUID를 userId로 사용하여 API 호출
+        // 임시로 UUID를 userId로 사용하여 API 호출
         const response = await fetch(`/api/reviews?userId=${uuid}`);
         
         if (!response.ok) {
@@ -50,7 +51,7 @@ export default function UserReviewsPage({ params }: { params: Promise<{ uuid: st
 
   if (loading) {
     return (
-      <div>
+      <div className={styles.loadingContainer}>
         <h1>유저 리뷰 목록</h1>
         <p>UUID: {uuid}</p>
         <p>로딩 중...</p>
@@ -60,40 +61,47 @@ export default function UserReviewsPage({ params }: { params: Promise<{ uuid: st
 
   if (error) {
     return (
-      <div>
+      <div className={styles.errorContainer}>
         <h1>유저 리뷰 목록</h1>
         <p>UUID: {uuid}</p>
         <p>오류: {error}</p>
-        <button onClick={() => window.location.reload()}>다시 시도</button>
+        <button className={styles.retryButton} onClick={() => window.location.reload()}>다시 시도</button>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1>유저 리뷰 목록</h1>
-      <p>UUID: {uuid}</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>유저 리뷰 목록</h1>
+      <p className={styles.uuid}>UUID: {uuid}</p>
       
       {reviews.length === 0 ? (
-        <p>받은 리뷰가 없습니다.</p>
+        <div className={styles.emptyState}>
+          <p>받은 리뷰가 없습니다.</p>
+        </div>
       ) : (
-        <div>
-          <h2>받은 리뷰 목록 ({reviews.length}개)</h2>
-          <ul>
+        <div className={styles.reviewsSection}>
+          <h2 className={styles.reviewsTitle}>받은 리뷰 목록 ({reviews.length}개)</h2>
+          <ul className={styles.reviewsList}>
             {reviews.map((review) => (
-              <li key={review.id}>
-                <a href={`/reviews/${review.id}`}>
-                  리뷰 #{review.id} - 평점: {'⭐'.repeat(review.rating)}
+              <li key={review.id} className={styles.reviewItem}>
+                <a href={`/reviews/${review.id}`} className={styles.reviewLink}>
+                  <div className={styles.reviewHeader}>
+                    <span className={styles.reviewId}>리뷰 #{review.id}</span>
+                    <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
+                  </div>
+                  <p className={styles.reviewText}>{review.text}</p>
+                  <small className={styles.reviewDate}>작성일: {new Date(review.createdAt).toLocaleDateString()}</small>
                 </a>
-                <p>{review.text}</p>
-                <small>작성일: {new Date(review.createdAt).toLocaleDateString()}</small>
               </li>
             ))}
           </ul>
         </div>
       )}
       
-      <a href={`/user/profile/${uuid}`}>프로필로 돌아가기</a>
+      <div className={styles.buttonContainer}>
+        <a href={`/user/profile/${uuid}`} className={styles.backButton}>프로필로 돌아가기</a>
+      </div>
     </div>
   );
 } 
