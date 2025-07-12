@@ -14,7 +14,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${gangwonEdu.variable} ${pretendard.variable}`}>
-        {children}
+        <main
+          style={{
+            position: "fixed",
+            display: "flex",
+            zIndex: 10,
+            flexDirection: "column",
+            alignContent: "center",
+            width: "100%",
+            maxWidth: "768px",
+            height: "100svh",
+            // maxHeight: "100svh",
+            border: `1px solid #d9d9d9`,
+            overflowX: "hidden",
+            overflowY: "auto",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          {children}
+        </main>
       </body>
     </html>
   );
