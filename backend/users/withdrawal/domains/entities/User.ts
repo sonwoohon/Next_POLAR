@@ -9,5 +9,6 @@ export interface User {
     address: string;
     name: string;
     created_at: Date;
+    uuid: string;
     // is_active?: boolean; // soft delete용(필요시)
 } 

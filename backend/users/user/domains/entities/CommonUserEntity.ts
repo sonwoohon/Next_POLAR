@@ -2,6 +2,7 @@
 export class CommonUserEntity {
   constructor(
     public readonly id: number, // 사용자 고유 ID (수정 불가능)
+    public uuid: string, // 사용자 고유 UUID (수정 불가능)
     public phoneNumber: string, // 전화번호
     public password: string, // 비밀번호
     public email: string, // 이메일
@@ -10,12 +11,13 @@ export class CommonUserEntity {
     public address: string, // 주소
     public name: string, // 이름
     public readonly createdAt: Date // 생성일시 (수정 불가능)
-  ) {}
+  ) { }
 
   // 엔티티를 객체로 변환하는 메서드
   toJSON() {
     return {
       id: this.id,
+      uuid: this.uuid,
       phoneNumber: this.phoneNumber,
       password: this.password,
       email: this.email,
