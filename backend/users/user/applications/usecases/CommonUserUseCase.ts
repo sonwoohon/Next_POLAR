@@ -4,7 +4,7 @@ import { IUserRepository } from '@/backend/users/user/domains/repositories/UserR
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) { }
 
   async execute(id: number): Promise<CommonUserEntity | null> {
     return this.userRepository.getUserById(id);
@@ -13,9 +13,9 @@ export class GetUserByIdUseCase {
 
 // 회원 정보 수정 UseCase
 export class UpdateUserInfoUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) { }
 
-  async execute(id: number, updateData: any): Promise<any | null> {
+  async execute(id: number, updateData: CommonUserEntity): Promise<CommonUserEntity | null> {
     return this.userRepository.updateUser(id, updateData);
   }
 }
@@ -137,6 +137,7 @@ export class UserValidator {
 
 // 사용자 정보 업데이트 인터페이스 (비밀번호 포함)
 export interface UserProfileUpdate {
+  uuid?: string;
   phoneNumber?: string;
   email?: string;
   age?: number;
@@ -148,7 +149,7 @@ export interface UserProfileUpdate {
 
 // 공용 사용자 Use Case
 export class CommonUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) { }
 
   // 특정 사용자 조회
   async getUserById(id: number): Promise<CommonUserEntity | null> {
@@ -191,6 +192,7 @@ export class CommonUserUseCase {
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
         existingUser.id,
+        existingUser.uuid,
         existingUser.phoneNumber,
         existingUser.password,
         existingUser.email,
@@ -293,6 +295,7 @@ export class CommonUserUseCase {
       // 새로운 엔티티 생성 (불변성 유지)
       const updatedUser = new CommonUserEntity(
         existingUser.id,
+        updates.uuid ?? existingUser.uuid,
         updates.phoneNumber ?? existingUser.phoneNumber,
         updates.password ?? existingUser.password,
         updates.email ?? existingUser.email,
