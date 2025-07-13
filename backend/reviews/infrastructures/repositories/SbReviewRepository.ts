@@ -77,8 +77,14 @@ export class SbReviewRepository implements IReviewRepository {
       .eq('id', helpId)
       .single();
 
-    if (helpError || !helpData) {
-      throw new Error(`Help ID ${helpId}를 찾을 수 없습니다.`);
+    if (helpError) {
+      console.error(`[SbReviewRepository] Help 조회 실패: helpId=${helpId}, error=${helpError.message}`);
+      throw new Error(`Help ID ${helpId} 조회 중 오류가 발생했습니다: ${helpError.message}`);
+    }
+    
+    if (!helpData) {
+      console.error(`[SbReviewRepository] Help 데이터 없음: helpId=${helpId}`);
+      throw new Error(`Help ID ${helpId}에 해당하는 도움 요청을 찾을 수 없습니다.`);
     }
 
     const seniorId = helpData.senior_id;
@@ -93,8 +99,14 @@ export class SbReviewRepository implements IReviewRepository {
         .eq('is_accepted', true)
         .single();
 
-      if (applicantError || !applicantData) {
-        throw new Error(`Help ID ${helpId}에 대한 수락된 주니어를 찾을 수 없습니다.`);
+      if (applicantError) {
+        console.error(`[SbReviewRepository] 수락된 주니어 조회 실패: helpId=${helpId}, error=${applicantError.message}`);
+        throw new Error(`Help ID ${helpId}에 대한 수락된 주니어 조회 중 오류가 발생했습니다: ${applicantError.message}`);
+      }
+      
+      if (!applicantData) {
+        console.error(`[SbReviewRepository] 수락된 주니어 없음: helpId=${helpId}`);
+        throw new Error(`Help ID ${helpId}에 대한 수락된 주니어가 없습니다. 아직 주니어가 수락되지 않았거나, 수락된 주니어가 존재하지 않습니다.`);
       }
 
       return applicantData.junior_id;
@@ -107,16 +119,22 @@ export class SbReviewRepository implements IReviewRepository {
         .eq('junior_id', writerId)
         .single();
 
-      if (applicantError || !applicantData) {
-        throw new Error(`Help ID ${helpId}에 대한 주니어 신청 정보를 찾을 수 없습니다.`);
+      if (applicantError) {
+        console.error(`[SbReviewRepository] 주니어 신청 정보 조회 실패: helpId=${helpId}, writerId=${writerId}, error=${applicantError.message}`);
+        throw new Error(`Help ID ${helpId}에 대한 주니어 신청 정보 조회 중 오류가 발생했습니다: ${applicantError.message}`);
+      }
+      
+      if (!applicantData) {
+        console.error(`[SbReviewRepository] 주니어 신청 정보 없음: helpId=${helpId}, writerId=${writerId}`);
+        throw new Error(`Help ID ${helpId}에 대한 주니어 신청 정보가 없습니다. 해당 도움 요청에 신청하지 않았거나, 신청 정보가 삭제되었을 수 있습니다.`);
       }
 
       if (!applicantData.is_accepted) {
-        throw new Error(`Help ID ${helpId}에 대한 주니어 신청이 수락되지 않았습니다.`);
+        console.error(`[SbReviewRepository] 주니어 신청이 수락되지 않음: helpId=${helpId}, writerId=${writerId}`);
+        throw new Error(`Help ID ${helpId}에 대한 주니어 신청이 아직 수락되지 않았습니다. 시니어가 수락한 후에 리뷰를 작성할 수 있습니다.`);
       }
 
       // 수락된 주니어인 경우: helps 테이블의 senior_id를 반환
-      console.log(`[SbReviewRepository] 수락된 주니어 확인됨: helpId=${helpId}, writerId=${writerId}, receiverId=${seniorId}`);
       return seniorId;
     }
   }
