@@ -5,15 +5,16 @@ import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastruct
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = Number(params.userId);
-    if (isNaN(userId)) {
+    const { userId } = await params;
+    const userIdNumber = Number(userId);
+    if (isNaN(userIdNumber)) {
       return NextResponse.json({ error: '잘못된 userId입니다.' }, { status: 400 });
     }
     const useCase = new CommonUserUseCase(new SbUserRepository());
-    const user = await useCase.getUserById(userId);
+    const user = await useCase.getUserById(userIdNumber);
     if (!user) {
       return NextResponse.json({ error: '사용자를 찾을 수 없습니다.' }, { status: 404 });
     }
