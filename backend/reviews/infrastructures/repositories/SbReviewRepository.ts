@@ -67,4 +67,57 @@ export class SbReviewRepository implements IReviewRepository {
 
     return ReviewMapper.toEntity(data);
   }
+
+  // helpId와 writerId로 receiverId 계산
+  async calculateReceiverId(helpId: number, writerId: number): Promise<number> {
+    // 1. help 정보 조회하여 senior_id 확인
+    const { data: helpData, error: helpError } = await supabase
+      .from('helps')
+      .select('senior_id')
+      .eq('id', helpId)
+      .single();
+
+    if (helpError || !helpData) {
+      throw new Error(`Help ID ${helpId}를 찾을 수 없습니다.`);
+    }
+
+    const seniorId = helpData.senior_id;
+
+    // 2. writerId가 수락된 주니어인지 시니어인지 확인
+    if (writerId === seniorId) {
+      // 작성자가 시니어인 경우: help_applicants에서 is_accepted=true인 주니어를 찾음
+      const { data: applicantData, error: applicantError } = await supabase
+        .from('help_applicants')
+        .select('junior_id')
+        .eq('help_id', helpId)
+        .eq('is_accepted', true)
+        .single();
+
+      if (applicantError || !applicantData) {
+        throw new Error(`Help ID ${helpId}에 대한 수락된 주니어를 찾을 수 없습니다.`);
+      }
+
+      return applicantData.junior_id;
+    } else {
+      // 작성자가 주니어인 경우: help_applicants에서 해당 주니어가 수락되었는지 확인
+      const { data: applicantData, error: applicantError } = await supabase
+        .from('help_applicants')
+        .select('junior_id, is_accepted')
+        .eq('help_id', helpId)
+        .eq('junior_id', writerId)
+        .single();
+
+      if (applicantError || !applicantData) {
+        throw new Error(`Help ID ${helpId}에 대한 주니어 신청 정보를 찾을 수 없습니다.`);
+      }
+
+      if (!applicantData.is_accepted) {
+        throw new Error(`Help ID ${helpId}에 대한 주니어 신청이 수락되지 않았습니다.`);
+      }
+
+      // 수락된 주니어인 경우: helps 테이블의 senior_id를 반환
+      console.log(`[SbReviewRepository] 수락된 주니어 확인됨: helpId=${helpId}, writerId=${writerId}, receiverId=${seniorId}`);
+      return seniorId;
+    }
+  }
 }

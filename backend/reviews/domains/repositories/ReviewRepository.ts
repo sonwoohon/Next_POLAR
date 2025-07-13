@@ -12,4 +12,7 @@ export interface IReviewRepository {
 
   // 리뷰 생성
   create(review: Omit<ReviewEntity, 'id' | 'createdAt'>): Promise<ReviewEntity>;
+
+  // helpId와 writerId로 receiverId 계산
+  calculateReceiverId(helpId: number, writerId: number): Promise<number>;
 } 
