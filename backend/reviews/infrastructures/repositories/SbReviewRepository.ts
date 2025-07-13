@@ -18,6 +18,20 @@ export class SbReviewRepository implements IReviewRepository {
     return data.map((review) => ReviewMapper.toEntity(review));
   }
 
+  // writerId로 내가 쓴(작성한) 리뷰 리스트 조회
+  async findByWriterId(writerId: number): Promise<ReviewEntity[]> {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('writer_id', writerId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map((review) => ReviewMapper.toEntity(review));
+  }
+
   // 리뷰 id로 단일 리뷰 상세 조회
   async findById(reviewId: number): Promise<ReviewEntity | null> {
     const { data, error } = await supabase

@@ -9,6 +9,11 @@ export class ReviewUseCases {
     return await this.reviewRepository.findByReceiverId(userId);
   }
 
+  // 1-2. userId로 내가 쓴(작성한) 리뷰 리스트 조회
+  async getReviewsByWriterId(userId: number): Promise<ReviewEntity[]> {
+    return await this.reviewRepository.findByWriterId(userId);
+  }
+
   // 2. 리뷰 id로 단일 리뷰 상세 조회
   async getReviewById(reviewId: number): Promise<ReviewEntity | null> {
     return await this.reviewRepository.findById(reviewId);

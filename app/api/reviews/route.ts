@@ -6,25 +6,9 @@ import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
-// GET /api/reviews?userId=...
+// GET /api/reviews?userId=... (이제 받은/작성한 리뷰는 각각 received, written에서 처리)
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-
-  try {
-    if (userId) {
-      const reviews = await reviewUseCases.getReviewsByReceiverId(Number(userId));
-      return NextResponse.json({ success: true, reviews }, { status: 200 });
-    }
-    return NextResponse.json({ error: 'userId 쿼리 파라미터가 필요합니다.' }, { status: 400 });
-  } catch (error: unknown) {
-    // 에러 타입 검증
-    if (error instanceof Error) {
-      return NextResponse.json({ error: '리뷰 조회 중 오류 발생', detail: error.message }, { status: 500 });
-    } else {
-      return NextResponse.json({ error: '리뷰 조회 중 오류 발생', detail: String(error) }, { status: 500 });
-    }
-  }
+  return NextResponse.json({ error: '이 API에서는 리뷰 리스트를 조회할 수 없습니다. /api/reviews/received 또는 /api/reviews/written을 사용하세요.' }, { status: 400 });
 }
 
 // POST /api/reviews
