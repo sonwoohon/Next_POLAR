@@ -5,7 +5,15 @@ const SUPABASE_DOMAIN = SUPABASE_URL ? new URL(SUPABASE_URL).hostname : undefine
 
 const nextConfig: NextConfig = {
   images: {
-    domains: SUPABASE_DOMAIN ? [SUPABASE_DOMAIN] : [],
+    remotePatterns: SUPABASE_DOMAIN
+      ? [
+          {
+            protocol: 'https',
+            hostname: SUPABASE_DOMAIN,
+            // pathname: '/**', // 필요시 전체 경로 허용
+          },
+        ]
+      : [],
   },
 };
 
