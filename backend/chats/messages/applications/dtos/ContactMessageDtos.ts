@@ -29,7 +29,7 @@ export class ContactMessageRequestDto {
 }
 
 export interface ContactMessageUseCase {
-  sender_id: string;
-  contact_room_id: number;
+  senderId: string;
+  contactRoomId: number;
   message: string;
 }

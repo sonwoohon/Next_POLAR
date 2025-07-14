@@ -29,8 +29,8 @@ export async function GET(
   }
 
   // 쿠키에서 사용자 ID 가져오기 (UUID)
-  const readerId = getNicknameFromCookie(request);
-  if (!readerId) {
+  const nickname = getNicknameFromCookie(request);
+  if (!nickname) {
     console.warn(
       '[API][GET /api/chats/rooms/[chatRoomId]/messages] 인증되지 않은 사용자'
     );

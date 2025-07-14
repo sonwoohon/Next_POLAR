@@ -2,7 +2,7 @@
 export class ContactMessageEntity {
   constructor(
     public readonly id: number | undefined, // 메시지 고유 ID
-    public senderId: string, // 닉네임으로 변경
+    public senderId: string, // uuid 변경
     public contactRoomId: number,
     public message: string, // 메시지 내용
     public readonly createdAt: Date | undefined // 생성일시

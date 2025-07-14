@@ -48,8 +48,8 @@ export class ContactMessageUseCases {
     }
 
     const entity: ContactMessageUseCase = {
-      sender_id: senderId,
-      contact_room_id: contactRoomId,
+      senderId: senderId,
+      contactRoomId: contactRoomId,
       message: message,
     };
 

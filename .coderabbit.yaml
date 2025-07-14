@@ -22,3 +22,14 @@ reviews:
 
   # 각 리뷰에 AI 요약 포함 여부
   summary: true
+
+  # 한글로 리뷰하기 위한 설정
+  language: ko
+
+  # 리뷰 메시지 언어 설정
+  messages:
+    language: ko
+
+  # 리뷰 설명 언어 설정
+  descriptions:
+    language: ko
