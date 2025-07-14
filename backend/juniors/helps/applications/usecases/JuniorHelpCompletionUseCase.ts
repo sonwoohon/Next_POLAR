@@ -29,6 +29,9 @@ export class JuniorHelpCompletionUseCase {
       throw new Error('인증 코드가 만료되었거나 존재하지 않습니다.');
     }
 
+    console.log('storedVerification', storedVerification);
+    console.log('request.verificationCode', request.verificationCode);
+
     if (storedVerification.code !== request.verificationCode) {
       throw new Error('유효하지 않은 인증 코드입니다.');
     }

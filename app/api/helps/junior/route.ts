@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import {
   GetJuniorAppliedHelpListUseCase,
   ApplyHelpUseCase,
   CancelJuniorHelpUseCase,
 } from '@/backend/helps/juniors/applications/usecases/JuniorHelpUseCase';
 import { SbJuniorHelpRepository } from '@/backend/helps/juniors/infrastructures/repositories/SbJuniorHelpRepository';
-// import { HelpDetailResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+import { getNicknameFromCookie } from '@/lib/jwt';
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createGetJuniorAppliedHelpListUseCase = () => {
@@ -23,53 +23,92 @@ const createCancelJuniorHelpUseCase = () => {
   return new CancelJuniorHelpUseCase(repository);
 };
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('juniorId');
+// 주니어 지원 헬프 리스트 조회 (닉네임 기반)
+export async function GET(request: NextRequest) {
+  const nickname = getNicknameFromCookie(request);
 
-  const result = await createGetJuniorAppliedHelpListUseCase().execute(
-    Number(userId)
-  );
-
-  if (!userId) {
-    return new NextResponse(
-      JSON.stringify({ success: false, error: 'userId가 필요합니다.' }),
-      { status: 400 }
+  if (!nickname) {
+    return NextResponse.json(
+      { success: false, error: '로그인이 필요합니다.' },
+      { status: 401 }
     );
   }
 
-  // userId를 사용해서 로직 처리
-
-  return new NextResponse(JSON.stringify({ success: true, result }), {
-    status: 200,
-  });
-}
-
-// 지원(신청) API
-export async function POST(request: Request) {
-  const { juniorId, helpId } = await request.json();
-  const useCase = createApplyHelpUseCase();
   try {
-    await useCase.execute(juniorId, helpId);
-    return new NextResponse(JSON.stringify({ success: true }), { status: 201 });
-  } catch {
-    return new NextResponse(
-      JSON.stringify({ success: false, error: '헬프 지원 실패' }),
+    const result = await createGetJuniorAppliedHelpListUseCase().execute(
+      nickname
+    );
+    return NextResponse.json({ success: true, result }, { status: 200 });
+  } catch (error) {
+    console.error('주니어 헬프 리스트 조회 오류:', error);
+    return NextResponse.json(
+      { success: false, error: '헬프 리스트 조회 실패' },
       { status: 500 }
     );
   }
 }
 
-// 지원 취소 API
-export async function DELETE(request: Request) {
-  const { juniorId, helpId } = await request.json();
-  const useCase = createCancelJuniorHelpUseCase();
+// 헬프 지원(신청) API (닉네임 기반)
+export async function POST(request: NextRequest) {
+  const nickname = getNicknameFromCookie(request);
+
+  if (!nickname) {
+    return NextResponse.json(
+      { success: false, error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
+
   try {
-    await useCase.execute(juniorId, helpId);
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch {
-    return new Response(
-      JSON.stringify({ success: false, error: '헬프 지원 취소 실패' }),
+    const { helpId } = await request.json();
+
+    if (!helpId) {
+      return NextResponse.json(
+        { success: false, error: 'helpId가 필요합니다.' },
+        { status: 400 }
+      );
+    }
+
+    const useCase = createApplyHelpUseCase();
+    await useCase.execute(nickname, helpId);
+    return NextResponse.json({ success: true }, { status: 201 });
+  } catch (error) {
+    console.error('헬프 지원 오류:', error);
+    return NextResponse.json(
+      { success: false, error: '헬프 지원 실패' },
+      { status: 500 }
+    );
+  }
+}
+
+// 헬프 지원 취소 API (닉네임 기반)
+export async function DELETE(request: NextRequest) {
+  const nickname = getNicknameFromCookie(request);
+
+  if (!nickname) {
+    return NextResponse.json(
+      { success: false, error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const { helpId } = await request.json();
+
+    if (!helpId) {
+      return NextResponse.json(
+        { success: false, error: 'helpId가 필요합니다.' },
+        { status: 400 }
+      );
+    }
+
+    const useCase = createCancelJuniorHelpUseCase();
+    await useCase.execute(nickname, helpId);
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error('헬프 지원 취소 오류:', error);
+    return NextResponse.json(
+      { success: false, error: '헬프 지원 취소 실패' },
       { status: 500 }
     );
   }

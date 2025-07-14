@@ -1,10 +1,11 @@
-// 헬프 리스트 응답 DTO
+// 헬프 리스트 응답 DTO (닉네임 기반)
 export interface HelpListResponseDto {
   id: number;
   seniorInfo: {
-    id: number;
-    //기타 해당 헬프 작성한 시니어 정보 갖고오기.
-  }
+    nickname: string; // UUID 대신 닉네임
+    name?: string;
+    profileImgUrl?: string;
+  };
   title: string;
   startDate: Date;
   endDate: Date;
@@ -14,10 +15,10 @@ export interface HelpListResponseDto {
   createdAt: Date;
 }
 
-// 헬프 상세 응답 DTO
+// 헬프 상세 응답 DTO (닉네임 기반)
 export interface HelpDetailResponseDto {
   id: number;
-  seniorId: number;
+  seniorNickname: string; // UUID 대신 닉네임
   title: string;
   startDate: Date;
   endDate: Date;
@@ -25,4 +26,23 @@ export interface HelpDetailResponseDto {
   content: string;
   status: string;
   createdAt: Date;
+}
+
+// 헬프 생성 요청 DTO (닉네임 기반)
+export interface CreateHelpRequestDto {
+  seniorNickname: string; // 요청 시 닉네임
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  category: number;
+  content: string;
+}
+
+// 헬프 수정 요청 DTO (닉네임 기반)
+export interface UpdateHelpRequestDto {
+  title?: string;
+  startDate?: Date;
+  endDate?: Date;
+  category?: number;
+  content?: string;
 }

@@ -4,14 +4,15 @@ import {
 } from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import { SeniorHelpUseCase } from '@/backend/seniors/helps/applications/usecases/SeniorHelpUseCases';
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
-import { getUserIdFromCookie } from '@/lib/jwt';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
+// 시니어 헬프 생성 API (닉네임 기반)
 export async function POST(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
+  const nickname = getNicknameFromCookie(req);
   const body = await req.json();
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
-    const help = await seniorHelpUseCase.createHelp(userId, helpReqCreate);
+    const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
     return NextResponse.json(help, { status: 200 });
   } catch (error) {
     console.error('Help 생성 중 오류:', error);
@@ -42,11 +43,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 수정 API (닉네임 기반)
 export async function PUT(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
+  const nickname = getNicknameFromCookie(req);
   const helpId = req.nextUrl.searchParams.get('helpId');
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }
@@ -74,7 +76,7 @@ export async function PUT(req: NextRequest) {
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
     const help = await seniorHelpUseCase.updateHelp(
-      Number(userId),
+      nickname,
       helpReqUpdate,
       Number(helpId)
     );
@@ -88,11 +90,12 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 삭제 API (닉네임 기반)
 export async function DELETE(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
+  const nickname = getNicknameFromCookie(req);
   const helpId = req.nextUrl.searchParams.get('helpId');
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }
