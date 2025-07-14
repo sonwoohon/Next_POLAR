@@ -59,6 +59,7 @@ export class ReviewUseCases {
       receiverId,
       request.rating,
       request.text,
+      request.reviewImgUrl || null, // 리뷰 이미지 URL
       undefined // createdAt은 DB에서 자동 생성
     );
 

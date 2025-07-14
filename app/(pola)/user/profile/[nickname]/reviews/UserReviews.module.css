@@ -105,6 +105,20 @@
   font-family: var(--font-pretendard);
 }
 
+.reviewImageContainer {
+  margin: 12px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviewImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
 .reviewInfo {
   margin-top: 12px;
   padding-top: 8px;

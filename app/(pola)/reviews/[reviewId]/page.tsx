@@ -12,6 +12,7 @@ interface Review {
   receiverId: number;
   rating: number;
   text: string;
+  reviewImgUrl?: string;
   createdAt: string;
 }
 
@@ -121,6 +122,19 @@ export default function ReviewDetailPage({
       <div className={styles.starRating}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</div>
       {/* 리뷰 텍스트 */}
       <div className={styles.reviewText}>{review.text}</div>
+      {/* 리뷰 이미지 */}
+      {review.reviewImgUrl && (
+        <div className={styles.reviewImageContainer}>
+          <Image
+            src={review.reviewImgUrl}
+            alt="리뷰 이미지"
+            width={400}
+            height={300}
+            className={styles.reviewImage}
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+      )}
       {/* 도움 요청 정보 */}
       <div className={styles.helpId}>도움 요청 ID: #{review.helpId}</div>
       {/* 하고싶은 말(코멘트) - 예시 */}

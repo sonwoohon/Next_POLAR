@@ -21,6 +21,7 @@ async function convertEntityToResponseDto(entity: any) {
     receiverNickname,
     rating: entity.rating,
     text: entity.text,
+    reviewImgUrl: entity.reviewImgUrl,
     createdAt: entity.createdAt?.toISOString() || new Date().toISOString(),
   };
 }

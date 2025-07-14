@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { use } from 'react';
+import Image from 'next/image';
 import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css';
 
 interface Review {
@@ -11,6 +12,7 @@ interface Review {
   receiverNickname: string;
   rating: number;
   text: string;
+  reviewImgUrl?: string;
   createdAt: string;
 }
 
@@ -63,6 +65,17 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
                 <span className={styles.reviewId}>리뷰 #{review.id}</span>
                 <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
               </div>
+              {review.reviewImgUrl && (
+                <div className={styles.reviewImageContainer}>
+                  <Image
+                    src={review.reviewImgUrl}
+                    alt={`Review image for review ${review.id}`}
+                    width={100}
+                    height={100}
+                    className={styles.reviewImage}
+                  />
+                </div>
+              )}
               <p className={styles.reviewText}>{review.text}</p>
               <div className={styles.reviewInfo}>
                 <small className={styles.reviewDate}>

@@ -1,27 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
+import { getNicknameFromCookie } from '@/lib/jwt';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
-
-// 임시 함수 - 나중에 lib/jwt.ts로 이동 예정
-function getNicknameFromCookie(request: NextRequest): string | null {
-  // 임시로 하드코딩된 nickname 반환
-  // TODO: 실제 쿠키에서 nickname 추출 로직 구현
-  return "jelly5361"; // 임시 테스트용 nickname
-}
 
 // POST /api/reviews/create
 export async function POST(request: NextRequest) {
   try {
     // 쿠키에서 nickname 추출
-    const writerNickname = getNicknameFromCookie(request);
+    const writerNickname = "jelly5361"; //getNicknameFromCookie(request);
     if (!writerNickname) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { helpId, rating, text } = body;
+    const { helpId, rating, text, reviewImgUrl } = body;
 
     if (
       helpId === undefined ||
@@ -36,7 +30,8 @@ export async function POST(request: NextRequest) {
       helpId: Number(helpId),
       writerNickname: writerNickname,
       rating: Number(rating),
-      text: String(text)
+      text: String(text),
+      reviewImgUrl: reviewImgUrl || undefined
     });
 
     return NextResponse.json({ success: true, review }, { status: 201 });
