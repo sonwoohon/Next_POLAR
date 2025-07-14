@@ -37,10 +37,10 @@ export class LoginUseCase {
     }
 
     const accessToken = generateAccessToken({
-      id: user.id,
+      nickname: user.nickname,
     });
     const refreshToken = generateRefreshToken({
-      id: user.id,
+      nickname: user.nickname,
     });
 
     return new LoginResponseDTO(accessToken, refreshToken, user.nickname);

@@ -18,6 +18,26 @@ export class SbChatRoomRepository implements IChatRoomRepository {
     return ChatRoomMapper.toChatRooms(data ?? []);
   }
 
+  // ===== chatRoomId로 특정 채팅방 조회 =====
+  async findRoomByChatRoomId(chatRoomId: number): Promise<ChatRoom | null> {
+    const { data, error } = await supabase
+      .from('contact_rooms')
+      .select('*')
+      .eq('id', chatRoomId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // 결과가 없는 경우
+        return null;
+      }
+      throw error;
+    }
+
+    if (!data) return null;
+    return ChatRoomMapper.toChatRoom(data);
+  }
+
   // ===== chatRoomId로 연결된 helpId 목록 조회 =====
   async findHelpIdsByChatRoomId(chatRoomId: number): Promise<number[]> {
     const { data, error } = await supabase
