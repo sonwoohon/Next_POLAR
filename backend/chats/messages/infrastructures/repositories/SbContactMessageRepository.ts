@@ -13,6 +13,7 @@ export class SbContactMessageRepository implements IContactMessageRepository {
       .from('contact_messages')
       .insert({
         sender_id: requestDto.senderId,
+        nickname: requestDto.nickname,
         contact_room_id: requestDto.contactRoomId,
         message: requestDto.message,
       })
@@ -50,6 +51,7 @@ export class SbContactMessageRepository implements IContactMessageRepository {
         id: number;
         contact_room_id: number;
         sender_id: string; // UUID
+        nickname: string;
         message: string;
         created_at: string;
       }) => ContactMessageMapper.toEntity(row)
