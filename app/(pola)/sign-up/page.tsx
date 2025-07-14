@@ -3,7 +3,7 @@ import styles from "./_styles/signup.module.css";
 import Image from "next/image";
 import Logo from "@/public/images/logos/POLAR.png";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { SignUpDto } from "@/app/api/user/signup/route";
+import { SignUpDto } from "@/backend/users/signup/applications/dtos/SignUpDto";
 import DaumPostcode, { Address } from "react-daum-postcode";
 import { useState, useRef, useEffect } from "react";
 
