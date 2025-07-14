@@ -1,0 +1,146 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: calc(100% - 3rem);
+  height: calc(100% - 6rem);
+  padding: 3rem 1.5rem;
+
+  font-family: var(--font-pretendard);
+}
+
+.container h1 {
+  display: none;
+}
+
+.userInfoSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.userProfileImageContainer {
+  position: relative;
+  width: 10rem;
+
+  overflow: visible;
+}
+
+.userProfileImage {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  background-color: #d9d9d9;
+}
+
+.userArchiveBadge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  /* color: #fff; */
+  font-size: 0.75rem;
+  font-family: var(--font-gangwon);
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.userRating {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userRating span {
+  font-weight: 700;
+}
+
+.userNameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.userNameContainer span {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.userTypeBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 1rem;
+
+  font-size: 0.75rem;
+  color: #fff;
+  background-color: #446ee8;
+  border-radius: 1rem;
+
+  font-family: var(--font-gangwon);
+}
+
+.userNicknameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userTierSection {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  width: 100%;
+}
+
+.userTierSection h2 {
+  font-family: var(--font-gangwon);
+}
+
+.userTierContainer {
+  padding: 1rem;
+  width: calc(100% - 2rem);
+  height: calc(9.5rem - 2rem);
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #e0e5ec 0%, #cfd8dc 100%);
+}
+
+.userTierInfo {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.userTierImage {
+  width: 4rem;
+  height: 4rem;
+  background-color: grey;
+}
+
+.userTierInfoTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.userTierSeason {
+  font-size: 0.5rem;
+}
+
+.userTierName {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
