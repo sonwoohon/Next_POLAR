@@ -4,6 +4,7 @@ import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
 // Entity -> DB object (snake_case)
 export function toDbObject(entity: CommonUserEntity): {
   id: string;
+  uuid: string;
   phone_number: string;
   password: string;
   email: string;
@@ -16,6 +17,7 @@ export function toDbObject(entity: CommonUserEntity): {
 } {
   return {
     id: entity.id,
+    uuid: entity.uuid,
     phone_number: entity.phoneNumber,
     password: entity.password,
     email: entity.email,
@@ -34,6 +36,7 @@ export function toDbObject(entity: CommonUserEntity): {
 // DB object (snake_case) -> Entity
 export function fromDbObject(dbObj: {
   id: string;
+  uuid: string;
   phone_number: string;
   password: string;
   email: string;
@@ -46,6 +49,7 @@ export function fromDbObject(dbObj: {
 }): CommonUserEntity {
   return new CommonUserEntity(
     dbObj.id,
+    dbObj.uuid,
     dbObj.phone_number,
     dbObj.password,
     dbObj.email,
@@ -101,13 +105,14 @@ export function entityToUserProfileResponseDto(
 
   const dto = {
     id: entity.id,
+    uuid: entity.uuid,
     name: entity.name,
+    nickname: entity.nickname,
     email: entity.email,
     phoneNumber: entity.phoneNumber,
     age: entity.age,
     profileImgUrl: entity.profileImgUrl || '',
     address: entity.address,
-    nickname: entity.nickname,
     createdAt: createdAtString,
   };
 

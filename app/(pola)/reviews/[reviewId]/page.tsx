@@ -46,14 +46,21 @@ export default function ReviewDetailPage({
 
         // 2. 작성자 프로필 정보 조회
         const writerId = reviewData.review.writerId;
-        const userRes = await fetch(`/api/users/${Number(writerId)}`);
+        // 먼저 userId로 사용자 정보를 가져와서 nickname을 추출
+        const userRes = await fetch(`/api/users/${writerId}`);
         if (userRes.status !== 200) throw new Error('작성자 정보를 불러오는데 실패했습니다.');
         const userData = await userRes.json();
         if (!userData.id || !userData.name) throw new Error('작성자 정보가 올바르지 않습니다.');
+        
+        // nickname으로 다시 조회
+        const nicknameRes = await fetch(`/api/users/${userData.nickname}`);
+        if (nicknameRes.status !== 200) throw new Error('작성자 정보를 불러오는데 실패했습니다.');
+        const nicknameData = await nicknameRes.json();
+        
         setWriter({
-          id: userData.id,
-          name: userData.name,
-          profileImgUrl: userData.profileImgUrl,
+          id: nicknameData.id,
+          name: nicknameData.name,
+          profileImgUrl: nicknameData.profileImgUrl,
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');

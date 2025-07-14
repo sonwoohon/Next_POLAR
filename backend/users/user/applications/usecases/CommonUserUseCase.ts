@@ -15,10 +15,7 @@ export class GetUserByIdUseCase {
 export class UpdateUserInfoUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(
-    id: string,
-    updateData: CommonUserEntity
-  ): Promise<CommonUserEntity | null> {
+  async execute(id: string, updateData: CommonUserEntity): Promise<CommonUserEntity | null> {
     return this.userRepository.updateUser(id, updateData);
   }
 }
@@ -163,8 +160,8 @@ export interface UserProfileUpdate {
   profileImgUrl?: string; // 이미지 URL을 직접 입력
   address?: string;
   name?: string;
-  password?: string;
   nickname?: string;
+  password?: string;
 }
 
 // 공용 사용자 Use Case
@@ -191,6 +188,26 @@ export class CommonUserUseCase {
     }
   }
 
+  // nickname으로 사용자 조회
+  async getUserByNickname(nickname: string): Promise<CommonUserEntity | null> {
+    console.log(`[UseCase] 사용자 조회 시작 - nickname: ${nickname}`);
+
+    try {
+      const user = await this.userRepository.getUserByNickname(nickname);
+
+      if (user) {
+        console.log(`[UseCase] 사용자 조회 성공 - nickname: ${nickname}`, user.toJSON());
+      } else {
+        console.log(`[UseCase] 사용자를 찾을 수 없음 - nickname: ${nickname}`);
+      }
+
+      return user;
+    } catch (error) {
+      console.error(`[UseCase] 사용자 조회 중 오류 발생 - nickname: ${nickname}`, error);
+      throw error;
+    }
+  }
+
   // 프로필 이미지 삭제 (빈 프로필로 설정)
   async deleteProfileImage(id: string): Promise<CommonUserEntity> {
     console.log(`[UseCase] 프로필 이미지 삭제 시작 - ID: ${id}`);
@@ -212,6 +229,7 @@ export class CommonUserUseCase {
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
         existingUser.id,
+        existingUser.uuid,
         existingUser.phoneNumber,
         existingUser.password,
         existingUser.email,
@@ -291,24 +309,29 @@ export class CommonUserUseCase {
       if (updates.name) {
         UserValidator.validateName(updates.name);
       }
-      if (updates.password) {
-        UserValidator.validatePassword(updates.password);
-      }
-      if (updates.nickname) {
+      if (updates.nickname !== undefined) {
+        console.log(`[UseCase] 닉네임 검증 - ID: ${id}, 값: ${updates.nickname}`);
         UserValidator.validateNickname(updates.nickname);
+      }
+      if (updates.password !== undefined) {
+        console.log(
+          `[UseCase] 비밀번호 검증 - ID: ${id}, 길이: ${updates.password.length}`
+        );
+        UserValidator.validatePassword(updates.password);
       }
 
       // 업데이트된 사용자 Entity 생성
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        updates.phoneNumber || existingUser.phoneNumber,
-        updates.password || existingUser.password,
-        updates.email || existingUser.email,
-        updates.age !== undefined ? updates.age : existingUser.age,
-        updates.profileImgUrl || existingUser.profileImgUrl,
-        updates.address || existingUser.address,
-        updates.name || existingUser.name,
-        updates.nickname || existingUser.nickname,
+        existingUser.uuid,
+        updates.phoneNumber ?? existingUser.phoneNumber,
+        updates.password ?? existingUser.password,
+        updates.email ?? existingUser.email,
+        updates.age ?? existingUser.age,
+        updates.profileImgUrl ?? existingUser.profileImgUrl,
+        updates.address ?? existingUser.address,
+        updates.name ?? existingUser.name,
+        updates.nickname ?? existingUser.nickname,
         existingUser.createdAt
       );
 
