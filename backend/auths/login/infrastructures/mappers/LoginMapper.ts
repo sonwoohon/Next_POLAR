@@ -1,8 +1,7 @@
 import { LoginEntity } from '@/backend/auths/login/domains/entities/LoginEntity';
 
 interface LoginUserData {
-  id: number;
-  uuid: string;
+  id: string;
   name: string;
   email: string;
   phoneNumber: string;
@@ -11,6 +10,7 @@ interface LoginUserData {
   profileImgUrl: string;
   password: string;
   createdAt: string;
+  nickname: string;
 }
 
 export class LoginMapper {
@@ -25,7 +25,7 @@ export class LoginMapper {
       userData.profileImgUrl,
       userData.password,
       new Date(userData.createdAt),
-      userData.uuid
+      userData.nickname
     );
   }
 }

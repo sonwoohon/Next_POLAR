@@ -2,10 +2,10 @@ export class JuniorHelpEntity {
   constructor(
     public id: number,
     public helpId: number,
-    public juniorId: number,
+    public juniorId: string, // UUID로 변경
     public isAccepted: boolean,
     public appliedAt: Date
-  ) { }
+  ) {}
 
   toJSON() {
     return {
@@ -13,7 +13,7 @@ export class JuniorHelpEntity {
       helpId: this.helpId,
       juniorId: this.juniorId,
       isAccepted: this.isAccepted,
-      appliedAt: this.appliedAt
+      appliedAt: this.appliedAt,
     };
   }
 }
