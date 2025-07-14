@@ -1,0 +1,81 @@
+/*TODO: container 공통으로 분리 가능할듯*/
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: calc(100% - 3rem);
+  height: calc(100% - 20rem);
+  padding: 10rem 1.5rem;
+}
+
+.logoContainer {
+  width: 17.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer img {
+  width: 100%;
+  height: 100%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 1.25rem;
+
+  label {
+    font-family: var(--font-pretendard);
+    font-size: 0.75rem;
+  }
+}
+
+.commonInput {
+  padding: 1rem;
+  width: calc(100% - 2rem);
+  border: 1px solid #d9d9d9;
+  border-radius: 0.5rem;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #446ee8;
+  }
+}
+
+.commonButton {
+  margin-bottom: auto;
+  padding: 1rem;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 0.5rem;
+  color: #fff;
+  background: #446ee8;
+}
+
+.subMenuContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 1.25rem 0rem;
+  font-size: 0.75rem;
+  color: grey;
+  font-size: 0.75rem;
+
+  a {
+    color: grey;
+    text-decoration: none;
+  }
+}

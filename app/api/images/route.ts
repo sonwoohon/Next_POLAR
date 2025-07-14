@@ -19,7 +19,7 @@ import {
 // 공통 헬퍼 함수들
 type AuthResult = 
   | { error: string; status: number }
-  | { userId: number; user: unknown };
+  | { userId: string; user: unknown };
 
 async function authenticateAndGetUser(request: NextRequest): Promise<AuthResult> {
   const userId = getUserIdFromCookie(request);
@@ -28,12 +28,12 @@ async function authenticateAndGetUser(request: NextRequest): Promise<AuthResult>
   }
 
   const userRepository = new SbUserRepository();
-  const user = await userRepository.getUserById(Number(userId));
+  const user = await userRepository.getUserById(userId);
   if (!user) {
     return { error: '사용자를 찾을 수 없습니다.', status: 404 };
   }
 
-  return { userId: Number(userId), user };
+  return { userId: userId, user };
 }
 
 function createErrorResponse(message: string, status: number = 500) {

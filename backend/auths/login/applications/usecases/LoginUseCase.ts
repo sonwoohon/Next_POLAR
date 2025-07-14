@@ -37,14 +37,12 @@ export class LoginUseCase {
     }
 
     const accessToken = generateAccessToken({
-      id: user.id,
-      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
+      nickname: user.nickname,
     });
     const refreshToken = generateRefreshToken({
-      id: user.id,
-      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
+      nickname: user.nickname,
     });
 
-    return new LoginResponseDTO(accessToken, refreshToken);
+    return new LoginResponseDTO(accessToken, refreshToken, user.nickname);
   }
 }

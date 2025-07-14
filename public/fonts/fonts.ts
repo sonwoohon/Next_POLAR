@@ -1,9 +1,9 @@
 import localFont from "next/font/local";
 
 export const gangwonEdu = localFont({
-  src: "./GangwonEdu_PowerExtraBoldA.ttf",
+  src: "./강원교육튼튼.otf",
   display: "swap",
-  variable: "--font-gangwon-edu",
+  variable: "--font-gangwon",
 });
 
 export const pretendard = localFont({

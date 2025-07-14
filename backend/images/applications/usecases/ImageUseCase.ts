@@ -1,5 +1,6 @@
 import { ValidationError } from '@/backend/common/errors/ValidationError';
 import { IImageRepository } from '@/backend/images/domains/repositories/ImageRepository';
+import { getUuidByNickname } from '@/lib/getUserName';
 
 // 이미지 파일 검증 클래스
 export class ImageValidator {
@@ -36,7 +37,7 @@ export class ImageValidator {
   static validateBucketName(bucketName: string): void {
     console.log(`[ImageValidator] 버킷명 검증 시작: ${bucketName}`);
 
-    const allowedBuckets = ['profile-images', 'help-images'];
+    const allowedBuckets = ['profile-images', 'help-images', 'review-images'];
     if (!allowedBuckets.includes(bucketName)) {
       console.error(`[ImageValidator] 지원하지 않는 버킷명: ${bucketName}`);
       throw new ValidationError('지원하지 않는 이미지 버킷입니다.');
@@ -66,17 +67,17 @@ export class ImageValidator {
   }
 }
 
-// 이미지 업로드 UseCase
+// 공통 이미지 업로드 UseCase
 export class UploadImageUseCase {
   constructor(private readonly imageRepository: IImageRepository) {}
 
   async execute(
     file: File,
     bucketName: string,
-    userId: number
+    nickname: string
   ): Promise<{ url: string }> {
     console.log(
-      `[UploadImageUseCase] 이미지 업로드 시작 - Bucket: ${bucketName}, UserID: ${userId}`
+      `[UploadImageUseCase] 이미지 업로드 시작 - Bucket: ${bucketName}, Nickname: ${nickname}`
     );
 
     try {
@@ -86,7 +87,13 @@ export class UploadImageUseCase {
       // 2. 버킷명 검증
       ImageValidator.validateBucketName(bucketName);
 
-      // 3. 이미지 업로드
+      // 3. nickname을 UUID로 변환
+      const userId = await getUuidByNickname(nickname);
+      if (!userId) {
+        throw new Error(`닉네임 "${nickname}"에 해당하는 사용자를 찾을 수 없습니다.`);
+      }
+
+      // 4. 이미지 업로드
       const imageUrl = await this.imageRepository.uploadImage(
         file,
         bucketName,
@@ -99,7 +106,7 @@ export class UploadImageUseCase {
       return imageUrl;
     } catch (error) {
       console.error(
-        `[UploadImageUseCase] 이미지 업로드 중 오류 발생 - Bucket: ${bucketName}, UserID: ${userId}`,
+        `[UploadImageUseCase] 이미지 업로드 중 오류 발생 - Bucket: ${bucketName}, Nickname: ${nickname}`,
         error
       );
       throw error;
@@ -107,7 +114,7 @@ export class UploadImageUseCase {
   }
 }
 
-// 이미지 조회 UseCase
+// 공통 이미지 조회 UseCase
 export class GetImageByUrlUseCase {
   constructor(private readonly imageRepository: IImageRepository) {}
 
@@ -153,7 +160,7 @@ export class GetImageByUrlUseCase {
   }
 }
 
-// 이미지 삭제 UseCase
+// 공통 이미지 삭제 UseCase
 export class DeleteImageUseCase {
   constructor(private readonly imageRepository: IImageRepository) {}
 
@@ -189,5 +196,46 @@ export class DeleteImageUseCase {
       );
       throw error;
     }
+  }
+}
+
+// 특정 용도별 이미지 UseCase들 (공통 UseCase를 래핑)
+
+// 프로필 이미지 업로드 UseCase
+export class UploadProfileImageUseCase {
+  private uploadImageUseCase: UploadImageUseCase;
+
+  constructor(imageRepository: IImageRepository) {
+    this.uploadImageUseCase = new UploadImageUseCase(imageRepository);
+  }
+
+  async execute(file: File, nickname: string): Promise<{ url: string }> {
+    return await this.uploadImageUseCase.execute(file, 'profile-images', nickname);
+  }
+}
+
+// 도움 요청 이미지 업로드 UseCase
+export class UploadHelpImageUseCase {
+  private uploadImageUseCase: UploadImageUseCase;
+
+  constructor(imageRepository: IImageRepository) {
+    this.uploadImageUseCase = new UploadImageUseCase(imageRepository);
+  }
+
+  async execute(file: File, nickname: string): Promise<{ url: string }> {
+    return await this.uploadImageUseCase.execute(file, 'help-images', nickname);
+  }
+}
+
+// 리뷰 이미지 업로드 UseCase
+export class UploadReviewImageUseCase {
+  private uploadImageUseCase: UploadImageUseCase;
+
+  constructor(imageRepository: IImageRepository) {
+    this.uploadImageUseCase = new UploadImageUseCase(imageRepository);
+  }
+
+  async execute(file: File, nickname: string): Promise<{ url: string }> {
+    return await this.uploadImageUseCase.execute(file, 'review-images', nickname);
   }
 }

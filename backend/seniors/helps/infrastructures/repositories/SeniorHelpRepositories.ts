@@ -8,38 +8,40 @@ import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpM
 
 type CategoryInput = number | number[];
 
-const handleSupabaseError = (error: unknown, operation: string): never => {
-  console.error(`${operation} 에러:`, error);
+// ===== 유틸리티 함수들 =====
+
+// Supabase 에러 처리 함수
+function handleSupabaseError(error: unknown, operation: string) {
+  console.error(`[SeniorHelpRepository] ${operation} 중 Supabase 오류:`, error);
   const errorMessage =
     error instanceof Error ? error.message : '알 수 없는 오류';
-  throw new Error(`${operation} 실패: ${errorMessage}`);
-};
+  throw new Error(`${operation} 중 오류가 발생했습니다: ${errorMessage}`);
+}
 
-const normalizeCategoryIds = (category: CategoryInput): number[] => {
-  return Array.isArray(category) ? category : [category];
-};
+// 카테고리 ID 정규화 함수
+function normalizeCategoryIds(category: CategoryInput): number[] {
+  if (Array.isArray(category)) {
+    return category;
+  }
+  return [category];
+}
 
-const createHelpCategories = async (
-  helpId: number,
-  categoryIds: number[]
-): Promise<void> => {
-  if (categoryIds.length === 0) return;
-
-  const helpCategoriesData = categoryIds.map((categoryId) => ({
+// 카테고리 관계 생성 함수
+async function createHelpCategories(helpId: number, categoryIds: number[]) {
+  const categoryData = categoryIds.map((categoryId) => ({
     help_id: helpId,
     category_id: categoryId,
   }));
 
-  const { error } = await supabase
-    .from('help_categories')
-    .insert(helpCategoriesData);
+  const { error } = await supabase.from('help_categories').insert(categoryData);
 
   if (error) {
     handleSupabaseError(error, '카테고리 관계 생성');
   }
-};
+}
 
-const deleteHelpCategories = async (helpId: number): Promise<void> => {
+// 카테고리 관계 삭제 함수
+async function deleteHelpCategories(helpId: number) {
   const { error } = await supabase
     .from('help_categories')
     .delete()
@@ -48,27 +50,28 @@ const deleteHelpCategories = async (helpId: number): Promise<void> => {
   if (error) {
     handleSupabaseError(error, '카테고리 관계 삭제');
   }
-};
+}
 
-const deleteHelpApplicant = async (helpId: number): Promise<void> => {
+// help_applicants 삭제 함수
+async function deleteHelpApplicant(helpId: number) {
   const { error } = await supabase
     .from('help_applicants')
     .delete()
     .eq('help_id', helpId);
 
   if (error) {
-    handleSupabaseError(error, '주니어 삭제');
+    handleSupabaseError(error, 'help_applicants 삭제');
   }
-};
+}
 
 export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
-  async createHelp(help: SeniorHelp, seniorId: number): Promise<number> {
+  async createHelp(help: SeniorHelp, seniorId: string): Promise<number> {
     // 1. helps 테이블에 데이터 삽입
     const { data: helpData, error: helpError } = await supabase
       .from('helps')
       .insert([
         {
-          senior_id: seniorId,
+          senior_id: seniorId, // UUID
           title: help.title,
           start_date: help.startDate,
           end_date: help.endDate,

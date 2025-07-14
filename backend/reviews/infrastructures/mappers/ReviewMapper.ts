@@ -9,6 +9,7 @@ export class ReviewMapper {
       row.receiver_id,
       row.rating,
       row.text,
+      row.review_img_url,
       new Date(row.created_at)
     );
   }

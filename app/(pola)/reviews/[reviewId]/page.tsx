@@ -12,6 +12,7 @@ interface Review {
   receiverId: number;
   rating: number;
   text: string;
+  reviewImgUrl?: string;
   createdAt: string;
 }
 
@@ -46,14 +47,21 @@ export default function ReviewDetailPage({
 
         // 2. 작성자 프로필 정보 조회
         const writerId = reviewData.review.writerId;
-        const userRes = await fetch(`/api/users/${Number(writerId)}`);
+        // 먼저 userId로 사용자 정보를 가져와서 nickname을 추출
+        const userRes = await fetch(`/api/users/${writerId}`);
         if (userRes.status !== 200) throw new Error('작성자 정보를 불러오는데 실패했습니다.');
         const userData = await userRes.json();
         if (!userData.id || !userData.name) throw new Error('작성자 정보가 올바르지 않습니다.');
+        
+        // nickname으로 다시 조회
+        const nicknameRes = await fetch(`/api/users/${userData.nickname}`);
+        if (nicknameRes.status !== 200) throw new Error('작성자 정보를 불러오는데 실패했습니다.');
+        const nicknameData = await nicknameRes.json();
+        
         setWriter({
-          id: userData.id,
-          name: userData.name,
-          profileImgUrl: userData.profileImgUrl,
+          id: nicknameData.id,
+          name: nicknameData.name,
+          profileImgUrl: nicknameData.profileImgUrl,
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
@@ -114,6 +122,19 @@ export default function ReviewDetailPage({
       <div className={styles.starRating}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</div>
       {/* 리뷰 텍스트 */}
       <div className={styles.reviewText}>{review.text}</div>
+      {/* 리뷰 이미지 */}
+      {review.reviewImgUrl && (
+        <div className={styles.reviewImageContainer}>
+          <Image
+            src={review.reviewImgUrl}
+            alt="리뷰 이미지"
+            width={400}
+            height={300}
+            className={styles.reviewImage}
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+      )}
       {/* 도움 요청 정보 */}
       <div className={styles.helpId}>도움 요청 ID: #{review.helpId}</div>
       {/* 하고싶은 말(코멘트) - 예시 */}

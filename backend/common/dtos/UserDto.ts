@@ -3,6 +3,7 @@
 // 로그인된 사용자 정보 수정 요청 DTO
 export interface UserUpdateRequestDto {
   name?: string;
+  nickname?: string;
   email?: string;
   phoneNumber?: string;
   age?: number;
@@ -19,6 +20,7 @@ export interface UserProfileUpdate {
   profileImgUrl?: string; // 이미지 URL을 직접 입력
   address?: string;
   name?: string;
+  nickname?: string;
   password?: string;
 }
 
@@ -26,9 +28,10 @@ export interface UserProfileUpdate {
 
 // 로그인된 사용자 정보 응답 DTO
 export interface UserProfileResponseDto {
-  id: number;
+  id: string;
   uuid: string;
   name: string;
+  nickname: string;
   email: string;
   phoneNumber: string;
   age: number;
