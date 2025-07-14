@@ -1,11 +1,11 @@
 // ===== 조회 응답 DTOs =====
 
-// 채팅방 기본 정보 응답 DTO
+// 채팅방 기본 정보 응답 DTO (닉네임 기반)
 export interface ChatRoomResponseDto {
   chatRoomId: number;
   helpId?: number;
-  juniorId: number;
-  seniorId: number;
+  juniorNickname: string; // UUID 대신 닉네임
+  seniorNickname: string; // UUID 대신 닉네임
   createdAt: string;
 }
 
@@ -15,23 +15,28 @@ export interface ChatRoomListResponseDto {
   totalCount: number;
 }
 
-// 채팅방 상세 정보 응답 DTO
-export interface ChatRoomDetailResponseDto extends ChatRoomResponseDto {
+// 채팅방 상세 정보 응답 DTO (닉네임 기반)
+export interface ChatRoomDetailResponseDto {
+  chatRoomId: number;
+  helpId?: number;
+  juniorNickname: string; // UUID 대신 닉네임
+  seniorNickname: string; // UUID 대신 닉네임
+  createdAt: string;
   participants: {
     junior: {
-      id: number;
+      nickname: string; // 닉네임
       name: string;
       profileImgUrl: string;
     };
     senior: {
-      id: number;
+      nickname: string; // 닉네임
       name: string;
       profileImgUrl: string;
     };
   };
-  helpInfo?: {
+  helpInfo: {
     title: string;
     description: string;
     status: string;
   };
-} 
+}

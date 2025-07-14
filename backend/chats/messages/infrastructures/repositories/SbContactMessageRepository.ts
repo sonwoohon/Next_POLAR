@@ -2,22 +2,25 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { ContactMessageEntity } from '@/backend/chats/messages/domains/entities/contactMessage';
 import { IContactMessageRepository } from '@/backend/chats/messages/domains/repositories/ContactMessageRepository';
 import { ContactMessageMapper } from '@/backend/chats/messages/infrastructures/mappers/ContactMessageMapper';
+import { ContactMessageUseCase } from '@/backend/chats/messages/applications/dtos/ContactMessageDtos';
 
 export class SbContactMessageRepository implements IContactMessageRepository {
   // 메시지 저장
-  async create(message: ContactMessageEntity): Promise<ContactMessageEntity> {
+  async create(
+    requestDto: ContactMessageUseCase
+  ): Promise<ContactMessageEntity> {
     console.log('[Repository] 메시지 생성 시작:', {
-      senderId: message.senderId,
-      contactRoomId: message.contactRoomId,
-      message: message.message,
+      senderId: requestDto.sender_id,
+      contactRoomId: requestDto.contact_room_id,
+      message: requestDto.message,
     });
 
     const { data, error } = await supabase
       .from('contact_messages')
       .insert({
-        sender_id: message.senderId,
-        contact_room_id: message.contactRoomId,
-        message: message.message,
+        sender_id: requestDto.sender_id,
+        contact_room_id: requestDto.contact_room_id,
+        message: requestDto.message,
       })
       .select()
       .single();
@@ -65,32 +68,10 @@ export class SbContactMessageRepository implements IContactMessageRepository {
       (row: {
         id: number;
         contact_room_id: number;
-        sender_id: number;
+        sender_id: string; // UUID
         message: string;
         created_at: string;
       }) => ContactMessageMapper.toEntity(row)
     );
-  }
-
-  // 실시간 구독 (프론트엔드에서 주로 사용)
-  subscribeToMessages(
-    contactRoomId: number,
-    onMessage: (message: ContactMessageEntity) => void
-  ) {
-    return supabase
-      .channel('contact_messages')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'contact_messages',
-          filter: `contact_room_id=eq.${contactRoomId}`,
-        },
-        (payload) => {
-          onMessage(ContactMessageMapper.toEntity(payload.new));
-        }
-      )
-      .subscribe();
   }
 }
