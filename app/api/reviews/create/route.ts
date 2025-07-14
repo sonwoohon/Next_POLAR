@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
-import { getUserIdFromCookie } from '@/lib/jwt';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
+
+// 임시 함수 - 나중에 lib/jwt.ts로 이동 예정
+function getNicknameFromCookie(request: NextRequest): string | null {
+  // 임시로 하드코딩된 nickname 반환
+  // TODO: 실제 쿠키에서 nickname 추출 로직 구현
+  return "jelly5361"; // 임시 테스트용 nickname
+}
 
 // POST /api/reviews/create
 export async function POST(request: NextRequest) {
   try {
-    // 쿠키에서 writerId 추출 (임시로 1로 설정)
-    const writerId = 1; // getUserIdFromCookie(request);
-    if (!writerId) {
+    // 쿠키에서 nickname 추출
+    const writerNickname = getNicknameFromCookie(request);
+    if (!writerNickname) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
 
@@ -28,7 +34,7 @@ export async function POST(request: NextRequest) {
     // usecase를 통해 리뷰 생성 (receiverId는 자동 계산)
     const review = await reviewUseCases.createReview({
       helpId: Number(helpId),
-      writerId: writerId, // 임시로 1로 설정
+      writerNickname: writerNickname,
       rating: Number(rating),
       text: String(text)
     });
@@ -60,10 +66,13 @@ export async function POST(request: NextRequest) {
       } else if (error.message.includes('조회 중 오류가 발생했습니다')) {
         errorReason = '데이터베이스 조회 중 오류가 발생했습니다.';
         statusCode = 500;
+      } else if (error.message.includes('닉네임') && error.message.includes('찾을 수 없습니다')) {
+        errorReason = '사용자 정보를 찾을 수 없습니다.';
+        statusCode = 404;
       }
       
       return NextResponse.json({ 
-        error: '리뷰 생성ㅋ 중 오류 발생', 
+        error: '리뷰 생성 중 오류 발생', 
         detail: error.message,
         reason: errorReason
       }, { status: statusCode });
