@@ -160,9 +160,10 @@ export interface UserProfileUpdate {
   phoneNumber?: string;
   email?: string;
   age?: number;
-  profileImgUrl?: string; // 이미지 URL을 직접 입력
+  profile_img_url?: string;
   address?: string;
   name?: string;
+  nickname?: string;
   password?: string;
   nickname?: string;
 }
@@ -271,6 +272,7 @@ export class CommonUserUseCase {
         `[UseCase] 기존 사용자 정보 - ID: ${id}`,
         existingUser.toJSON()
       );
+
 
       // 업데이트할 필드 검증
       if (updates.phoneNumber) {

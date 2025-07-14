@@ -13,7 +13,6 @@ export class CommonUserEntity {
     public readonly createdAt: Date // 생성일시 (수정 불가능)
   ) {}
 
-  // 엔티티를 객체로 변환하는 메서드
   toJSON() {
     return {
       id: this.id,
@@ -21,7 +20,7 @@ export class CommonUserEntity {
       password: this.password,
       email: this.email,
       age: this.age,
-      profileImgUrl: this.profileImgUrl,
+      profile_img_url: this.profile_img_url,
       address: this.address,
       name: this.name,
       nickname: this.nickname,
