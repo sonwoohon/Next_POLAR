@@ -1,6 +1,6 @@
 export interface SignUpDto {
-  uuid: string;
   name: string;
+  nickname: string;
   phone_number: string;
   password: string;
   email?: string;
