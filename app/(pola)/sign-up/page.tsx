@@ -1,5 +1,5 @@
 "use client";
-import styles from "./_styles/signup.module.css";
+import styles from "@/app/(pola)/sign-up/_styles/signUp.module.css";
 import Image from "next/image";
 import Logo from "@/public/images/logos/POLAR.png";
 import { useForm, SubmitHandler } from "react-hook-form";

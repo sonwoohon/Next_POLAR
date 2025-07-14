@@ -1,9 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
 import styles from './CreateReview.module.css';
+
+interface UserProfile {
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
+}
 
 export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
   const { helpId } = use(params);
@@ -16,6 +22,28 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [receiver, setReceiver] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchReceiver = async () => {
+      try {
+        // 1. helpId로 헬프 상세 조회
+        const helpRes = await fetch(`/api/helps/${helpId}`);
+        if (!helpRes.ok) return;
+        const helpData = await helpRes.json();
+        const seniorNickname = helpData.seniorNickname;
+        if (!seniorNickname) return;
+        // 2. seniorNickname으로 유저 정보 조회
+        const userRes = await fetch(`/api/users/${seniorNickname}`);
+        if (!userRes.ok) return;
+        const userData = await userRes.json();
+        setReceiver(userData);
+      } catch (e) {
+        // 무시
+      }
+    };
+    fetchReceiver();
+  }, [helpId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -92,6 +120,20 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>리뷰 작성</h1>
+      {receiver && (
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'18px'}}>
+          <Image
+            src={receiver.profileImgUrl || '/images/dummies/dummy_user.png'}
+            alt={receiver.nickname}
+            width={80}
+            height={80}
+            style={{borderRadius:'50%', objectFit:'cover', border:'2px solid #e5e5e5', background:'#fff'}}
+          />
+          <div style={{marginTop:'10px', fontWeight:700, fontSize:'20px', color:'#222', fontFamily:'var(--font-gangwon)'}}>
+            {receiver.name} <span style={{color:'#888', fontSize:'15px'}}>({receiver.nickname})</span>
+          </div>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.ratingSection}>
           <label htmlFor="rating" className={styles.label}>평점</label>
