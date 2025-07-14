@@ -5,17 +5,19 @@ import {
 } from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import { SeniorHelpUseCase } from '@/backend/seniors/helps/applications/usecases/SeniorHelpUseCases';
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
+// 시니어 헬프 생성 API (닉네임 기반)
 export async function POST(req: NextRequest) {
-  //   const userId = getUserIdFromCookie(req);
+  const nickname = getNicknameFromCookie(req);
 
-  //   if (!userId) {
-  //     return NextResponse.json(
-  //       { error: '로그인이 필요합니다.' },
-  //       { status: 401 }
-  //     );
-  //   }
+  if (!nickname) {
+    return NextResponse.json(
+      { error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
 
   const helpReqCreate: CreateSeniorHelpRequestDto = {
     ...(await req.json()),
@@ -30,10 +32,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
-    const help = await seniorHelpUseCase.createHelp(9, helpReqCreate);
+    const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
     return NextResponse.json(help, { status: 200 });
   } catch (error) {
-    console.error('점수 조회 중 오류:', error);
+    console.error('Help 생성 중 오류:', error);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
@@ -41,20 +43,21 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 수정 API (닉네임 기반)
 export async function PUT(req: NextRequest) {
-  //   const userId = await getUserIdFromCookie(req);
+  const nickname = getNicknameFromCookie(req);
   const helpId = parseInt(req.nextUrl.pathname.split('/').pop() || '0');
 
-  //   if (!userId) {
-  //     return NextResponse.json(
-  //       { error: '로그인이 필요합니다.' },
-  //       { status: 401 }
-  //     );
-  //   }
+  if (!nickname) {
+    return NextResponse.json(
+      { error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
 
   if (!helpId) {
     return NextResponse.json(
-      { error: '헬프를 입력해주세요.' },
+      { error: '헬프 ID를 입력해주세요.' },
       { status: 400 }
     );
   }
@@ -76,14 +79,13 @@ export async function PUT(req: NextRequest) {
       new SbCommonHelpRepository()
     );
     const help = await seniorHelpUseCase.updateHelp(
-      //   Number(userId),
-      9,
+      nickname,
       helpReqUpdate,
       Number(helpId)
     );
     return NextResponse.json(help, { status: 200 });
   } catch (error) {
-    console.error('점수 조회 중 오류:', error);
+    console.error('Help 수정 중 오류:', error);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
@@ -91,21 +93,21 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 삭제 API (닉네임 기반)
 export async function DELETE(req: NextRequest) {
-  //   const userId = await getUserIdFromCookie(req);
-
-  //   if (!userId) {
-  //     return NextResponse.json(
-  //       { error: '로그인이 필요합니다.' },
-  //       { status: 401 }
-  //     );
-  //   }
-
+  const nickname = getNicknameFromCookie(req);
   const helpId = parseInt(req.nextUrl.pathname.split('/').pop() || '0');
+
+  if (!nickname) {
+    return NextResponse.json(
+      { error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
 
   if (!helpId) {
     return NextResponse.json(
-      { error: '데이터를 입력해주세요.' },
+      { error: '헬프 ID를 입력해주세요.' },
       { status: 400 }
     );
   }
@@ -115,7 +117,7 @@ export async function DELETE(req: NextRequest) {
     const help = await seniorHelpUseCase.deleteHelp(Number(helpId));
     return NextResponse.json(help, { status: 200 });
   } catch (error) {
-    console.error('점수 조회 중 오류:', error);
+    console.error('Help 삭제 중 오류:', error);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }

@@ -3,12 +3,12 @@ import { HelpStatus } from '@/backend/helps/domains/entities/HelpStatus';
 import { CommonHelpStatusUseCase } from '@/backend/helps/applications/usecases/CommonHelpStatusUseCases';
 import { HelpStatusRepository } from '@/backend/helps/infrastructures/repositories/SbHelpStatusRepository';
 
-// 공통 Help 상태 관리 API
+// 공통 Help 상태 관리 API (닉네임 기반)
 const commonHelpStatusUseCase = new CommonHelpStatusUseCase(
   new HelpStatusRepository()
 );
 
-// Help 상태 조회
+// Help 상태 조회 (닉네임 기반 응답)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -43,7 +43,7 @@ export async function GET(
   }
 }
 
-// Help 상태 변경 (모든 상태 지원)
+// Help 상태 변경 (모든 상태 지원, 닉네임 기반)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
