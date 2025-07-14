@@ -39,9 +39,34 @@
   color: #fff;
 }
 
+@keyframes rotateY360 {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.rankingTopWrap ul li:before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  animation: rotateY360 2s linear infinite;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
 .rankingTopWrap ul li .rankingTopName{
   display: inline-block;
   margin-top: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 }
 
 .rankingTopWrap ul li:nth-child(1) {
@@ -83,6 +108,24 @@
   color: #fff;
   list-style: none;
   padding:2rem;
+  align-items: center;
+}
+
+/* 하단 랭킹 유저 프로필 이미지 */
+.rankingBtmImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 2px solid #fff;
+  background: #222;
+}
+
+/* 하단 랭킹 이미지와 등수 컨테이너 */
+.rankingBtmImgContainer {
+  display: flex;
+  align-items: center;
 }
 
 /* 커튼 */
