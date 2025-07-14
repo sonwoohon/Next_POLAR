@@ -1,0 +1,99 @@
+.container {
+  background: #fff;
+  height: 100%;
+  width: 80%;
+  margin: 0 auto;
+  font-family: 'Pretendard', 'sans-serif';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  padding: 32px 0 0 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #3b82f6 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 24px;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 16px;
+  margin: 48px 0 24px 0;
+}
+
+.button {
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  cursor: pointer;
+}
+
+.guide {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.categoryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 24px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 72px;
+}
+
+.categoryIcon {
+  width: 48px;
+  height: 48px;
+  background: #f6f8fa;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.categoryText {
+  font-size: 0.95rem;
+  color: #222;
+  text-align: center;
+}
+
+.moreBtn {
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.moreGuide {
+  font-size: 1rem;
+  color: #222;
+  text-align: center;
+  margin-top: 32px;
+  font-weight: 600;
+}
