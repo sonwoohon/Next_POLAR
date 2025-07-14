@@ -18,6 +18,7 @@ const SignupPage: React.FC = () => {
   const daumPostcodeRef = useRef<HTMLDivElement>(null);
 
   const signupSubmitHandler: SubmitHandler<SignUpDto> = (data) => {
+    //TODO: POST 회원가입 요청 구현
     alert(`
       이메일: ${data.email}
       휴대폰번호: ${data.phone_number}
