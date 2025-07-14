@@ -5,7 +5,7 @@ export class SbImageRepository implements IImageRepository {
   async uploadImage(
     file: File,
     bucketName: string,
-    userId: number
+    userId: string
   ): Promise<{ url: string }> {
     console.log(
       `[SbImageRepository] 이미지 업로드 시작 - Bucket: ${bucketName}, UserID: ${userId}, 파일: ${file.name}`

@@ -2,17 +2,8 @@ import { SignUpUsecase } from '@/backend/users/signup/applications/usecases/Sign
 import { SbAuthRepository } from '@/backend/users/signup/infrastructures/repositories/SbSignUpRepository';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { SignUpDto } from '@/backend/users/signup/applications/dtos/SignUpDto';
 
-export interface SignUpDto {
-  name: string;
-  phone_number: string;
-  password: string;
-  email: string;
-  age?: number;
-  profile_img_url?: string;
-  address?: string;
-  uuid?: string;
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,6 +12,7 @@ export async function POST(request: NextRequest) {
     // 2. DTO 생성 (body에서 필요한 값만 추출)
     const signUpDto: SignUpDto = {
       name: body.name,
+      nickname: "", // 서버에서 자동 생성
       phone_number: body.phone_number,
       password: body.password,
       email: body.email,

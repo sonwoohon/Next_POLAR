@@ -18,5 +18,17 @@ export type DeleteImageRequestDto = {
 // 프로필 이미지 업데이트 요청 DTO
 export type UpdateProfileImageRequestDto = {
   file: File;
-  userId: number;
+  nickname: string;
+};
+
+// 도움 요청 이미지 업로드 요청 DTO
+export type UploadHelpImageRequestDto = {
+  file: File;
+  nickname: string;
+};
+
+// 리뷰 이미지 업로드 요청 DTO
+export type UploadReviewImageRequestDto = {
+  file: File;
+  nickname: string;
 }; 

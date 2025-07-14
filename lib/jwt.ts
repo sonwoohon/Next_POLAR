@@ -106,3 +106,36 @@ export function getNicknameFromCookie(request: NextRequest): string | null {
     return null;
   }
 }
+
+// 쿠키에서 사용자 닉네임을 추출하는 함수
+export function getNicknameFromCookie(request: NextRequest): string | null {
+  try {
+    // 쿠키에서 access-token 가져오기
+    const accessToken = request.cookies.get('access-token')?.value;
+
+    if (!accessToken) {
+      console.log('[JWT] access-token 쿠키가 없습니다.');
+      return null;
+    }
+
+    // JWT 토큰 검증 및 페이로드 추출
+    const payload = verifyAccessToken(accessToken);
+    const nickname = payload.nickname as string;
+
+    if (!nickname) {
+      console.log('[JWT] 토큰에서 nickname을 찾을 수 없습니다.');
+      return null;
+    }
+
+    console.log(`[JWT] 토큰에서 추출한 닉네임: ${nickname}`);
+    return nickname;
+  } catch (error: unknown) {
+    // 에러 타입 검증
+    if (error instanceof Error) {
+      console.error('[JWT] 토큰 검증 중 오류:', error.message);
+    } else {
+      console.error('[JWT] 토큰 검증 중 예상치 못한 오류:', error);
+    }
+    return null;
+  }
+}

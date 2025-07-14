@@ -1,23 +1,23 @@
 'use client';
 
-// TODO: 현재 uuid를 실제로는 userId 값으로 사용 중이지만, 코드상 uuid 변수/params를 유지합니다. 나중에 진짜 uuid로 전환 시 fetch 쿼리만 uuid로 바꿔주면 됩니다.
 import { useEffect, useState } from 'react';
 import { use } from 'react';
-import styles from '@/app/(pola)/user/profile/[uuid]/reviews/UserReviews.module.css';
+import Image from 'next/image';
+import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css';
 
 interface Review {
   id: number;
   helpId: number;
-  writerId: number;
-  receiverId: number;
+  writerNickname: string;
+  receiverNickname: string;
   rating: number;
   text: string;
+  reviewImgUrl?: string;
   createdAt: string;
 }
 
-export default function WrittenReviewsPage({ params }: { params: Promise<{ uuid: string }> }) {
-  // params로 uuid를 받지만, 실제 값은 userId임. 나중에 uuid로 전환 시 fetch 쿼리만 바꿔주면 됨.
-  const { uuid } = use(params);
+export default function ReceivedReviewsPage({ params }: { params: Promise<{ nickname: string }> }) {
+  const { nickname } = use(params);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,8 +27,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ uuid:
       try {
         setLoading(true);
         setError(null);
-        // 현재는 userId로 사용, 나중에 uuid로 전환 시 아래 한 줄만 수정하면 됨
-        const response = await fetch(`/api/reviews/written?uuid=${uuid}`);
+        const response = await fetch(`/api/reviews/received?nickname=${nickname}`);
         if (!response.ok) throw new Error('리뷰를 불러오는데 실패했습니다.');
         const data = await response.json();
         if (data.success) {
@@ -43,7 +42,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ uuid:
       }
     };
     fetchReviews();
-  }, [uuid]);
+  }, [nickname]);
 
   if (loading) {
     return <div className={styles.loadingContainer}>로딩 중...</div>;
@@ -54,9 +53,10 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ uuid:
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>작성한 리뷰</h2>
+      <h2 className={styles.title}>받은 리뷰</h2>
+      <p className={styles.nickname}>사용자: {nickname}</p>
       {reviews.length === 0 ? (
-        <div className={styles.emptyState}>작성한 리뷰가 없습니다.</div>
+        <div className={styles.emptyState}>받은 리뷰가 없습니다.</div>
       ) : (
         <ul className={styles.reviewsList}>
           {reviews.map((review) => (
@@ -65,8 +65,27 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ uuid:
                 <span className={styles.reviewId}>리뷰 #{review.id}</span>
                 <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
               </div>
+              {review.reviewImgUrl && (
+                <div className={styles.reviewImageContainer}>
+                  <Image
+                    src={review.reviewImgUrl}
+                    alt={`Review image for review ${review.id}`}
+                    width={100}
+                    height={100}
+                    className={styles.reviewImage}
+                  />
+                </div>
+              )}
               <p className={styles.reviewText}>{review.text}</p>
-              <small className={styles.reviewDate}>작성일: {new Date(review.createdAt).toLocaleDateString()}</small>
+              <div className={styles.reviewInfo}>
+                <small className={styles.reviewDate}>
+                  작성자: {review.writerNickname}
+                </small>
+                <br />
+                <small className={styles.reviewDate}>
+                  작성일: {new Date(review.createdAt).toLocaleDateString()}
+                </small>
+              </div>
             </li>
           ))}
         </ul>

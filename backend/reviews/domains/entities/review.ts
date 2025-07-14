@@ -6,6 +6,7 @@ export class ReviewEntity {
     public receiverId: string, // 피드백 받는 사람 ID (UUID)
     public rating: number, // 평점
     public text: string, // 리뷰 내용
+    public reviewImgUrl: string | null, // 리뷰 이미지 URL
     public readonly createdAt: Date | undefined // 생성일시
   ) {}
 
@@ -17,6 +18,7 @@ export class ReviewEntity {
       receiverId: this.receiverId,
       rating: this.rating,
       text: this.text,
+      reviewImgUrl: this.reviewImgUrl,
       createdAt: this.createdAt,
     };
   }

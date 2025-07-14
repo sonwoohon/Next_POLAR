@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface UserProfile {
-  id: number;
+  id: string;
   loginId: string;
   name: string;
+  nickname: string;
   email: string;
   phoneNumber: string;
   profileImgUrl?: string;
