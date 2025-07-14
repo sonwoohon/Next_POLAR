@@ -137,13 +137,13 @@ export class UserValidator {
 
 // 사용자 정보 업데이트 인터페이스 (비밀번호 포함)
 export interface UserProfileUpdate {
-  uuid?: string;
-  phoneNumber?: string;
+  phone_number?: string;
   email?: string;
   age?: number;
-  profileImgUrl?: string; // 이미지 URL을 직접 입력
+  profile_img_url?: string;
   address?: string;
   name?: string;
+  nickname?: string;
   password?: string;
 }
 
@@ -192,15 +192,15 @@ export class CommonUserUseCase {
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        existingUser.uuid,
-        existingUser.phoneNumber,
+        existingUser.phone_number,
         existingUser.password,
         existingUser.email,
         existingUser.age,
         '', // 빈 문자열로 설정
         existingUser.address,
         existingUser.name,
-        existingUser.createdAt
+        existingUser.nickname,
+        existingUser.created_at
       );
 
       console.log(
@@ -255,11 +255,11 @@ export class CommonUserUseCase {
       // 검증 수행
       console.log(`[UseCase] 입력 데이터 검증 시작 - ID: ${id}`);
 
-      if (updates.phoneNumber !== undefined) {
+      if (updates.phone_number !== undefined) {
         console.log(
-          `[UseCase] 전화번호 검증 - ID: ${id}, 값: ${updates.phoneNumber}`
+          `[UseCase] 전화번호 검증 - ID: ${id}, 값: ${updates.phone_number}`
         );
-        UserValidator.validatePhoneNumber(updates.phoneNumber);
+        UserValidator.validatePhoneNumber(updates.phone_number);
       }
       if (updates.email !== undefined) {
         console.log(`[UseCase] 이메일 검증 - ID: ${id}, 값: ${updates.email}`);
@@ -269,11 +269,11 @@ export class CommonUserUseCase {
         console.log(`[UseCase] 나이 검증 - ID: ${id}, 값: ${updates.age}`);
         UserValidator.validateAge(updates.age);
       }
-      if (updates.profileImgUrl !== undefined) {
+      if (updates.profile_img_url !== undefined) {
         console.log(
-          `[UseCase] 프로필 이미지 URL 검증 - ID: ${id}, 값: ${updates.profileImgUrl}`
+          `[UseCase] 프로필 이미지 URL 검증 - ID: ${id}, 값: ${updates.profile_img_url}`
         );
-        UserValidator.validateProfileImageUrl(updates.profileImgUrl);
+        UserValidator.validateProfileImageUrl(updates.profile_img_url);
       }
       if (updates.address !== undefined) {
         console.log(`[UseCase] 주소 검증 - ID: ${id}, 값: ${updates.address}`);
@@ -295,15 +295,15 @@ export class CommonUserUseCase {
       // 새로운 엔티티 생성 (불변성 유지)
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        updates.uuid ?? existingUser.uuid,
-        updates.phoneNumber ?? existingUser.phoneNumber,
+        updates.phone_number ?? existingUser.phone_number,
         updates.password ?? existingUser.password,
         updates.email ?? existingUser.email,
         updates.age ?? existingUser.age,
-        updates.profileImgUrl ?? existingUser.profileImgUrl,
+        updates.profile_img_url ?? existingUser.profile_img_url,
         updates.address ?? existingUser.address,
         updates.name ?? existingUser.name,
-        existingUser.createdAt
+        updates.nickname ?? existingUser.nickname,
+        existingUser.created_at
       );
 
       console.log(
