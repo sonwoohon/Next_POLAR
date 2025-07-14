@@ -38,13 +38,11 @@ export class LoginUseCase {
 
     const accessToken = generateAccessToken({
       id: user.id,
-      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
     });
     const refreshToken = generateRefreshToken({
       id: user.id,
-      loginId: request.loginId.includes('@') ? user.email : user.phoneNumber,
     });
 
-    return new LoginResponseDTO(accessToken, refreshToken);
+    return new LoginResponseDTO(accessToken, refreshToken, user.nickname);
   }
 }

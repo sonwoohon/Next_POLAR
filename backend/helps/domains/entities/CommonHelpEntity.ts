@@ -10,7 +10,7 @@
 export class CommonHelpEntity {
   constructor(
     public id: number,
-    public seniorId: number,
+    public seniorId: string, // UUID로 변경
     public title: string,
     public startDate: Date,
     public endDate: Date,
@@ -18,7 +18,7 @@ export class CommonHelpEntity {
     public content: string,
     public status: string,
     public createdAt: Date
-  ) { }
+  ) {}
 
   toJSON() {
     return {
@@ -30,7 +30,7 @@ export class CommonHelpEntity {
       category: this.category,
       content: this.content,
       status: this.status,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
     };
   }
 }

@@ -1,21 +1,24 @@
 // 회원 정보 조회 및 수정 UseCase
 import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUserEntity';
-import { IUserRepository } from '@/backend/users/user/domains/repositories/UserRepository';
+import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: number): Promise<CommonUserEntity | null> {
+  async execute(id: string): Promise<CommonUserEntity | null> {
     return this.userRepository.getUserById(id);
   }
 }
 
 // 회원 정보 수정 UseCase
 export class UpdateUserInfoUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: number, updateData: CommonUserEntity): Promise<CommonUserEntity | null> {
+  async execute(
+    id: string,
+    updateData: CommonUserEntity
+  ): Promise<CommonUserEntity | null> {
     return this.userRepository.updateUser(id, updateData);
   }
 }
@@ -133,11 +136,28 @@ export class UserValidator {
 
     console.log(`[Validator] 이름 검증 성공: ${name}`);
   }
+
+  static validateNickname(nickname: string): void {
+    console.log(`[Validator] 닉네임 검증 시작: ${nickname}`);
+
+    if (!nickname || nickname.trim().length === 0) {
+      console.error('[Validator] 닉네임 검증 실패: 빈 값');
+      throw new ValidationError('닉네임은 비어있을 수 없습니다.');
+    }
+    if (nickname.length > 30) {
+      console.error(
+        `[Validator] 닉네임 검증 실패: 길이 초과 - ${nickname.length}자리`
+      );
+      throw new ValidationError('닉네임은 30자를 초과할 수 없습니다.');
+    }
+
+    console.log(`[Validator] 닉네임 검증 성공: ${nickname}`);
+  }
 }
 
 // 사용자 정보 업데이트 인터페이스 (비밀번호 포함)
 export interface UserProfileUpdate {
-  phone_number?: string;
+  phoneNumber?: string;
   email?: string;
   age?: number;
   profile_img_url?: string;
@@ -145,14 +165,15 @@ export interface UserProfileUpdate {
   name?: string;
   nickname?: string;
   password?: string;
+  nickname?: string;
 }
 
 // 공용 사용자 Use Case
 export class CommonUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   // 특정 사용자 조회
-  async getUserById(id: number): Promise<CommonUserEntity | null> {
+  async getUserById(id: string): Promise<CommonUserEntity | null> {
     console.log(`[UseCase] 사용자 조회 시작 - ID: ${id}`);
 
     try {
@@ -172,7 +193,7 @@ export class CommonUserUseCase {
   }
 
   // 프로필 이미지 삭제 (빈 프로필로 설정)
-  async deleteProfileImage(id: number): Promise<CommonUserEntity> {
+  async deleteProfileImage(id: string): Promise<CommonUserEntity> {
     console.log(`[UseCase] 프로필 이미지 삭제 시작 - ID: ${id}`);
 
     try {
@@ -192,7 +213,7 @@ export class CommonUserUseCase {
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        existingUser.phone_number,
+        existingUser.phoneNumber,
         existingUser.password,
         existingUser.email,
         existingUser.age,
@@ -200,7 +221,7 @@ export class CommonUserUseCase {
         existingUser.address,
         existingUser.name,
         existingUser.nickname,
-        existingUser.created_at
+        existingUser.createdAt
       );
 
       console.log(
@@ -232,7 +253,7 @@ export class CommonUserUseCase {
 
   // 사용자 프로필 업데이트 (비밀번호 포함)
   async updateUserProfile(
-    id: number,
+    id: string,
     updates: UserProfileUpdate
   ): Promise<CommonUserEntity> {
     console.log(`[UseCase] 사용자 프로필 업데이트 시작 - ID: ${id}`, updates);
@@ -252,71 +273,59 @@ export class CommonUserUseCase {
         existingUser.toJSON()
       );
 
-      // 검증 수행
-      console.log(`[UseCase] 입력 데이터 검증 시작 - ID: ${id}`);
 
-      if (updates.phone_number !== undefined) {
-        console.log(
-          `[UseCase] 전화번호 검증 - ID: ${id}, 값: ${updates.phone_number}`
-        );
-        UserValidator.validatePhoneNumber(updates.phone_number);
+      // 업데이트할 필드 검증
+      if (updates.phoneNumber) {
+        UserValidator.validatePhoneNumber(updates.phoneNumber);
       }
-      if (updates.email !== undefined) {
-        console.log(`[UseCase] 이메일 검증 - ID: ${id}, 값: ${updates.email}`);
+      if (updates.email) {
         UserValidator.validateEmail(updates.email);
       }
       if (updates.age !== undefined) {
-        console.log(`[UseCase] 나이 검증 - ID: ${id}, 값: ${updates.age}`);
         UserValidator.validateAge(updates.age);
       }
-      if (updates.profile_img_url !== undefined) {
-        console.log(
-          `[UseCase] 프로필 이미지 URL 검증 - ID: ${id}, 값: ${updates.profile_img_url}`
-        );
-        UserValidator.validateProfileImageUrl(updates.profile_img_url);
+      if (updates.profileImgUrl) {
+        UserValidator.validateProfileImageUrl(updates.profileImgUrl);
       }
-      if (updates.address !== undefined) {
-        console.log(`[UseCase] 주소 검증 - ID: ${id}, 값: ${updates.address}`);
+      if (updates.address) {
         UserValidator.validateAddress(updates.address);
       }
-      if (updates.name !== undefined) {
-        console.log(`[UseCase] 이름 검증 - ID: ${id}, 값: ${updates.name}`);
+      if (updates.name) {
         UserValidator.validateName(updates.name);
       }
-      if (updates.password !== undefined) {
-        console.log(
-          `[UseCase] 비밀번호 검증 - ID: ${id}, 길이: ${updates.password.length}`
-        );
+      if (updates.password) {
         UserValidator.validatePassword(updates.password);
       }
+      if (updates.nickname) {
+        UserValidator.validateNickname(updates.nickname);
+      }
 
-      console.log(`[UseCase] 모든 검증 통과 - ID: ${id}`);
-
-      // 새로운 엔티티 생성 (불변성 유지)
+      // 업데이트된 사용자 Entity 생성
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        updates.phone_number ?? existingUser.phone_number,
-        updates.password ?? existingUser.password,
-        updates.email ?? existingUser.email,
-        updates.age ?? existingUser.age,
-        updates.profile_img_url ?? existingUser.profile_img_url,
-        updates.address ?? existingUser.address,
-        updates.name ?? existingUser.name,
-        updates.nickname ?? existingUser.nickname,
-        existingUser.created_at
+        updates.phoneNumber || existingUser.phoneNumber,
+        updates.password || existingUser.password,
+        updates.email || existingUser.email,
+        updates.age !== undefined ? updates.age : existingUser.age,
+        updates.profileImgUrl || existingUser.profileImgUrl,
+        updates.address || existingUser.address,
+        updates.name || existingUser.name,
+        updates.nickname || existingUser.nickname,
+        existingUser.createdAt
       );
 
       console.log(
-        `[UseCase] 업데이트용 Entity 생성 완료 - ID: ${id}`,
+        `[UseCase] 업데이트된 사용자 Entity 생성 완료 - ID: ${id}`,
         updatedUser.toJSON()
       );
 
+      // Repository를 통해 업데이트
       const result = await this.userRepository.updateUser(id, updatedUser);
       if (!result) {
         console.error(
           `[UseCase] 프로필 업데이트 실패 - Repository 업데이트 실패 - ID: ${id}`
         );
-        throw new ValidationError('사용자 정보 업데이트에 실패했습니다.');
+        throw new ValidationError('프로필 업데이트에 실패했습니다.');
       }
 
       console.log(

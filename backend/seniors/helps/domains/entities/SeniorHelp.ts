@@ -5,7 +5,7 @@ export class SeniorHelp {
     public content: string,
     public category: number | number[],
     public endDate?: string,
-    public seniorId?: number,
+    public seniorId?: string, // UUID로 변경
     public id?: number,
     public status?: string,
     public createdAt?: string,

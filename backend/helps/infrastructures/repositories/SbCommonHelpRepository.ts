@@ -17,7 +17,7 @@ export class SbCommonHelpRepository implements ICommonHelpRepository {
         (help: HelpData) =>
           new CommonHelpEntity(
             help.id,
-            help.senior_id,
+            help.senior_id, // UUID
             help.title,
             new Date(help.start_date),
             new Date(help.end_date),
@@ -45,7 +45,7 @@ export class SbCommonHelpRepository implements ICommonHelpRepository {
 
       return new CommonHelpEntity(
         data.id,
-        data.senior_id,
+        data.senior_id, // UUID
         data.title,
         new Date(data.start_date),
         new Date(data.end_date),
