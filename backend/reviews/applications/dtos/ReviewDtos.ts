@@ -1,7 +1,7 @@
 // 리뷰 생성 요청 DTO
 export interface CreateReviewRequest {
   helpId: number;
-  writerId: string; // UUID로 변경
+  writerNickname: string; // nickname으로 변경
   rating: number;
   text: string;
 }
@@ -10,8 +10,8 @@ export interface CreateReviewRequest {
 export class CreateReviewDto {
   constructor(
     public helpId: number,
-    public writerId: number,
-    public receiverId: number,
+    public writerNickname: string, // nickname으로 변경
+    public receiverNickname: string, // nickname으로 변경
     public rating: number,
     public text: string
   ) {}

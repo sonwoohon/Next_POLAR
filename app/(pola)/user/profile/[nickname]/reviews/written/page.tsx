@@ -7,8 +7,8 @@ import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.mod
 interface Review {
   id: number;
   helpId: number;
-  writerId: number;
-  receiverId: number;
+  writerNickname: string;
+  receiverNickname: string;
   rating: number;
   text: string;
   createdAt: string;
@@ -52,6 +52,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>작성한 리뷰</h2>
+      <p className={styles.nickname}>사용자: {nickname}</p>
       {reviews.length === 0 ? (
         <div className={styles.emptyState}>작성한 리뷰가 없습니다.</div>
       ) : (
@@ -63,7 +64,15 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
                 <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
               </div>
               <p className={styles.reviewText}>{review.text}</p>
-              <small className={styles.reviewDate}>작성일: {new Date(review.createdAt).toLocaleDateString()}</small>
+              <div className={styles.reviewInfo}>
+                <small className={styles.reviewDate}>
+                  받은 사람: {review.receiverNickname}
+                </small>
+                <br />
+                <small className={styles.reviewDate}>
+                  작성일: {new Date(review.createdAt).toLocaleDateString()}
+                </small>
+              </div>
             </li>
           ))}
         </ul>
