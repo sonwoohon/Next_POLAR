@@ -58,6 +58,7 @@ export class SbReviewRepository implements IReviewRepository {
         receiver_id: review.receiverId,
         rating: review.rating,
         text: review.text,
+        review_img_url: review.reviewImgUrl,
       })
       .select()
       .single();
