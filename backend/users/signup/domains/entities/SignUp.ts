@@ -1,27 +1,26 @@
 export class SignUpEntity {
-  public readonly id: bigint;
-  public uuid: string;
+  public readonly id: string; // UUID로 변경
   public name: string;
-  public phoneNumber: bigint;
+  public phoneNumber: string; // bigint에서 string으로 변경
   public password: string;
   public email: string;
   public age?: number;
   public profileImgUrl?: string;
   public address?: string;
+  public nickname: string; // 닉네임 추가
 
   constructor(params: {
-    id: bigint;
-    uuid: string;
+    id: string;
     name: string;
-    phoneNumber: bigint;
+    phoneNumber: string;
     password: string;
     email: string;
     age?: number;
     profileImgUrl?: string;
     address?: string;
+    nickname: string;
   }) {
     this.id = params.id;
-    this.uuid = params.uuid;
     this.name = params.name;
     this.phoneNumber = params.phoneNumber;
     this.password = params.password;
@@ -29,5 +28,6 @@ export class SignUpEntity {
     this.age = params.age;
     this.profileImgUrl = params.profileImgUrl;
     this.address = params.address;
+    this.nickname = params.nickname;
   }
 }
