@@ -1,6 +1,6 @@
 import styles from './ProfileBanner.module.css';
-import sliverTierImg from '@/public/sliverTier.webp';
-import defaultImg from '@/public/dongHyun.png';
+import sliverTierImg from '@/public/images/sliverTier.webp';
+import defaultImg from '@/public/images/dongHyun.jpg';
 import Image from 'next/image';
 
 export default function ProfileBanner() {
