@@ -1,0 +1,173 @@
+/* 랭킹 1,2,3 */
+.rankingWrap {
+  background: #2c2c2c;
+  padding: 0rem 2rem 2rem;
+  width: 100%;
+  /* border-radius: 24px;padding: 32px 24px;box-shadow: 0 4px 24px #0003; */
+}
+
+.rankingTopWrap {
+  position: relative;
+  overflow: hidden;
+  min-height: 13rem;
+}
+
+.rankingTopWrap ul {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  height: 100%;
+  transition: all .2s;
+  animation: rankingTopWrap 1s 3.5s ease-in-out forwards;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rankingTopWrap ul li {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  transform: translateY(16px);
+  margin: 0 10px;
+  list-style: none;
+  align-items: center;
+  color: #fff;
+}
+
+.rankingTopWrap ul li .rankingTopName{
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.rankingTopWrap ul li:nth-child(1) {
+  font-size: 1.3em;
+  font-weight: bold;
+  transform: translateY(0);
+  order: 1;
+}
+
+.rankingTopWrap ul li:nth-child(3) {
+  order: 3;
+}
+
+@keyframes rankingTopWrap {
+  from {
+    transform: translateY(-50%) scale(0);
+  }
+  to {
+    transform: translateY(-50%) scale(.9);
+  }
+}
+
+.rankingBtmWrap {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.rankingBtmWrap ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rankingBtmWrap .rankingBtmItem {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  list-style: none;
+  padding:2rem;
+}
+
+/* 커튼 */
+.curtain {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+.curtain > div {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transition: all .4s;
+}
+
+.curtain > div img {
+  width: 100%;
+}
+
+.curtainItemLeft {
+  left: 0;
+  animation: curtainItemLeft 2s 2.5s ease-in-out forwards;
+}
+
+.curtainItemright {
+  right: 0;
+  animation: curtainItemRight 2s 2.5s ease-in-out forwards;
+}
+
+@keyframes curtainItemLeft {
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: -50%;
+  }
+}
+
+@keyframes curtainItemRight {
+  0% {
+    right: 0%;
+  }
+  100% {
+    right: -50%;
+  }
+}
+
+/* 조명 */
+.circleLights {
+  background: #fff;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0.3;
+  box-shadow: 1px 1px 7px 6px #fff;
+  animation: circleLights 2s .5s ease-in-out forwards;
+  transition: all .4s;
+}
+
+@keyframes circleLights {
+  0% {
+    left: 50%;
+    opacity: 0.3;
+  }
+  25% {
+    left: 100%;
+    opacity: 0.3;
+  }
+  50% {
+    left: 0%;
+    opacity: 0.3;
+  }
+  75% {
+    left: 50%;
+    opacity: 0.3;
+  }
+  100% {
+    left: 50%;
+    opacity: 0;
+  }
+} 
