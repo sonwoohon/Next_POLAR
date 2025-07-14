@@ -11,6 +11,7 @@ export interface SignUpDto {
   age?: number;
   profile_img_url?: string;
   address?: string;
+  uuid?: string;
 }
 
 export async function POST(request: NextRequest) {

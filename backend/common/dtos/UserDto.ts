@@ -27,6 +27,7 @@ export interface UserProfileUpdate {
 // 로그인된 사용자 정보 응답 DTO
 export interface UserProfileResponseDto {
   id: number;
+  uuid: string;
   name: string;
   email: string;
   phoneNumber: string;
