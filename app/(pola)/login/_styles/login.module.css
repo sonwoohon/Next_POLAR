@@ -36,6 +36,7 @@
   margin-bottom: 1.25rem;
 
   label {
+    font-family: var(--font-pretendard);
     font-size: 0.75rem;
   }
 }
