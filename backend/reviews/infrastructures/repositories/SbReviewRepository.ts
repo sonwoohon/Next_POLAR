@@ -32,6 +32,40 @@ export class SbReviewRepository implements IReviewRepository {
     return data.map((review) => ReviewMapper.toEntity(review));
   }
 
+  // nickname으로 내가 쓴(작성한) 리뷰 리스트 조회
+  async findByWriterNickname(nickname: string): Promise<ReviewEntity[]> {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select(`
+        *,
+        users!reviews_writer_id_fkey(nickname)
+      `)
+      .eq('users.nickname', nickname)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map((review) => ReviewMapper.toEntity(review));
+  }
+
+  // nickname으로 받은 리뷰 리스트 조회
+  async findByReceiverNickname(nickname: string): Promise<ReviewEntity[]> {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select(`
+        *,
+        users!reviews_receiver_id_fkey(nickname)
+      `)
+      .eq('users.nickname', nickname)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    if (!data) return [];
+
+    return data.map((review) => ReviewMapper.toEntity(review));
+  }
+
   // 리뷰 id로 단일 리뷰 상세 조회
   async findById(reviewId: number): Promise<ReviewEntity | null> {
     const { data, error } = await supabase

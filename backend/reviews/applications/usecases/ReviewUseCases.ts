@@ -40,6 +40,16 @@ export class ReviewUseCases {
     return await this.reviewRepository.findByWriterId(userId);
   }
 
+  // 1-3. nickname으로 내가 쓴(작성한) 리뷰 리스트 조회
+  async getReviewsByWriterNickname(nickname: string): Promise<ReviewEntity[]> {
+    return await this.reviewRepository.findByWriterNickname(nickname);
+  }
+
+  // 1-4. nickname으로 받은 리뷰 리스트 조회
+  async getReviewsByReceiverNickname(nickname: string): Promise<ReviewEntity[]> {
+    return await this.reviewRepository.findByReceiverNickname(nickname);
+  }
+
   // 2. 리뷰 id로 단일 리뷰 상세 조회
   async getReviewById(reviewId: number): Promise<ReviewEntity | null> {
     return await this.reviewRepository.findById(reviewId);
