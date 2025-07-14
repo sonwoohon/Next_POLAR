@@ -1,9 +1,127 @@
 {
   "info": {
-    "name": "Next_POLAR All APIs (with Params & Body)",
+    "name": "Next_POLAR All APIs (Complete)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User Signup",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"홍길동\",\n  \"phone_number\": \"010-1234-5678\",\n  \"password\": \"password123\",\n  \"email\": \"hong@example.com\",\n  \"age\": 25,\n  \"profile_img_url\": \"https://example.com/profile.jpg\",\n  \"address\": \"서울시 강남구\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "signup"]
+            }
+          }
+        },
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"loginId\": \"hong@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "login"]
+            }
+          }
+        },
+        {
+          "name": "Token Refresh",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/user/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "User Logout",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/user/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "logout"]
+            }
+          }
+        },
+        {
+          "name": "User Withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"confirmPassword\": \"password123\",\n  \"reason\": \"서비스 이용 중단\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/withdrawal",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "withdrawal"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"홍길동\",\n  \"email\": \"hong@example.com\",\n  \"phoneNumber\": \"010-1234-5678\",\n  \"age\": 25,\n  \"profileImgUrl\": \"https://example.com/profile.jpg\",\n  \"address\": \"서울시 강남구\",\n  \"password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Delete Profile Image",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "Helps",
       "item": [
@@ -26,6 +144,22 @@
               "raw": "{{baseUrl}}/api/helps/1",
               "host": ["{{baseUrl}}"],
               "path": ["api", "helps", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Help Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/helps/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "helps", "1", "status"]
             }
           }
         }
@@ -83,6 +217,131 @@
               "path": ["api", "helps", "junior"]
             }
           }
+        },
+        {
+          "name": "Complete Junior Help",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"helpId\": 1,\n  \"completionNote\": \"도움 완료\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/juniors/helps/1/completion",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "juniors", "helps", "1", "completion"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Senior Helps",
+      "item": [
+        {
+          "name": "Get Senior Help List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/seniors/help",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seniors", "help"]
+            }
+          }
+        },
+        {
+          "name": "Get Senior Help Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/seniors/help/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seniors", "help", "1"]
+            }
+          }
+        },
+        {
+          "name": "Complete Senior Help",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"helpId\": 1,\n  \"completionNote\": \"시니어 도움 완료\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/seniors/helps/1/completion",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "seniors", "helps", "1", "completion"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chats",
+      "item": [
+        {
+          "name": "Get Chat Room Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/rooms/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chats", "rooms", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Chat Messages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/messages?roomId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chats", "messages"],
+              "query": [
+                {
+                  "key": "roomId",
+                  "value": "1",
+                  "description": "채팅방 ID"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"안녕하세요!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chats", "messages"]
+            }
+          }
+        },
+        {
+          "name": "Update Read Status",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": 1,\n  \"messageId\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/messages/read-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "chats", "messages", "read-status"]
+            }
+          }
         }
       ]
     },
@@ -100,6 +359,17 @@
               "query": [
                 { "key": "helpId", "value": "1", "description": "헬프 ID" }
               ]
+            }
+          }
+        },
+        {
+          "name": "Get Review Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "1"]
             }
           }
         },
@@ -122,59 +392,6 @@
       ]
     },
     {
-      "name": "Users",
-      "item": [
-        {
-          "name": "Get User Profile",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users"]
-            }
-          }
-        },
-        {
-          "name": "Update User Profile",
-          "request": {
-            "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"홍길동\",\n  \"email\": \"hong@example.com\",\n  \"phoneNumber\": \"010-1234-5678\",\n  \"age\": 25,\n  \"profileImgUrl\": \"https://...\",\n  \"address\": \"서울시 강남구\",\n  \"password\": \"newpassword123\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Login",
-      "item": [
-        {
-          "name": "User Login",
-          "request": {
-            "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"loginId\": \"hong@example.com\",\n  \"password\": \"password123\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/user/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "user", "login"]
-            }
-          }
-        }
-      ]
-    },
-    {
       "name": "Images",
       "item": [
         {
@@ -186,7 +403,11 @@
             ],
             "body": {
               "mode": "formdata",
-              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "bucketName", "value": "profile-images" },
+                { "key": "userId", "value": "1" }
+              ]
             },
             "url": {
               "raw": "{{baseUrl}}/api/images",
@@ -200,9 +421,13 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/images",
+              "raw": "{{baseUrl}}/api/images?url=https://example.com/image.jpg&bucketName=profile-images",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "images"]
+              "path": ["api", "images"],
+              "query": [
+                { "key": "url", "value": "https://example.com/image.jpg" },
+                { "key": "bucketName", "value": "profile-images" }
+              ]
             }
           }
         },
@@ -211,13 +436,113 @@
           "request": {
             "method": "DELETE",
             "url": {
-              "raw": "{{baseUrl}}/api/images",
+              "raw": "{{baseUrl}}/api/images?url=https://example.com/image.jpg&bucketName=profile-images",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "images"]
+              "path": ["api", "images"],
+              "query": [
+                { "key": "url", "value": "https://example.com/image.jpg" },
+                { "key": "bucketName", "value": "profile-images" }
+              ]
             }
           }
         }
       ]
+    },
+    {
+      "name": "Scores",
+      "item": [
+        {
+          "name": "Get User Score",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/user?userId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "user"],
+              "query": [
+                { "key": "userId", "value": "1", "description": "사용자 ID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Score by Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/user-with-category?userId=1&categoryId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "user-with-category"],
+              "query": [
+                { "key": "userId", "value": "1", "description": "사용자 ID" },
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "description": "카테고리 ID"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Score by Season",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/user-with-season?userId=1&seasonId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "user-with-season"],
+              "query": [
+                { "key": "userId", "value": "1", "description": "사용자 ID" },
+                { "key": "seasonId", "value": "1", "description": "시즌 ID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Category Scores",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/category",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "category"]
+            }
+          }
+        },
+        {
+          "name": "Get Category Scores by Season",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/category-with-season?seasonId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "category-with-season"],
+              "query": [
+                { "key": "seasonId", "value": "1", "description": "시즌 ID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Season Scores",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/scores/season",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "scores", "season"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
     }
   ]
 }
