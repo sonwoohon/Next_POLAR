@@ -1,9 +1,7 @@
-import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
-
 // 리뷰 생성 요청 DTO
 export interface CreateReviewRequest {
   helpId: number;
-  writerId: number;
+  writerId: string; // UUID로 변경
   rating: number;
   text: string;
 }
@@ -17,4 +15,4 @@ export class CreateReviewDto {
     public rating: number,
     public text: string
   ) {}
-} 
+}

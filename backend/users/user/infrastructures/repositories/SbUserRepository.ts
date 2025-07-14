@@ -3,22 +3,9 @@ import { CommonUserEntity } from '@/backend/users/user/domains/entities/CommonUs
 import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 import { fromDbObject } from '@/backend/common/mappers/UserMapper';
 
-// User 인터페이스 정의 (UserWithdrawalUseCase용)
-interface User {
-  id: number;
-  phoneNumber: string;
-  password: string;
-  email: string;
-  age: number;
-  profileImgUrl: string | null;
-  address: string;
-  name: string;
-  createdAt: Date;
-}
-
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
-  async getUserById(id: number): Promise<CommonUserEntity | null> {
+  async getUserById(id: string): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 조회 시작 - ID: ${id}`);
 
     try {
@@ -55,7 +42,7 @@ export class SbUserRepository implements IUserRepository {
   }
 
   async updateUser(
-    id: number,
+    id: string,
     user: CommonUserEntity
   ): Promise<CommonUserEntity | null> {
     console.log(`[Repository] 사용자 업데이트 시작 - ID: ${id}`, user.toJSON());
@@ -70,6 +57,7 @@ export class SbUserRepository implements IUserRepository {
         profile_img_url: user.profileImgUrl,
         address: user.address,
         name: user.name,
+        nickname: user.nickname,
       };
 
       console.log(`[Repository] 업데이트 데이터 준비 완료:`, updateData);
@@ -109,7 +97,7 @@ export class SbUserRepository implements IUserRepository {
 
   // UserWithdrawalUseCase용 메서드들
 
-  async deleteById(id: number): Promise<void> {
+  async deleteById(id: string): Promise<void> {
     console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
 
     try {

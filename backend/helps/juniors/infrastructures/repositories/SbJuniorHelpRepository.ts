@@ -5,7 +5,7 @@ import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEnt
 
 export class SbJuniorHelpRepository implements IJuniorHelpRepository {
   async getJuniorAppliedHelpList(
-    juniorId: number
+    juniorId: string // UUID로 변경
   ): Promise<CommonHelpEntity[] | null> {
     try {
       const { data, error } = await supabase
@@ -32,7 +32,7 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
         ) =>
           new CommonHelpEntity(
             help.id,
-            help.senior_id,
+            help.senior_id, // UUID
             help.title,
             new Date(help.start_date),
             new Date(help.end_date),
@@ -51,7 +51,7 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
     }
   }
 
-  async applyHelp(juniorId: number, helpId: number): Promise<void | null> {
+  async applyHelp(juniorId: string, helpId: number): Promise<void | null> {
     try {
       const { error } = await supabase.from('help_applicants').insert({
         junior_id: juniorId,
@@ -73,7 +73,7 @@ export class SbJuniorHelpRepository implements IJuniorHelpRepository {
   }
 
   async cancelJuniorlHelp(
-    juniorId: number,
+    juniorId: string,
     helpId: number
   ): Promise<void | null> {
     try {

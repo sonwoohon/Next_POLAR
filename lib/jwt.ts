@@ -24,7 +24,10 @@ export function generateRefreshToken(payload: Record<string, unknown>) {
 
 export function verifyAccessToken(token: string): Record<string, unknown> {
   try {
-    return jwt.verify(token, ACCESS_SECRET as string) as Record<string, unknown>;
+    return jwt.verify(token, ACCESS_SECRET as string) as Record<
+      string,
+      unknown
+    >;
   } catch (error: unknown) {
     // JWT 관련 에러 타입 체크
     if (error instanceof jwt.JsonWebTokenError) {
@@ -47,7 +50,10 @@ export function verifyAccessToken(token: string): Record<string, unknown> {
 
 export function verifyRefreshToken(token: string): Record<string, unknown> {
   try {
-    return jwt.verify(token, REFRESH_SECRET as string) as Record<string, unknown>;
+    return jwt.verify(token, REFRESH_SECRET as string) as Record<
+      string,
+      unknown
+    >;
   } catch (error: unknown) {
     // JWT 관련 에러 타입 체크
     if (error instanceof jwt.JsonWebTokenError) {
@@ -69,7 +75,7 @@ export function verifyRefreshToken(token: string): Record<string, unknown> {
 }
 
 // 쿠키에서 사용자 ID를 추출하는 함수
-export function getUserIdFromCookie(request: NextRequest): number | null {
+export function getUserIdFromCookie(request: NextRequest): string | null {
   try {
     // 쿠키에서 access-token 가져오기
     const accessToken = request.cookies.get('access-token')?.value;
@@ -81,7 +87,7 @@ export function getUserIdFromCookie(request: NextRequest): number | null {
 
     // JWT 토큰 검증 및 페이로드 추출
     const payload = verifyAccessToken(accessToken);
-    const userId = payload.id as number;
+    const userId = payload.id as string;
 
     if (!userId) {
       console.log('[JWT] 토큰에서 userId를 찾을 수 없습니다.');

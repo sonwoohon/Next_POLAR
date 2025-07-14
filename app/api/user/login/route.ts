@@ -26,8 +26,7 @@ export async function POST(req: NextRequest) {
     cookieStore.set('refresh-token', result.refreshToken);
 
     return NextResponse.json({
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
+      nickname: result.nickname,
     });
   } catch (e: unknown) {
     const errorMessage =

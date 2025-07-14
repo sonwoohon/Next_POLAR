@@ -1,10 +1,10 @@
 // ===== 타입 정의 =====
 // contact_rooms 테이블의 타입
 export interface ContactRoomRow {
-  id: number;           // 채팅방 ID
-  senior_id: number;    // 시니어 ID
-  junior_id: number;    // 주니어 ID
-  created_at: string;   // 생성일
+  id: number; // 채팅방 ID
+  senior_id: string; // 시니어 ID (UUID)
+  junior_id: string; // 주니어 ID (UUID)
+  created_at: string; // 생성일
 }
 
 // ===== ChatRoom 매핑 클래스 =====
@@ -22,6 +22,6 @@ export class ChatRoomMapper {
 
   // ===== ContactRoomRow 배열을 ChatRoom 배열로 변환 =====
   static toChatRooms(rows: ContactRoomRow[]) {
-    return rows.map(row => this.toChatRoom(row));
+    return rows.map((row) => this.toChatRoom(row));
   }
-} 
+}
