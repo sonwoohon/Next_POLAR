@@ -1,13 +1,20 @@
 import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 
-export class CreateReviewDto extends ReviewEntity {
+// 리뷰 생성 요청 DTO
+export interface CreateReviewRequest {
+  helpId: number;
+  writerId: number;
+  rating: number;
+  text: string;
+}
+
+// 기존 DTO들...
+export class CreateReviewDto {
   constructor(
-    helpId: number,
-    writerId: number,
-    receiverId: number,
-    rating: number,
-    text: string
-  ) {
-    super(0, helpId, writerId, receiverId, rating, text, new Date());
-  }
+    public helpId: number,
+    public writerId: number,
+    public receiverId: number,
+    public rating: number,
+    public text: string
+  ) {}
 } 

@@ -6,16 +6,16 @@ const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ reviewId: string }> }
 ) {
   try {
-    const { id } = await params;
-    const reviewId = Number(id);
-    if (isNaN(reviewId)) {
+    const { reviewId } = await params;
+    const reviewIdNum = Number(reviewId);
+    if (isNaN(reviewIdNum)) {
       return NextResponse.json({ error: '잘못된 리뷰 id입니다.' }, { status: 400 });
     }
 
-    const review = await reviewUseCases.getReviewById(reviewId);
+    const review = await reviewUseCases.getReviewById(reviewIdNum);
     if (!review) {
       return NextResponse.json({ error: '리뷰를 찾을 수 없습니다.' }, { status: 404 });
     }
