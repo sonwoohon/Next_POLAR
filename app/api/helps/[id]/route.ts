@@ -8,6 +8,7 @@ const createHelpDetailUseCase = () => {
   return new GetHelpDetailUseCase(repository);
 };
 
+// 헬프 상세 조회 API (닉네임 기반 응답)
 export async function GET(
   request: NextRequest
 ): Promise<NextResponse<HelpDetailResponseDto | null>> {
