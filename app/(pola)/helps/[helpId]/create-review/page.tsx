@@ -14,7 +14,7 @@ interface UserProfile {
 export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
   const { helpId } = use(params);
   const [form, setForm] = useState({
-    rating: 5,
+    rating: 0,
     text: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -23,6 +23,7 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [receiver, setReceiver] = useState<UserProfile | null>(null);
+  const [hover, setHover] = useState(0);
 
   useEffect(() => {
     const fetchReceiver = async () => {
@@ -136,18 +137,22 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
       )}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.ratingSection}>
-          <label htmlFor="rating" className={styles.label}>평점</label>
-          <input 
-            id="rating"
-            name="rating" 
-            type="number" 
-            min={1} 
-            max={5} 
-            value={form.rating} 
-            onChange={handleChange} 
-            required 
-            className={styles.input} 
-          />
+          <label className={styles.label}>평점</label>
+          <div className={styles.ratingStars}>
+            {[1,2,3,4,5].map((star) => (
+              <span
+                key={star}
+                className={`${styles.star} ${(hover || form.rating) >= star ? styles.filled : ''}`}
+                onClick={() => setForm({ ...form, rating: star })}
+                onMouseEnter={() => setHover(star)}
+                onMouseLeave={() => setHover(0)}
+                style={{ cursor: 'pointer' }}
+                aria-label={`${star}점`}
+              >
+                {(hover || form.rating) >= star ? '★' : '☆'}
+              </span>
+            ))}
+          </div>
         </div>
         
         <div className={styles.textSection}>

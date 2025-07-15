@@ -219,21 +219,18 @@
 
 .ratingStars {
   display: flex;
-  gap: 8px;
-  justify-content: center;
+  gap: 4px;
 }
 
 .star {
-  font-size: 24px;
+  font-size: 2rem;
+  color: #e5e5e5;
+  transition: color 0.2s;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #ddd;
 }
 
-.star:hover,
-.star.active {
-  color: #ff9500;
-  transform: scale(1.1);
+.star.filled {
+  color: #FFD600;
 }
 
 /* Responsive Design */
