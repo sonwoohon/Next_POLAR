@@ -28,6 +28,7 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
   const { helpId } = use(params);
   const [help, setHelp] = useState<HelpDetail | null>(null);
   const [senior, setSenior] = useState<UserProfile | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -49,6 +50,13 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
         if (!seniorRes.ok) throw new Error('시니어 정보를 불러오지 못했습니다.');
         const seniorData = await seniorRes.json();
         setSenior(seniorData);
+        
+        // 헬프 이미지 리스트 조회
+        const imagesRes = await fetch(`/api/images/help/${helpId}`);
+        if (imagesRes.ok) {
+          const imagesData = await imagesRes.json();
+          setImages(imagesData.images || []);
+        }
       } catch (e) {
         setError(e instanceof Error ? e.message : '알 수 없는 오류');
       } finally {
@@ -86,18 +94,58 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
 
       {/* Image Carousel */}
       <div className={styles.imageSection}>
-        <div className={styles.imagePlaceholder}>
-          <div className={styles.mountainIcon}>🏔️</div>
-        </div>
-        <div className={styles.imageDots}>
-          {[0, 1, 2, 3, 4].map((index) => (
-            <div
-              key={index}
-              className={`${styles.dot} ${index === currentImageIndex ? styles.activeDot : ''}`}
-              onClick={() => setCurrentImageIndex(index)}
-            />
-          ))}
-        </div>
+        {images.length > 0 ? (
+          <>
+            <div className={styles.imageContainer}>
+              <Image
+                src={images[currentImageIndex]}
+                alt={`헬프 이미지 ${currentImageIndex + 1}`}
+                width={400}
+                height={300}
+                className={styles.helpImage}
+                onError={(e) => {
+                  // 이미지 로드 실패 시 빈칸으로 처리
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
+            {images.length > 1 && (
+              <>
+                {/* 이전 버튼 */}
+                <button 
+                  className={styles.slideButton} 
+                  onClick={() => setCurrentImageIndex(prev => prev > 0 ? prev - 1 : images.length - 1)}
+                  style={{ left: '10px' }}
+                >
+                  ‹
+                </button>
+                {/* 다음 버튼 */}
+                <button 
+                  className={styles.slideButton} 
+                  onClick={() => setCurrentImageIndex(prev => prev < images.length - 1 ? prev + 1 : 0)}
+                  style={{ right: '10px' }}
+                >
+                  ›
+                </button>
+                {/* 닷 인디케이터 */}
+                <div className={styles.imageDots}>
+                  {images.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`${styles.dot} ${index === currentImageIndex ? styles.activeDot : ''}`}
+                      onClick={() => setCurrentImageIndex(index)}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <div className={styles.imagePlaceholder}>
+            <div className={styles.mountainIcon}>🏔️</div>
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
@@ -124,7 +172,7 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
 
             {/* Help Period */}
             <div className={styles.helpPeriod}>
-              헬프시작일 ~ 끝나는일
+              {help && `${formatDate(help.startDate)} ~ ${formatDate(help.endDate)}`}
             </div>
 
             {/* Help Content */}

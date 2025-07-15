@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
 import styles from './CreateReview.module.css';
+import ProfileCard from '@/app/_components/ProfileCard';
 
 interface UserProfile {
   nickname: string;
@@ -149,6 +150,10 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
               </>
             )}
           </div>
+          
+          {/* ProfileCard 컴포넌트 사용 
+          {receiver && <ProfileCard />}
+          */}
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.ratingSection}>
               {helpTitle && (
