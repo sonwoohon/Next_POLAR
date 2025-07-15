@@ -243,7 +243,6 @@
 }
 
 .profileArea {
-  min-height: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -268,22 +267,6 @@
 .profileNickname {
   color: #888;
   font-size: 15px;
-}
-
-.skeletonImage {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #eee;
-  margin: 0 auto 10px auto;
-}
-
-.skeletonText {
-  width: 120px;
-  height: 24px;
-  background: #eee;
-  border-radius: 6px;
-  margin: 0 auto 8px auto;
 }
 
 .loadingContainer {
