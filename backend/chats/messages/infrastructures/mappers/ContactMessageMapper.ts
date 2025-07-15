@@ -6,6 +6,7 @@ export class ContactMessageMapper {
     id: number;
     sender_id: string;
     contact_room_id: number;
+    nickname: string;
     message: string;
     created_at: string;
   }): ContactMessageEntity {
@@ -13,18 +14,18 @@ export class ContactMessageMapper {
       row.id,
       row.sender_id, // UUID
       row.contact_room_id,
+      row.nickname, // nickname
       row.message,
       new Date(row.created_at)
     );
   }
 
   static toResponseDto(
-    entity: ContactMessageEntity,
-    senderNickname: string
+    entity: ContactMessageEntity
   ): ContactMessageResponseDto {
     return {
       id: entity.id!,
-      senderNickname: senderNickname,
+      nickname: entity.nickname,
       contactRoomId: entity.contactRoomId,
       message: entity.message,
       createdAt: entity.createdAt!.toISOString(),
