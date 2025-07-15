@@ -1,21 +1,56 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
 import styles from './CreateReview.module.css';
 
+interface UserProfile {
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
+}
+
 export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
   const { helpId } = use(params);
   const [form, setForm] = useState({
-    rating: 5,
+    rating: 0,
     text: '',
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [receiver, setReceiver] = useState<UserProfile | null>(null);
+  const [helpTitle, setHelpTitle] = useState<string>('');
+  const [hover, setHover] = useState(0);
+
+  useEffect(() => {
+    const fetchReceiver = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // 1. helpId로 헬프 상세 조회
+        const helpRes = await fetch(`/api/helps/${helpId}`);
+        if (!helpRes.ok) throw new Error('헬프 정보를 불러오지 못했습니다.');
+        const helpData = await helpRes.json();
+        setHelpTitle(helpData.title || '');
+        const seniorNickname = helpData.seniorNickname;
+        if (!seniorNickname) throw new Error('헬프 작성자 정보가 없습니다.');
+        // 2. seniorNickname으로 유저 정보 조회
+        const userRes = await fetch(`/api/users/${seniorNickname}`);
+        if (!userRes.ok) throw new Error('유저 정보를 불러오지 못했습니다.');
+        const userData = await userRes.json();
+        setReceiver(userData);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : '알 수 없는 오류');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReceiver();
+  }, [helpId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -91,72 +126,108 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>리뷰 작성</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.ratingSection}>
-          <label htmlFor="rating" className={styles.label}>평점</label>
-          <input 
-            id="rating"
-            name="rating" 
-            type="number" 
-            min={1} 
-            max={5} 
-            value={form.rating} 
-            onChange={handleChange} 
-            required 
-            className={styles.input} 
-          />
-        </div>
-        
-        <div className={styles.textSection}>
-          <label htmlFor="text" className={styles.label}>리뷰 내용</label>
-          <textarea 
-            id="text"
-            name="text" 
-            placeholder="리뷰 내용을 작성해주세요" 
-            value={form.text} 
-            onChange={handleChange} 
-            required 
-            className={styles.textarea} 
-          />
-        </div>
-
-        <div className={styles.imageSection}>
-          <label htmlFor="image" className={styles.label}>이미지 첨부 (선택사항)</label>
-          <input
-            id="image"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className={styles.fileInput}
-          />
-          {imagePreview && (
-            <div className={styles.imagePreview}>
-              <Image
-                src={imagePreview}
-                alt="미리보기"
-                width={200}
-                height={150}
-                className={styles.previewImage}
-              />
-              <button
-                type="button"
-                onClick={removeImage}
-                className={styles.removeImageButton}
-              >
-                이미지 제거
-              </button>
+      {loading ? (
+        <div className={styles.loadingContainer}>로딩 중...</div>
+      ) : error ? (
+        <div className={styles.errorContainer}>오류: {error}</div>
+      ) : (
+        <>
+          <h1 className={styles.title}>리뷰 작성</h1>
+          <div className={styles.profileArea}>
+            {receiver ? (
+              <>
+                <Image
+                  src={receiver.profileImgUrl || '/images/dummies/dummy_user.png'}
+                  alt={receiver.nickname}
+                  width={80}
+                  height={80}
+                  className={styles.profileImage}
+                />
+                <div className={styles.profileName}>
+                  {receiver.name} <span className={styles.profileNickname}>({receiver.nickname})</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.skeletonImage} />
+                <div className={styles.skeletonText} />
+              </>
+            )}
+          </div>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.ratingSection}>
+              {helpTitle && (
+                <div className={styles.label}>{helpTitle}</div>
+              )}
+              <label className={styles.label}>평점</label>
+              <div className={styles.ratingStars}>
+                {[1,2,3,4,5].map((star) => (
+                  <span
+                    key={star}
+                    className={`${styles.star} ${(hover || form.rating) >= star ? styles.filled : ''}`}
+                    onClick={() => setForm({ ...form, rating: star })}
+                    onMouseEnter={() => setHover(star)}
+                    onMouseLeave={() => setHover(0)}
+                    style={{ cursor: 'pointer' }}
+                    aria-label={`${star}점`}
+                  >
+                    {(hover || form.rating) >= star ? '★' : '☆'}
+                  </span>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+            
+            <div className={styles.textSection}>
+              <label htmlFor="text" className={styles.label}>리뷰 내용</label>
+              <textarea 
+                id="text"
+                name="text" 
+                placeholder="리뷰 내용을 작성해주세요" 
+                value={form.text} 
+                onChange={handleChange} 
+                required 
+                className={styles.textarea} 
+              />
+            </div>
 
-        <button type="submit" disabled={loading} className={styles.button}>
-          {loading ? '등록 중...' : '리뷰 등록'}
-        </button>
-      </form>
-      
-      {error && <p className={styles.error}>{error}</p>}
-      {success && <p className={styles.success}>리뷰가 성공적으로 등록되었습니다!</p>}
+            <div className={styles.imageSection}>
+              <label htmlFor="image" className={styles.label}>이미지 첨부 (선택사항)</label>
+              <input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className={styles.fileInput}
+              />
+              {imagePreview && (
+                <div className={styles.imagePreview}>
+                  <Image
+                    src={imagePreview}
+                    alt="미리보기"
+                    width={200}
+                    height={150}
+                    className={styles.previewImage}
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className={styles.removeImageButton}
+                  >
+                    이미지 제거
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? '등록 중...' : '리뷰 등록'}
+            </button>
+          </form>
+          
+          {error && <p className={styles.error}>{error}</p>}
+          {success && <p className={styles.success}>리뷰가 성공적으로 등록되었습니다!</p>}
+        </>
+      )}
     </div>
   );
 } 

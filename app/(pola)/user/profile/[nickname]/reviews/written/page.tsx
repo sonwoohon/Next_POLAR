@@ -13,20 +13,36 @@ interface Review {
   rating: number;
   text: string;
   reviewImgUrl?: string;
+  writerProfileImgUrl?: string;
   createdAt: string;
+}
+
+interface UserProfile {
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
 }
 
 export default function WrittenReviewsPage({ params }: { params: Promise<{ nickname: string }> }) {
   const { nickname } = use(params);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchUserAndReviews = async () => {
       try {
         setLoading(true);
         setError(null);
+        // 유저 정보 fetch
+        const userRes = await fetch(`/api/users/${nickname}`);
+        let userData = null;
+        if (userRes.ok) {
+          userData = await userRes.json();
+          setUser(userData);
+        }
+        // 리뷰 fetch
         const response = await fetch(`/api/reviews/written?nickname=${nickname}`);
         if (!response.ok) throw new Error('리뷰를 불러오는데 실패했습니다.');
         const data = await response.json();
@@ -41,7 +57,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
         setLoading(false);
       }
     };
-    fetchReviews();
+    fetchUserAndReviews();
   }, [nickname]);
 
   if (loading) {
@@ -53,17 +69,45 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>작성한 리뷰</h2>
-      <p className={styles.nickname}>사용자: {nickname}</p>
+      <h2 className={styles.title}>쓴리뷰</h2>
+      {user && (
+        <div className={styles.profileSummary}>
+          <Image
+            src={user.profileImgUrl || '/images/dummies/dummy_user.png'}
+            alt={user.nickname}
+            width={80}
+            height={80}
+            className={styles.profileImageLarge}
+          />
+          <div className={styles.profileInfoBox}>
+            <div className={styles.profileNickname}>{user.name} <span style={{color:'#888', fontSize:'15px'}}>({user.nickname})</span></div>
+          </div>
+        </div>
+      )}
+      <div className={styles.reviewCountRow}>
+        <span className={styles.reviewCount}>리뷰 {reviews.length}개</span>
+      </div>
       {reviews.length === 0 ? (
         <div className={styles.emptyState}>작성한 리뷰가 없습니다.</div>
       ) : (
         <ul className={styles.reviewsList}>
           {reviews.map((review) => (
             <li key={review.id} className={styles.reviewItem}>
-              <div className={styles.reviewHeader}>
-                <span className={styles.reviewId}>리뷰 #{review.id}</span>
-                <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
+              <div className={styles.reviewHeaderRow}>
+                <Image
+                  src={review.writerProfileImgUrl || '/images/dummies/dummy_user.png'}
+                  alt={review.writerNickname}
+                  width={40}
+                  height={40}
+                  className={styles.profileImageCircle}
+                />
+                <span className={styles.nicknameRow}>
+                  <span className={styles.nicknameBold}>{review.writerNickname}</span>
+                  <span className={styles.arrow}>&nbsp;&gt;</span>
+                </span>
+                <span className={styles.stars}>
+                  {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                </span>
               </div>
               {review.reviewImgUrl && (
                 <div className={styles.reviewImageContainer}>
@@ -76,16 +120,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
                   />
                 </div>
               )}
-              <p className={styles.reviewText}>{review.text}</p>
-              <div className={styles.reviewInfo}>
-                <small className={styles.reviewDate}>
-                  받은 사람: {review.receiverNickname}
-                </small>
-                <br />
-                <small className={styles.reviewDate}>
-                  작성일: {new Date(review.createdAt).toLocaleDateString()}
-                </small>
-              </div>
+              <div className={styles.reviewTextBox}>{review.text}</div>
             </li>
           ))}
         </ul>
