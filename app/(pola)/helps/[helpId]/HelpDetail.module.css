@@ -1,0 +1,325 @@
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #666;
+  font-size: 16px;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc3545;
+  font-size: 15px;
+}
+
+/* Top Bar */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  width: 100%;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #007bff, #9c27b0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.topButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.closeButton,
+.heartButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover,
+.heartButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Image Section */
+.imageSection {
+  position: relative;
+  background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.imagePlaceholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.mountainIcon {
+  font-size: 48px;
+  opacity: 0.7;
+}
+
+.imageDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 123, 255, 0.3);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.activeDot {
+  background: #007bff;
+}
+
+/* Main Content */
+.mainContent {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  margin-top: -20px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.helpTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 20px;
+  font-family: var(--font-gangwon);
+}
+
+/* Profile Section */
+.profileSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.profileImageContainer {
+  position: relative;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobBadge {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.jobIcon {
+  font-size: 12px;
+}
+
+.jobText {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.star {
+  color: #ffc107;
+  font-size: 16px;
+}
+
+.rating {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  font-family: var(--font-gangwon);
+}
+
+.jrBadge {
+  background: #007bff;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bio {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+  font-family: var(--font-pretendard);
+}
+
+.profileHeartButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.profileHeartButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Help Period */
+.helpPeriod {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+  font-family: var(--font-pretendard);
+}
+
+/* Help Content */
+.helpContent {
+  font-size: 15px;
+  color: #999;
+  line-height: 1.6;
+  font-family: var(--font-pretendard);
+}
+
+/* Bottom Button */
+.bottomButtonContainer {
+  padding: 20px;
+  background: white;
+  width: 100%;
+}
+
+.applyButton {
+  width: 100%;
+  background: linear-gradient(135deg, #007bff, #00bcd4);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s;
+  font-family: var(--font-pretendard);
+}
+
+.applyButton:hover {
+  transform: translateY(-2px);
+}
+
+.plusIcon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Profile Section - Create Review Style */
+.profileArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e5e5;
+  background: #fff;
+}
+
+.profileName {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #222;
+  font-family: var(--font-gangwon);
+}
+
+.profileNickname {
+  color: #888;
+  font-size: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .mainContent {
+    padding: 20px 16px;
+  }
+  
+  .helpTitle {
+    font-size: 18px;
+  }
+  
+  .name {
+    font-size: 16px;
+  }
+  
+  .applyButton {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+} 
