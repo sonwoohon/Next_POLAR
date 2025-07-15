@@ -70,7 +70,7 @@ export async function getNicknameByUuid(uuid: string): Promise<string | null> {
     const { data, error } = await supabase
       .from('users')
       .select('nickname')
-      .eq('id', uuid)
+      .eq('id', uuid.trim())
       .single();
 
     if (error) {

@@ -25,7 +25,8 @@ const createCancelJuniorHelpUseCase = () => {
 
 // 주니어 지원 헬프 리스트 조회 (닉네임 기반)
 export async function GET(request: NextRequest) {
-  const nickname = getNicknameFromCookie(request);
+  const userData = getNicknameFromCookie(request);
+  const { nickname, age } = userData || {};
 
   if (!nickname) {
     return NextResponse.json(
@@ -50,7 +51,8 @@ export async function GET(request: NextRequest) {
 
 // 헬프 지원(신청) API (닉네임 기반)
 export async function POST(request: NextRequest) {
-  const nickname = getNicknameFromCookie(request);
+  const userData = getNicknameFromCookie(request);
+  const { nickname, age } = userData || {};
 
   if (!nickname) {
     return NextResponse.json(
@@ -83,7 +85,8 @@ export async function POST(request: NextRequest) {
 
 // 헬프 지원 취소 API (닉네임 기반)
 export async function DELETE(request: NextRequest) {
-  const nickname = getNicknameFromCookie(request);
+  const userData = getNicknameFromCookie(request);
+  const { nickname, age } = userData || {};
 
   if (!nickname) {
     return NextResponse.json(
