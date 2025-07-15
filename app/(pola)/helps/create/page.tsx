@@ -7,24 +7,14 @@ import Step1HelpType from './components/Step1HelpType';
 import Step2TimeSelection from './components/Step2TimeSelection';
 import Step3HelpDetails from './components/Step3HelpDetails';
 import { useCreateHelp, useCreateHelpImages } from '@/lib/hooks/useCreateHelp';
+import { HelpFunnelData } from '@/lib/models/createHelpDto';
 
 type Step = 1 | 2 | 3;
-
-interface HelpFormData {
-  type: string | null;
-  timeType: string | null;
-  date: string;
-  startTime: string;
-  endTime: string;
-  title: string;
-  content: string;
-  imageFiles: File[];
-}
 
 const CreateHelpPage: React.FC = () => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>(1);
-  const [formData, setFormData] = useState<HelpFormData>({
+  const [formData, setFormData] = useState<HelpFunnelData>({
     type: null,
     timeType: null,
     date: new Date().toISOString().split('T')[0],
@@ -139,9 +129,10 @@ const CreateHelpPage: React.FC = () => {
       // 3. 이미지가 있다면 업로드
       if (formData.imageFiles.length > 0) {
         const uploadPromises = formData.imageFiles.map(async (file) => {
-          console.log('file', file);
+          const uploadFormData = new FormData();
+          uploadFormData.append('file', file);
           const uploadResult = await uploadImageMutation({
-            imageFiles: [file],
+            formData: uploadFormData,
           });
           const responseData = uploadResult as { url: string };
           if (responseData?.url) {

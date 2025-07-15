@@ -7,8 +7,19 @@ export interface ApiCreateHelp {
   imageFiles: string[];
 }
 
-export interface ApiCreateHelpImagesRequest {
+export interface HelpFunnelData {
+  type: string | null;
+  timeType: string | null;
+  date: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  content: string;
   imageFiles: File[];
+}
+
+export interface ApiCreateHelpImagesRequest {
+  formData: FormData;
 }
 
 export interface ApiCreateHelpResponse {
