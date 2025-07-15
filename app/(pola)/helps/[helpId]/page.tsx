@@ -32,6 +32,13 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // 임시: 사용자 나이 설정 (실제로는 쿠키에서 가져올 예정)
+  const userAge = 28; // 25세 (주니어) - 실제로는 getAgeFromCookie() 등으로 교체
+  
+  // 주니어/시니어 판별 (25세 이하: 주니어, 26세 이상: 시니어)
+  const isJunior = userAge <= 25;
+  const isSenior = userAge >= 26;
 
   useEffect(() => {
     const fetchHelpDetail = async () => {
@@ -91,6 +98,8 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
           <button className={styles.heartButton}>♡</button>
         </div>
       </div>
+
+
 
       {/* Image Carousel */}
       <div className={styles.imageSection}>
@@ -184,10 +193,17 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
 
       {/* Bottom Action Button */}
       <div className={styles.bottomButtonContainer}>
-        <button className={styles.applyButton}>
-          <span className={styles.plusIcon}>+</span>
-          헬프 지원하기
-        </button>
+        {isJunior ? (
+          <button className={styles.applyButton}>
+            <span className={styles.plusIcon}>+</span>
+            헬프 지원하기
+          </button>
+        ) : isSenior ? (
+          <button className={styles.applyButton}>
+            <span className={styles.checkIcon}>👥</span>
+            지원자 확인하기
+          </button>
+        ) : null}
       </div>
     </div>
   );

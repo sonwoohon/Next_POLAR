@@ -331,6 +331,13 @@
   font-weight: 700;
 }
 
+.checkIcon {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+
 /* Profile Section - Create Review Style */
 .profileArea {
   display: flex;
