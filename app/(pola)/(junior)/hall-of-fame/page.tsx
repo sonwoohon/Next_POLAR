@@ -78,6 +78,11 @@ export default function JuniorHallOffamePage () {
     <div className={styles.rankingWrap}>
       <h1 className={`${styles.neon} ${styles.hallTitle} ${styles.neonFlash}`}>명예의 <span>전당</span></h1>
       <div className={styles.rankingTopWrap}>
+        <div className={styles.verticalLighting}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
         <ul>
           {ranking.slice(0, 3).map((item, idx) => (
             <li key={nicknameMap[item.userId] || item.userId}>
@@ -94,15 +99,6 @@ export default function JuniorHallOffamePage () {
             </li>
           ))}
         </ul>
-        <div className={styles.curtain}>
-          <div className={styles.curtainItemLeft}>
-            <img src="/images/ranking/curtain_left.png" alt="커튼 왼쪽" />
-          </div>
-          <div className={styles.curtainItemright}>
-            <img src="/images/ranking/curtain_right.png" alt="커튼 오른쪽" />
-          </div>
-        </div>
-        <div className={styles.circleLights}></div>
       </div>
       <div className={styles.rankingBtmWrap}>
         {loading || error ? (
@@ -132,6 +128,15 @@ export default function JuniorHallOffamePage () {
           </ul>
         )}
       </div>
+      <div className={styles.curtain}>
+        <div className={styles.curtainItemLeft}>
+          <img src="/images/ranking/curtain_left.png" alt="커튼 왼쪽" />
+        </div>
+        <div className={styles.curtainItemright}>
+          <img src="/images/ranking/curtain_right.png" alt="커튼 오른쪽" />
+        </div>
+      </div>
+        <div className={styles.circleLights}></div>
     </div>
   );
 } 
