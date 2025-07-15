@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './StarRating.module.css';
 
 interface StarRatingProps {
   value: number;
@@ -10,16 +11,16 @@ interface StarRatingProps {
 
 const StarRating = ({ value, max = 5, onChange, readOnly = false, size = 24 }: StarRatingProps) => {
   return (
-    <div style={{ display: 'flex', gap: 2 }}>
+    <div className={styles.starRating}>
       {Array.from({ length: max }).map((_, i) => (
         <span
           key={i}
-          style={{
-            fontSize: size,
-            color: i < value ? '#FFD600' : '#E0E0E0',
-            cursor: readOnly ? 'default' : 'pointer',
-            userSelect: 'none',
-          }}
+          className={
+            i < value
+              ? styles.starFilled
+              : styles.starEmpty
+          }
+          style={{ fontSize: size }}
           onClick={() => !readOnly && onChange && onChange(i + 1)}
         >
           {i < value ? '★' : '☆'}

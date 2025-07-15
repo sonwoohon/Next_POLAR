@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from '../UserReviews.module.css';
+import styles from './ReviewCard.module.css';
 
 interface Review {
   id: number;

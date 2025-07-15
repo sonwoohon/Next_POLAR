@@ -1,0 +1,31 @@
+.imageUploader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  display: none;
+}
+
+.uploadButton {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.previewList {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.previewImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #eee;
+} 

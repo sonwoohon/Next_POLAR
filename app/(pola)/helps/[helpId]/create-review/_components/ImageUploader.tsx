@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import styles from './ImageUploader.module.css';
 
 interface ImageUploaderProps {
   value?: File[];
@@ -16,25 +17,25 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ value, onChange, multiple
   };
 
   return (
-    <div>
+    <div className={styles.imageUploader}>
       <input
         ref={inputRef}
         type="file"
         accept={accept}
         multiple={multiple}
-        style={{ display: 'none' }}
+        className={styles.input}
         onChange={handleChange}
       />
-      <button type="button" onClick={() => inputRef.current?.click()} style={{ padding: '8px 12px', borderRadius: 4, border: '1px solid #ccc', background: '#fafafa', cursor: 'pointer' }}>
+      <button type="button" onClick={() => inputRef.current?.click()} className={styles.uploadButton}>
         이미지 업로드
       </button>
-      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+      <div className={styles.previewList}>
         {value && value.length > 0 && value.map((file, idx) => (
           <img
             key={idx}
             src={URL.createObjectURL(file)}
             alt={`preview-${idx}`}
-            style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 4, border: '1px solid #eee' }}
+            className={styles.previewImage}
           />
         ))}
       </div>
