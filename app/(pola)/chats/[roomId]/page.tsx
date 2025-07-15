@@ -3,127 +3,79 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ChatRoom from './ChatRoom';
+import styles from './page.module.css';
+import Image from 'next/image';
+// import ChatRoom from './ChatRoom';
 
 interface PageProps {
   params: Promise<{ roomId: string }>;
 }
 
 export default function ChatRoomPage({ params }: PageProps) {
-  const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loginUserNickname] = useState<string | null>('jelly5915');
   const [roomId, setRoomId] = useState<string | null>(null);
   const router = useRouter();
+
+  // 임시 데이터(시니어명, 헬프 정보, 태그 등)
+  const seniorName = '무슨무슨 시니어';
+  const helpTitle =
+    '어떤 어떤 것을 도와주시는 요구사항을 만족할 수 있도록 어떻게 어떻게 부탁드리면 안될까요?';
+  const helpTags = ['방청소', '헬쓰기'];
+  const helpImgUrl = '/_assets/default.jpg'; // 실제 이미지 경로로 교체
 
   useEffect(() => {
     const initializePage = async () => {
       try {
-        // params에서 roomId 가져오기
-        const { roomId: resolvedRoomId } = await params;
-        setRoomId(resolvedRoomId);
-
-        // 로그인 상태 확인 및 사용자 정보 가져오기
-        const response = await fetch('/api/users');
-        if (response.ok) {
-          const userData = await response.json();
-          setCurrentUserNickname(userData.nickname);
-        } else {
-          console.log('로그인되지 않음');
-          router.push('/login');
-          return;
-        }
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error('페이지 초기화 오류:', error);
-        setError('페이지 로드 중 오류가 발생했습니다.');
-        setIsLoading(false);
+        const { roomId } = await params;
+        // 실제 환경에서는 여기서 loginUserNickname도 fetch해서 set
+        setRoomId(roomId);
+      } catch {
+        // 에러 무시
       }
     };
-
     initializePage();
-  }, [params, router]);
-
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}
-      >
-        <p>채팅방을 불러오는 중...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}
-      >
-        <p style={{ color: 'red', marginBottom: '20px' }}>오류: {error}</p>
-        <button
-          onClick={() => router.push('/test-chat')}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          채팅 목록으로 돌아가기
-        </button>
-      </div>
-    );
-  }
-
-  if (!currentUserNickname || !roomId) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}
-      >
-        <p>사용자 정보를 불러올 수 없습니다.</p>
-        <button
-          onClick={() => router.push('/login')}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            marginTop: '10px',
-          }}
-        >
-          로그인 페이지로
-        </button>
-      </div>
-    );
-  }
+  }, [params]);
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <ChatRoom roomId={roomId} currentUserNickname={currentUserNickname} />
+    <div className={styles.container}>
+      {/* 헤더 */}
+      <div className={styles.header}>
+        <span className={styles.logo}>POLAR</span>
+        <span className={styles.spacer}></span>
+        <span className={styles.bell}>🔔</span>
+      </div>
+      {/* 시니어명 */}
+      <div className={styles.topBar}>
+        <span className={styles.back} onClick={() => router.back()}>
+          {'<'}
+        </span>
+        <span className={styles.seniorName}>{seniorName}</span>
+      </div>
+      {/* 헬프 정보 */}
+      <div className={styles.helpInfo}>
+        <Image
+          className={styles.helpImg}
+          src={helpImgUrl}
+          alt='help'
+          width={48}
+          height={48}
+        />
+        <div className={styles.helpTextWrap}>
+          <div className={styles.helpTitle}>{helpTitle}</div>
+          <div className={styles.tags}>
+            {helpTags.map((tag) => (
+              <span className={styles.tag} key={tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+        <span className={styles.prevHelp}>이전 help 보기 {'>'}</span>
+      </div>
+      {/* 채팅 내역/입력창은 ChatRoom에서 분리 구현 */}
+      {roomId && loginUserNickname && (
+        <ChatRoom roomId={roomId} loginUserNickname={loginUserNickname} />
+      )}
     </div>
   );
 }
