@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import styles from './HelpDetail.module.css';
 
 interface UserProfile {
@@ -33,18 +34,34 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
-  // 임시: 사용자 나이 설정 (실제로는 쿠키에서 가져올 예정)
-  const userAge = 28; // 25세 (주니어) - 실제로는 getAgeFromCookie() 등으로 교체
+  // 쿠키에서 사용자 정보 가져오기
+  const [userInfo, setUserInfo] = useState<{ nickname: string; age: number } | null>(null);
   
   // 주니어/시니어 판별 (25세 이하: 주니어, 26세 이상: 시니어)
-  const isJunior = userAge <= 25;
-  const isSenior = userAge >= 26;
+  const isJunior = userInfo?.age ? userInfo.age <= 65 : false;
+  const isSenior = userInfo?.age ? userInfo.age >= 66 : false;
 
   useEffect(() => {
     const fetchHelpDetail = async () => {
       try {
         setLoading(true);
         setError(null);
+        
+        // 쿠키에서 사용자 정보 가져오기 (클라이언트 사이드)
+        const cookies = document.cookie.split(';');
+        const accessToken = cookies.find(cookie => cookie.trim().startsWith('access-token='));
+        
+        if (accessToken) {
+          try {
+            const token = accessToken.split('=')[1];
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload.nickname && payload.age) {
+              setUserInfo({ nickname: payload.nickname, age: payload.age });
+            }
+          } catch (error) {
+            console.error('토큰 파싱 오류:', error);
+          }
+        }
         
         // 헬프 상세 정보 조회
         const helpRes = await fetch(`/api/helps/${helpId}`);

@@ -10,8 +10,12 @@ import { NextRequest, NextResponse } from 'next/server';
 // 시니어 헬프 생성 API (닉네임 기반)
 export async function POST(req: NextRequest) {
   const userData = getNicknameFromCookie(req);
+
   // const { nickname, age } = userData || {};
   const nickname = 'grape9133';
+
+  const body = await req.json();
+
 
   if (!nickname) {
     return NextResponse.json(

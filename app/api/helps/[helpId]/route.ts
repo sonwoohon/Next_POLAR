@@ -8,16 +8,17 @@ const createHelpDetailUseCase = () => {
   return new GetHelpDetailUseCase(repository);
 };
 
-// 헬프 상세 조회 API (닉네임 기반 응답)
+// 헬프 상세 조회 API (helpId 기반 응답)
 export async function GET(
-  request: NextRequest
+  request: NextRequest,
+  { params }: { params: { helpId: string } }
 ): Promise<NextResponse<HelpDetailResponseDto | null>> {
-  console.log('[API] GET /api/helps/:id 호출됨');
-  const id: number = parseInt(request.nextUrl.pathname.split('/').pop() || '0');
+  console.log('[API] GET /api/helps/[helpId] 호출됨');
+  const helpId: number = parseInt(params.helpId);
 
   try {
     const useCase = createHelpDetailUseCase();
-    const helpDetail: HelpDetailResponseDto | null = await useCase.execute(id);
+    const helpDetail: HelpDetailResponseDto | null = await useCase.execute(helpId);
 
     if (helpDetail) {
       console.log('[API] 헬프 상세 조회 성공:', helpDetail);
@@ -29,4 +30,4 @@ export async function GET(
     console.error('[API] 헬프 상세 조회 오류:', error);
     return NextResponse.json(null, { status: 500 });
   }
-}
+} 
