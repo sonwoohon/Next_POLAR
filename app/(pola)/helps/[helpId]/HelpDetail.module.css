@@ -1,3 +1,13 @@
+.helpDetailContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: calc(100% - 3rem);
+  height: calc(100% - 6rem);
+  padding: 3rem 1.5rem;
+}
+
 .loadingContainer {
   display: flex;
   justify-content: center;
@@ -22,6 +32,7 @@
   padding: 16px 20px;
   background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
   width: 100%;
+  border-radius: 12px;
 }
 
 .logo {
@@ -61,6 +72,7 @@
   background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
   padding: 40px 20px;
   width: 100%;
+  border-radius: 12px;
 }
 
 .imagePlaceholder {
@@ -84,12 +96,20 @@
   align-items: center;
   margin-bottom: 20px;
   position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .helpImage {
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: block;
 }
 
 .slideButton {
@@ -137,8 +157,7 @@
 /* Main Content */
 .mainContent {
   background: white;
-  border-radius: 20px 20px 0 0;
-  margin-top: -20px;
+  border-radius: 12px;
   padding: 24px 20px;
   width: 100%;
 }
@@ -281,9 +300,8 @@
 
 /* Bottom Button */
 .bottomButtonContainer {
-  padding: 20px;
-  background: white;
   width: 100%;
+  padding: 20px 0;
 }
 
 .applyButton {

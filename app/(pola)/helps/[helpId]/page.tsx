@@ -82,7 +82,7 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
   }
 
   return (
-    <>
+    <div className={styles.helpDetailContainer}>
       {/* Top Bar */}
       <div className={styles.topBar}>
         <div className={styles.logo}>POLAR</div>
@@ -100,8 +100,7 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
               <Image
                 src={images[currentImageIndex]}
                 alt={`헬프 이미지 ${currentImageIndex + 1}`}
-                width={400}
-                height={300}
+                fill
                 className={styles.helpImage}
                 onError={(e) => {
                   // 이미지 로드 실패 시 빈칸으로 처리
@@ -190,6 +189,6 @@ export default function HelpDetailPage({ params }: { params: Promise<{ helpId: s
           헬프 지원하기
         </button>
       </div>
-    </>
+    </div>
   );
 }
