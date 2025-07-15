@@ -1,6 +1,7 @@
 import styles from './ProfileCard.module.css';
-import defaultImg from '@/public/dongHyun.png';
+import defaultImg from '@/public/images/dongHyun.jpg';
 import Image from 'next/image';
+
 
 export default function ProfileCard() {
   return (
