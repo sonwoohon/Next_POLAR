@@ -15,7 +15,7 @@ export interface HelpFunnelData {
   endTime: string;
   title: string;
   content: string;
-  imageFiles: File[];
+  imageFiles: string[];
 }
 
 export interface ApiCreateHelpImagesRequest {
