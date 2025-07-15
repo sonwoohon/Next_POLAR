@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
 import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css';
+import ProfileSummary from '../_components/ProfileSummary';
+import ReviewCard from '../_components/ReviewCard';
 
 interface Review {
   id: number;
@@ -70,20 +72,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>쓴리뷰</h2>
-      {user && (
-        <div className={styles.profileSummary}>
-          <Image
-            src={user.profileImgUrl || '/images/dummies/dummy_user.png'}
-            alt={user.nickname}
-            width={80}
-            height={80}
-            className={styles.profileImageLarge}
-          />
-          <div className={styles.profileInfoBox}>
-            <div className={styles.profileNickname}>{user.name} <span style={{color:'#888', fontSize:'15px'}}>({user.nickname})</span></div>
-          </div>
-        </div>
-      )}
+      {user && <ProfileSummary user={user} />}
       <div className={styles.reviewCountRow}>
         <span className={styles.reviewCount}>리뷰 {reviews.length}개</span>
       </div>
@@ -92,36 +81,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
       ) : (
         <ul className={styles.reviewsList}>
           {reviews.map((review) => (
-            <li key={review.id} className={styles.reviewItem}>
-              <div className={styles.reviewHeaderRow}>
-                <Image
-                  src={review.writerProfileImgUrl || '/images/dummies/dummy_user.png'}
-                  alt={review.writerNickname}
-                  width={40}
-                  height={40}
-                  className={styles.profileImageCircle}
-                />
-                <span className={styles.nicknameRow}>
-                  <span className={styles.nicknameBold}>{review.writerNickname}</span>
-                  <span className={styles.arrow}>&nbsp;&gt;</span>
-                </span>
-                <span className={styles.stars}>
-                  {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
-                </span>
-              </div>
-              {review.reviewImgUrl && (
-                <div className={styles.reviewImageContainer}>
-                  <Image
-                    src={review.reviewImgUrl}
-                    alt={`Review image for review ${review.id}`}
-                    width={100}
-                    height={100}
-                    className={styles.reviewImage}
-                  />
-                </div>
-              )}
-              <div className={styles.reviewTextBox}>{review.text}</div>
-            </li>
+            <ReviewCard key={review.id} review={review} />
           ))}
         </ul>
       )}
