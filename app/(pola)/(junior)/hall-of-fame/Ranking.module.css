@@ -480,8 +480,7 @@
   position: fixed;
   height: 100vh;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   z-index: 100;
   overflow: hidden;
 }
@@ -598,6 +597,7 @@
   .rankingWrap > * {transform: scale(0.8);}
   .rankingTopWrap ul li {height: 90%;}
   .rankingBtmWrap{margin: -5rem -3rem 0rem;}
+  .curtain{transform: scale(1);}
 }
 
 .rankingTopScore {
