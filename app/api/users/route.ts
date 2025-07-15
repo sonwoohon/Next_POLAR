@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserIdFromCookie } from '@/lib/jwt';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import { CommonUserUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
-import {
-  UserProfileResponseDto,
-} from '@/backend/users/user/applications/dtos/UserDtos';
+import { UserProfileResponseDto } from '@/backend/users/user/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';
 import { ValidationError } from '@/backend/common/errors/ValidationError';
 
@@ -22,7 +20,7 @@ export async function GET(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const userId = getNicknameFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
@@ -82,7 +80,7 @@ export async function PUT(
     console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const userId = getNicknameFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
@@ -137,7 +135,7 @@ export async function DELETE(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
+    const userId = getNicknameFromCookie(request);
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
 
     if (!userId) {
