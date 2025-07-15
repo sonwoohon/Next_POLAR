@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './Ranking.module.css';
 
 interface Score {
@@ -14,13 +14,21 @@ interface UserRanking {
   userId: string;
   totalScore: number;
   profileImage?: string; // 유저 프로필 이미지 (선택적)
+  category?: string; // 카테고리 추가
 }
+
+// 임시 카테고리 데이터
+const categories = [
+  '요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
+  '수리왕', '청소왕', '이사왕', '노인케어왕', '정원왕'
+];
 
 export default function JuniorHallOffamePage () {
   const [ranking, setRanking] = useState<UserRanking[]>([]);
   const [nicknameMap, setNicknameMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const neonRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const fetchScoresAndNicknames = async () => {
@@ -39,7 +47,11 @@ export default function JuniorHallOffamePage () {
         });
         // 배열로 변환 후 내림차순 정렬
         const rankingArr: UserRanking[] = Object.entries(userScoreMap)
-          .map(([userId, totalScore]) => ({ userId, totalScore }))
+          .map(([userId, totalScore]) => ({ 
+            userId, 
+            totalScore,
+            category: categories[Math.floor(Math.random() * categories.length)] // 임시로 랜덤 카테고리 할당
+          }))
           .sort((a, b) => b.totalScore - a.totalScore)
           .slice(0, 10); // 상위 10명
         setRanking(rankingArr);
@@ -64,6 +76,7 @@ export default function JuniorHallOffamePage () {
 
   return (
     <div className={styles.rankingWrap}>
+      <h1 className={`${styles.neon} ${styles.hallTitle} ${styles.neonFlash}`}>명예의 <span>전당</span></h1>
       <div className={styles.rankingTopWrap}>
         <ul>
           {ranking.slice(0, 3).map((item, idx) => (
@@ -74,6 +87,10 @@ export default function JuniorHallOffamePage () {
               />
               <span className={styles.rankingTopName}>{nicknameMap[item.userId] || item.userId}</span>
               <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}점</span>
+              <div className={`${styles.categoryLabel} ${styles[`category-${item.category}`]}`} style={{ marginTop: '.5rem' }}>
+                <span>{item.category}</span>
+                {/* ! 실제 데이터로 교체할 때는 item.category 부분만 실제 카테고리 데이터로 바꾸면 됩니다. */}
+              </div>
             </li>
           ))}
         </ul>
@@ -103,7 +120,13 @@ export default function JuniorHallOffamePage () {
                   <span className={styles.rankingBtmRank}>{idx + 4}</span>
                 </div>
                 <span className={styles.rankingBtmName}>{nicknameMap[item.userId] || item.userId}</span>
-                <span className={styles.rankingBtmAmount}>{item.totalScore.toLocaleString()}</span>
+                <div className={styles.rankingBtmAmount}>
+                  <div className={`${styles.categoryLabel} ${styles[`category-${item.category}`]}`}>
+                    <span>{item.category}</span>
+                    {/* ! 실제 데이터로 교체할 때는 item.category 부분만 실제 카테고리 데이터로 바꾸면 됩니다. */}
+                  </div>
+                  <span>{item.totalScore.toLocaleString()}</span>
+                </div>
               </li>
             ))}
           </ul>
