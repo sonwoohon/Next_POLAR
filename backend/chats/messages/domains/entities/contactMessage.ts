@@ -4,6 +4,7 @@ export class ContactMessageEntity {
     public readonly id: number | undefined, // 메시지 고유 ID
     public senderId: string, // uuid 변경
     public contactRoomId: number,
+    public nickname: string, // 닉네임
     public message: string, // 메시지 내용
     public readonly createdAt: Date | undefined // 생성일시
   ) {}
@@ -13,6 +14,7 @@ export class ContactMessageEntity {
       id: this.id,
       senderId: this.senderId,
       contactRoomId: this.contactRoomId,
+      nickname: this.nickname,
       message: this.message,
       createdAt: this.createdAt,
     };
