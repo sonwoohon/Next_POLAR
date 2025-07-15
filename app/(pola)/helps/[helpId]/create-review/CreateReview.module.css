@@ -233,6 +233,75 @@
   color: #FFD600;
 }
 
+.helpTitle, .label.helpTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: var(--font-pretendard);
+}
+
+.profileArea {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e5e5;
+  background: #fff;
+}
+
+.profileName {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #222;
+  font-family: var(--font-gangwon);
+}
+
+.profileNickname {
+  color: #888;
+  font-size: 15px;
+}
+
+.skeletonImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #eee;
+  margin: 0 auto 10px auto;
+}
+
+.skeletonText {
+  width: 120px;
+  height: 24px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto 8px auto;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #666;
+  font-size: 16px;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc3545;
+  font-size: 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 480px) {
   .container {

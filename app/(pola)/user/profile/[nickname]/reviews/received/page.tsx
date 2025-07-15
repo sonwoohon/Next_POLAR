@@ -69,7 +69,7 @@ export default function ReceivedReviewsPage({ params }: { params: Promise<{ nick
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>리뷰</h2>
+      <h2 className={styles.title}>받은리뷰</h2>
       {user && (
         <div className={styles.profileSummary}>
           <Image
