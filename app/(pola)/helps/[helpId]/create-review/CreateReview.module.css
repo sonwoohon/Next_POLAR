@@ -79,7 +79,7 @@
 }
 
 .textarea {
-  min-height: 100px;
+  min-height: 180px;
   resize: vertical;
   line-height: 1.6;
 }
