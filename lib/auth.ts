@@ -36,7 +36,7 @@ export function getAuthenticatedUser(request: NextRequest): AuthResult {
   } catch (e: unknown) {
     // JWT 관련 에러 타입 체크
     if (e instanceof jwt.JsonWebTokenError) {
-      return { error: '유효하지 않은 토큰입니다.' };
+    return { error: '유효하지 않은 토큰입니다.' };
     }
 
     if (e instanceof jwt.TokenExpiredError) {
