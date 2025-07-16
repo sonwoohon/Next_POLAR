@@ -18,14 +18,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { helpId, rating, text, reviewImgUrl } = body;
+    // JSON이 아니라 formData로 받기
+    const formData = await request.formData();
+    const helpId = formData.get('helpId');
+    const rating = formData.get('rating');
+    const text = formData.get('text');
+    const reviewImgFile = formData.get('reviewImgFile'); // File 객체
 
-    if (helpId === undefined || rating === undefined || text === undefined) {
+    if (helpId === null || rating === null || text === null) {
       return NextResponse.json(
         { error: '필수 값이 누락되었습니다.' },
         { status: 400 }
       );
+    }
+
+    // 이미지 파일 업로드 처리 (예: Supabase, S3 등)
+    let reviewImgUrl: string | undefined = undefined;
+    if (reviewImgFile && typeof reviewImgFile === 'object') {
+      // 예시: Supabase 업로드 함수 사용
+      // reviewImgUrl = await uploadImageToSupabase(reviewImgFile);
     }
 
     // usecase를 통해 리뷰 생성 (receiverId는 자동 계산)
@@ -34,7 +45,7 @@ export async function POST(request: NextRequest) {
       writerNickname: writerNickname,
       rating: Number(rating),
       text: String(text),
-      reviewImgUrl: reviewImgUrl || undefined,
+      reviewImgUrl, // 업로드된 이미지 URL
     });
 
     return NextResponse.json({ success: true, review }, { status: 201 });

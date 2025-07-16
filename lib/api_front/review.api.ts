@@ -1,6 +1,7 @@
 import { API_ENDPOINTS } from '../constants/api';
 import apiClient from '../http.api';
 import { Review, ReceivedReviewsResponse, WrittenReviewsResponse } from '../models/review.model';
+import { CreateReviewRequest, CreateReviewResponse } from '../models/review.model';
 
 // 받은 리뷰 목록 조회
 export const getReceivedReviews = async (nickname: string): Promise<ReceivedReviewsResponse> => {
@@ -14,6 +15,28 @@ export const getReceivedReviews = async (nickname: string): Promise<ReceivedRevi
 export const getWrittenReviews = async (nickname: string): Promise<WrittenReviewsResponse> => {
   const response = await apiClient.get<WrittenReviewsResponse>(
     `${API_ENDPOINTS.REVIEWS_WRITTEN}?nickname=${nickname}`
+  );
+  return response.data;
+};
+
+// 리뷰 생성
+export const createReview = async (reviewData: CreateReviewRequest): Promise<CreateReviewResponse> => {
+  const formData = new FormData();
+  formData.append('helpId', reviewData.helpId);
+  formData.append('rating', String(reviewData.rating));
+  formData.append('text', reviewData.text);
+  if (reviewData.reviewImgFile) {
+    formData.append('reviewImgFile', reviewData.reviewImgFile);
+  }
+
+  const response = await apiClient.post(
+    `${API_ENDPOINTS.REVIEW_CREATE}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
   );
   return response.data;
 }; 

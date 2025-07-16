@@ -23,4 +23,17 @@ export interface WrittenReviewsResponse {
   success: boolean;
   reviews: Review[];
   error?: string;
+}
+
+// 리뷰 생성 요청 DTO
+export interface CreateReviewRequest {
+  helpId: string;
+  rating: number;
+  text: string;
+  reviewImgFile?: File; // 파일 자체를 받도록 변경
+}
+
+// 리뷰 생성 응답 DTO
+export interface CreateReviewResponse {
+  helpId: string;
 } 
