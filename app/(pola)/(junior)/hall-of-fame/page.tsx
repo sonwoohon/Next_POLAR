@@ -47,10 +47,10 @@ export default function JuniorHallOffamePage () {
         });
         // 배열로 변환 후 내림차순 정렬
         const rankingArr: UserRanking[] = Object.entries(userScoreMap)
-          .map(([userId, totalScore]) => ({ 
+          .map(([userId, totalScore], index) => ({ 
             userId, 
             totalScore,
-            category: categories[Math.floor(Math.random() * categories.length)] // 임시로 랜덤 카테고리 할당
+            category: categories[index % categories.length] // 임시로 순차적으로 카테고리 할당
           }))
           .sort((a, b) => b.totalScore - a.totalScore)
           .slice(0, 10); // 상위 10명
