@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./userArchivment.module.css";
+import BadgeItem from "../../../(pola)/user/profile/[nickname]/_components/BadgeItem";
 
 interface UserArchivmentSectionProps {
   nickname: string;
@@ -28,13 +29,14 @@ const UserArchivmentSection: React.FC<UserArchivmentSectionProps> = ({
         </div>
       </div>
       <div className={styles.userArchiveBadgeGrid}>
-        {badges.map((badge) => (
-          <div className={styles.userArchiveBadgeItem} key={badge.id}>
-            {badge.icon}
-            <div className={styles.userArchiveBadgeTooltip}>
-              {badge.tooltip}
-            </div>
-          </div>
+        {badges.map((badge, idx) => (
+          <BadgeItem
+            key={badge.id}
+            icon={badge.icon}
+            tooltip={badge.tooltip}
+            isFirst={idx === 0}
+            isLast={idx === badges.length - 1}
+          />
         ))}
       </div>
     </section>
