@@ -20,15 +20,7 @@ export const getWrittenReviews = async (nickname: string): Promise<WrittenReview
 };
 
 // 리뷰 생성
-export const createReview = async (reviewData: CreateReviewRequest): Promise<CreateReviewResponse> => {
-  const formData = new FormData();
-  formData.append('helpId', reviewData.helpId);
-  formData.append('rating', String(reviewData.rating));
-  formData.append('text', reviewData.text);
-  if (reviewData.reviewImgFile) {
-    formData.append('reviewImgFile', reviewData.reviewImgFile);
-  }
-
+export const createReview = async (formData: FormData): Promise<CreateReviewResponse> => {
   const response = await apiClient.post(
     `${API_ENDPOINTS.REVIEW_CREATE}`,
     formData,
