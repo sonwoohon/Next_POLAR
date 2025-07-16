@@ -1,0 +1,120 @@
+.userInfoSection {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.userProfileImageContainer {
+  position: relative;
+  width: 10rem;
+  overflow: visible;
+}
+
+.userProfileImage {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  background-color: #d9d9d9;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.userArchiveBadge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-family: var(--font-gangwon);
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.userRating {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userRating span {
+  font-weight: 700;
+}
+
+.userNameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.userNameContainer span {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.userTypeBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 1rem;
+  font-size: 0.75rem;
+  color: #fff;
+  background-color: #446ee8;
+  border-radius: 1rem;
+  font-family: var(--font-gangwon);
+}
+
+.userNicknameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userNicknameContainer span {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .userInfoSection {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .userProfileImageContainer {
+    width: auto;
+  }
+
+  .userProfileImage {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .userInfo {
+    align-items: center;
+  }
+
+  .userNameContainer span {
+    font-size: 1.25rem;
+  }
+
+  .userNicknameContainer span {
+    font-size: 0.9rem;
+  }
+}
