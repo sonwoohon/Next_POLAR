@@ -31,7 +31,32 @@ const UserProfilePage: React.FC = () => {
         progressPercentage={95}
       />
 
-      <UserArchivmentSection />
+      <UserArchivmentSection
+        nickname={params.nickname as string}
+        title="활동 배지"
+        badges={[
+          {
+            id: 1,
+            icon: "🏦",
+            tooltip: "자산을 부탁해",
+          },
+          {
+            id: 2,
+            icon: "💘",
+            tooltip: "두근두근",
+          },
+          {
+            id: 3,
+            icon: "🧹",
+            tooltip: "청소 마스터",
+          },
+          {
+            id: 4,
+            icon: "⭐",
+            tooltip: "평점 마스터",
+          },
+        ]}
+      />
 
       <UserHelpsSection />
 

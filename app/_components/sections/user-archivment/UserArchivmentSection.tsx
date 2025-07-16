@@ -3,9 +3,9 @@ import Link from "next/link";
 import styles from "./userArchivment.module.css";
 
 interface UserArchivmentSectionProps {
-  title?: string;
-  moreLink?: string;
-  badges?: Array<{
+  nickname: string;
+  title: string;
+  badges: Array<{
     id: number;
     icon: string;
     tooltip: string;
@@ -13,14 +13,12 @@ interface UserArchivmentSectionProps {
 }
 
 const UserArchivmentSection: React.FC<UserArchivmentSectionProps> = ({
-  title = "유저 업적",
-  moreLink = "/user/profile/achievement",
-  badges = Array.from({ length: 16 }, (_, i) => ({
-    id: i,
-    icon: "🧹",
-    tooltip: "청소마스터",
-  })),
+  nickname,
+  title,
+  badges,
 }) => {
+  const moreLink = `/user/profile/${nickname}/archivment`;
+
   return (
     <section className={styles.userArchiveSection}>
       <div className={styles.userArchiveSectionTitleContainer}>

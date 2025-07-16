@@ -29,13 +29,15 @@
 
 .userArchiveBadgeGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+  grid-template-columns: repeat(20, 1fr);
   gap: 1rem;
   padding: 2rem 1rem;
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
   margin-top: 1.5rem;
+  overflow: visible;
+  position: relative;
 }
 
 .userArchiveBadgeItem {
@@ -74,6 +76,18 @@
   pointer-events: none;
 }
 
+/* 왼쪽 끝과 오른쪽 끝의 툴팁만 위치 조정 */
+.userArchiveBadgeItem:first-child .userArchiveBadgeTooltip {
+  left: 0;
+  transform: none;
+}
+
+.userArchiveBadgeItem:last-child .userArchiveBadgeTooltip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
 .userArchiveBadgeItem:hover .userArchiveBadgeTooltip {
   display: block;
 }
@@ -81,7 +95,7 @@
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .userArchiveBadgeGrid {
-    grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
+    grid-template-columns: repeat(20, 1fr);
     gap: 0.75rem;
     padding: 1.5rem 0.75rem;
   }
@@ -96,4 +110,4 @@
     font-size: 0.85rem;
     padding: 0.25rem 0.75rem;
   }
-} 
+}
