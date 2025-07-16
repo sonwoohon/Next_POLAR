@@ -37,13 +37,11 @@ export async function POST(
     // 여러 가능한 파일 필드명을 시도
     const possibleFileKeys = ['file', 'image', 'upload', 'photo', 'helpImage'];
     let file: File | null = null;
-    let foundKey = '';
 
     for (const key of possibleFileKeys) {
       const value = formData.get(key);
       if (value instanceof File) {
         file = value;
-        foundKey = key;
         console.log(`[API] 파일을 찾았습니다 - 키: ${key}`);
         break;
       }
