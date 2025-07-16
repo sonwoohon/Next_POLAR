@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-export default function UserProfilePage({ params }: { params: { nickname: string } }) {
-  return (
-    <div>
-      <h1>유저 프로필</h1>
-      <p>사용자명: {params.nickname}</p>
-      <a href={`/user/profile/${params.nickname}/reviews`}>
-        이 유저의 리뷰 보기
-      </a>
-=======
 "use client";
 import styles from "./_styles/userProfile.module.css";
 import { useParams } from "next/navigation";
@@ -15,6 +5,7 @@ import UserInfoSection from "@/app/_components/commons/common-sections/user-info
 import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
 import UserHelpsSection from "@/app/_components/sections/user-helps/UserHelpsSection";
+import ProfileMenuSection from "./_components/sections/ProfileMenuSection";
 
 const UserProfilePage: React.FC = () => {
   const params = useParams();
@@ -43,7 +34,16 @@ const UserProfilePage: React.FC = () => {
       <UserArchivmentSection />
 
       <UserHelpsSection />
->>>>>>> parent of 5b25db0 (Feat: Add user menu section)
+
+      <ProfileMenuSection
+        nickname={nickname}
+        onLogout={() => {
+          // TODO: 로그아웃 로직 구현
+          console.log("로그아웃 버튼 클릭됨");
+        }}
+      />
     </div>
   );
-} 
+};
+
+export default UserProfilePage;
