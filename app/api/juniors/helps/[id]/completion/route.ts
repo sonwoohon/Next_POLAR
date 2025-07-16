@@ -35,7 +35,7 @@ export async function POST(
 
     // 주니어: 인증 코드 입력 및 완료 처리
     const result = await juniorHelpCompletionUseCase.completeHelp(
-      new JuniorsHelpCompletionDto(helpId, Number(verificationCode))
+      new JuniorsHelpCompletionDto(helpId, verificationCode)
     );
 
     return NextResponse.json(result);

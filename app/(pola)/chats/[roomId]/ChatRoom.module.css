@@ -1,0 +1,178 @@
+/* ── 채팅 전체 컨테이너 ── */
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh; /* 전체 화면 높이 */
+  background: #fff;
+  overflow: hidden; /* 전체 컨테이너 스크롤 방지 */
+}
+
+/* ── 메시지 리스트 ── */
+.messagesContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 0 16px 0;
+  overflow-y: auto; /* 메시지 영역만 스크롤 */
+  overflow-x: hidden;
+}
+
+/* ── 메시지 행 (비내 메시지: avatar 위 → bubble 아래) ── */
+.messageRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 18px;
+  margin-left: 16px;
+}
+
+/* ── 메시지 행 (내 메시지) ── */
+.myMessageRow {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 끝 정렬 */
+  margin-top: 18px;
+  margin-right: 16px;
+}
+
+/* ── 아바타 ── */
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e5f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px; /* avatar 와 bubble 사이 여백 */
+  flex-shrink: 0;
+}
+.avatarIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #b6d4fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 말풍선 + 메타 래퍼 ── */
+.messageWrapper,
+.myMessageWrapper {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 4px;
+}
+
+.myMessageWrapper {
+  justify-content: flex-end;
+}
+
+/* ── 말풍선 ── */
+.bubble {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  font-size: 1.08rem;
+  border-radius: 4px 18px 18px 18px;
+  background: #f3f4f6;
+  color: #222;
+  word-break: break-word;
+  box-shadow: none;
+  margin-top: 22px;
+  margin-left: 8px;
+  min-width: 48px;
+}
+.myBubble {
+  background: #007aff;
+  color: #fff;
+  border-radius: 18px 18px 4px 18px;
+  margin-right: 12px;
+  margin-bottom: 4px;
+}
+
+.meta,
+.myMeta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 2px;
+  margin-top: 48px;
+  min-width: 56px;
+}
+.meta {
+  align-items: flex-start;
+  margin-left: 8px;
+}
+.myMeta {
+  align-items: flex-end;
+  margin-right: 8px;
+}
+.read {
+  font-size: 0.8em;
+  color: #b0b0b0;
+  margin-bottom: 2px;
+}
+
+/* ── 입력창 ── */
+.inputContainer {
+  display: flex;
+  align-items: center;
+  padding: 18px 16px;
+  border-top: 1.5px solid #e5e7eb;
+  background: #fff;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+.plusBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e5f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #007aff;
+  margin-right: 10px;
+  border: none;
+  cursor: pointer;
+}
+.messageInput {
+  flex: 1;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 18px;
+  font-size: 1.08rem;
+  padding: 12px 16px;
+  outline: none;
+  margin-right: 10px;
+  resize: none;
+}
+.sendButton {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sendButton:disabled {
+  background: #b6c6e3;
+  cursor: not-allowed;
+}
+
+/* ── 로딩 ── */
+.loading {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  padding: 24px;
+}

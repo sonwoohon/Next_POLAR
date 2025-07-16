@@ -12,7 +12,7 @@ export class CommonUserEntity {
     public name: string, // 이름
     public nickname: string, // 닉네임 (nickname 컬럼)
     public readonly createdAt: Date // 생성일시 (수정 불가능)
-  ) {}
+  ) { }
 
   toJSON() {
     return {
@@ -22,7 +22,7 @@ export class CommonUserEntity {
       password: this.password,
       email: this.email,
       age: this.age,
-      profile_img_url: this.profile_img_url,
+      profile_img_url: this.profileImgUrl,
       address: this.address,
       name: this.name,
       nickname: this.nickname,

@@ -4,8 +4,9 @@ import {
   HelpListResponseDto,
   HelpDetailResponseDto,
 } from '@/backend/helps/applications/dtos/HelpDTO';
+import { getNicknameByUuid } from '@/lib/getUserName';
 
-// 헬프 리스트 조회 UseCase
+// 헬프 리스트 조회 UseCase (닉네임 기반)
 export class GetHelpListUseCase {
   constructor(private readonly helpRepository: ICommonHelpRepository) {}
 
@@ -14,26 +15,32 @@ export class GetHelpListUseCase {
       await this.helpRepository.getHelpList();
 
     if (helpList) {
-      return helpList.map((help) => ({
-        id: help.id,
-        seniorInfo: {
-          id: help.seniorId,
-          //TODO: 기타 시니어 정보 필요시 추가 - FE 디자인 확정시 추가
-        },
-        title: help.title,
-        startDate: help.startDate,
-        endDate: help.endDate,
-        category: help.category,
-        content: help.content,
-        status: help.status,
-        createdAt: help.createdAt,
-      }));
+      // 각 헬프의 seniorId를 닉네임으로 변환
+      const helpListWithNicknames = await Promise.all(
+        helpList.map(async (help) => {
+          const seniorNickname = await getNicknameByUuid(help.seniorId);
+          return {
+            id: help.id,
+            seniorInfo: {
+              nickname: seniorNickname || '알 수 없음',
+            },
+            title: help.title,
+            startDate: help.startDate,
+            endDate: help.endDate,
+            category: help.category,
+            content: help.content,
+            status: help.status,
+            createdAt: help.createdAt,
+          };
+        })
+      );
+      return helpListWithNicknames;
     }
     return null;
   }
 }
 
-// 헬프 상세 조회 UseCase
+// 헬프 상세 조회 UseCase (닉네임 기반)
 export class GetHelpDetailUseCase {
   constructor(private readonly helpRepository: ICommonHelpRepository) {}
 
@@ -43,9 +50,10 @@ export class GetHelpDetailUseCase {
     );
 
     if (help) {
+      const seniorNickname = await getNicknameByUuid(help.seniorId);
       return {
         id: help.id,
-        seniorId: help.seniorId,
+        seniorNickname: seniorNickname || '알 수 없음',
         title: help.title,
         startDate: help.startDate,
         endDate: help.endDate,

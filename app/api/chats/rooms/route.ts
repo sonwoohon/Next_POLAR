@@ -5,7 +5,9 @@ import { getNicknameFromCookie } from '@/lib/jwt';
 
 // GET /api/chats/rooms
 export async function GET(req: NextRequest) {
-  const nickname = getNicknameFromCookie(req);
+  const userData = getNicknameFromCookie(req);
+  const { nickname } = userData || {};
+
   if (!nickname)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

@@ -38,11 +38,18 @@ export class LoginUseCase {
 
     const accessToken = generateAccessToken({
       nickname: user.nickname,
+      role: user.age >= 60 ? 'senior' : 'junior',
     });
     const refreshToken = generateRefreshToken({
       nickname: user.nickname,
+      role: user.age >= 60 ? 'senior' : 'junior',
     });
 
-    return new LoginResponseDTO(accessToken, refreshToken, user.nickname);
+    return new LoginResponseDTO(
+      accessToken,
+      refreshToken,
+      user.nickname,
+      user.age >= 60 ? 'senior' : 'junior'
+    );
   }
 }

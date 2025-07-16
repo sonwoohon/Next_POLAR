@@ -13,7 +13,8 @@ export async function POST(
 
   try {
     // 사용자 인증 - 쿠키에서 nickname 추출
-    const nickname = getNicknameFromCookie(request);
+    const userData = getNicknameFromCookie(request);
+    const { nickname } = userData || {};
     if (!nickname) {
       return NextResponse.json(
         { error: '유효하지 않은 사용자입니다.' },
@@ -22,7 +23,7 @@ export async function POST(
     }
 
     const formData = await request.formData();
-    
+
     // FormData 전체 내용 로깅
     console.log('[API] FormData 전체 내용:');
     for (const [key, value] of formData.entries()) {
@@ -33,17 +34,21 @@ export async function POST(
         console.log(`    - 타입: ${value.type}`);
       }
     }
-    
+
     // 여러 가능한 파일 필드명을 시도
-    const possibleFileKeys = ['file', 'image', 'upload', 'photo', 'profileImage'];
+    const possibleFileKeys = [
+      'file',
+      'image',
+      'upload',
+      'photo',
+      'profileImage',
+    ];
     let file: File | null = null;
-    let foundKey = '';
 
     for (const key of possibleFileKeys) {
       const value = formData.get(key);
       if (value instanceof File) {
         file = value;
-        foundKey = key;
         console.log(`[API] 파일을 찾았습니다 - 키: ${key}`);
         break;
       }
@@ -57,16 +62,16 @@ export async function POST(
       );
     }
 
-    console.log(
-      `[API] 프로필 이미지 업로드 시작 - 사용자: ${nickname}`
-    );
+    console.log(`[API] 프로필 이미지 업로드 시작 - 사용자: ${nickname}`);
 
     // 1. 기존 프로필 이미지 삭제
     const userRepository = new SbUserRepository();
     const user = await userRepository.getUserByNickname(nickname);
     if (user && user.profileImgUrl && user.profileImgUrl.trim() !== '') {
-      console.log(`[API] 기존 프로필 이미지 삭제 시작 - URL: ${user.profileImgUrl}`);
-      
+      console.log(
+        `[API] 기존 프로필 이미지 삭제 시작 - URL: ${user.profileImgUrl}`
+      );
+
       const imageRepository = new SbImageRepository();
       await imageRepository.deleteImage(user.profileImgUrl, 'profile-images');
       console.log('[API] 기존 프로필 이미지 삭제 완료');
@@ -89,7 +94,7 @@ export async function POST(
     if (user) {
       const userUseCase = new CommonUserUseCase(userRepository);
       const updatedUser = await userUseCase.updateUserProfile(user.id, {
-        profileImgUrl: result.url
+        profile_img_url: result.url,
       });
 
       if (!updatedUser) {
@@ -101,7 +106,10 @@ export async function POST(
       }
     }
 
-    console.log('[API] 프로필 이미지 업로드 및 사용자 정보 업데이트 성공:', result.url);
+    console.log(
+      '[API] 프로필 이미지 업로드 및 사용자 정보 업데이트 성공:',
+      result.url
+    );
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error('[API] 프로필 이미지 업로드 중 오류 발생:', error);
@@ -110,4 +118,4 @@ export async function POST(
       { status: 500 }
     );
   }
-} 
+}

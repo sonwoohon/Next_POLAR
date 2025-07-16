@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       nickname: result.nickname,
+      role: result.role,
     });
   } catch (e: unknown) {
     const errorMessage =
