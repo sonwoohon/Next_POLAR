@@ -10,7 +10,7 @@ const createHelpListUseCase = () => {
   return new GetHelpListUseCase(repository);
 };
 
-// 헬프 리스트 조회 API
+// 헬프 리스트 조회 API (닉네임 기반 응답)
 export async function GET(): Promise<
   NextResponse<HelpListResponseDto[] | null>
 > {

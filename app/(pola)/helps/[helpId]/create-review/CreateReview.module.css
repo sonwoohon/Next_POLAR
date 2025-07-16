@@ -1,27 +1,48 @@
 .container {
-  width: 100%;
-  max-width: 100%;
-  padding: 20px;
-  background: #ffffff;
-  height: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: calc(100% - 3rem);
+  height: calc(100% - 6rem);
+  padding: 3rem 1.5rem;
 }
 
 .title {
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
+  color: #222;
   text-align: center;
-  color: #333333;
-  font-family: var(--font-gangwonEdu);
+  font-family: var(--font-gangwon);
 }
 
 .form {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 32px 0 24px 0;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #eee;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 400px;
-  margin: 0 auto;
+  flex: 1 1 auto;
+  min-height: 400px;
+  padding-bottom: 24px;
+}
+
+.form input,
+.form textarea,
+.form button {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .ratingSection,
@@ -39,7 +60,8 @@
   font-family: var(--font-pretendard);
 }
 
-.input {
+.input,
+.textarea {
   padding: 12px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
@@ -47,7 +69,7 @@
   font-family: var(--font-pretendard);
   background: #ffffff;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .input:focus {
@@ -57,16 +79,8 @@
 }
 
 .textarea {
-  min-height: 100px;
-  padding: 12px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: var(--font-pretendard);
+  min-height: 180px;
   resize: vertical;
-  background: #ffffff;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   line-height: 1.6;
 }
 
@@ -102,6 +116,7 @@
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   background: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.07);
 }
 
 .previewImage {
@@ -139,12 +154,13 @@
   font-family: var(--font-pretendard);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.12);
+  margin-top: auto;
 }
 
 .button:hover:not(:disabled) {
   background: #0056b3;
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.18);
   transform: translateY(-1px);
 }
 
@@ -203,27 +219,81 @@
 
 .ratingStars {
   display: flex;
-  gap: 8px;
-  justify-content: center;
+  gap: 4px;
 }
 
 .star {
-  font-size: 24px;
+  font-size: 2rem;
+  color: #e5e5e5;
+  transition: color 0.2s;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #ddd;
 }
 
-.star:hover,
-.star.active {
-  color: #ff9500;
-  transform: scale(1.1);
+.star.filled {
+  color: #FFD600;
+}
+
+.helpTitle, .label.helpTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: var(--font-pretendard);
+}
+
+.profileArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e5e5;
+  background: #fff;
+}
+
+.profileName {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #222;
+  font-family: var(--font-gangwon);
+}
+
+.profileNickname {
+  color: #888;
+  font-size: 15px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #666;
+  font-size: 16px;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc3545;
+  font-size: 15px;
 }
 
 /* Responsive Design */
 @media (max-width: 480px) {
   .container {
-    padding: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 12px;
+    overflow-x: hidden;
   }
   
   .title {
@@ -231,7 +301,23 @@
   }
   
   .form {
-    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    gap: 12px;
+    margin: 0;
+    padding: 12px 2px;
+    overflow-x: hidden;
+  }
+  
+  .form input,
+  .form textarea,
+  .form button {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100vw;
   }
   
   .input,

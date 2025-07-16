@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserIdFromCookie } from '@/lib/jwt';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import { CommonUserUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
-import {
-  UserProfileResponseDto,
-} from '@/backend/users/user/applications/dtos/UserDtos';
+import { UserProfileResponseDto } from '@/backend/users/user/applications/dtos/UserDtos';
 import { entityToUserProfileResponseDto } from '@/backend/users/user/infrastructures/mappers/UserMapper';
 import { ValidationError } from '@/backend/common/errors/ValidationError';
 
@@ -22,10 +20,11 @@ export async function GET(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
+    const userData = getNicknameFromCookie(request);
+    const { nickname, age } = userData || {};
+    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
-    if (!userId) {
+    if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
@@ -33,22 +32,22 @@ export async function GET(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
+    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
 
-    console.log(`[API] 사용자 조회 시작 - ID: ${userId}`);
-    const user = await useCase.getUserById(userId);
+    console.log(`[API] 사용자 조회 시작 - ID: ${nickname}`);
+    const user = await useCase.getUserById(nickname);
 
     if (!user) {
-      console.error(`[API] 사용자를 찾을 수 없음 - ID: ${userId}`);
+      console.error(`[API] 사용자를 찾을 수 없음 - ID: ${nickname}`);
       return NextResponse.json(
         { error: '사용자를 찾을 수 없습니다.' },
         { status: 404 }
       );
     }
 
-    console.log(`[API] 사용자 조회 완료 - ID: ${user.id}`);
+    console.log(`[API] 사용자 조회 완료 - ID: ${nickname}`);
 
     // Entity를 DTO로 변환
     console.log('[API] DTO 변환 시작');
@@ -82,10 +81,11 @@ export async function PUT(
     console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
+    const userData = getNicknameFromCookie(request);
+    const { nickname, age } = userData || {};
+    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
-    if (!userId) {
+    if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
@@ -93,14 +93,14 @@ export async function PUT(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
+    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
 
     // 모든 정보 수정 (비밀번호 포함)
-    console.log(`[API] 사용자 프로필 업데이트 시작 - ID: ${userId}`);
-    const updatedUser = await useCase.updateUserProfile(userId, body);
-    console.log(`[API] 사용자 프로필 업데이트 완료 - ID: ${userId}`);
+    console.log(`[API] 사용자 프로필 업데이트 시작 - ID: ${nickname}`);
+    const updatedUser = await useCase.updateUserProfile(nickname, body);
+    console.log(`[API] 사용자 프로필 업데이트 완료 - ID: ${nickname}`);
 
     // Entity를 DTO로 변환하여 반환
     console.log('[API] DTO 변환 시작');
@@ -137,10 +137,11 @@ export async function DELETE(
 
   try {
     // 쿠키에서 사용자 ID 추출
-    const userId = getUserIdFromCookie(request);
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${userId}`);
+    const userData = getNicknameFromCookie(request);
+    const { nickname, age } = userData || {};
+    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
-    if (!userId) {
+    if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
@@ -148,14 +149,14 @@ export async function DELETE(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${userId}`);
+    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
     console.log('[API] UseCase 생성 완료');
 
     // 프로필 이미지 삭제
-    console.log(`[API] 프로필 이미지 삭제 시작 - ID: ${userId}`);
-    const updatedUser = await useCase.deleteProfileImage(userId);
-    console.log(`[API] 프로필 이미지 삭제 완료 - ID: ${userId}`);
+    console.log(`[API] 프로필 이미지 삭제 시작 - ID: ${nickname}`);
+    const updatedUser = await useCase.deleteProfileImage(nickname);
+    console.log(`[API] 프로필 이미지 삭제 완료 - ID: ${nickname}`);
 
     // Entity를 DTO로 변환하여 반환
     console.log('[API] DTO 변환 시작');

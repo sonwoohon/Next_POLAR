@@ -74,41 +74,10 @@ export function verifyRefreshToken(token: string): Record<string, unknown> {
   }
 }
 
-// 쿠키에서 사용자 ID를 추출하는 함수
-export function getNicknameFromCookie(request: NextRequest): string | null {
-  try {
-    // 쿠키에서 access-token 가져오기
-    const accessToken = request.cookies.get('access-token')?.value;
-
-    if (!accessToken) {
-      console.log('[JWT] access-token 쿠키가 없습니다.');
-      return null;
-    }
-
-    // JWT 토큰 검증 및 페이로드 추출
-    const payload = verifyAccessToken(accessToken);
-    const userNickname = payload.nickname as string;
-
-    if (!userNickname) {
-      console.log('[JWT] 토큰에서 userId를 찾을 수 없습니다.');
-      return null;
-    }
-
-    console.log(`[JWT] 토큰에서 추출한 사용자 Nickname: ${userNickname}`);
-    return userNickname;
-  } catch (error: unknown) {
-    // 에러 타입 검증
-    if (error instanceof Error) {
-      console.error('[JWT] 토큰 검증 중 오류:', error.message);
-    } else {
-      console.error('[JWT] 토큰 검증 중 예상치 못한 오류:', error);
-    }
-    return null;
-  }
-}
-
 // 쿠키에서 사용자 닉네임을 추출하는 함수
-export function getNicknameFromCookie(request: NextRequest): string | null {
+export function getNicknameFromCookie(
+  request: NextRequest
+): { nickname: string; age: number } | null {
   try {
     // 쿠키에서 access-token 가져오기
     const accessToken = request.cookies.get('access-token')?.value;
@@ -121,6 +90,7 @@ export function getNicknameFromCookie(request: NextRequest): string | null {
     // JWT 토큰 검증 및 페이로드 추출
     const payload = verifyAccessToken(accessToken);
     const nickname = payload.nickname as string;
+    const age = payload.age as number;
 
     if (!nickname) {
       console.log('[JWT] 토큰에서 nickname을 찾을 수 없습니다.');
@@ -128,7 +98,7 @@ export function getNicknameFromCookie(request: NextRequest): string | null {
     }
 
     console.log(`[JWT] 토큰에서 추출한 닉네임: ${nickname}`);
-    return nickname;
+    return { nickname, age };
   } catch (error: unknown) {
     // 에러 타입 검증
     if (error instanceof Error) {

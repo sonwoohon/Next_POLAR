@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { use } from 'react';
 import Image from 'next/image';
 import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css';
+import ProfileSummary from '../_components/ProfileSummary';
+import ReviewCard from '../_components/ReviewCard';
 
 interface Review {
   id: number;
@@ -13,20 +15,36 @@ interface Review {
   rating: number;
   text: string;
   reviewImgUrl?: string;
+  writerProfileImgUrl?: string;
   createdAt: string;
+}
+
+interface UserProfile {
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
 }
 
 export default function WrittenReviewsPage({ params }: { params: Promise<{ nickname: string }> }) {
   const { nickname } = use(params);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchUserAndReviews = async () => {
       try {
         setLoading(true);
         setError(null);
+        // 유저 정보 fetch
+        const userRes = await fetch(`/api/users/${nickname}`);
+        let userData = null;
+        if (userRes.ok) {
+          userData = await userRes.json();
+          setUser(userData);
+        }
+        // 리뷰 fetch
         const response = await fetch(`/api/reviews/written?nickname=${nickname}`);
         if (!response.ok) throw new Error('리뷰를 불러오는데 실패했습니다.');
         const data = await response.json();
@@ -41,7 +59,7 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
         setLoading(false);
       }
     };
-    fetchReviews();
+    fetchUserAndReviews();
   }, [nickname]);
 
   if (loading) {
@@ -53,40 +71,17 @@ export default function WrittenReviewsPage({ params }: { params: Promise<{ nickn
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>작성한 리뷰</h2>
-      <p className={styles.nickname}>사용자: {nickname}</p>
+      <h2 className={styles.title}>쓴리뷰</h2>
+      {user && <ProfileSummary user={user} />}
+      <div className={styles.reviewCountRow}>
+        <span className={styles.reviewCount}>리뷰 {reviews.length}개</span>
+      </div>
       {reviews.length === 0 ? (
         <div className={styles.emptyState}>작성한 리뷰가 없습니다.</div>
       ) : (
         <ul className={styles.reviewsList}>
           {reviews.map((review) => (
-            <li key={review.id} className={styles.reviewItem}>
-              <div className={styles.reviewHeader}>
-                <span className={styles.reviewId}>리뷰 #{review.id}</span>
-                <span className={styles.rating}>{'⭐'.repeat(review.rating)}</span>
-              </div>
-              {review.reviewImgUrl && (
-                <div className={styles.reviewImageContainer}>
-                  <Image
-                    src={review.reviewImgUrl}
-                    alt={`Review image for review ${review.id}`}
-                    width={100}
-                    height={100}
-                    className={styles.reviewImage}
-                  />
-                </div>
-              )}
-              <p className={styles.reviewText}>{review.text}</p>
-              <div className={styles.reviewInfo}>
-                <small className={styles.reviewDate}>
-                  받은 사람: {review.receiverNickname}
-                </small>
-                <br />
-                <small className={styles.reviewDate}>
-                  작성일: {new Date(review.createdAt).toLocaleDateString()}
-                </small>
-              </div>
-            </li>
+            <ReviewCard key={review.id} review={review} />
           ))}
         </ul>
       )}

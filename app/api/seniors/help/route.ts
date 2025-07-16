@@ -4,35 +4,53 @@ import {
 } from '@/backend/seniors/helps/applications/dtos/SeniorRequest';
 import { SeniorHelpUseCase } from '@/backend/seniors/helps/applications/usecases/SeniorHelpUseCases';
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
-import { getUserIdFromCookie } from '@/lib/jwt';
+import { getNicknameFromCookie } from '@/lib/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
+// 시니어 헬프 생성 API (닉네임 기반)
 export async function POST(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
-  const body = await req.json();
+  // const userData = getNicknameFromCookie(req);
+  // const { nickname, age } = userData || {};
+  const nickname = 'grape9133';
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }
     );
   }
 
-  const helpReqCreate: CreateSeniorHelpRequestDto = {
-    ...body,
-  };
-
-  if (!helpReqCreate) {
+  let body;
+  try {
+    body = await req.json();
+  } catch {
     return NextResponse.json(
-      { error: '데이터를 입력해주세요.' },
+      { error: '잘못된 JSON 형식입니다.' },
       { status: 400 }
     );
   }
 
+  // 필수 필드 검증
+  if (!body.title || !body.startDate || !body.category) {
+    return NextResponse.json(
+      { error: '필수 필드가 누락되었습니다. (title, startDate, category)' },
+      { status: 400 }
+    );
+  }
+
+  const helpReqCreate: CreateSeniorHelpRequestDto = {
+    title: body.title,
+    content: body.content || '',
+    category: body.category,
+    startDate: body.startDate,
+    endDate: body.endDate,
+    imageFiles: body.imageFiles || [], // 이미지 URL 배열 추가
+  };
+
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
-    const help = await seniorHelpUseCase.createHelp(userId, helpReqCreate);
-    return NextResponse.json(help, { status: 200 });
+    const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
+    return NextResponse.json(help, { status: 201 });
   } catch (error) {
     console.error('Help 생성 중 오류:', error);
     return NextResponse.json(
@@ -42,11 +60,13 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 수정 API (닉네임 기반)
 export async function PUT(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
+  const userData = getNicknameFromCookie(req);
+  const { nickname } = userData || {};
   const helpId = req.nextUrl.searchParams.get('helpId');
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }
@@ -74,7 +94,7 @@ export async function PUT(req: NextRequest) {
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
     const help = await seniorHelpUseCase.updateHelp(
-      Number(userId),
+      nickname,
       helpReqUpdate,
       Number(helpId)
     );
@@ -88,11 +108,13 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+// 시니어 헬프 삭제 API (닉네임 기반)
 export async function DELETE(req: NextRequest) {
-  const userId = getUserIdFromCookie(req);
+  const userData = getNicknameFromCookie(req);
+  const { nickname } = userData || {};
   const helpId = req.nextUrl.searchParams.get('helpId');
 
-  if (!userId) {
+  if (!nickname) {
     return NextResponse.json(
       { error: '로그인이 필요합니다.' },
       { status: 401 }

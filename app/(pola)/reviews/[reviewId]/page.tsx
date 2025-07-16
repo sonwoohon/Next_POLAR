@@ -108,7 +108,7 @@ export default function ReviewDetailPage({
       {/* 상단 프로필 */}
       <div className={styles.profileSection}>
         <Image
-          src={writer.profileImgUrl ? writer.profileImgUrl : '/default-profile.png'}
+          src={writer.profileImgUrl ? writer.profileImgUrl : '/images/dummies/dummy_user.png'}
           alt="프로필"
           width={64}
           height={64}

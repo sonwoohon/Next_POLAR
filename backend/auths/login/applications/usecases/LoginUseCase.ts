@@ -38,11 +38,18 @@ export class LoginUseCase {
 
     const accessToken = generateAccessToken({
       nickname: user.nickname,
+      age: user.age,
     });
     const refreshToken = generateRefreshToken({
       nickname: user.nickname,
+      age: user.age,
     });
 
-    return new LoginResponseDTO(accessToken, refreshToken, user.nickname);
+    return new LoginResponseDTO(
+      accessToken,
+      refreshToken,
+      user.nickname,
+      user.age
+    );
   }
 }

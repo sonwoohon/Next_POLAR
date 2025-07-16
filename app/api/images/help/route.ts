@@ -11,7 +11,10 @@ export async function POST(
 
   try {
     // 사용자 인증 - 쿠키에서 nickname 추출
-    const nickname = getNicknameFromCookie(request);
+    // const userData = getNicknameFromCookie(request);
+    // const { nickname, age } = userData || {};
+    const nickname = 'grape9133';
+
     if (!nickname) {
       return NextResponse.json(
         { error: '유효하지 않은 사용자입니다.' },
@@ -20,7 +23,7 @@ export async function POST(
     }
 
     const formData = await request.formData();
-    
+
     // FormData 전체 내용 로깅
     console.log('[API] FormData 전체 내용:');
     for (const [key, value] of formData.entries()) {
@@ -31,7 +34,7 @@ export async function POST(
         console.log(`    - 타입: ${value.type}`);
       }
     }
-    
+
     // 여러 가능한 파일 필드명을 시도
     const possibleFileKeys = ['file', 'image', 'upload', 'photo', 'helpImage'];
     let file: File | null = null;
@@ -55,9 +58,7 @@ export async function POST(
       );
     }
 
-    console.log(
-      `[API] 도움 요청 이미지 업로드 시작 - 사용자: ${nickname}`
-    );
+    console.log(`[API] 도움 요청 이미지 업로드 시작 - 사용자: ${nickname}`);
 
     // 이미지 업로드
     const imageRepository = new SbImageRepository();
@@ -81,4 +82,4 @@ export async function POST(
       { status: 500 }
     );
   }
-} 
+}
