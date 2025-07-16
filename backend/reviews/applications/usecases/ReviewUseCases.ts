@@ -15,11 +15,6 @@ export class ReviewUseCases {
     return await this.reviewRepository.findByWriterNickname(nickname);
   }
 
-  // 리뷰 id로 단일 리뷰 상세 조회
-  async getReviewById(reviewId: number): Promise<ReviewEntity | null> {
-    return await this.reviewRepository.findById(reviewId);
-  }
-
   // 리뷰 생성 (writerNickname, receiverNickname 기반)
   async createReview(request: CreateReviewRequest): Promise<ReviewEntity> {
     // nickname 기반으로 repository에 전달

@@ -2,7 +2,7 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { ReviewMapper } from '@/backend/reviews/infrastructures/mappers/ReviewMapper';
 import { IReviewRepository } from '@/backend/reviews/domains/repositories/ReviewRepository';
 import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
-import { CreateReviewRequest } from '@/backend/reviews/domains/requests/CreateReviewRequest';
+import { CreateReviewRequest } from '@/backend/reviews/applications/dtos/ReviewDtos';
 
 export class SbReviewRepository implements IReviewRepository {
   // nickname으로 받은 리뷰 리스트 조회
@@ -16,7 +16,7 @@ export class SbReviewRepository implements IReviewRepository {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((review) => ReviewMapper.toEntity(review));
+    return data.map((review: any) => ReviewMapper.toEntity(review));
   }
 
   // nickname으로 내가 쓴(작성한) 리뷰 리스트 조회
@@ -30,10 +30,8 @@ export class SbReviewRepository implements IReviewRepository {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((review) => ReviewMapper.toEntity(review));
+    return data.map((review: any) => ReviewMapper.toEntity(review));
   }
-
-
 
   // nickname 기반 리뷰 생성
   async createByNicknames(request: CreateReviewRequest): Promise<ReviewEntity> {
@@ -79,13 +77,19 @@ export class SbReviewRepository implements IReviewRepository {
       receiverId = seniorId;
     }
 
-    // 5. writerId, receiverId로 리뷰 저장
+    // 5. writerId, receiverId로 리뷰 저장 (닉네임도 함께 저장)
     const { data, error } = await supabase
       .from('reviews')
       .insert({
         help_id: helpId,
         writer_id: writerId,
         receiver_id: receiverId,
+        writer_nickname: writerNickname,
+        receiver_nickname: writerId === seniorId ? ( // writer가 senior면 주니어 닉네임, 아니면 시니어 닉네임
+          (await supabase.from('users').select('nickname').eq('id', receiverId).single()).data?.nickname
+        ) : (
+          (await supabase.from('users').select('nickname').eq('id', receiverId).single()).data?.nickname
+        ),
         rating,
         text,
         review_img_url: reviewImgUrl,

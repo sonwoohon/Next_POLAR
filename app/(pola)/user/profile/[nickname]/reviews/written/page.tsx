@@ -1,7 +1,6 @@
 'use client';
 
 import { use } from 'react';
-import Image from 'next/image';
 import styles from '@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css';
 import ProfileSummary from '../_components/ProfileSummary';
 import ReviewCard from '../_components/ReviewCard';

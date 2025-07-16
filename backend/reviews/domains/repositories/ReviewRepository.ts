@@ -8,9 +8,6 @@ export interface IReviewRepository {
   // nickname으로 내가 쓴(작성한) 리뷰 리스트 조회
   findByWriterNickname(nickname: string): Promise<ReviewEntity[]>;
 
-  // 리뷰 id로 단일 리뷰 상세 조회
-  findById(reviewId: number): Promise<ReviewEntity | null>;
-
   // 리뷰 생성
   createByNicknames(request: CreateReviewRequest): Promise<ReviewEntity>;
 }
