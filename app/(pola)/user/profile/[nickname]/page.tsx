@@ -1,7 +1,7 @@
 "use client";
 import styles from "./_styles/userProfile.module.css";
 import { useParams } from "next/navigation";
-import UserInfoSection from "@/app/_components/sections/user-info/UserInfoSection";
+import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
 import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
 import UserHelpsSection from "@/app/_components/sections/user-helps/UserHelpsSection";
