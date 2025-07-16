@@ -5,6 +5,7 @@ import UserInfoSection from "@/app/_components/commons/common-sections/user-info
 import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
 import UserHelpsSection from "@/app/_components/sections/user-helps/UserHelpsSection";
+import ProfileMenuSection from "./_components/sections/ProfileMenuSection";
 
 const UserProfilePage: React.FC = () => {
   const params = useParams();
@@ -33,6 +34,13 @@ const UserProfilePage: React.FC = () => {
       <UserArchivmentSection />
 
       <UserHelpsSection />
+      <ProfileMenuSection
+        nickname={nickname}
+        onLogout={() => {
+          // TODO: 로그아웃 로직 구현
+          console.log("로그아웃 버튼 클릭됨");
+        }}
+      />
     </div>
   );
 };
