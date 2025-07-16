@@ -12,7 +12,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import UserInfoSection from "@/app/_components/commons/UserInfoSection";
+import UserInfoSection from "@/app/_components/sections/user-info/UserInfoSection";
+import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
+import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
 
 Chart.register(
   RadialLinearScale,
@@ -38,55 +40,16 @@ const UserProfilePage: React.FC = () => {
         archiveBadge="환경미화원"
       />
 
-      {/* 유저 티어 */}
-      {/* TODO: 컴포넌트 분리 */}
-      <section className={styles.userTierSection}>
-        <h2>티어</h2>
-        <div className={styles.userTierContainer}>
-          <div className={styles.userTierInfo}>
-            <div className={styles.userTierImage}></div>
-            <div className={styles.userTierInfoTextContainer}>
-              <span className={styles.userTierSeason}>2025 - 1시즌</span>
-              <span className={styles.userTierName}>SILVER</span>
-            </div>
-          </div>
-          {/* 프로그레스바 */}
-          <div className={styles.userTierProgressBarWrapper}>
-            <div className={styles.userTierProgressInfo}>
-              <span>
-                다음 티어까지 <b>35,000</b>점
-              </span>
-            </div>
-            <div className={styles.userTierProgressBarBg}>
-              <div
-                className={styles.userTierProgressBarFill}
-                style={{ width: "95%" }} // 예시: 765,000/800,000
-              ></div>
-            </div>
-            <div className={styles.userTierProgressBarScore}>
-              765,000 <span>/800,000</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <UserTierSection
+        season="2025 - 1시즌"
+        tierName="SILVER"
+        currentScore={765000}
+        maxScore={800000}
+        nextTierScore={35000}
+        progressPercentage={95}
+      />
 
-      {/* 칭호 뱃지  */}
-      <section className={styles.userArchiveSection}>
-        <div className={styles.userArchiveSectionTitleContainer}>
-          <h2>유저 업적</h2>
-          <div className={styles.userArchiveSectionTitleButton}>
-            <Link href="/user/profile/achievement">더보기</Link>
-          </div>
-        </div>
-        <div className={styles.userArchiveBadgeGrid}>
-          {Array.from({ length: 16 }).map((_, i) => (
-            <div className={styles.userArchiveBadgeItem} key={i}>
-              🧹
-              <div className={styles.userArchiveBadgeTooltip}>청소마스터</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <UserArchivmentSection />
 
       {/* 헬프 기록 */}
       <section className={styles.userHelpsSection}>
