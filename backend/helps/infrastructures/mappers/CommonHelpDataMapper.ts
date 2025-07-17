@@ -5,7 +5,7 @@ export interface HelpData {
   title: string;
   start_date: string;
   end_date: string;
-  category: number[];
+  category: { id: number; point: number }[];
   content: string;
   status: string;
   created_at: string;

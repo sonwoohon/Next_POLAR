@@ -27,16 +27,16 @@ function normalizeCategoryIds(category: CategoryInput): number[] {
 }
 
 // 카테고리 관계 생성 함수
-async function createHelpCategories(helpId: number, categoryIds: number[]) {
+async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
   console.log(
-    `[createHelpCategories] 카테고리 관계 생성 시작 - HelpId: ${helpId}, CategoryIds: ${JSON.stringify(
-      categoryIds
+    `[createHelpCategories] 서브카테고리 관계 생성 시작 - HelpId: ${helpId}, SubCategoryIds: ${JSON.stringify(
+      subCategoryIds
     )}`
   );
 
-  const categoryData = categoryIds.map((categoryId) => ({
+  const categoryData = subCategoryIds.map((subCategoryId) => ({
     help_id: helpId,
-    category_id: categoryId,
+    sub_category_id: subCategoryId,
   }));
 
   console.log(
@@ -49,12 +49,12 @@ async function createHelpCategories(helpId: number, categoryIds: number[]) {
     .select();
 
   if (error) {
-    console.error(`[createHelpCategories] 카테고리 관계 생성 실패:`, error);
-    handleSupabaseError(error, '카테고리 관계 생성');
+    console.error(`[createHelpCategories] 서브카테고리 관계 생성 실패:`, error);
+    handleSupabaseError(error, '서브카테고리 관계 생성');
   }
 
   console.log(
-    `[createHelpCategories] 카테고리 관계 생성 성공 - HelpId: ${helpId}, 삽입된 데이터: ${JSON.stringify(
+    `[createHelpCategories] 서브카테고리 관계 생성 성공 - HelpId: ${helpId}, 삽입된 데이터: ${JSON.stringify(
       data
     )}`
   );

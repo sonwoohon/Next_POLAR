@@ -29,7 +29,8 @@ export const API_ENDPOINTS = {
 
   // 채팅 관련
   CHAT_ROOMS: '/api/chats/rooms',
-  CHAT_ROOM_MESSAGES: (roomId: string) => `/api/chats/rooms/${roomId}/messages`,
+  CHAT_ROOM_MESSAGES: (roomId: number) => `/api/chats/rooms/${roomId}/messages`,
+  CHAT_ROOM_DETAIL: (roomId: number) => `/api/chats/rooms/${roomId}`,
 
   // 이미지 업로드 관련
   IMAGE_UPLOAD: '/api/images',
@@ -70,8 +71,14 @@ export const QUERY_KEYS = {
 
   // 채팅 관련
   CHAT_ROOMS: ['chats', 'rooms'] as const,
-  CHAT_MESSAGES: (roomId: string) =>
+  CHAT_MESSAGES: (roomId: number) =>
     ['chats', 'rooms', roomId, 'messages'] as const,
+  CHAT_ROOM_DETAIL: (roomId: number) =>
+    ['chats', 'rooms', roomId, 'detail'] as const,
+  LATEST_HELP_BY_CHAT_ROOM: (roomId: number) =>
+    ['chats', 'rooms', roomId, 'latest-help'] as const,
+  HELPS_BY_CHAT_ROOM: (roomId: number) =>
+    ['chats', 'rooms', roomId, 'helps'] as const,
 
   // 점수 관련
   SCORES: ['scores'] as const,

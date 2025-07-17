@@ -1,17 +1,17 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import styles from "./HelpListCard.module.css";
-import CategoryBadge from "@/app/_components/category-badge/CategoryBadge";
-import type { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import styles from './HelpListCard.module.css';
+import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
+import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 interface HelpListCardProps {
   help: HelpListResponseDto;
 }
 
-const getRewardByCategory = (category: number) => {
+const getRewardByCategory = (category: { id: number; point: number }[]) => {
   // 카테고리별로 고정된 seed로 임의의 점수 생성 (10,000~100,000, 10,000 단위)
-  const base = (category * 23457) % 10;
+  const base = ((category[0]?.id ?? 1) * 23457) % 10;
   return (base + 1) * 10000;
 };
 
@@ -23,25 +23,25 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
     const d = new Date(date);
     return `${d.getFullYear()}.${(d.getMonth() + 1)
       .toString()
-      .padStart(2, "0")}.${d.getDate().toString().padStart(2, "0")}`;
+      .padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}`;
   };
 
   return (
     <div className={styles.card}>
       <div className={styles.thumbnail}>
         <Image
-          src={seniorInfo.profileImgUrl || "/default-profile.png"}
-          alt="썸네일"
+          src={seniorInfo.profileImgUrl || '/default-profile.png'}
+          alt='썸네일'
           width={100}
           height={100}
           className={styles.thumbnailImg}
-          style={{ objectFit: "cover", borderRadius: "0.8rem" }}
+          style={{ objectFit: 'cover', borderRadius: '0.8rem' }}
           priority={true}
         />
       </div>
       <div className={styles.info}>
         <div className={styles.topRow}>
-          <CategoryBadge category={category} />
+          <CategoryBadge category={category[0]?.id} />
           <span className={styles.status}>{status}</span>
         </div>
         <div className={styles.title}>{title}</div>
