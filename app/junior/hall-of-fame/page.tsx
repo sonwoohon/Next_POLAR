@@ -31,8 +31,8 @@ useEffect(() => {
         const scores = await response.json();
         console.log('API 응답:', scores);
 
-        // 임시 카테고리 데이터
-        const categories = ['요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
+        // 임시 카테고리 데이터 
+        const CATEGORIES = ['요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
         '수리왕', '청소왕', '이사왕', '노인케어왕', '정원왕'];
         
         // user_id 기준으로 점수 합산
@@ -60,7 +60,7 @@ useEffect(() => {
             const highestScore = userScores.reduce((max: any, score: any) => 
             score.category_score > max.category_score ? score : max
             );
-            const categoryName = categories[highestScore.category_id] || '기타';
+            const categoryName = CATEGORIES[highestScore.category_id] || '기타';
             
             return {
             userId,
