@@ -14,6 +14,7 @@ export default function JuniorHallOffamePage() {
 const [ranking, setRanking] = useState<UserRanking[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState<string | null>(null);
+const [skipAnimation, setSkipAnimation] = useState(false);
 
 useEffect(() => {
     const fetchScores = async () => {
@@ -87,7 +88,7 @@ useEffect(() => {
 }, []);
 
 return (
-    <div className={styles.rankingWrap}>
+    <div className={styles.rankingWrap + (skipAnimation ? ' ' + styles.skipAnim : '')}>
     <h1 className={`${styles.neon} ${styles.hallTitle} ${styles.neonFlash}`}>명예의 <span>전당</span></h1>
     <div className={styles.rankingTopWrap}>
         <div className={styles.verticalLighting}>
@@ -98,14 +99,12 @@ return (
         <ul>
         {ranking.slice(0, 3).map((item, idx) => (
             <li key={item.userId}>
-            <img 
-                src={item.profileImg} alt="프로필 이미지" 
-            />
-            <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}</span>
-            <span className={styles.rankingTopName}>{item.nickname}</span>
-            <span className={styles.categoryLabel}>
-                {item.category}
-            </span>
+                <div className={styles.imgwrap}><img src={item.profileImg} alt="프로필 이미지" /></div>
+                <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}</span>
+                <span className={styles.rankingTopName}>{item.nickname}</span>
+                <span className={styles.categoryLabel}>
+                    {item.category}
+                </span>
             </li>
         ))}
         </ul>
@@ -146,6 +145,14 @@ return (
         </div>
     </div>
     <div className={styles.circleLights}></div>
+    {!skipAnimation && (
+      <button
+        className={styles.skipBtn}
+        onClick={() => setSkipAnimation(true)}>
+        애니메이션 스킵
+      </button>
+    )}
     </div>
+    
 );
 } 

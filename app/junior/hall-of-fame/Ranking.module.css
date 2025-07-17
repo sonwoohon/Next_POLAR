@@ -178,10 +178,13 @@
   margin: 0 10px;
 }
 
-.rankingTopWrap ul li img{
+.rankingTopWrap ul li .imgwrap{
   border-radius: 50%;
   width: 50%;
   border: 1px solid #3d3d3d;
+}
+.rankingTopWrap ul li .imgwrap img{
+  width: 100%;
 }
 @keyframes spotlight{
   0%{opacity: 0; bottom: -10%;}
@@ -681,4 +684,81 @@
       0 0 160px #f00,
       0 0 200px #f00;
   }
+}
+
+.skipBtn {
+  z-index: 200;
+  color: #222;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 700;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 8px #0002;
+}
+/* ===== 애니메이션 스킵 기능 (animation, transition 모두 제거) ===== */
+.skipAnim .rankingTopWrap ul{
+  opacity: 1 !important;
+  top: 50% !important;
+  transform: translateY(-50%) scale(.9) !important;
+  animation: none !important;
+  transition: none !important;
+}
+.skipAnim .rankingBtmWrap ul {
+  opacity: 1 !important;
+  top: 50% !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.skipAnim .verticalLighting div {
+  opacity: 0 !important;
+  animation: none !important;
+  transition: none !important;
+  transform: translate(0, -10%) rotate(0deg) !important;
+  height: 200% !important;
+}
+
+.skipAnim .curtain {
+  animation: none !important;
+  transition: none !important;
+  display: none !important;
+}
+
+.skipAnim .curtainItemLeft {
+  left: -50% !important;
+  animation: none !important;
+  transition: none !important;
+}
+.skipAnim .curtainItemright {
+  right: -50% !important;
+  animation: none !important;
+  transition: none !important;
+}
+.skipAnim .curtain > div {
+  transition: none !important;
+}
+
+.skipAnim .circleLights {
+  opacity: 0.4 !important;
+  top: -100% !important;
+  left: 50% !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.skipAnim .rankingTopWrap ul li:before {
+  animation: none !important;
+}
+
+.skipAnim .neonFlash {
+  animation: none !important;
 }
