@@ -31,4 +31,12 @@ export const createReview = async (formData: FormData): Promise<CreateReviewResp
     }
   );
   return response.data;
+};
+
+// 리뷰 생성 권한 확인
+export const checkReviewCreateAccess = async (nickname: string, helpId: number): Promise<boolean> => {
+  const response = await apiClient.get<{ hasAccess: boolean }>(
+    `${API_ENDPOINTS.REVIEW_CREATE_AUTH_CHECK}?nickname=${nickname}&helpId=${helpId}`
+  );
+  return response.data.hasAccess;
 }; 
