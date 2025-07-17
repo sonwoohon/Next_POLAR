@@ -47,12 +47,10 @@ const getBigCategoryColor = (bigCategory: string): string => {
   }
 };
 
-
-
 export default function CustomCalendar({ 
   year, 
   month, 
-  helps = mockHelps, // 기본값으로 임시 데이터 사용
+  helps = [], // 기본값으로 빈 배열 사용
   onDateClick,
   selectedDate 
 }: CalendarProps) {
@@ -134,11 +132,6 @@ export default function CustomCalendar({
       onDateClick(value);
     }
   };
-
-  // 전체 helps 통계
-  const totalHelps = allHelps.length;
-  const openHelps = allHelps.filter(help => help.status === 'open').length;
-  const connectingHelps = allHelps.filter(help => help.status === 'connecting').length;
 
   return (
     <div className={styles.calendarContainer}>

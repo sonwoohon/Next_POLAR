@@ -23,7 +23,6 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [hover, setHover] = useState(0);
 
   const nickname = useAuthStore.getState().user?.nickname;
   const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');

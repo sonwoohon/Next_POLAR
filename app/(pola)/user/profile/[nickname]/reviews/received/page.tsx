@@ -43,4 +43,4 @@ export default function ReceivedReviewsPage({ params }: { params: Promise<{ nick
       )}
     </div>
   );
-} 
+}
