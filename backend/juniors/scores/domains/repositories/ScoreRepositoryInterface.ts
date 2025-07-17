@@ -25,4 +25,7 @@ export interface ScoreRepositoryInterface {
   getScoresByNicknameAndCategoryId(
     request: ScoreRequestDtoWithNicknameAndCategoryId
   ): Promise<Score[]>;
+  
+  // Hall of Fame용 랭킹 조회 메서드
+  getUserRankingsBySeason(season: number): Promise<any[]>;
 }

@@ -134,4 +134,21 @@ export class ScoreRepository implements ScoreRepositoryInterface {
       category_id: request.categoryId,
     });
   }
+
+  // user_id별 총점과 nickname을 가져오는 메서드 (Hall of Fame용)
+  async getUserRankingsBySeason(season: number): Promise<any[]> {
+    const { data, error } = await supabase
+      .from('scores')
+      .select(`
+        user_id,
+        users!inner(nickname, profile_img_url),
+        category_id,
+        category_score
+      `)
+      .eq('season', season);
+
+    if (error || !data) return [];
+
+    return data;
+  }
 }

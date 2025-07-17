@@ -46,4 +46,9 @@ export class GetUserScoresUseCase {
   ): Promise<Score[]> {
     return await this.scoreRepository.getScoresByNicknameAndCategoryId(request);
   }
+
+  // Hall of Fame용 랭킹 조회 메서드
+  async executeRankingsBySeason(season: number): Promise<any[]> {
+    return await this.scoreRepository.getUserRankingsBySeason(season);
+  }
 }

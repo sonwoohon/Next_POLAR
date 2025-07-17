@@ -19,7 +19,7 @@ const slides = [
   {
     title: '요청과 도움, 모두의 성장',
     img: 'https://source.unsplash.com/featured/?handshake,people',
-    desc: '실버의 작은 요청이\n주니어의 소중한 경험이 됩니다.\n서로의 일상에 힘이 되어주세요.'
+    desc: '주니어의 작은 요청이\n주니어의 소중한 경험이 됩니다.\n서로의 일상에 힘이 되어주세요.'
   },
   {
     title: '정성스러운 봉사, 소중한 보상',

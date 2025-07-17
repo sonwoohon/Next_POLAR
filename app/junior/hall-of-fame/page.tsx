@@ -1,132 +1,151 @@
 "use client"
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Ranking.module.css';
-import axios from 'axios';
-
-// interface Score {
-//   userId: string;
-//   categoryScore: number;
-//   updatedAt: string;
-// }
 
 interface UserRanking {
   userId: string;
   nickname: string;
   totalScore: number;
+  category: string;
+  profileImg: string;
 }
 
-// 임시 카테고리 데이터
-// const categories = [
-//   '요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
-//   '수리왕', '청소왕', '이사왕', '노인케어왕', '정원왕'
-// ];
+export default function JuniorHallOffamePage() {
+const [ranking, setRanking] = useState<UserRanking[]>([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
 
-export default function JuniorHallOffamePage () {
-  const [ranking, setRanking] = useState<UserRanking[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const neonRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
+useEffect(() => {
     const fetchScores = async () => {
-      try {
+    try {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('/api/scores/season?season=1');
-        const raw = response.data;
-        console.log('API 응답 데이터:', raw);
+        // 실제 API 호출 (기존 API만 사용)
+        const response = await fetch('/api/scores/season?season=1');
+        if (!response.ok) {
+        throw new Error('점수 조회에 실패했습니다.');
+        }
+        
+        const scores = await response.json();
+        console.log('API 응답:', scores);
 
-        // nickname 기준으로 category_score 합산
-        const userScoreMap: Record<string, { nickname: string; totalScore: number }> = {};
-        raw.forEach((score: any) => {
-          const key = score.nickname || score.user_id;
-          if (!key) return;
-          if (!userScoreMap[key]) {
-            userScoreMap[key] = {
-              nickname: score.nickname || '',
-              totalScore: 0,
-            };
-          }
-          userScoreMap[key].totalScore += score.categoryScore ?? score.category_score ?? 0;
+        // 임시 카테고리 데이터
+        const categories = ['요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
+        '수리왕', '청소왕', '이사왕', '노인케어왕', '정원왕'];
+        
+        // user_id 기준으로 점수 합산
+        const userScores: Record<string, number> = {};
+        
+        scores.forEach((score: any) => {
+        const userId = score.user_id;
+        const scoreValue = score.category_score || 0;
+        
+        if (userId) {
+            userScores[userId] = (userScores[userId] || 0) + scoreValue;
+        }
         });
 
-        // 내림차순 정렬 후 상위 10명
-        const rankingArr: UserRanking[] = Object.entries(userScoreMap)
-          .map(([userId, { nickname, totalScore }]) => ({
+        // 랭킹 생성 (상위 10)
+        const rankingData: UserRanking[] = Object.entries(userScores)
+        .map(([userId, totalScore]) => {
+            // 해당 사용자의 첫 번째 점수에서 nickname과 profile_img_url 가져오기
+            const userScore = scores.find((score: any) => score.user_id === userId);
+            const nickname = userScore?.users?.nickname || `User_${userId}`;
+            const profileImg = userScore?.users?.profile_img_url || "/images/dummies/dummy_user.png";
+            
+            // 해당 사용자의 가장 높은 점수 카테고리 찾기
+            const userScores = scores.filter((score: any) => score.user_id === userId);
+            const highestScore = userScores.reduce((max: any, score: any) => 
+            score.category_score > max.category_score ? score : max
+            );
+            const categoryName = categories[highestScore.category_id] || '기타';
+            
+            return {
             userId,
-            nickname,
-            totalScore: Number(totalScore),
-          }))
-          .sort((a, b) => b.totalScore - a.totalScore)
-          .slice(0, 10);
+            nickname: nickname,
+            totalScore,
+            category: categoryName,
+            profileImg: profileImg
+            };
+        })
+        .sort((a, b) => b.totalScore - a.totalScore)
+        .slice(0, 10);
 
-        console.log('합산 후 랭킹 데이터:', rankingArr);
-        setRanking(rankingArr);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '알 수 없는 오류');
-      } finally {
+        setRanking(rankingData);
+        console.log('랭킹 데이터:', rankingData);
+        
+    } catch (err) {
+        console.error('점수 조회 오류:', err);
+        setError('점수를 불러오는 중 오류가 발생했습니다.');
+    } finally {
         setLoading(false);
-      }
+    }
     };
-    fetchScores();
-  }, []);
 
-  return (
+    fetchScores();
+}, []);
+
+return (
     <div className={styles.rankingWrap}>
-      <h1 className={`${styles.neon} ${styles.hallTitle} ${styles.neonFlash}`}>명예의 <span>전당</span></h1>
-      <div className={styles.rankingTopWrap}>
+    <h1 className={`${styles.neon} ${styles.hallTitle} ${styles.neonFlash}`}>명예의 <span>전당</span></h1>
+    <div className={styles.rankingTopWrap}>
         <div className={styles.verticalLighting}>
-          <div></div>
-          <div></div>
-          <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
         <ul>
-          {ranking.slice(0, 3).map((item, idx) => (
+        {ranking.slice(0, 3).map((item, idx) => (
             <li key={item.userId}>
-              <img 
-                src="/dummy_user.png" 
-                alt="프로필 이미지" 
-              />
-              <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}점</span>
-              <span className={styles.rankingTopName}>{item.nickname || item.userId}</span>
+            <img 
+                src={item.profileImg} alt="프로필 이미지" 
+            />
+            <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}</span>
+            <span className={styles.rankingTopName}>{item.nickname}</span>
+            <span className={styles.categoryLabel}>
+                {item.category}
+            </span>
             </li>
-          ))}
+        ))}
         </ul>
-      </div>
-      <div className={styles.rankingBtmWrap}>
-        {loading || error ? (
-          <p className={styles.error}>{error}</p>
+    </div>
+    <div className={styles.rankingBtmWrap}>
+        {loading ? (
+        <p>로딩 중...</p>
+        ) : error ? (
+        <p className={styles.error}>{error}</p>
         ) : (
-          <ul>
+        <ul>
             {ranking.slice(3, 10).map((item, idx) => (
-              <li key={item.userId} className={styles.rankingBtmItem}>
+            <li key={item.userId} className={styles.rankingBtmItem}>
                 <div className={styles.rankingBtmImgContainer}>
-                  <img 
-                    src="/dummy_user.png" 
+                <img 
+                    src={item.profileImg} 
                     alt="프로필 이미지" 
                     className={styles.rankingBtmImg} 
-                  />
-                  <span className={styles.rankingBtmRank}>{idx + 4}</span>
-                  <span className={styles.rankingBtmName}>{item.nickname || item.userId}</span>
+                />
+                <span className={styles.rankingBtmRank}>{idx + 4}</span>
+                <span className={styles.rankingBtmName}>{item.nickname}</span>
                 </div>
                 <div className={styles.rankingBtmAmount}>
-                  <span>{item.totalScore.toLocaleString()}점</span>
+                    <span className={styles.categoryLabel}>{item.category}</span>
+                <span>{item.totalScore.toLocaleString()}</span>
                 </div>
-              </li>
+            </li>
             ))}
-          </ul>
+        </ul>
         )}
-      </div>
-      <div className={styles.curtain}>
+    </div>
+    <div className={styles.curtain}>
         <div className={styles.curtainItemLeft}>
-          <img src="/images/ranking/curtain_left.png" alt="커튼 왼쪽" />
+        <img src="/images/ranking/curtain_left.png" alt="커튼 왼쪽"/>
         </div>
         <div className={styles.curtainItemright}>
-          <img src="/images/ranking/curtain_right.png" alt="커튼 오른쪽" />
+        <img src="/images/ranking/curtain_right.png" alt="커튼 오른쪽"/>
         </div>
-      </div>
-        <div className={styles.circleLights}></div>
     </div>
-  );
+    <div className={styles.circleLights}></div>
+    </div>
+);
 } 
