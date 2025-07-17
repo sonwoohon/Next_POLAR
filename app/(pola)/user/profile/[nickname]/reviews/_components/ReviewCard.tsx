@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import styles from './ReviewCard.module.css';
 
 interface Review {
@@ -14,6 +15,12 @@ interface Review {
 }
 
 export default function ReviewCard({ review }: { review: Review }) {
+  const router = useRouter();
+
+  const handleProfileClick = () => {
+    router.push(`/user/profile/${review.writerNickname}`);
+  };
+
   return (
     <li className={styles.reviewItem}>
       <div className={styles.reviewHeaderRow}>
@@ -26,7 +33,13 @@ export default function ReviewCard({ review }: { review: Review }) {
         />
         <span className={styles.nicknameRow}>
           <span className={styles.nicknameBold}>{review.writerNickname}</span>
-          <span className={styles.arrow}>&nbsp;&gt;</span>
+          <span
+            className={styles.arrow}
+            onClick={handleProfileClick}
+            style={{ cursor: 'pointer' }}
+          >
+            &nbsp;&gt;
+          </span>
         </span>
         <span className={styles.stars}>
           {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
