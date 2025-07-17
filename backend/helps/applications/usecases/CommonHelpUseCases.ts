@@ -4,7 +4,7 @@ import {
   HelpListResponseDto,
   HelpDetailResponseDto,
 } from '@/backend/helps/applications/dtos/HelpDTO';
-import { getNicknameByUuid } from '@/lib/getUserName';
+import { getNicknameByUuid } from '@/lib/getUserData';
 
 // 헬프 리스트 조회 UseCase (닉네임 기반)
 export class GetHelpListUseCase {

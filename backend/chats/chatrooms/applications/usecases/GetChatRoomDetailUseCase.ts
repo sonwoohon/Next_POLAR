@@ -2,7 +2,7 @@ import { IChatRoomRepository } from '@/backend/chats/chatrooms/domains/repositor
 import { ChatRoom } from '@/backend/chats/chatrooms/domains/entities/ChatRoom';
 import { GetChatRoomDetailRequestDto } from '@/backend/chats/chatrooms/applications/dtos/ChatRoomRequestDtos';
 import { ChatRoomDetailResponseDto } from '@/backend/chats/chatrooms/applications/dtos/ChatRoomResponseDtos';
-import { getNicknameByUuid } from '@/lib/getUserName';
+import { getNicknameByUuid } from '@/lib/getUserData';
 
 export class GetChatRoomDetailUseCase {
   constructor(private chatRoomRepo: IChatRoomRepository) {}
