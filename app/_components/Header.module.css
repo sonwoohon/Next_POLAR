@@ -1,0 +1,35 @@
+.header{
+  position: fixed;
+  max-width: 768px;
+  width: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  padding: 1.2rem;
+  transition: margin-top 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+.headerWrap{
+  display: flex;
+  justify-content: space-between;
+}
+.logo{
+  width: 100px;
+}
+
+.logo a {
+  background: linear-gradient(90deg, #7ee8fa 46%, #446EE8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hide {
+  margin-top: -100px;
+}
