@@ -60,7 +60,7 @@ export default function CustomCalendar({
   onDateClick,
   selectedDate,
 }: CalendarProps) {
-  const [value, setValue] = useState<any>(selectedDate || new Date());
+  const [value, setValue] = useState<Date>(selectedDate || new Date());
   const [allHelps, setAllHelps] = useState<Help[]>(helps);
 
   // 컴포넌트 마운트 시 helps 데이터 설정
@@ -139,10 +139,13 @@ export default function CustomCalendar({
     return '';
   };
 
-  const handleDateChange = (value: any, event: any) => {
-    setValue(value);
-    if (value instanceof Date && onDateClick) {
-      onDateClick(value);
+  const handleDateChange = (value: unknown, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // 타입 안전성을 위한 런타임 체크
+    if (value instanceof Date) {
+      setValue(value);
+      if (onDateClick) {
+        onDateClick(value);
+      }
     }
   };
 

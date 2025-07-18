@@ -7,6 +7,7 @@ import {
   ScoreRequestDtoWithNicknameAndSeason,
   ScoreRequestDtoWithNicknameAndCategoryId,
 } from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
+import { ScoreRankingDto } from '@/backend/juniors/scores/applications/dtos/ScoreRankingDto';
 
 export interface ScoreRepositoryInterface {
   getScoresByCategoryId(
@@ -25,4 +26,7 @@ export interface ScoreRepositoryInterface {
   getScoresByNicknameAndCategoryId(
     request: ScoreRequestDtoWithNicknameAndCategoryId
   ): Promise<Score[]>;
+  
+  // Hall of Fame용 랭킹 조회 메서드
+  getUserRankingsBySeason(season: number): Promise<ScoreRankingDto[]>;
 }

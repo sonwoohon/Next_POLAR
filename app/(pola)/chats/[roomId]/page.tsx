@@ -7,7 +7,7 @@ import HelpInfo from './_components/HelpInfo';
 import styles from './page.module.css';
 import { useAuthStore } from '@/lib/stores/authStore';
 import Link from 'next/link';
-import { useChatRoomDetailWithHelps } from '@/lib/hooks';
+import { useChatRoomDetailWithHelps } from '@/lib/hooks/chats/useChatRoomDetailWithHelps';
 
 interface PageProps {
   params: Promise<{ roomId: string }>;

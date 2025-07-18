@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { createReview } from '../api_front/review.api';
+import { createReview } from '../../api_front/review.api';
 
 export function useCreateReview(options?: {
   onSuccess?: () => void;

@@ -8,6 +8,7 @@ import {
   ScoreRequestDtoWithNicknameAndSeason,
   ScoreRequestDtoWithNicknameAndCategoryId,
 } from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
+import { ScoreRankingDto } from '@/backend/juniors/scores/applications/dtos/ScoreRankingDto';
 
 export class GetUserScoresUseCase {
   constructor(private scoreRepository: ScoreRepositoryInterface) {}
@@ -45,5 +46,10 @@ export class GetUserScoresUseCase {
     request: ScoreRequestDtoWithNicknameAndCategoryId
   ): Promise<Score[]> {
     return await this.scoreRepository.getScoresByNicknameAndCategoryId(request);
+  }
+
+  // Hall of Fame용 랭킹 조회 메서드
+  async executeRankingsBySeason(season: number): Promise<ScoreRankingDto[]> {
+    return await this.scoreRepository.getUserRankingsBySeason(season);
   }
 }
