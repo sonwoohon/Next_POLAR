@@ -142,7 +142,7 @@ export class ScoreRepository implements ScoreRepositoryInterface {
       .from('scores')
       .select(`
         user_id,
-        users!inner(nickname, profile_img_url),
+        users(nickname, profile_img_url),
         category_id,
         category_score
       `)
@@ -153,7 +153,7 @@ export class ScoreRepository implements ScoreRepositoryInterface {
     // Supabase 응답을 ScoreRankingDto 형태로 변환
     return (data as ScoreRankingRawDto[]).map(item => ({
       user_id: item.user_id,
-      users: item.users[0], // 배열의 첫 번째 요소 사용
+      users: Array.isArray(item.users) ? item.users[0] : item.users, // 배열이면 첫 번째 요소, 아니면 그대로
       category_id: item.category_id,
       category_score: item.category_score,
     }));
