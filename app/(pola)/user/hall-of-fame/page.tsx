@@ -37,9 +37,6 @@ useEffect(() => {
         // 실제 API 호출 (axios 사용)
         const response = await axios.get('/api/scores/season?season=1');
         const scores: ScoreData[] = response.data;
-        console.log('API 응답:', scores);
-        console.log('API 응답 길이:', scores.length);
-        console.log('첫 번째 데이터:', scores[0]);
 
         // 임시 카테고리 데이터 
         const CATEGORIES = ['요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
@@ -49,18 +46,13 @@ useEffect(() => {
         const userScores: Record<string, number> = {};
         
         scores.forEach((score: ScoreData) => {
-        console.log('처리 중인 score:', score);
         const nickname = score.users?.nickname;
         const scoreValue = score.category_score || 0;
-        
-        console.log('nickname:', nickname, 'scoreValue:', scoreValue);
         
         if (nickname) {
             userScores[nickname] = (userScores[nickname] || 0) + scoreValue;
         }
         });
-        
-        console.log('점수 합산 결과:', userScores);
 
         // 랭킹 생성 (상위 10)
         const rankingData: UserRanking[] = Object.entries(userScores)
@@ -87,7 +79,6 @@ useEffect(() => {
         .slice(0, 10);
 
         setRanking(rankingData);
-        console.log('랭킹 데이터:', rankingData);
         
     } catch (err) {
         console.error('점수 조회 오류:', err);
