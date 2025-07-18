@@ -24,10 +24,9 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
-  const userRole = useAuthStore.getState().user?.role || '';
   const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');
   const { imageFiles, clearImages } = useImageContext();
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -70,8 +69,8 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
 
   return (
     <div className={styles.container}>
-      {userProfile && (
-        <UserInfoSection data={userProfile} userRole={userRole} />
+      {userProfile && userProfile.data && (
+        <UserInfoSection data={userProfile.data} />
       )}
       {loading ? (
         <div className={styles.loadingContainer}>로딩 중...</div>

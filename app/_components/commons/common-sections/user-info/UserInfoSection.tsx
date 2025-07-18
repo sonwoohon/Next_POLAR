@@ -4,22 +4,17 @@ import RatingStar from "@/public/images/icons/icon_star.svg";
 import styles from "./UserInfoSection.module.css";
 import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
 
-// 프론트엔드에서 id가 string일 수도 있으므로 확장 타입 정의
-type UserInfoSectionData = Omit<UserProfileResponseDto, 'id'> & { id: string | number };
-
 interface UserInfoSectionProps {
-  data: UserInfoSectionData;
-  userRole: string;
+  data: UserProfileResponseDto;
 }
 
 const UserInfoSection: React.FC<UserInfoSectionProps> = ({
   data,
-  userRole,
 }) => {
   console.log(data);
-  const { nickname, name, profileImgUrl } = data;
+  const { nickname, name, profileImgUrl, age } = data;
 
-  const userType = userRole === "senior" ? "Sr." : "Jr.";
+  const userType = age >= 60 ? "Sr." : "Jr.";
   const rating = 4.5;
 
   return (
