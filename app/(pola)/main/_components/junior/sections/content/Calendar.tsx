@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styles from './Calendar.module.css';
+import Calendar from 'react-calendar';
 
 interface Help {
   id: number;
@@ -38,21 +38,27 @@ const getBigCategory = (subCategoryId: number): string => {
 // Big Category 색상 매핑
 const getBigCategoryColor = (bigCategory: string): string => {
   switch (bigCategory) {
-    case '힘': return '#ff4444'; // 빨강
-    case '지능': return '#4444ff'; // 파랑
-    case '민첩': return '#44ff44'; // 연두
-    case '매력': return '#ff44ff'; // 분홍
-    case '인내': return '#8844ff'; // 보라
-    default: return '#888888'; // 회색
+    case '힘':
+      return '#ff4444'; // 빨강
+    case '지능':
+      return '#4444ff'; // 파랑
+    case '민첩':
+      return '#44ff44'; // 연두
+    case '매력':
+      return '#ff44ff'; // 분홍
+    case '인내':
+      return '#8844ff'; // 보라
+    default:
+      return '#888888'; // 회색
   }
 };
 
-export default function CustomCalendar({ 
-  year, 
-  month, 
+export default function CustomCalendar({
+  year,
+  month,
   helps = [], // 기본값으로 빈 배열 사용
   onDateClick,
-  selectedDate 
+  selectedDate,
 }: CalendarProps) {
   const [value, setValue] = useState<any>(selectedDate || new Date());
   const [allHelps, setAllHelps] = useState<Help[]>(helps);
@@ -64,14 +70,22 @@ export default function CustomCalendar({
 
   // 특정 날짜의 help 목록 가져오기 (start_date인 help만)
   const getHelpsForDate = (date: Date): Help[] => {
-    return allHelps.filter(help => {
+    return allHelps.filter((help) => {
       const helpStart = new Date(help.startDate);
       const targetDate = new Date(date);
-      
+
       // 날짜 비교 (시간 제외) - start_date와 정확히 일치하는 것만
-      const startDate = new Date(helpStart.getFullYear(), helpStart.getMonth(), helpStart.getDate());
-      const currentDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-      
+      const startDate = new Date(
+        helpStart.getFullYear(),
+        helpStart.getMonth(),
+        helpStart.getDate()
+      );
+      const currentDate = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        targetDate.getDate()
+      );
+
       return currentDate.getTime() === startDate.getTime();
     });
   };
@@ -80,7 +94,7 @@ export default function CustomCalendar({
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
       const dayHelps = getHelpsForDate(date);
-      
+
       if (dayHelps.length > 0) {
         return (
           <div className={styles.tileContent}>
@@ -88,8 +102,8 @@ export default function CustomCalendar({
               const bigCategory = getBigCategory(help.category);
               const color = getBigCategoryColor(bigCategory);
               return (
-                <div 
-                  key={help.id} 
+                <div
+                  key={help.id}
                   className={styles.categoryDot}
                   style={{ backgroundColor: color }}
                   title={`${help.title} (${bigCategory})`}
@@ -97,9 +111,7 @@ export default function CustomCalendar({
               );
             })}
             {dayHelps.length > 5 && (
-              <div className={styles.moreDots}>
-                +{dayHelps.length - 5}
-              </div>
+              <div className={styles.moreDots}>+{dayHelps.length - 5}</div>
             )}
           </div>
         );
@@ -113,14 +125,15 @@ export default function CustomCalendar({
     if (view === 'month') {
       const dayHelps = getHelpsForDate(date);
       const isToday = date.toDateString() === new Date().toDateString();
-      const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
-      
+      const isSelected =
+        selectedDate && date.toDateString() === selectedDate.toDateString();
+
       let className = styles.calendarTile;
-      
+
       if (isToday) className += ` ${styles.today}`;
       if (isSelected) className += ` ${styles.selected}`;
       if (dayHelps.length > 0) className += ` ${styles.hasHelps}`;
-      
+
       return className;
     }
     return '';
@@ -140,10 +153,10 @@ export default function CustomCalendar({
         value={value}
         tileContent={tileContent}
         tileClassName={tileClassName}
-        locale="ko-KR"
+        locale='ko-KR'
         formatDay={(locale, date) => date.getDate().toString()}
         className={styles.reactCalendar}
       />
     </div>
   );
-} 
+}
