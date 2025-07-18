@@ -14,6 +14,7 @@ const SeniorHelpsSection: React.FC<SeniorHelpsSectionProps> = ({
   nickname,
 }) => {
   // 더미 데이터
+  const URL = `/user/profile/${nickname}/helps`;
   const dummyHelps: HelpListResponseDto[] = [
     {
       id: 1,
@@ -70,7 +71,7 @@ const SeniorHelpsSection: React.FC<SeniorHelpsSectionProps> = ({
       <div className={styles.seniorHelpsTitleContainer}>
         <h2>{title}</h2>
         <div className={styles.seniorHelpsSectionTitleButton}>
-          <Link href={`/user/profile/${nickname}/helps`}>더보기</Link>
+          <Link href={URL}>더보기</Link>
         </div>
       </div>
 

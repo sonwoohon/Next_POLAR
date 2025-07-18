@@ -18,6 +18,7 @@ import { useAuthStore } from "@/lib/stores/authStore";
 const UserProfilePage: React.FC = () => {
   const params = useParams();
   const nickname = params.nickname as string;
+  const url = ``
 
   // 현재 로그인한 유저 정보 가져오기
   const currentUser = useAuthStore((state) => state.user);
