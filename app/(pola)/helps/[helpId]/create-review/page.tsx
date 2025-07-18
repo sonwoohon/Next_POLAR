@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { use } from 'react';
-import Image from 'next/image';
 import styles from './CreateReview.module.css';
-import ProfileSummary from './_components/ProfileSummary';
+import UserInfoSection from '@/app/_components/commons/common-sections/user-info/UserInfoSection';
 import Button from './_components/Button';
 import Input from './_components/Input';
 import { useCreateReview } from '@/lib/hooks/review/useCreateReview';
@@ -25,6 +24,7 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
+  const userRole = useAuthStore.getState().user?.role || '';
   const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');
   const { imageFiles, clearImages } = useImageContext();
 
@@ -70,7 +70,9 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
 
   return (
     <div className={styles.container}>
-      {userProfile && <ProfileSummary user={userProfile} />}
+      {userProfile && (
+        <UserInfoSection data={userProfile} userRole={userRole} />
+      )}
       {loading ? (
         <div className={styles.loadingContainer}>로딩 중...</div>
       ) : error ? (
