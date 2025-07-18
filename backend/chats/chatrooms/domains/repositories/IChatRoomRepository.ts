@@ -14,4 +14,7 @@ export interface IChatRoomRepository {
 
   // chatRoomId로 연결된 helpId 목록 조회
   findHelpIdsByChatRoomId(chatRoomId: number): Promise<number[]>;
+
+  // nickname이 특정 채팅방에 접근 권한이 있는지 확인
+  checkUserAccessToChatRoom(nickname: string, chatRoomId: number): Promise<boolean>;
 }
