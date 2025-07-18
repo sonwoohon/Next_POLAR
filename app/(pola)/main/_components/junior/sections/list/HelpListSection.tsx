@@ -1,9 +1,20 @@
 import Link from 'next/link';
 import styles from './HelpListSection.module.css';
-import HelpListCard from '@/app/_components/commons/list-card/HelpListCard';
+import HelpListCard from '@/app/_components/commons/list-card/help-list-card/HelpListCard';
+
+interface Help {
+  id: number;
+  title: string;
+  content: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  category: number[];
+  seniorNickname: string;
+}
 
 interface HelpListSectionProps {
-  filteredHelps: any[];
+  filteredHelps: Help[];
 }
 
 export default function HelpListSection({ filteredHelps }: HelpListSectionProps) {
