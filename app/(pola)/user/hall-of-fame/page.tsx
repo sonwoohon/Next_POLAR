@@ -10,6 +10,18 @@ interface UserRanking {
   profileImg: string;
 }
 
+interface User {
+  nickname: string;
+  profile_img_url: string;
+}
+
+interface ScoreData {
+  user_id: string;
+  category_score: number;
+  category_id: number;
+  users: User;
+}
+
 export default function JuniorHallOffamePage() {
 const [ranking, setRanking] = useState<UserRanking[]>([]);
 const [loading, setLoading] = useState(true);
@@ -28,7 +40,7 @@ useEffect(() => {
         throw new Error('점수 조회에 실패했습니다.');
         }
         
-        const scores = await response.json();
+        const scores: ScoreData[] = await response.json();
         console.log('API 응답:', scores);
 
         // 임시 카테고리 데이터 
@@ -38,7 +50,7 @@ useEffect(() => {
         // user_id 기준으로 점수 합산
         const userScores: Record<string, number> = {};
         
-        scores.forEach((score: any) => {
+        scores.forEach((score: ScoreData) => {
         const userId = score.user_id;
         const scoreValue = score.category_score || 0;
         
@@ -51,13 +63,13 @@ useEffect(() => {
         const rankingData: UserRanking[] = Object.entries(userScores)
         .map(([userId, totalScore]) => {
             // 해당 사용자의 첫 번째 점수에서 nickname과 profile_img_url 가져오기
-            const userScore = scores.find((score: any) => score.user_id === userId);
+            const userScore = scores.find((score: ScoreData) => score.user_id === userId);
             const nickname = userScore?.users?.nickname || `User_${userId}`;
             const profileImg = userScore?.users?.profile_img_url || "/images/dummies/dummy_user.png";
             
             // 해당 사용자의 가장 높은 점수 카테고리 찾기
-            const userScores = scores.filter((score: any) => score.user_id === userId);
-            const highestScore = userScores.reduce((max: any, score: any) => 
+            const userScores = scores.filter((score: ScoreData) => score.user_id === userId);
+            const highestScore = userScores.reduce((max: ScoreData, score: ScoreData) => 
             score.category_score > max.category_score ? score : max
             );
             const categoryName = CATEGORIES[highestScore.category_id] || '기타';
@@ -146,11 +158,11 @@ return (
     </div>
     <div className={styles.circleLights}></div>
     {!skipAnimation && (
-      <button
-        className={styles.skipBtn}
-        onClick={() => setSkipAnimation(true)}>
-        애니메이션 스킵
-      </button>
+        <button
+            className={styles.skipBtn}
+            onClick={() => setSkipAnimation(true)}>
+            애니메이션 스킵
+        </button>
     )}
     </div>
     
