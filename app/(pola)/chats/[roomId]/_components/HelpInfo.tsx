@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './HelpInfo.module.css';
 import { HelpDetail } from '@/lib/models/helpDetail';
+import { getCategoryName } from '@/lib/utils/categoryUtils';
 
 interface HelpInfoProps {
   roomId: number;
@@ -15,17 +16,6 @@ export default function HelpInfo({ roomId, helpData }: HelpInfoProps) {
 
   const handlePrevHelpClick = () => {
     router.push(`/chats/${roomId}/history`);
-  };
-
-  const getCategoryName = (categoryId: number) => {
-    const categories: { [key: number]: string } = {
-      1: '🧹 청소',
-      2: '🍳 요리',
-      3: '🚗 운전',
-      4: '💬 상담',
-      5: '✨ 기타',
-    };
-    return categories[categoryId] || '기타';
   };
 
   return (
@@ -45,7 +35,15 @@ export default function HelpInfo({ roomId, helpData }: HelpInfoProps) {
       <div className={styles.helpTextWrap}>
         <h3 className={styles.helpTitle}>{helpData.title}</h3>
         <div className={styles.tags}>
-          <span className={styles.tag}>{getCategoryName(1)}</span>
+          {helpData.category && helpData.category.length > 0 ? (
+            helpData.category.map((cat, index) => (
+              <span key={index} className={styles.tag}>
+                {getCategoryName(cat.id)}
+              </span>
+            ))
+          ) : (
+            <span className={styles.tag}>기타</span>
+          )}
         </div>
       </div>
       <span className={styles.prevHelp} onClick={handlePrevHelpClick}>

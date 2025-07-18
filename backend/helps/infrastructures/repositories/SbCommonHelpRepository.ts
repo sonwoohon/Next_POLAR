@@ -5,6 +5,7 @@ import {
 } from '@/backend/helps/domains/entities/CommonHelpEntity';
 import { ICommonHelpRepository } from '@/backend/helps/domains/repositories/ICommonHelpRepository';
 import { HelpData } from '@/backend/helps/infrastructures/mappers/CommonHelpDataMapper';
+import { HelpFilterDto } from '@/backend/helps/applications/dtos/HelpFilterDto';
 
 // JOIN 결과 타입 정의
 type CategoryJoinResult = {
@@ -209,6 +210,207 @@ export class SbCommonHelpRepository implements ICommonHelpRepository {
     } catch (error) {
       console.error('[Repository] 헬프 상세 조회 오류:', error);
       throw new Error('헬프 상세 조회 오류');
+    }
+  }
+
+  async getHelpListWithFilter(
+    filter: HelpFilterDto
+  ): Promise<CommonHelpEntity[] | null> {
+    try {
+      let query = supabase.from('helps').select('*');
+
+      // 서브 카테고리 필터링 (sub_categories 테이블)
+      if (filter.subCategoryIds && filter.subCategoryIds.length > 0) {
+        const { data: subCategoryFilteredHelps, error: subCategoryError } =
+          await supabase
+            .from('help_categories')
+            .select('help_id')
+            .in('sub_category_id', filter.subCategoryIds);
+
+        if (subCategoryError) {
+          console.error(
+            '[Repository] 서브 카테고리 필터링 오류:',
+            subCategoryError
+          );
+          return null;
+        }
+
+        if (subCategoryFilteredHelps && subCategoryFilteredHelps.length > 0) {
+          const helpIds = subCategoryFilteredHelps.map((item) => item.help_id);
+          query = query.in('id', helpIds);
+        } else {
+          // 해당 서브 카테고리의 help가 없으면 빈 결과 반환
+          return [];
+        }
+      }
+
+      // 메인 카테고리 필터링 (categories 테이블)
+      if (filter.categoryIds && filter.categoryIds.length > 0) {
+        // sub_categories 테이블을 통해 category_id로 필터링
+        const { data: categoryFilteredHelps, error: categoryError } =
+          await supabase
+            .from('help_categories')
+            .select(
+              `
+              help_id,
+              sub_categories!help_categories_sub_category_id_fkey(
+                category_id
+              )
+            `
+            )
+            .in('sub_categories.category_id', filter.categoryIds);
+
+        if (categoryError) {
+          console.error(
+            '[Repository] 메인 카테고리 필터링 오류:',
+            categoryError
+          );
+          return null;
+        }
+
+        if (categoryFilteredHelps && categoryFilteredHelps.length > 0) {
+          const helpIds = categoryFilteredHelps.map((item) => item.help_id);
+          query = query.in('id', helpIds);
+        } else {
+          // 해당 메인 카테고리의 help가 없으면 빈 결과 반환
+          return [];
+        }
+      }
+
+      // 날짜 필터링
+      if (filter.startDate) {
+        query = query.gte('start_date', filter.startDate);
+      }
+      if (filter.endDate) {
+        query = query.lte('end_date', filter.endDate);
+      }
+
+      // 상태 필터링
+      if (filter.status) {
+        query = query.eq('status', filter.status);
+      }
+
+      // 페이지네이션
+      if (filter.limit) {
+        query = query.limit(filter.limit);
+      }
+      if (filter.offset) {
+        query = query.range(
+          filter.offset,
+          filter.offset + (filter.limit || 10) - 1
+        );
+      }
+
+      const { data, error } = await query;
+
+      if (!data || error) {
+        console.error(
+          '[Repository] Supabase 필터링된 헬프 리스트 조회 오류:',
+          error
+        );
+        return null;
+      }
+
+      const helpEntities = await Promise.all(
+        data.map((help: HelpData) => this.createHelpEntity(help))
+      );
+
+      return helpEntities;
+    } catch (error) {
+      console.error(
+        '[SbCommonHelpRepository] 필터링된 헬프 리스트 조회 오류:',
+        error
+      );
+      throw new Error(`필터링된 헬프 리스트 조회 오류: ${error}`);
+    }
+  }
+
+  async getHelpCountWithFilter(filter: HelpFilterDto): Promise<number> {
+    try {
+      let query = supabase.from('helps').select('id', { count: 'exact' });
+
+      // 서브 카테고리 필터링 (sub_categories 테이블)
+      if (filter.subCategoryIds && filter.subCategoryIds.length > 0) {
+        const { data: subCategoryFilteredHelps, error: subCategoryError } =
+          await supabase
+            .from('help_categories')
+            .select('help_id')
+            .in('sub_category_id', filter.subCategoryIds);
+
+        if (subCategoryError) {
+          console.error(
+            '[Repository] 서브 카테고리 필터링 오류:',
+            subCategoryError
+          );
+          return 0;
+        }
+
+        if (subCategoryFilteredHelps && subCategoryFilteredHelps.length > 0) {
+          const helpIds = subCategoryFilteredHelps.map((item) => item.help_id);
+          query = query.in('id', helpIds);
+        } else {
+          // 해당 서브 카테고리의 help가 없으면 0 반환
+          return 0;
+        }
+      }
+
+      // 메인 카테고리 필터링 (categories 테이블)
+      if (filter.categoryIds && filter.categoryIds.length > 0) {
+        // sub_categories 테이블을 통해 category_id로 필터링
+        const { data: categoryFilteredHelps, error: categoryError } =
+          await supabase
+            .from('help_categories')
+            .select(
+              `
+              help_id,
+              sub_categories!help_categories_sub_category_id_fkey(
+                category_id
+              )
+            `
+            )
+            .in('sub_categories.category_id', filter.categoryIds);
+
+        if (categoryError) {
+          console.error(
+            '[Repository] 메인 카테고리 필터링 오류:',
+            categoryError
+          );
+          return 0;
+        }
+
+        if (categoryFilteredHelps && categoryFilteredHelps.length > 0) {
+          const helpIds = categoryFilteredHelps.map((item) => item.help_id);
+          query = query.in('id', helpIds);
+        } else {
+          // 해당 메인 카테고리의 help가 없으면 0 반환
+          return 0;
+        }
+      }
+
+      // 날짜 필터링
+      if (filter.startDate) {
+        query = query.gte('start_date', filter.startDate);
+      }
+      if (filter.endDate) {
+        query = query.lte('end_date', filter.endDate);
+      }
+
+      // 상태 필터링
+      if (filter.status) {
+        query = query.eq('status', filter.status);
+      }
+
+      const { count, error } = await query;
+
+      if (error) {
+        console.error('[Repository] Supabase 헬프 개수 조회 오류:', error);
+        return 0;
+      }
+
+      return count || 0;
+    } catch (error) {
+      console.error('[SbCommonHelpRepository] 헬프 개수 조회 오류:', error);
+      return 0;
     }
   }
 }

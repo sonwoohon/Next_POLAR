@@ -48,6 +48,7 @@ export interface ConnectedHelpDto {
   startDate: string;
   endDate: string;
   createdAt: string;
+  category: { id: number; point: number }[];
 }
 
 // 채팅방 상세 정보와 연결된 helps 리스트 응답 DTO

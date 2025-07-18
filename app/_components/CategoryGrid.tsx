@@ -1,30 +1,33 @@
 'use client';
 import { useState } from 'react';
 import styles from './CategoryGrid.module.css';
+import { getCategoryName } from '@/lib/utils/categoryUtils';
 
-const categoryData = [
-  { img: '/cat-korean.png', text: '무거워요' },
-  { img: '/cat-burger.png', text: '어려워요' },
-  { img: '/cat-pizza.png', text: '정리해요' },
-  { img: '/cat-cutlet.png', text: '배워요' },
-  { img: '/cat-jokbal.png', text: '복잡해요' },
-  { img: '/cat-chicken.png', text: '고장나요' },
-  { img: '/cat-snack.png', text: '심부름' },
-  { img: '/cat-fold.png', text: '접기', isMore: true },
-];
+interface CategoryItem {
+  id: number;
+  text: string;
+  img?: string;
+  isMore?: boolean;
+}
 
 export default function CategoryGrid() {
   const [showMore, setShowMore] = useState(false);
+
+  // 카테고리 데이터 생성 (1-19번까지)
+  const categoryData: CategoryItem[] = Array.from({ length: 19 }, (_, i) => ({
+    id: i + 1,
+    text: getCategoryName(i + 1),
+  }));
 
   const shownCategories = showMore
     ? categoryData
     : categoryData
         .slice(0, 3)
-        .concat([{ img: '', text: '더보기', isMore: true }]);
+        .concat([{ id: 0, img: '', text: '더보기', isMore: true }]);
 
   return (
     <div className={styles.categoryRow}>
-      {shownCategories.map((cat, i) =>
+      {shownCategories.map((cat: CategoryItem, i: number) =>
         cat.isMore ? (
           <div
             className={styles.category}

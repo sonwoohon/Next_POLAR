@@ -5,4 +5,5 @@ export interface HelpDetail {
   startDate: string;
   endDate: string;
   createdAt: string;
+  category: { id: number; point: number }[];
 }
