@@ -21,8 +21,11 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    console.log(`[API] season ${season} 랭킹 조회 시작`);
     const scoreUseCase = new GetUserScoresUseCase(new ScoreRepository());
     const rankings = await scoreUseCase.executeRankingsBySeason(season);
+    console.log(`[API] 랭킹 조회 결과:`, rankings);
+    console.log(`[API] 랭킹 개수:`, rankings.length);
     return NextResponse.json(rankings, { status: 200 });
   } catch (error) {
     console.error('점수 조회 중 오류:', error);
