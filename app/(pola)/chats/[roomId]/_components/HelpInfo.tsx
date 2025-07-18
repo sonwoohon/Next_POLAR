@@ -19,11 +19,11 @@ export default function HelpInfo({ roomId, helpData }: HelpInfoProps) {
 
   const getCategoryName = (categoryId: number) => {
     const categories: { [key: number]: string } = {
-      1: '💪 무거워요',
-      2: '🧹 청소',
-      3: '🛠️ 수리',
-      4: '📚 학습',
-      5: '🏥 돌봄',
+      1: '🧹 청소',
+      2: '🍳 요리',
+      3: '🚗 운전',
+      4: '💬 상담',
+      5: '✨ 기타',
     };
     return categories[categoryId] || '기타';
   };

@@ -27,14 +27,19 @@ export async function POST(req: NextRequest) {
     // FormData에서 help 데이터 추출
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    const category = Number(formData.get('category'));
+    const subCategoryIds = formData
+      .getAll('subCategoryId')
+      .map((id) => Number(id));
     const startDate = formData.get('startDate') as string;
     const endDate = formData.get('endDate') as string;
 
     // 필수 필드 검증
-    if (!title || !startDate || !category) {
+    if (!title || !startDate || subCategoryIds.length === 0) {
       return NextResponse.json(
-        { error: '필수 필드가 누락되었습니다. (title, startDate, category)' },
+        {
+          error:
+            '필수 필드가 누락되었습니다. (title, startDate, subCategoryId)',
+        },
         { status: 400 }
       );
     }
@@ -70,7 +75,7 @@ export async function POST(req: NextRequest) {
       const helpReqCreate: CreateSeniorHelpRequestDto = {
         title,
         content: content || '',
-        category,
+        category: subCategoryIds, // subCategoryId를 category 필드로 전달
         startDate,
         endDate,
         imageFiles: uploadedImageUrls,
