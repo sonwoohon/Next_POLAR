@@ -46,6 +46,7 @@ export class GetChatRoomWithHelpsUseCase {
             startDate: help.startDate.toISOString(),
             endDate: help.endDate.toISOString(),
             createdAt: help.createdAt.toISOString(),
+            category: help.category,
           });
         }
       }
