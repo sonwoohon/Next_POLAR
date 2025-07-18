@@ -35,7 +35,7 @@ const UserProfilePage: React.FC = () => {
       enabled: !!nickname,
     }
   );
-  console.log(receivedReviewsData?.reviews);
+
   // ApiResponse에서 실제 데이터 추출
   const userData = extractData(userProfile);
 
@@ -154,12 +154,7 @@ const UserProfilePage: React.FC = () => {
   );
 
   // userData의 age로 role 분기
-  const targetUserRole =
-    userData?.age !== undefined
-      ? userData.age >= 60
-        ? "senior"
-        : "junior"
-      : undefined;
+  const targetUserRole = currentUser?.role;
 
   return (
     <UserProfileHOC
