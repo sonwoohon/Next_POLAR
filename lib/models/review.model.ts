@@ -2,11 +2,13 @@
 export interface Review {
   id: number;
   helpId: number;
+  writerId: string;
+  receiverId: string;
   writerNickname: string;
   receiverNickname: string;
   rating: number;
   text: string;
-  reviewImgUrl?: string;
+  reviewImgUrl: string | null;
   writerProfileImgUrl?: string;
   createdAt: string;
 }

@@ -5,29 +5,29 @@ import Link from "next/link";
 interface ReviewPreview {
   id: number;
   helpId: number;
+  writerId: string;
+  receiverId: string;
   writerNickname: string;
   receiverNickname: string;
   rating: number;
   text: string;
-  reviewImgUrl?: string;
+  reviewImgUrl: string | null;
   writerProfileImgUrl?: string;
   createdAt: string;
 }
 
 interface UserRecivedReviewsPreviewProps {
   nickname: string;
-  reviews: Partial<ReviewPreview>[]; // 유연하게 받기 위해 Partial 처리
-  title?: string;
-  maxPreviewCount?: number;
+  reviews: ReviewPreview[];
+  title: string;
 }
 
 const UserRecivedReviewsPreview: React.FC<UserRecivedReviewsPreviewProps> = ({
   nickname,
   reviews,
-  title = "받은 리뷰 미리보기",
-  maxPreviewCount = 3,
+  title = "받은 리뷰",
 }) => {
-  const previewReviews = reviews.slice(0, maxPreviewCount);
+  console.log(reviews);
 
   return (
     <section className={styles.section}>
@@ -41,15 +41,17 @@ const UserRecivedReviewsPreview: React.FC<UserRecivedReviewsPreviewProps> = ({
         </Link>
       </div>
       <ul className={styles.reviewList}>
-        {previewReviews.length === 0 ? (
+        {reviews.length === 0 ? (
           <li className={styles.empty}>아직 받은 리뷰가 없습니다.</li>
         ) : (
-          previewReviews.map((review, idx) => (
+          reviews.map((review: ReviewPreview, idx: number) => (
             <ReviewCard
               key={review.id ?? idx}
               review={{
                 id: review.id ?? idx,
                 helpId: review.helpId ?? 0,
+                writerId: review.writerId ?? "",
+                receiverId: review.receiverId ?? "",
                 writerNickname: review.writerNickname ?? "익명",
                 receiverNickname: review.receiverNickname ?? nickname,
                 rating: review.rating ?? 5,

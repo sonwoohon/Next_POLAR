@@ -21,10 +21,12 @@ export interface WrittenReviewsRequest {
 export interface ReviewResponseDto {
   id: number;
   helpId: number;
+  writerId: string;
+  receiverId: string;
   writerNickname: string;
   receiverNickname: string;
   rating: number;
   text: string;
-  reviewImgUrl?: string;
+  reviewImgUrl: string | null;
   createdAt: string;
 }

@@ -25,6 +25,7 @@ const UserProfilePage: React.FC = () => {
     }
   );
 
+  
   // ApiResponse에서 실제 데이터 추출
   const userData = extractData(userProfile);
 
@@ -89,7 +90,6 @@ const UserProfilePage: React.FC = () => {
         nickname={nickname}
         reviews={[]}
         title="받은 리뷰 미리보기"
-        maxPreviewCount={3}
       />
 
       <ProfileMenuSection
