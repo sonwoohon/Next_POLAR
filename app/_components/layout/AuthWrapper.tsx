@@ -27,8 +27,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   // 헬프 생성 페이지인지 확인
   const isHelpCreatePage = pathname === '/helps/create';
   
-  // 프로필 편집 페이지인지 확인
-  const isProfileEditPage = pathname.match(/^\/user\/profile\/[^\/]+\/edit$/);
+  // 프로필 설정 페이지인지 확인
+  const isProfileSettingsPage = pathname.match(/^\/user\/profile\/[^\/]+\/settings$/);
   
   // 채팅방 페이지인지 확인
   const isChatRoomPage = pathname.match(/^\/chats\/[0-9]+$/);
@@ -92,15 +92,15 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
     
-    // 프로필 편집 페이지에서 본인의 프로필이 아닌 경우 홈으로 리다이렉트
-    if (isProfileEditPage) {
-      const urlNickname = pathname.split('/')[3]; // /user/profile/[nickname]/edit에서 nickname 추출
+    // 프로필 설정 페이지에서 본인의 프로필이 아닌 경우 홈으로 리다이렉트
+    if (isProfileSettingsPage) {
+      const urlNickname = pathname.split('/')[3]; // /user/profile/[nickname]/settings에서 nickname 추출
       if (user?.nickname !== urlNickname) {
         alert('본인의 프로필만 수정할 수 있습니다.');
         router.replace("/");
       }
     }
-  }, [isInitialized, isProfileEditPage, user?.nickname, pathname, router]);
+  }, [isInitialized, isProfileSettingsPage, user?.nickname, pathname, router]);
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
@@ -125,7 +125,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   if (isReviewCreatePage && isLoading) return null; // 권한 확인 중
   if (isReviewCreatePage && hasAccess === false) return null; // 권한이 없으면 렌더링하지 않음
   if (isHelpCreatePage && user?.role !== 'senior') return null; // senior가 아니면 렌더링하지 않음
-  if (isProfileEditPage && user?.nickname !== pathname.split('/')[3]) return null; // 본인의 프로필이 아니면 렌더링하지 않음
+  if (isProfileSettingsPage && user?.nickname !== pathname.split('/')[3]) return null; // 본인의 프로필이 아니면 렌더링하지 않음
   if (isChatRoomPage && chatLoading) return null; // 채팅방 권한 확인 중
   if (isChatRoomPage && hasChatAccess !== true) return null; // 채팅방 접근 권한이 없으면 렌더링하지 않음
 

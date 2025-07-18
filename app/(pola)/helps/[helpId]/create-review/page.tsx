@@ -7,7 +7,7 @@ import styles from './CreateReview.module.css';
 import ProfileSummary from './_components/ProfileSummary';
 import Button from './_components/Button';
 import Input from './_components/Input';
-import { useCreateReview } from '@/lib/hooks/useCreateReview';
+import { useCreateReview } from '@/lib/hooks/review/useCreateReview';
 import { useAuthStore } from '@/lib/stores/authStore';
 import StarRating from '@/app/_components/commons/ui/StarRating';
 import ImageUploader from '@/app/_components/commons/imageUploader/ImageUploader';

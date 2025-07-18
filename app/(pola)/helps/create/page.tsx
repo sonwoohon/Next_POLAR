@@ -6,7 +6,7 @@ import styles from './createHelp.module.css';
 import Step1HelpType from './components/Step1HelpType';
 import Step2TimeSelection from './components/Step2TimeSelection';
 import Step3HelpDetails from './components/Step3HelpDetails';
-import { useCreateHelp } from '@/lib/hooks/useCreateHelp';
+import { useCreateHelp } from '@/lib/hooks/help/useCreateHelp';
 import { useImageContext } from '@/lib/contexts/ImageContext';
 import { HelpFunnelData } from '@/lib/models/createHelpDto';
 
