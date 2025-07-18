@@ -7,7 +7,7 @@ export const useOnboardingData = () => {
   const slides: OnboardingSlide[] = [
     {
       title: '함께하는 마음, 두 세대의 연결',
-      desc: '도움이 필요한 실버와\n따뜻한 손길을 내미는 주니어가\n서로를 만나는 공간입니다.'
+      desc: '도움이 필요한 시니어와\n따뜻한 손길을 내미는 주니어가\n서로를 만나는 공간입니다.'
     },
     {
       title: '요청과 도움, 모두의 성장',
@@ -27,7 +27,7 @@ export const useOnboardingData = () => {
     modules: ['Autoplay', 'Pagination'],
     spaceBetween: 30,
     slidesPerView: 1,
-    autoplay: { delay: 30000000, disableOnInteraction: false },
+    autoplay: { delay: 4000, disableOnInteraction: false },
     pagination: { clickable: true },
     loop: true,
   };

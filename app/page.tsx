@@ -20,12 +20,6 @@ export default function Home() {
 
   return (
     <div className={styles.onboardingWrap}>
-      {/* 애니메이션 버블 배경 */}
-      <div className={`${styles.bubble} ${styles.bubble1}`}></div>
-      <div className={`${styles.bubble} ${styles.bubble2}`}></div>
-      <div className={`${styles.bubble} ${styles.bubble3}`}></div>
-      <div className={`${styles.bubble} ${styles.bubble4}`}></div>
-      <div className={`${styles.bubble} ${styles.bubble5}`}></div>
       {/* Swiper 슬라이드 및 버튼 등 기존 컨텐츠 */}
       <Swiper
         modules={[Autoplay, Pagination]}
@@ -40,6 +34,43 @@ export default function Home() {
           <SwiperSlide key={idx}>
             <div className={styles.slideContent}>
               <h2 className={styles.slideTitle}>{slide.title}</h2>
+              
+              {/* 슬라이드별 인터랙션 요소 */}
+              <div className={styles.slideInteraction}>
+                {idx === 0 && (
+                  <div className={styles.interactionConnect}>
+                    <div className={styles.personSenior}>👴</div>
+                    <div className={styles.connectionLine}></div>
+                    <div className={styles.personJunior}>👨‍🎓</div>
+                  </div>
+                )}
+                
+                {idx === 1 && (
+                  <div className={styles.interactionGrowth}>
+                    <div className={styles.requestIcon}>📝</div>
+                    <div className={styles.arrowDown}>↓</div>
+                    <div className={styles.experienceIcon}>💡</div>
+                  </div>
+                )}
+                
+                {idx === 2 && (
+                  <div className={styles.interactionReward}>
+                    <div className={styles.helpIcon}>🤝</div>
+                    <div className={styles.trophyIcon}>🏆</div>
+                    <div className={styles.equalsIcon}>=</div>
+                    <img src="/images/logos/POLAR.png" alt="POLAR 로고" className={styles.polarLogo} />
+                  </div>
+                )}
+                
+                {idx === 3 && (
+                  <div className={styles.interactionSafety}>
+                    <div className={styles.shieldIcon}>🛡️</div>
+                    <div className={styles.chatIcon}>💬</div>
+                    <div className={styles.checkIcon}>✅</div>
+                  </div>
+                )}
+              </div>
+              
               <p className={styles.slideDesc}>{slide.desc}</p>
             </div>
           </SwiperSlide>

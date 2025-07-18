@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const lastScrollY = useRef(0);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  /* 스크롤 이벤트 핸들러 */
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -36,7 +37,7 @@ const Header: React.FC = () => {
     <header className={`${styles.header} ${hidden ? styles.hide : ''}`}>
       <div className={styles.headerWrap}>
         <div className={styles.logo}>
-          <h1><a href="/"><Image src={Logo} alt='POLAR' /></a></h1>
+          <h1><a href="/main"><Image src={Logo} alt='POLAR' /></a></h1>
         </div>
         <div className={styles.hamburger}>
           <a href="">버튼</a>

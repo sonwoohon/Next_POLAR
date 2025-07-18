@@ -6,7 +6,8 @@ import Footer from './Footer';
 // Header를 숨길 페이지들
 const hideHeaderPaths = [
 /*   '/login', */
-  '/sign-up'
+  '/sign-up',
+  '/find-password',
 ];
 
 // Footer를 숨길 페이지들
@@ -14,7 +15,7 @@ const hideFooterPaths = [
 /*   '/login', */
   '/sign-up',
   '/user/hall-of-fame',
-  '/'
+  '/find-password',
 ];
 
 interface LayoutWrapperProps {
