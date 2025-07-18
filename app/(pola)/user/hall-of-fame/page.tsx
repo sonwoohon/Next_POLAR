@@ -1,9 +1,9 @@
 "use client"
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './Ranking.module.css';
 
 interface UserRanking {
-  userId: string;
   nickname: string;
   totalScore: number;
   category: string;
@@ -34,49 +34,42 @@ useEffect(() => {
         setLoading(true);
         setError(null);
 
-        // 실제 API 호출 (기존 API만 사용)
-        const response = await fetch('/api/scores/season?season=1');
-        if (!response.ok) {
-        throw new Error('점수 조회에 실패했습니다.');
-        }
-        
-        const scores: ScoreData[] = await response.json();
-        console.log('API 응답:', scores);
+        // 실제 API 호출 (axios 사용)
+        const response = await axios.get('/api/scores/season?season=1');
+        const scores: ScoreData[] = response.data;
 
         // 임시 카테고리 데이터 
         const CATEGORIES = ['요리왕', '배달왕', '애견케어왕', '돌봄왕', '장보기왕', 
         '수리왕', '청소왕', '이사왕', '노인케어왕', '정원왕'];
         
-        // user_id 기준으로 점수 합산
+        // nickname 기준으로 점수 합산
         const userScores: Record<string, number> = {};
         
         scores.forEach((score: ScoreData) => {
-        const userId = score.user_id;
+        const nickname = score.users?.nickname;
         const scoreValue = score.category_score || 0;
         
-        if (userId) {
-            userScores[userId] = (userScores[userId] || 0) + scoreValue;
+        if (nickname) {
+            userScores[nickname] = (userScores[nickname] || 0) + scoreValue;
         }
         });
 
         // 랭킹 생성 (상위 10)
         const rankingData: UserRanking[] = Object.entries(userScores)
-        .map(([userId, totalScore]) => {
-            // 해당 사용자의 첫 번째 점수에서 nickname과 profile_img_url 가져오기
-            const userScore = scores.find((score: ScoreData) => score.user_id === userId);
-            const nickname = userScore?.users?.nickname || `User_${userId}`;
+        .map(([nickname, totalScore]) => {
+            // 해당 사용자의 첫 번째 점수에서 profile_img_url 가져오기
+            const userScore = scores.find((score: ScoreData) => score.users.nickname === nickname);
             const profileImg = userScore?.users?.profile_img_url || "/images/dummies/dummy_user.png";
             
             // 해당 사용자의 가장 높은 점수 카테고리 찾기
-            const userScores = scores.filter((score: ScoreData) => score.user_id === userId);
+            const userScores = scores.filter((score: ScoreData) => score.users.nickname === nickname);
             const highestScore = userScores.reduce((max: ScoreData, score: ScoreData) => 
             score.category_score > max.category_score ? score : max
             );
             const categoryName = CATEGORIES[highestScore.category_id] || '기타';
             
             return {
-            userId,
-            nickname: nickname,
+            nickname,
             totalScore,
             category: categoryName,
             profileImg: profileImg
@@ -86,7 +79,6 @@ useEffect(() => {
         .slice(0, 10);
 
         setRanking(rankingData);
-        console.log('랭킹 데이터:', rankingData);
         
     } catch (err) {
         console.error('점수 조회 오류:', err);
@@ -110,7 +102,7 @@ return (
         </div>
         <ul>
         {ranking.slice(0, 3).map((item, idx) => (
-            <li key={item.userId}>
+            <li key={item.nickname}>
                 <div className={styles.imgwrap}><img src={item.profileImg} alt="프로필 이미지" /></div>
                 <span className={styles.rankingTopScore}>{item.totalScore.toLocaleString()}</span>
                 <span className={styles.rankingTopName}>{item.nickname}</span>
@@ -129,7 +121,7 @@ return (
         ) : (
         <ul>
             {ranking.slice(3, 10).map((item, idx) => (
-            <li key={item.userId} className={styles.rankingBtmItem}>
+            <li key={item.nickname} className={styles.rankingBtmItem}>
                 <div className={styles.rankingBtmImgContainer}>
                 <img 
                     src={item.profileImg} 
@@ -158,11 +150,11 @@ return (
     </div>
     <div className={styles.circleLights}></div>
     {!skipAnimation && (
-      <button
-        className={styles.skipBtn}
-        onClick={() => setSkipAnimation(true)}>
-        애니메이션 스킵
-      </button>
+        <button
+            className={styles.skipBtn}
+            onClick={() => setSkipAnimation(true)}>
+            애니메이션 스킵
+        </button>
     )}
     </div>
     

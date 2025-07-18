@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { QUERY_KEYS } from '../constants/api';
 
 interface User {
   role: 'junior' | 'senior';
@@ -14,7 +15,7 @@ export const useAuthRedirect = () => {
 
   // 사용자 정보 조회
   const { data: user, isLoading, error } = useQuery({
-    queryKey: ['userInfo'],
+    queryKey: QUERY_KEYS.USERS,
     queryFn: async () => {
       const res = await axios.get('/api/users', { withCredentials: true });
       return res.data;
