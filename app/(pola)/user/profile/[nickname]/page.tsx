@@ -12,10 +12,21 @@ import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/U
 import { extractData } from "@/lib/utils/apiUtils";
 import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
 import UserRecivedReviewsPreview from "./_components/sections/reviews-preview/UserRecivedReviewsPreview";
+import { useReceivedReviews } from "@/lib/hooks/useReceivedReviews";
+import { useAuthStore } from "@/lib/stores/authStore";
 
 const UserProfilePage: React.FC = () => {
   const params = useParams();
   const nickname = params.nickname as string;
+
+  // 현재 로그인한 유저 정보 가져오기
+  const currentUser = useAuthStore((state) => state.user);
+
+  // 현재 페이지의 nickname과 로그인한 유저의 nickname이 같은지 확인
+  const isMyProfile = currentUser?.nickname === nickname;
+
+  // 받은 리뷰
+  const { data: receivedReviewsData } = useReceivedReviews(nickname);
 
   const { data: userProfile } = useApiQuery<UserProfileResponseDto>(
     ["userProfile", nickname],
@@ -24,8 +35,7 @@ const UserProfilePage: React.FC = () => {
       enabled: !!nickname,
     }
   );
-
-  
+  console.log(receivedReviewsData?.reviews);
   // ApiResponse에서 실제 데이터 추출
   const userData = extractData(userProfile);
 
@@ -88,16 +98,19 @@ const UserProfilePage: React.FC = () => {
 
       <UserRecivedReviewsPreview
         nickname={nickname}
-        reviews={[]}
-        title="받은 리뷰 미리보기"
+        reviews={receivedReviewsData?.reviews.slice(0, 3) || []}
+        title="받은 리뷰"
       />
 
-      <ProfileMenuSection
-        nickname={nickname}
-        onLogout={() => {
-          console.log("로그아웃 버튼 클릭됨");
-        }}
-      />
+      {/* 마이페이지일 때만 설정 메뉴 섹션 표시 */}
+      {isMyProfile && (
+        <ProfileMenuSection
+          nickname={nickname}
+          onLogout={() => {
+            console.log("로그아웃 버튼 클릭됨");
+          }}
+        />
+      )}
     </div>
   );
 
@@ -124,24 +137,36 @@ const UserProfilePage: React.FC = () => {
 
       <UserRecivedReviewsPreview
         nickname={nickname}
-        reviews={[]}
-        title="받은 리뷰 미리보기"
-        maxPreviewCount={3}
+        reviews={receivedReviewsData?.reviews.slice(0, 3) || []}
+        title="받은 리뷰"
       />
 
-      <ProfileMenuSection
-        nickname={nickname}
-        onLogout={() => {
-          console.log("로그아웃 버튼 클릭됨");
-        }}
-      />
+      {/* 마이페이지일 때만 설정 메뉴 섹션 표시 */}
+      {isMyProfile && (
+        <ProfileMenuSection
+          nickname={nickname}
+          onLogout={() => {
+            console.log("로그아웃 버튼 클릭됨");
+          }}
+        />
+      )}
     </div>
   );
+
+  // userData의 age로 role 분기
+  const targetUserRole =
+    userData?.age !== undefined
+      ? userData.age >= 60
+        ? "senior"
+        : "junior"
+      : undefined;
 
   return (
     <UserProfileHOC
       juniorComponent={JuniorComponent}
       seniorComponent={SeniorComponent}
+      targetUserRole={targetUserRole}
+      targetNickname={nickname}
     >
       <div className={styles.container}>
         <h1>유저프로필</h1>
@@ -200,17 +225,19 @@ const UserProfilePage: React.FC = () => {
 
         <UserRecivedReviewsPreview
           nickname={nickname}
-          reviews={[]}
-          title="받은 리뷰 미리보기"
-          maxPreviewCount={3}
+          reviews={receivedReviewsData?.reviews.slice(0, 3) || []}
+          title="받은 리뷰"
         />
 
-        <ProfileMenuSection
-          nickname={nickname}
-          onLogout={() => {
-            console.log("로그아웃 버튼 클릭됨");
-          }}
-        />
+        {/* 마이페이지일 때만 설정 메뉴 섹션 표시 */}
+        {isMyProfile && (
+          <ProfileMenuSection
+            nickname={nickname}
+            onLogout={() => {
+              console.log("로그아웃 버튼 클릭됨");
+            }}
+          />
+        )}
       </div>
     </UserProfileHOC>
   );

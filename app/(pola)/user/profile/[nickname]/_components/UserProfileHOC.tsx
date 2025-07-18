@@ -5,12 +5,16 @@ interface UserProfileHOCProps {
   children: React.ReactNode;
   juniorComponent?: React.ReactNode;
   seniorComponent?: React.ReactNode;
+  targetUserRole?: string; // 추가: 타겟 유저의 role
+  targetNickname?: string; // 추가: 타겟 유저의 nickname
 }
 
 const UserProfileHOC: React.FC<UserProfileHOCProps> = ({
   children,
   juniorComponent,
   seniorComponent,
+  targetUserRole,
+  targetNickname,
 }) => {
   // Zustand에서 저장된 유저 정보 가져오기
   const user = useAuthStore((state) => state.user);
@@ -33,8 +37,11 @@ const UserProfileHOC: React.FC<UserProfileHOCProps> = ({
     );
   }
 
-  // role에 따라 적절한 컴포넌트 렌더링
-  const isSenior = user.role === "senior";
+  // 내 프로필인지 확인
+  const isMyProfile = user.nickname === targetNickname;
+  // 분기 기준 role 결정
+  const roleToUse = isMyProfile ? user.role : targetUserRole;
+  const isSenior = roleToUse === "senior";
 
   if (isSenior) {
     return seniorComponent || children;
