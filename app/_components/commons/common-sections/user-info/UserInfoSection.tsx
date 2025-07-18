@@ -5,19 +5,18 @@ import styles from "./UserInfoSection.module.css";
 import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
 
 interface UserInfoSectionProps {
-  data?: UserProfileResponseDto;
+  data: UserProfileResponseDto;
+  userRole: string;
 }
 
-const UserInfoSection: React.FC<UserInfoSectionProps> = ({ data }) => {
-  console.log("UserInfoSection data:", data);
+const UserInfoSection: React.FC<UserInfoSectionProps> = ({
+  data,
+  userRole,
+}) => {
+  console.log(data);
+  const { nickname, name, profileImgUrl } = data;
 
-  if (!data) {
-    console.log("UserInfoSection: data가 없습니다");
-    return null;
-  }
-
-  const { nickname, name, age, profileImgUrl } = data;
-  const userType = age >= 60 ? "Sr." : "Jr.";
+  const userType = userRole === "senior" ? "Sr." : "Jr.";
   const rating = 4.5;
 
   return (

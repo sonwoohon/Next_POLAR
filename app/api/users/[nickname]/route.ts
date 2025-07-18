@@ -22,7 +22,7 @@ export async function GET(
     }
 
     const userDto = entityToUserProfileResponseDto(user);
-    return NextResponse.json(userDto, { status: 200 });
+    return NextResponse.json({ success: true, data: userDto }, { status: 200 });
   } catch (error) {
     console.error('[API] 사용자 조회 중 오류 발생:', error);
     return NextResponse.json(

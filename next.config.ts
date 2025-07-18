@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       : [],
     domains: [
       "images.unsplash.com",
+      "hjjhgiuoyjsmhzsnogmg.supabase.co",
       // unplash 이미지로 더미 데이터 활용 위해 추가, 배포 시 삭제해도 됩니다
 
     ],
