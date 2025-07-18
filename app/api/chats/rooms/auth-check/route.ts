@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     // 쿼리 파라미터에서 nickname과 roomId 가져오기
     const { searchParams } = new URL(request.url);
     const nickname = searchParams.get('nickname');
-    const roomId = searchParams.get('roomId');
+    const chatRoomId = parseInt(searchParams.get('chatRoomId') || '0');
     
     if (!nickname) {
       return NextResponse.json(
@@ -16,14 +16,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!roomId) {
-      return NextResponse.json(
-        { error: 'Room ID is required' },
-        { status: 400 }
-      );
-    }
-
-    const chatRoomId = parseInt(roomId);
     if (isNaN(chatRoomId)) {
       return NextResponse.json(
         { error: 'Invalid chat room ID' },

@@ -12,6 +12,7 @@ export const useReviewAccess = ({ nickname, helpId }: UseReviewAccessProps) => {
     queryFn: () => checkReviewCreateAccess(nickname, helpId),
     enabled: !!nickname && !!helpId,
     staleTime: 5 * 60 * 1000, // 5분
-    gcTime: 10 * 60 * 1000, // 10분 (cacheTime 대신 gcTime 사용)
+    gcTime: 10 * 60 * 1000, // 10분
+    retry: 1, // 실패 시 1번만 재시도
   });
 }; 
