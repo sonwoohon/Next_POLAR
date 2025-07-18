@@ -5,7 +5,7 @@ import styles from "./_styles/userProfile.module.css";
 import { useParams } from "next/navigation";
 import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
-import UserHelpsSection from "@/app/(pola)/user/profile/[nickname]/_components/user-helps/UserHelpsSection";
+import UserHelpsSection from "./_components/user-helps/junior/UserHelpsSection";
 import ProfileMenuSection from "./_components/sections/profile-menu/ProfileMenuSection";
 import { useApiQuery } from "@/lib/hooks/useApi";
 import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
