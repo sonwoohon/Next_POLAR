@@ -4,6 +4,8 @@ import './globals.css';
 import { QueryProvider } from '@/app/_components/QueryProvider';
 import { ImageProvider } from '@/lib/contexts/ImageContext';
 import AuthWrapper from '@/app/_components/layout/AuthWrapper';
+import { HelpVerificationProvider } from '@/lib/contexts/HelpVerificationContext';
+import VerificationModalWrapper from './_components/VerificationModalWrapper';
 
 export const metadata: Metadata = {
   title: 'POLAR',
@@ -21,7 +23,10 @@ export default function RootLayout({
         <QueryProvider>
           <ImageProvider>
             <AuthWrapper>
-              <main className='main-container'>{children}</main>
+              <HelpVerificationProvider>
+                <main className='main-container'>{children}</main>
+                <VerificationModalWrapper />
+              </HelpVerificationProvider>
             </AuthWrapper>
           </ImageProvider>
         </QueryProvider>
