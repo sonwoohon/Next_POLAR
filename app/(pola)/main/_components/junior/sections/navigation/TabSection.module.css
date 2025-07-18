@@ -1,0 +1,29 @@
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 2rem * 2);
+  padding: 0 2rem;
+  gap: 20px;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 0.75em 1.5em;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabButton:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.tabButton:active {
+  transform: scale(0.98);
+}

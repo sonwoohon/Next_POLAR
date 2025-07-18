@@ -7,7 +7,7 @@ import styles from './CreateReview.module.css';
 import ProfileSummary from './_components/ProfileSummary';
 import Button from './_components/Button';
 import Input from './_components/Input';
-import { useCreateReview } from '@/lib/hooks/useCreateReview';
+import { useCreateReview } from '@/lib/hooks/review/useCreateReview';
 import { useAuthStore } from '@/lib/stores/authStore';
 import StarRating from '@/app/_components/commons/ui/StarRating';
 import ImageUploader from '@/app/_components/commons/imageUploader/ImageUploader';
@@ -16,14 +16,13 @@ import { useImageContext } from '@/lib/contexts/ImageContext';
 
 export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
   const { helpId } = use(params);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{ text: string }>({
     text: '',
   });
-  const [starRating, setStarRating] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [starRating, setStarRating] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [hover, setHover] = useState(0);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
   const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');

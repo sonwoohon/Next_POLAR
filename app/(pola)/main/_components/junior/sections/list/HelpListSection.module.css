@@ -1,0 +1,70 @@
+.helpList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0 8px 32px 8px;
+}
+
+.helpCard {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px 12px;
+  gap: 16px;
+}
+
+.helpTextWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.helpTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.helpDate {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.helpTag {
+  font-size: 0.9rem;
+  color: #fbbf24;
+  background: #fef9c3;
+  border-radius: 8px;
+  padding: 4px 8px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.helpRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.helpImg {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.helpPoint {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+} 

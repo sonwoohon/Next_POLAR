@@ -8,7 +8,7 @@ export interface ApiCreateHelp {
 }
 
 export interface HelpFunnelData {
-  type: string | null;
+  types: string[]; // 여러 타입을 선택할 수 있도록 배열로 변경
   timeType: string | null;
   date: string;
   startTime: string;

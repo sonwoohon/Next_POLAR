@@ -1,6 +1,6 @@
 .starRating {
   display: flex;
-  gap: 2px;
+  gap: 0.125rem;
 }
 
 .starFilled {

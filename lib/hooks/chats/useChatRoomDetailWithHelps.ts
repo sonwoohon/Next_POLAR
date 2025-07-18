@@ -5,7 +5,7 @@ import { QUERY_KEYS } from '@/lib/constants/api';
 
 export const useChatRoomDetailWithHelps = (chatRoomId: number) => {
   return useQuery<ChatRoomDetailWithHelps>({
-    queryKey: [QUERY_KEYS.CHAT_ROOM_DETAIL(chatRoomId)],
+    queryKey: QUERY_KEYS.CHAT_ROOM_DETAIL(chatRoomId),
     queryFn: () => getChatRoomDetailWithHelps(chatRoomId),
     enabled: !!chatRoomId,
     staleTime: 1000 * 60 * 5, // 5분

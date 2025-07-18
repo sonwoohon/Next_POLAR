@@ -48,3 +48,14 @@ export const getChatRoomDetailWithHelps = async (
 
   return response.data;
 };
+
+// 채팅방 접근 권한 확인
+export const checkChatRoomAccess = async (
+  nickname: string,
+  chatRoomId: number
+): Promise<any> => {
+  const response = await apiClient.get(
+    `${API_ENDPOINTS.CHAT_ROOM_AUTH_CHECK}?nickname=${nickname}&chatRoomId=${chatRoomId}`
+  );
+  return response.data;
+};

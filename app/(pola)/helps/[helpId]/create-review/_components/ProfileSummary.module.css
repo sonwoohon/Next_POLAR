@@ -1,15 +1,15 @@
 .profileSummary {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 .profileImageLarge {
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
   object-fit: cover;
-  border: 2px solid #eee;
+  border: 0.125rem solid #eee;
 }
 .profileInfoBox {
   display: flex;
@@ -17,6 +17,6 @@
   justify-content: center;
 }
 .profileNickname {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
 } 

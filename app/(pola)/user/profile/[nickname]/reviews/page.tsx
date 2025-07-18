@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import styles from "@/app/(pola)/user/profile/[nickname]/reviews/UserReviews.module.css";
 import ReviewCard from "@/app/_components/commons/list-card/review-list-card/ReviewCard";
-import { useReceivedReviews } from "@/lib/hooks/useReceivedReviews";
-import { useWrittenReviews } from "@/lib/hooks/useWrittenReviews";
+import { useReceivedReviews } from "@/lib/hooks/review/useReceivedReviews";
+import { useWrittenReviews } from "@/lib/hooks/review/useWrittenReviews";
 
 const PAGE_SIZE = 10;
 

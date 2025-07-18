@@ -4,7 +4,6 @@ import { IHelpImageRepository } from '@/backend/images/domains/repositories/IHel
 import {
   HelpListResponseDto,
   HelpDetailResponseDto,
-  HelpPreviewResponseDto,
 } from '@/backend/helps/applications/dtos/HelpDTO';
 import { getNicknameByUuid } from '@/lib/getUserData';
 
@@ -42,7 +41,7 @@ export class GetHelpListUseCase {
   }
 }
 
-// 헬프 상세 조회 UseCase (닉네임 기반)
+// 헬프 상세 조회 UseCase (helpId 기반)
 export class GetHelpDetailUseCase {
   constructor(private readonly helpRepository: ICommonHelpRepository) {}
 
@@ -76,7 +75,7 @@ export class GetHelpsByIdsUseCase {
     private readonly helpImageRepository: IHelpImageRepository
   ) {}
 
-  async execute(helpIds: number[]): Promise<HelpPreviewResponseDto[] | null> {
+  async execute(helpIds: number[]): Promise<HelpDetailResponseDto[] | null> {
     if (!helpIds || helpIds.length === 0) {
       return [];
     }
@@ -115,6 +114,7 @@ export class GetHelpsByIdsUseCase {
           title: help.title,
           startDate: help.startDate,
           endDate: help.endDate,
+          content: help.content,
           category: help.category,
           status: help.status,
           createdAt: help.createdAt,
