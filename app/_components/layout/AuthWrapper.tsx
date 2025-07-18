@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname, useParams } from "next/navigation";
 import { useAuthStore } from "@/lib/stores/authStore";
-import { useReviewAccess } from "@/lib/hooks/useReviewAccess";
-import { useChatRoomAccess } from "@/lib/hooks/chats/useChatRoomAccess";
+import { useReviewAccess } from "@/lib/hooks/auth/useReviewAccess";
+import { useChatRoomAccess } from "@/lib/hooks/auth/useChatRoomAccess";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
