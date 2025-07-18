@@ -1,26 +1,33 @@
 "use client";
 import styles from "./_styles/userProfile.module.css";
 import { useParams } from "next/navigation";
-import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
 import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import UserArchivmentSection from "@/app/_components/sections/user-archivment/UserArchivmentSection";
 import UserHelpsSection from "@/app/(pola)/user/profile/[nickname]/_components/user-helps/UserHelpsSection";
-import ProfileMenuSection from "./_components/sections/ProfileMenuSection";
+import ProfileMenuSection from "./_components/sections/profile-menu/ProfileMenuSection";
+import { useApiQuery } from "@/lib/hooks/useApi";
+import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
+import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
+import UserRecivedReviewsPreview from "./_components/sections/reviews-preview/UserRecivedReviewsPreview";
 
 const UserProfilePage: React.FC = () => {
   const params = useParams();
-  const nickname = decodeURIComponent(params.nickname as string);
+  const nickname = params.nickname as string;
+
+  const { data: userProfile } = useApiQuery<UserProfileResponseDto>(
+    ["userProfile", nickname],
+    `/api/users/${nickname}`,
+    {
+      enabled: !!nickname,
+    }
+  );
 
   return (
     <div className={styles.container}>
       <h1>유저프로필</h1>
-      <UserInfoSection
-        nickname={nickname}
-        userName="사나이"
-        userType="Jr."
-        rating={4.5}
-        archiveBadge="환경미화원"
-      />
+      {userProfile && (
+        <UserInfoSection data={userProfile as UserProfileResponseDto} />
+      )}
 
       <UserTierSection
         season="2025 - 1시즌"
@@ -71,6 +78,13 @@ const UserProfilePage: React.FC = () => {
           { name: "상담", points: 400000 },
           { name: "기타", points: 200000 },
         ]}
+      />
+
+      <UserRecivedReviewsPreview
+        nickname={nickname}
+        reviews={[]}
+        title="받은 리뷰 미리보기"
+        maxPreviewCount={3}
       />
 
       <ProfileMenuSection
