@@ -2,36 +2,34 @@
 import Image from "next/image";
 import RatingStar from "@/public/images/icons/icon_star.svg";
 import styles from "./UserInfoSection.module.css";
+import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
 
 interface UserInfoSectionProps {
-  nickname: string;
-  userName?: string;
-  userType?: "Jr." | "Sr.";
-  rating?: number;
-  archiveBadge?: string;
-  profileImageUrl?: string;
+  data: UserProfileResponseDto;
+  userRole: string;
 }
 
 const UserInfoSection: React.FC<UserInfoSectionProps> = ({
-  nickname,
-  userName = "사나이",
-  userType = "Jr.",
-  rating = 4.5,
-  archiveBadge = "환경미화원",
-  profileImageUrl,
+  data,
+  userRole,
 }) => {
+  console.log(data);
+  const { nickname, name, profileImgUrl } = data;
+
+  const userType = userRole === "senior" ? "Sr." : "Jr.";
+  const rating = 4.5;
+
   return (
     <section className={styles.userInfoSection}>
       <div className={styles.userProfileImageContainer}>
         <div
           className={styles.userProfileImage}
           style={
-            profileImageUrl
-              ? { backgroundImage: `url(${profileImageUrl})` }
-              : {}
+            profileImgUrl ? { backgroundImage: `url(${profileImgUrl})` } : {}
           }
         />
-        <div className={styles.userArchiveBadge}>{archiveBadge}</div>
+        {/* archive_badge 필드는 UserProfileResponseDto에 없으므로 주석 처리 또는 제거 */}
+        {/* <div className={styles.userArchiveBadge}>{archive_badge}</div> */}
       </div>
 
       <div className={styles.userInfo}>
@@ -45,7 +43,7 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = ({
 
         {/* 유저 이름 */}
         <div className={styles.userNameContainer}>
-          <span>{userName} 님</span>
+          <span>{name} 님</span>
           <div className={styles.userTypeBadge}>{userType}</div>
         </div>
 

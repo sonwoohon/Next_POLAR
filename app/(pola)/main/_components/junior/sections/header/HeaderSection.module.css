@@ -1,0 +1,21 @@
+.header {
+  width: 100%;
+  padding: 16px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.back {
+  font-size: 1.5rem;
+  color: #2563eb;
+  margin-left: 16px;
+  cursor: pointer;
+}
+
+.menu {
+  font-size: 2rem;
+  color: #222;
+  margin-right: 16px;
+  cursor: pointer;
+} 

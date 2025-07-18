@@ -1,13 +1,15 @@
 import { API_ENDPOINTS } from '../constants/api';
 import apiClient from '../http.api';
-import { Review, ReceivedReviewsResponse, WrittenReviewsResponse } from '../models/review.model';
-import { CreateReviewRequest, CreateReviewResponse } from '../models/review.model';
+import { ReceivedReviewsResponse, WrittenReviewsResponse } from '../models/review.model';
+import { CreateReviewResponse } from '../models/review.model';
 
 // 받은 리뷰 목록 조회
 export const getReceivedReviews = async (nickname: string): Promise<ReceivedReviewsResponse> => {
   const response = await apiClient.get<ReceivedReviewsResponse>(
     `${API_ENDPOINTS.REVIEWS_RECEIVED}?nickname=${nickname}`
   );
+
+  console.log(response.data);
   return response.data;
 };
 
@@ -31,4 +33,12 @@ export const createReview = async (formData: FormData): Promise<CreateReviewResp
     }
   );
   return response.data;
+};
+
+// 리뷰 생성 권한 확인
+export const checkReviewCreateAccess = async (nickname: string, helpId: number): Promise<boolean> => {
+  const response = await apiClient.get<{ hasAccess: boolean }>(
+    `${API_ENDPOINTS.REVIEW_CREATE_AUTH_CHECK}?nickname=${nickname}&helpId=${helpId}`
+  );
+  return response.data.hasAccess;
 }; 

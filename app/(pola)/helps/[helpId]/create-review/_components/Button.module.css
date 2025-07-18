@@ -1,6 +1,6 @@
 .button {
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
   border: none;
   background: #2d72d9;
   color: #fff;

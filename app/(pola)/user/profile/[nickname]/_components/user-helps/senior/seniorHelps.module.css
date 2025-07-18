@@ -1,0 +1,44 @@
+.seniorHelpsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.seniorHelpsTitleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.seniorHelpsTitleContainer h2 {
+  font-family: var(--font-gangwon);
+}
+
+.seniorHelpsSectionTitleButton a {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: var(--font-pretendard);
+}
+
+.seniorHelpList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .seniorHelpsTitleContainer {
+    padding: 0 1rem;
+  }
+}

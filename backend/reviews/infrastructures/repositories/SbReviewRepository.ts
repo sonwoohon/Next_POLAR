@@ -2,7 +2,8 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { ReviewMapper } from '@/backend/reviews/infrastructures/mappers/ReviewMapper';
 import { IReviewRepository } from '@/backend/reviews/domains/repositories/ReviewRepository';
 import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
-import { CreateReviewRequest } from '@/backend/reviews/applications/dtos/ReviewDtos';
+import { CreateReviewRequest, ReviewCreateAccessRequestDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
+import { getNicknameByUuid } from '@/lib/getUserData';
 
 export class SbReviewRepository implements IReviewRepository {
   // nickname으로 받은 리뷰 리스트 조회
@@ -102,5 +103,32 @@ export class SbReviewRepository implements IReviewRepository {
     if (!data) throw new Error('리뷰 생성 실패');
 
     return ReviewMapper.toEntity(data);
+  }
+
+  // 리뷰 생성 권한 확인
+  async checkCreateReviewAccess(dto: ReviewCreateAccessRequestDto): Promise<boolean> {
+    const { nickname, helpId } = dto;
+    // 1, 2. helps 테이블에서 senior_id와 users 테이블에서 senior 닉네임을 자동조인으로 한 번에 조회
+    const { data: help, error: helpError } = await supabase
+      .from('helps')
+      .select('senior_id, users!inner(nickname)')
+      .eq('id', helpId)
+      .single();
+    if (helpError || !help) return false;
+    const seniorNickname = (help as any).users?.nickname;
+    if (!seniorNickname) return false;
+    if (nickname === seniorNickname) return true;
+
+    // 3. help_applicants에서 accepted된 junior 확인 (기존과 동일)
+    const { data: applicants, error: applicantsError } = await supabase
+      .from('help_applicants')
+      .select(`users!inner(nickname), is_accepted`)
+      .eq('help_id', helpId)
+      .eq('is_accepted', true);
+    if (applicantsError) return false;
+    const isAcceptedJunior = applicants?.some(
+      (applicant: any) => applicant.users.nickname === nickname
+    );
+    return !!isAcceptedJunior;
   }
 }

@@ -21,10 +21,18 @@ export interface WrittenReviewsRequest {
 export interface ReviewResponseDto {
   id: number;
   helpId: number;
+  writerId: string;
+  receiverId: string;
   writerNickname: string;
   receiverNickname: string;
   rating: number;
   text: string;
-  reviewImgUrl?: string;
+  reviewImgUrl: string | null;
   createdAt: string;
+}
+
+// 리뷰 생성 권한 여부 요청 DTO
+export interface ReviewCreateAccessRequestDto {
+  nickname: string;
+  helpId: number;
 }
