@@ -3,7 +3,7 @@
   max-width: 768px;
   width: 100%;
   min-height: 100vh;
-  margin: 0 auto;
+  margin: -5rem auto 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,11 +53,11 @@
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   height: 60vh;
   padding: 2rem 1rem 1rem 1rem;
   box-sizing: border-box;
+  justify-content: space-around;
 }
 
 .slideContent .slideImg {
@@ -106,7 +106,7 @@
 .loginBtn {
   width: 90%;
   max-width: 100%;
-  padding: 1rem 0;
+  padding: .5rem 0;
   background: #446ee8;
   color: #fff;
   font-size: 1.1rem;
@@ -116,6 +116,7 @@
   cursor: pointer;
   margin-bottom: 0.5rem;
   transition: background 0.2s;
+  font-family: 'pretendard';
 }
 .loginBtn:hover {
   background: #2563eb;
@@ -124,7 +125,7 @@
 .signupBtn {
   width: 90%;
   max-width: 100%;
-  padding: 0.9rem 0;
+  padding: 0.5rem 0;
   background: #fff;
   color: #3b82f6;
   font-size: 1.05rem;
@@ -133,6 +134,7 @@
   border-radius: 12px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  font-family: 'pretendard';
 }
 .signupBtn:hover {
   background: #3b82f6;
@@ -178,14 +180,7 @@
     min-height: 100vh;
     padding: 0;
   }
-  /* .swiper {
-    max-width: 100vw;
-    width: 100vw;
-  } */
-/*   .slideContent {
-    max-width: 100vw;
-    width: 100vw;
-  } */
+
   .slideTitle {
     font-size: 1.3rem;
   }
