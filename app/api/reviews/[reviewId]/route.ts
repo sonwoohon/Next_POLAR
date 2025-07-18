@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
-import { getNicknameByUuid } from '@/lib/getUserName';
+import { getNicknameByUuid } from '@/lib/getUserData';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 

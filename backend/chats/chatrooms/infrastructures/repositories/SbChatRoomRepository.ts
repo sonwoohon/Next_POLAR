@@ -3,7 +3,7 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { IChatRoomRepository } from '@/backend/chats/chatrooms/domains/repositories/IChatRoomRepository';
 import { ChatRoom } from '@/backend/chats/chatrooms/domains/entities/ChatRoom';
 import { ChatRoomMapper } from '@/backend/chats/chatrooms/infrastructures/mappers/ChatRoomMapper';
-import { getNicknameByUuid } from '@/lib/getUserData';
+import { getNicknameByUuid, getUuidByNickname } from '@/lib/getUserData';
 
 // ===== Repository 구현체 =====
 // IChatRoomRepository 인터페이스를 구현하는 실제 데이터베이스 접근 클래스
@@ -82,5 +82,40 @@ export class SbChatRoomRepository implements IChatRoomRepository {
     if (error) throw error;
     if (!data) return [];
     return data.map((row: { help_id: number }) => row.help_id);
+  }
+
+  // ===== nickname이 특정 채팅방에 접근 권한이 있는지 확인 =====
+  async checkUserAccessToChatRoom(nickname: string, chatRoomId: number): Promise<boolean> {
+    try {
+      // 1. nickname을 UUID로 변환
+      const userId = await getUuidByNickname(nickname);
+      if (!userId) {
+        return false;
+      }
+
+      // 2. 채팅방 정보 조회
+      const { data, error } = await supabase
+        .from('contact_rooms')
+        .select('junior_id, senior_id')
+        .eq('id', chatRoomId)
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // 채팅방이 존재하지 않는 경우
+          return false;
+        }
+        throw error;
+      }
+
+      if (!data) return false;
+
+      // 3. 사용자가 해당 채팅방의 참여자인지 확인
+      const isParticipant = data.junior_id === userId || data.senior_id === userId;
+      return isParticipant;
+    } catch (error) {
+      console.error('checkUserAccessToChatRoom error:', error);
+      return false;
+    }
   }
 }

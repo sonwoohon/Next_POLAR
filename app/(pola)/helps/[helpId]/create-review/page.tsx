@@ -16,14 +16,13 @@ import { useImageContext } from '@/lib/contexts/ImageContext';
 
 export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
   const { helpId } = use(params);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{ text: string }>({
     text: '',
   });
-  const [starRating, setStarRating] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [starRating, setStarRating] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [hover, setHover] = useState(0);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
   const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');

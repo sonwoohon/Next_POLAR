@@ -28,3 +28,9 @@ export interface ReviewResponseDto {
   reviewImgUrl?: string;
   createdAt: string;
 }
+
+// 리뷰 생성 권한 여부 요청 DTO
+export interface ReviewCreateAccessRequestDto {
+  nickname: string;
+  helpId: number;
+}

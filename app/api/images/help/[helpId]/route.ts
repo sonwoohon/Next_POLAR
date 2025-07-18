@@ -6,12 +6,13 @@ import { SbImageRepository } from '@/backend/images/infrastructures/repositories
 // 헬프 이미지 리스트 조회 (GET)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { helpId: string } }
+  { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ images: string[] } | { error: string }>> {
-  console.log(`[API] GET /api/images/help/${params.helpId} 호출됨`);
+  const { helpId: helpIdParam } = await params;
+  console.log(`[API] GET /api/images/help/${helpIdParam} 호출됨`);
 
   try {
-    const helpId = parseInt(params.helpId);
+    const helpId = parseInt(helpIdParam);
     
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(
@@ -39,12 +40,13 @@ export async function GET(
 // 헬프 이미지 업로드 (POST)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { helpId: string } }
+  { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ urls: string[] } | { error: string }>> {
-  console.log(`[API] POST /api/images/help/${params.helpId} 호출됨`);
+  const { helpId: helpIdParam } = await params;
+  console.log(`[API] POST /api/images/help/${helpIdParam} 호출됨`);
 
   try {
-    const helpId = parseInt(params.helpId);
+    const helpId = parseInt(helpIdParam);
     
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(
@@ -103,12 +105,13 @@ export async function POST(
 // 헬프의 모든 이미지 삭제 (DELETE)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { helpId: string } }
+  { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ success: boolean } | { error: string }>> {
-  console.log(`[API] DELETE /api/images/help/${params.helpId} 호출됨`);
+  const { helpId: helpIdParam } = await params;
+  console.log(`[API] DELETE /api/images/help/${helpIdParam} 호출됨`);
 
   try {
-    const helpId = parseInt(params.helpId);
+    const helpId = parseInt(helpIdParam);
     
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(

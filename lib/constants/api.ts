@@ -26,11 +26,13 @@ export const API_ENDPOINTS = {
   REVIEW_DETAIL: (id: string) => `/api/reviews/${id}`,
   REVIEWS_RECEIVED: '/api/reviews/received',
   REVIEWS_WRITTEN: '/api/reviews/written',
+  REVIEW_CREATE_AUTH_CHECK: '/api/reviews/create/auth-check',
 
   // 채팅 관련
   CHAT_ROOMS: '/api/chats/rooms',
-  CHAT_ROOM_MESSAGES: (roomId: number) => `/api/chats/rooms/${roomId}/messages`,
   CHAT_ROOM_DETAIL: (roomId: number) => `/api/chats/rooms/${roomId}`,
+  CHAT_ROOM_MESSAGES: (roomId: string) => `/api/chats/rooms/${roomId}/messages`,
+  CHAT_ROOM_AUTH_CHECK: '/api/chats/rooms/auth-check',
 
   // 이미지 업로드 관련
   IMAGE_UPLOAD: '/api/images',

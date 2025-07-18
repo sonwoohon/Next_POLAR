@@ -3,6 +3,7 @@ import { gangwonEdu, pretendard } from '@/public/fonts/fonts';
 import './globals.css';
 import { QueryProvider } from '@/app/_components/QueryProvider';
 import { ImageProvider } from '@/lib/contexts/ImageContext';
+import AuthWrapper from '@/app/_components/layout/AuthWrapper';
 
 export const metadata: Metadata = {
   title: 'POLAR',
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body className={`${gangwonEdu.variable} ${pretendard.variable}`}>
         <QueryProvider>
           <ImageProvider>
-            <main className='main-container'>{children}</main>
+            <AuthWrapper>
+              <main className='main-container'>{children}</main>
+            </AuthWrapper>
           </ImageProvider>
         </QueryProvider>
       </body>
