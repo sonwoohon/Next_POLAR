@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useChatRoomDetailWithHelps } from '@/lib/hooks';
+import { useChatRoomDetailWithHelps } from '@/lib/hooks/chats/useChatRoomDetailWithHelps';
 import styles from './History.module.css';
 import Image from 'next/image';
 import { formatDateRange } from '@/lib/utils/dateFormat';

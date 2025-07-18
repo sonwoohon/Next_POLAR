@@ -1,0 +1,227 @@
+.calendarContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.reactCalendar {
+  width: 100% !important;
+  border: none !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: inherit;
+}
+
+/* react-calendar 기본 스타일 오버라이드 */
+.reactCalendar button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.reactCalendar__navigation {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.reactCalendar__navigation button {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.reactCalendar__navigation button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.reactCalendar__navigation__label {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.reactCalendar__month-view__weekdays {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.reactCalendar__month-view__weekdays__weekday {
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #495057;
+  border-right: 1px solid #e9ecef;
+}
+
+.reactCalendar__month-view__weekdays__weekday:last-child {
+  border-right: none;
+}
+
+.reactCalendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  color: #dc3545;
+}
+
+.reactCalendar__month-view__days__day {
+  position: relative;
+  min-height: 80px;
+  padding: 8px;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.reactCalendar__month-view__days__day:hover {
+  background: #f8f9fa;
+  transform: scale(1.02);
+}
+
+.reactCalendar__month-view__days__day:last-child {
+  border-right: none;
+}
+
+.reactCalendar__month-view__days__day--neighboringMonth {
+  background: #f8f9fa;
+  color: #adb5bd;
+}
+
+.reactCalendar__tile {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+}
+
+.reactCalendar__tile--now {
+  border: 2px solid #2196f3;
+}
+
+.reactCalendar__tile--active {
+  border: 2px solid #4caf50;
+}
+
+.calendarTile {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+}
+
+.today {
+  border: 2px solid #2196f3;
+}
+
+.selected {
+  border: 2px solid #4caf50;
+}
+
+.hasHelps {
+  background: #fff3cd;
+}
+
+.tileContent {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 4px;
+  justify-content: center;
+}
+
+.categoryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.categoryDot:hover {
+  transform: scale(1.2);
+}
+
+.moreDots {
+  background: rgba(0,123,255,0.1);
+  color: #007bff;
+  font-size: 7px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  text-align: center;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .calendarContainer {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  .reactCalendar__navigation {
+    padding: 12px;
+  }
+  
+  .reactCalendar__navigation__label {
+    font-size: 18px;
+  }
+  
+  .reactCalendar__month-view__weekdays__weekday {
+    padding: 8px 0;
+    font-size: 12px;
+  }
+  
+  .reactCalendar__month-view__days__day {
+    min-height: 80px;
+    padding: 8px;
+  }
+  
+  .categoryDot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .moreDots {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reactCalendar__month-view__days__day {
+    min-height: 70px;
+    padding: 6px;
+  }
+  
+  .categoryDot {
+    width: 9px;
+    height: 9px;
+  }
+  
+  .moreDots {
+    font-size: 7px;
+    padding: 1px 3px;
+  }
+} 

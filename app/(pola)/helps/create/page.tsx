@@ -6,7 +6,7 @@ import styles from './createHelp.module.css';
 import Step1HelpType from './components/Step1HelpType';
 import Step2TimeSelection from './components/Step2TimeSelection';
 import Step3HelpDetails from './components/Step3HelpDetails';
-import { useCreateHelp } from '@/lib/hooks/useCreateHelp';
+import { useCreateHelp } from '@/lib/hooks/help/useCreateHelp';
 import { useImageContext } from '@/lib/contexts/ImageContext';
 import { HelpFunnelData } from '@/lib/models/createHelpDto';
 
@@ -16,7 +16,7 @@ const CreateHelpPage: React.FC = () => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [helpData, setHelpData] = useState<HelpFunnelData>({
-    type: null,
+    types: [], // 여러 타입을 선택할 수 있도록 배열로 변경
     timeType: null,
     date: new Date().toISOString().split('T')[0],
     startTime: '',
@@ -29,7 +29,18 @@ const CreateHelpPage: React.FC = () => {
   const { imageFiles, clearImages } = useImageContext();
 
   const handleTypeSelect = (type: string) => {
-    setHelpData((prev) => ({ ...prev, type }));
+    setHelpData((prev) => {
+      const currentTypes = prev.types || [];
+      const isSelected = currentTypes.includes(type);
+
+      if (isSelected) {
+        // 이미 선택된 경우 제거
+        return { ...prev, types: currentTypes.filter((t) => t !== type) };
+      } else {
+        // 선택되지 않은 경우 추가
+        return { ...prev, types: [...currentTypes, type] };
+      }
+    });
   };
 
   const handleTimeTypeSelect = (timeType: string) => {
@@ -59,7 +70,7 @@ const CreateHelpPage: React.FC = () => {
   const canGoNext = () => {
     switch (currentStep) {
       case 1:
-        return helpData.type !== null;
+        return helpData.types.length > 0;
       case 2:
         if (
           helpData.timeType === 'specific' ||
@@ -101,7 +112,27 @@ const CreateHelpPage: React.FC = () => {
       // help 데이터 추가
       formData.append('title', helpData.title);
       formData.append('content', helpData.content);
-      formData.append('category', helpData.type === 'heavy' ? '1' : '2'); // 무거워요: 1, 어려워요: 2
+
+      // 선택된 타입들을 subCategoryId로 매핑
+      const typeToSubCategoryMap: { [key: string]: number } = {
+        heavy: 1, // 무거워요
+        difficult: 2, // 어려워요
+        clean: 3, // 정리해요
+        learn: 4, // 배워요
+        complex: 5, // 복잡해요
+        broken: 6, // 고장나요
+        errand: 7, // 심부름
+      };
+
+      const subCategoryIds = helpData.types
+        .map((type) => typeToSubCategoryMap[type])
+        .filter(Boolean);
+
+      // 각 subCategoryId를 개별적으로 추가
+      subCategoryIds.forEach((id) => {
+        formData.append('subCategoryId', id.toString());
+      });
+
       formData.append(
         'startDate',
         helpData.timeType === 'now'
@@ -181,7 +212,7 @@ const CreateHelpPage: React.FC = () => {
       {/* 단계별 컨텐츠 */}
       {currentStep === 1 && (
         <Step1HelpType
-          selectedType={helpData.type}
+          selectedTypes={helpData.types}
           onTypeSelect={handleTypeSelect}
         />
       )}

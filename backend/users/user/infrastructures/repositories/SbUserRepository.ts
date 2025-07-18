@@ -48,7 +48,7 @@ export class SbUserRepository implements IUserRepository {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('nickname', nickname)
+        .eq('nickname',  nickname)
         .single();
 
       if (error) {

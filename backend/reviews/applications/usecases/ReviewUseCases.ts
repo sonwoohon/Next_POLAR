@@ -1,6 +1,6 @@
 import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 import { IReviewRepository } from '@/backend/reviews/domains/repositories/ReviewRepository';
-import { CreateReviewRequest } from '@/backend/reviews/applications/dtos/ReviewDtos';
+import { CreateReviewRequest, ReviewCreateAccessRequestDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
 
 export class ReviewUseCases {
   constructor(private readonly reviewRepository: IReviewRepository) {}
@@ -19,5 +19,10 @@ export class ReviewUseCases {
   async createReview(request: CreateReviewRequest): Promise<ReviewEntity> {
     // nickname 기반으로 repository에 전달
     return await this.reviewRepository.createByNicknames(request);
+  }
+
+  // 리뷰 생성 권한 여부 확인
+  async checkCreateReviewAccess(dto: ReviewCreateAccessRequestDto): Promise<boolean> {
+    return await this.reviewRepository.checkCreateReviewAccess(dto);
   }
 }

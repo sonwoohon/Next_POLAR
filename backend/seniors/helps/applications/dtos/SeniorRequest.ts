@@ -3,7 +3,7 @@ export interface CreateSeniorHelpRequestDto {
   title: string;
   startDate: string;
   content?: string;
-  category: number | number[];
+  category: number | number[]; // subCategoryId 배열 또는 단일 값 (기존 호환성을 위해 category로 유지)
   endDate?: string;
   imageFiles?: string[]; // 이미지 URL 배열 추가
 }

@@ -1,8 +1,8 @@
 'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constants/api';
-import { postHelp } from '../api_front/help.api';
-import { ApiCreateHelpResponse } from '../models/createHelpDto';
+import { QUERY_KEYS } from '../../constants/api';
+import { postHelp } from '../../api_front/help.api';
+import { ApiCreateHelpResponse } from '../../models/createHelpDto';
 
 export function useCreateHelp() {
   const queryClient = useQueryClient();
