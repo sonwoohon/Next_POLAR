@@ -14,7 +14,7 @@ export class CommonHelpEntity {
     public title: string,
     public startDate: Date,
     public endDate: Date,
-    public category: number[], // 여러 카테고리를 지원하도록 배열로 변경
+    public category: { id: number; point: number }[], // 여러 카테고리를 지원하도록 배열로 변경
     public content: string,
     public status: string,
     public createdAt: Date
@@ -44,7 +44,7 @@ export class CommonHelpWithNicknameEntity {
     public title: string,
     public startDate: Date,
     public endDate: Date,
-    public category: number[],
+    public category: { id: number; point: number }[],
     public content: string,
     public status: string,
     public createdAt: Date
