@@ -22,6 +22,7 @@ import {
   ScoreRequestDtoWithNicknameAndSeason,
   ScoreRequestDtoWithNicknameAndCategoryId,
 } from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
+import { ScoreRankingDto, ScoreRankingRawDto } from '@/backend/juniors/scores/applications/dtos/ScoreRankingDto';
 
 export class ScoreRepository implements ScoreRepositoryInterface {
   private async queryScores(
@@ -133,5 +134,28 @@ export class ScoreRepository implements ScoreRepositoryInterface {
     return this.queryScoresByNickname(request.nickname, {
       category_id: request.categoryId,
     });
+  }
+
+  // user_id별 총점과 nickname을 가져오는 메서드 (Hall of Fame용)
+  async getUserRankingsBySeason(season: number): Promise<ScoreRankingDto[]> {
+    const { data, error } = await supabase
+      .from('scores')
+      .select(`
+        user_id,
+        users(nickname, profile_img_url),
+        category_id,
+        category_score
+      `)
+      .eq('season', season);
+
+    if (error || !data) return [];
+
+    // Supabase 응답을 ScoreRankingDto 형태로 변환
+    return (data as ScoreRankingRawDto[]).map(item => ({
+      user_id: item.user_id,
+      users: Array.isArray(item.users) ? item.users[0] : item.users, // 배열이면 첫 번째 요소, 아니면 그대로
+      category_id: item.category_id,
+      category_score: item.category_score,
+    }));
   }
 }
