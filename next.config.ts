@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
         ]
       : [],
     domains: [
+      "images.unsplash.com",
+      "hjjhgiuoyjsmhzsnogmg.supabase.co",
       'images.unsplash.com',
       'example.com',
       'plus.unsplash.com',

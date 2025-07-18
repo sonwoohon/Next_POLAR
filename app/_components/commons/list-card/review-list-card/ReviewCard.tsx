@@ -1,15 +1,17 @@
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import styles from './ReviewCard.module.css';
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import styles from "./ReviewCard.module.css";
 
 interface Review {
   id: number;
   helpId: number;
+  writerId: string;
+  receiverId: string;
   writerNickname: string;
   receiverNickname: string;
   rating: number;
   text: string;
-  reviewImgUrl?: string;
+  reviewImgUrl: string | null;
   writerProfileImgUrl?: string;
   createdAt: string;
 }
@@ -25,7 +27,7 @@ export default function ReviewCard({ review }: { review: Review }) {
     <li className={styles.reviewItem}>
       <div className={styles.reviewHeaderRow}>
         <Image
-          src={review.writerProfileImgUrl || '/images/dummies/dummy_user.png'}
+          src={review.writerProfileImgUrl || "/images/dummies/dummy_user.png"}
           alt={review.writerNickname}
           width={40}
           height={40}
@@ -36,13 +38,14 @@ export default function ReviewCard({ review }: { review: Review }) {
           <span
             className={styles.arrow}
             onClick={handleProfileClick}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             &nbsp;&gt;
           </span>
         </span>
         <span className={styles.stars}>
-          {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+          {"★".repeat(review.rating)}
+          {"☆".repeat(5 - review.rating)}
         </span>
       </div>
       {review.reviewImgUrl && (
@@ -59,4 +62,4 @@ export default function ReviewCard({ review }: { review: Review }) {
       <div className={styles.reviewTextBox}>{review.text}</div>
     </li>
   );
-} 
+}

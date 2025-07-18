@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
 import { ReviewResponseDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
+import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
 // ReviewEntity를 API 응답용 DTO로 변환
-async function convertEntityToResponseDto(entity: any): Promise<ReviewResponseDto> {
+async function convertEntityToResponseDto(entity: ReviewEntity): Promise<ReviewResponseDto> {
   return {
-    id: entity.id,
+    id: entity.id ?? 0,
     helpId: entity.helpId,
+    writerId: entity.writerId,
+    receiverId: entity.receiverId,
     writerNickname: entity.writerNickname,
     receiverNickname: entity.receiverNickname,
     rating: entity.rating,
