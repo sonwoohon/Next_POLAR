@@ -28,7 +28,19 @@ export default function HelpContent({ help }: HelpContentProps) {
 
   return (
     <div className={styles.mainContent}>
-      <h1 className={styles.helpTitle}>{help.title}</h1>
+      <div className={styles.titleAndStatus}>
+        <h1 className={styles.helpTitle}>{help.title}</h1>
+        <div className={styles.helpStatus}>
+          <div className={styles.statusItem}>
+            <span className={styles.statusLabel}>상태</span>
+            <span className={styles.statusValue}>{help.status}</span>
+          </div>
+          <div className={styles.statusItem}>
+            <span className={styles.statusLabel}>지원자</span>
+            <span className={styles.statusValue}>3명</span>
+          </div>
+        </div>
+      </div>
 
       {/* Help Categories */}
       {help.category && help.category.length > 0 && (
