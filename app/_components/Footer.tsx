@@ -1,52 +1,29 @@
 'use client';
-import { useState } from 'react';
+import { useFooterNavigation } from '@/lib/hooks/useFooterNavigation';
 import styles from './Footer.module.css';
-import Link from 'next/link';
 
 const Footer: React.FC = () => {
-  const [activeMenu, setActiveMenu] = useState<string>('');
-
-  const handleMenuClick = (menuName: string) => {
-    setActiveMenu(menuName);
-  };
+  const { activeMenu, slidePosition, handleMenuClick, menuItems } = useFooterNavigation();
 
   return (
     <footer className={styles.footer}>
-      <nav>
+      <nav className={styles.nav}>
         <ul className={styles.menuList}>
-          <li className={activeMenu === 'helps' ? styles.active : ''}>
-            <Link 
-              href="/helps" 
-              onClick={() => handleMenuClick('helps')}
-            >
-              헬프메인
-            </Link>
-          </li>
-          <li className={activeMenu === 'hall-of-fame' ? styles.active : ''}>
-            <Link 
-            href="/user/hall-of-fame"  
-              onClick={() => handleMenuClick('hall-of-fame')}
-            >
-              명예의 전당
-            </Link>
-          </li>
-          <li className={activeMenu === 'home' ? styles.active : ''}>
-            <Link 
-              href="/main" 
-              onClick={() => handleMenuClick('home')}
-            >
-              홈
-            </Link>
-          </li>
-          <li className={activeMenu === 'profile' ? styles.active : ''}>
-            <Link 
-              href="/user/profile/me" 
-              onClick={() => handleMenuClick('profile')}
-            >
-              마이페이지
-            </Link>
-          </li>
+          {menuItems.map((item) => (
+            <li key={item.name} className={activeMenu === item.name ? styles.active : ''}>
+              <button 
+                onClick={() => handleMenuClick(item.name, item.path, item.position)}
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
         </ul>
+        {/* 슬라이드 배경 */}
+        <div 
+          className={styles.slideBackground}
+          style={{ left: `${slidePosition * 25}%` }}
+        />
       </nav>
     </footer>
   );

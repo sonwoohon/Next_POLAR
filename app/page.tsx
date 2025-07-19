@@ -1,22 +1,30 @@
+// 온보딩 페이지 (루트 경로) - 첫 진입 페이지, 로그인/회원가입 버튼 및 앱 소개 슬라이드
 "use client";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import styles from './Onboarding.module.css';
-import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect';
+import { useOnboardingAuth } from '@/lib/hooks/useOnboardingAuth';
 import { useNavigation } from '@/lib/hooks/useNavigation';
 import { useOnboardingData } from '@/lib/hooks/useOnboardingData';
 
 export default function Home() {
-  // 인증 상태 확인 및 자동 리다이렉트
-  const { isAuthenticated } = useAuthRedirect();
+  // 온보딩 페이지 전용 인증 확인
+  const { shouldRender } = useOnboardingAuth();
   
   // 네비게이션 핸들러
   const { navigateToLogin, navigateToSignup } = useNavigation();
   
   // 온보딩 데이터
   const { slides, swiperConfig } = useOnboardingData();
+
+  // 인증 확인 중이거나 인증된 사용자인 경우 아무것도 렌더링하지 않음
+  if (!shouldRender) {
+    return null;
+  }
+
+  // 비인증 사용자만 온보딩 페이지 표시
 
   return (
     <div className={styles.onboardingWrap}>

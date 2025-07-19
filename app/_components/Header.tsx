@@ -1,37 +1,51 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import styles from './Header.module.css';
 import Image from 'next/image';
 import Logo from '@/public/images/logos/POLAR.png';
+import { useHeaderScroll } from '@/lib/hooks/useHeaderScroll';
+import { useUserProfile } from '@/lib/hooks/useUserProfile';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { useProfileImage } from '@/lib/hooks/useProfileImage';
+import DummyUser from '@/public/images/dummies/dummy_user.png';
 
 const Header: React.FC = () => {
-  const [hidden, setHidden] = useState(false);
-  const lastScrollY = useRef(0);
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  const { hidden } = useHeaderScroll();
+  const { currentUser, isLoading: authLoading } = useAuth();
+  
+  // 기존 useUserProfile 훅 사용
+  const { data: userProfile, isLoading: profileLoading, error } = useUserProfile(currentUser?.nickname || '') as any;
+  
+  // useProfileImage 훅 사용
+  const { profileImageUrl, handleImageError } = useProfileImage({
+    profileImgUrl: userProfile?.data?.profileImgUrl
+  });
 
-  /* 스크롤 이벤트 핸들러 */
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        setHidden(true); // 아래로 스크롤하면 숨김
-      } else {
-        setHidden(false); // 위로 스크롤하면 보임
-      }
-      lastScrollY.current = currentScrollY;
+  const isLoading = authLoading || profileLoading;
 
-      // 스크롤 멈춤 감지
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-      scrollTimeout.current = setTimeout(() => {
-        setHidden(false); // 스크롤 멈추면 다시 보임
-      }, 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-    };
-  }, []);
+  if (isLoading) {
+    return (
+      <header className={`${styles.header} ${hidden ? styles.hide : ''}`}>
+        <div className={styles.headerWrap}>
+          <div className={styles.logo}>
+            <h1><a href="/main"><Image src={Logo} alt='POLAR' /></a></h1>
+          </div>
+          <div className={styles.profile}>
+            <Image 
+              src={DummyUser} 
+              alt="User Profile" 
+              width={32}
+              height={32}
+            />
+          </div>
+        </div>
+      </header>
+    );
+  }
+
+  if (error) {
+    console.error('[Header] 에러:', error);
+  }
 
   return (
     <header className={`${styles.header} ${hidden ? styles.hide : ''}`}>
@@ -39,8 +53,14 @@ const Header: React.FC = () => {
         <div className={styles.logo}>
           <h1><a href="/main"><Image src={Logo} alt='POLAR' /></a></h1>
         </div>
-        <div className={styles.hamburger}>
-          <a href="">버튼</a>
+        <div className={styles.profile}>
+          <Image 
+            src={profileImageUrl} 
+            alt="User Profile" 
+            width={32}
+            height={32}
+            onError={handleImageError}
+          />
         </div>
       </div>
     </header>

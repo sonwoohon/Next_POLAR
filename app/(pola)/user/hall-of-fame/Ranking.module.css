@@ -4,10 +4,6 @@
 .rankingWrap {
   background: #1f1f1f;
   width: 100%;
-  margin-top: -5rem;
-  margin-bottom: -4rem;
-  padding-top: 5rem;
-  padding-bottom: 4rem;
 }
 .rankingTopWrap {
   margin-top: 3rem;
@@ -380,7 +376,7 @@
   justify-content: space-between;
   color: #fff;
   list-style: none;
-  padding:1.2rem 2rem 1.2rem 1.2rem;
+  padding:1.2rem 0 1.2rem 0rem;
   align-items: center;
 }
 

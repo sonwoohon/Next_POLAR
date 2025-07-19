@@ -127,13 +127,14 @@ body {
   width: 100%;
   height: 100svh;
   border: 1px solid #d9d9d9;
-  background-color: transparent;
+  background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  padding: 5rem 1.5rem 4rem;
+
 }
 
+.main-container > div{padding:5rem 1.5rem 2rem !important;} /* 최하단 공통 레이아웃 */
 
 

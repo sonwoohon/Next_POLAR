@@ -12,7 +12,7 @@ import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/U
 import { extractData } from "@/lib/utils/apiUtils";
 import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
 import UserRecivedReviewsPreview from "./_components/sections/reviews-preview/UserRecivedReviewsPreview";
-import { useReceivedReviews } from "@/lib/hooks/useReceivedReviews";
+import { useReceivedReviews } from "@/lib/hooks/review/useReceivedReviews";
 import { useAuthStore } from "@/lib/stores/authStore";
 
 const UserProfilePage: React.FC = () => {
