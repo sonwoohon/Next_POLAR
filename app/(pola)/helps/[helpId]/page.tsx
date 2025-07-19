@@ -29,7 +29,7 @@ export default function HelpDetailPage({
 
   // React Query를 사용하여 헬프 데이터 가져오기
   const { data: helpList, isLoading, error: helpError } = useHelpList({
-    helpId: parseInt(helpId),
+    id: parseInt(helpId),
   });
 
   // 첫 번째 헬프 데이터 사용 (helpId로 필터링된 결과)
@@ -43,7 +43,6 @@ export default function HelpDetailPage({
 
   // 사용자 역할
   const userRole = user?.role as 'junior' | 'senior' | null;
-  console.log("현재 유저 helpData", helpData);
   
   // Help 완료 요청 함수 (새로운 훅 사용)
   const handleCompleteHelp = () => {

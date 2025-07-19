@@ -12,9 +12,8 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = ({
   data,
 }) => {
 
-  const { nickname, name, profileImgUrl, age } = data;
+  const { nickname, name, profileImgUrl, userType } = data;
 
-  const userType = age >= 60 ? "Sr." : "Jr.";
   const rating = 4.5;
 
   return (
@@ -42,7 +41,7 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = ({
         {/* 유저 이름 */}
         <div className={styles.userNameContainer}>
           <span>{name} 님</span>
-          <div className={styles.userTypeBadge}>{userType}</div>
+          <div className={styles.userTypeBadge}>{userType === "senior" ? "Sr." : "Jr."}</div>
         </div>
 
         {/* 유저 닉네임 */}

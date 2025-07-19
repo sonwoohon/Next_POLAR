@@ -27,7 +27,7 @@ export interface UserProfileUpdate {
 // 로그인된 사용자 정보 응답 DTO
 export interface UserProfileResponseDto {
     name: string;
-    age: number;
+    userType: 'senior' | 'junior';
     profileImgUrl: string;
     address: string;
     nickname: string;

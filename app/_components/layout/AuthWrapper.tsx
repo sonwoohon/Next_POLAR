@@ -22,6 +22,9 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   // 로그인/회원가입 페이지인지 확인
   const isAuthPage = pathname === '/login' || pathname === '/sign-up';
 
+  // 온보딩 페이지(메인 페이지)인지 확인
+  const isOnboardingPage = pathname === '/';
+
   // 리뷰 생성 페이지인지 확인
   const isReviewCreatePage = pathname.match(/^\/helps\/[0-9]+\/create-review/);
   
@@ -86,7 +89,13 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       router.replace('/main');
       return;
     }
-  }, [isInitialized, isAuthPage, isAuthenticated, user, router]);
+
+    // 로그인된 상태에서 온보딩 페이지로 접근하면 메인으로 리다이렉트
+    if (isOnboardingPage && isAuthenticated && user) {
+      router.replace('/main');
+      return;
+    }
+  }, [isInitialized, isAuthPage, isOnboardingPage, isAuthenticated, user, router]);
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
@@ -136,8 +145,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     }
   }, [isInitialized, isChatRoomPage, chatLoading, hasChatAccess, router]);
 
-  // 로그인된 상태에서 로그인/회원가입 페이지로 접근하면 렌더링하지 않음
-  if (isAuthPage && isAuthenticated && user) {
+  // 로그인된 상태에서 로그인/회원가입 페이지나 온보딩 페이지로 접근하면 렌더링하지 않음
+  if ((isAuthPage || isOnboardingPage) && isAuthenticated && user) {
     return null;
   }
 
