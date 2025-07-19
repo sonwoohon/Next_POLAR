@@ -38,16 +38,16 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   const isChatRoomPage = pathname.match(/^\/chats\/[0-9]+$/);
   
   // 리뷰 생성 권한 확인 (nickname이 있을 때만)
-  const {
-    data: hasAccess,
-    isLoading,
-    error,
-  } = useReviewAccess({
+  const reviewHelpId = isReviewCreatePage
+    ? Number(params.helpId || pathname.split('/')[2])
+    : 0;
+  const { data: reviewAccessData, isLoading: reviewLoading } = useReviewAccess({
     nickname: user?.nickname || '',
-    helpId: isReviewCreatePage
-      ? Number(params.helpId || pathname.split('/')[2])
-      : 0,
+    helpId: reviewHelpId,
   });
+  
+  // API 응답에서 hasAccess 값을 추출 (boolean 직접 반환)
+  const hasReviewAccess = reviewAccessData;
   
   // 채팅방 접근 권한 확인
   const chatRoomId = isChatRoomPage ? Number(pathname.split('/')[2]) : 0;
@@ -90,13 +90,13 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
-
+    console.log({hasReviewAccess});
     // 리뷰 생성 페이지에서 권한이 없으면 홈으로 리다이렉트
-    if (isReviewCreatePage && !isLoading && hasAccess === false) {
+    if (isReviewCreatePage && !reviewLoading && hasReviewAccess !== true) {
       alert('리뷰를 작성할 권한이 없습니다.');
       router.replace('/main');
     }
-  }, [isInitialized, isReviewCreatePage, isLoading, hasAccess, router]);
+  }, [isInitialized, isReviewCreatePage, reviewLoading, hasReviewAccess, router]);
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
@@ -137,6 +137,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     }
   }, [isInitialized, isChatRoomPage, chatLoading, hasChatAccess, router]);
 
+  // 로그인된 상태에서 로그인/회원가입 페이지로 접근하면 렌더링하지 않음
+  if (isAuthPage && isAuthenticated && user) {
+    return null;
+  }
+
   // 로그인/회원가입 페이지에서는 인증 체크 없이 렌더링
   if (isAuthPage) {
     return <>{children}</>;
@@ -147,8 +152,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   
   // 로그인하지 않은 경우 아무것도 렌더링하지 않음 (이미 리다이렉트됨)
   if (!isAuthenticated || !user) return null;
-  if (isReviewCreatePage && isLoading) return null; // 권한 확인 중
-  if (isReviewCreatePage && hasAccess === false) return null; // 권한이 없으면 렌더링하지 않음
+  if (isReviewCreatePage && reviewLoading) return null; // 권한 확인 중
+  if (isReviewCreatePage && hasReviewAccess !== true) return null; // 권한이 없으면 렌더링하지 않음
   if (isHelpCreatePage && user?.role !== 'senior') return null; // senior가 아니면 렌더링하지 않음
 
   if (isProfilePage) return null; // 프로필 페이지에서 user nickname이 없을 때 렌더링하지 않음

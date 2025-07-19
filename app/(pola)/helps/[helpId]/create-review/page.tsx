@@ -10,6 +10,7 @@ import { useCreateReview } from '@/lib/hooks/review/useCreateReview';
 import { useAuthStore } from '@/lib/stores/authStore';
 import StarRating from '@/app/_components/commons/ui/StarRating';
 import ImageUploader from '@/app/_components/commons/imageUploader/ImageUploader';
+import { useReviewReceiver } from '@/lib/hooks/review/useReviewReceiver';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useImageContext } from '@/lib/contexts/ImageContext';
 
@@ -24,7 +25,8 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
-  const { data: userProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(nickname || '');
+  const { data: reviewReceiver, isLoading: receiverLoading, isError: receiverError } = useReviewReceiver(nickname || '', Number(helpId));
+  const { data: receiverProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(reviewReceiver?.receiverNickname || '');
   const { imageFiles, clearImages } = useImageContext();
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,8 +71,8 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
 
   return (
     <div className={styles.container}>
-      {userProfile && userProfile.data && (
-        <UserInfoSection data={userProfile.data} />
+      {receiverProfile && receiverProfile.data && (
+        <UserInfoSection data={receiverProfile.data} />
       )}
       {loading ? (
         <div className={styles.loadingContainer}>로딩 중...</div>
