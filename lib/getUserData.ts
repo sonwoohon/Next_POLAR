@@ -6,7 +6,7 @@ export async function getUuidByNickname(
   try {
     console.log(`[getUuidByNickname] 닉네임으로 UUID 검색 시작: ${nickname}`);
 
-    if (!nickname || nickname.trim().length === 0) {
+    if (!nickname || nickname.length === 0) {
       console.error('[getUuidByNickname] 닉네임이 비어있습니다.');
       return null;
     }
@@ -15,7 +15,7 @@ export async function getUuidByNickname(
     const { data, error } = await supabase
       .from('users')
       .select('id')
-      .eq('nickname', nickname.trim())
+      .eq('nickname', nickname)
       .single();
 
     if (error) {
