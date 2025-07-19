@@ -30,8 +30,38 @@ export async function GET(
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url);
     const filter: HelpFilterDto = {};
+  
+    // 허용된 쿼리 파라미터 목록
+    const allowedParams = [
+      'categoryIds',
+      'subCategoryIds', 
+      'startDate',
+      'endDate',
+      'status',
+      'page',
+      'limit',
+      'offset',
+      'pagination'
+    ];
 
+    // 쿼리 파라미터 확인
+    const requestParams = Array.from(searchParams.keys());
+    
+    // 파라미터가 없으면 빈 결과 반환
+    if (requestParams.length === 0) {
+      console.log('쿼리 파라미터가 없음, 빈 결과 반환');
+      return NextResponse.json([], { status: 200 });
+    }
+    
+    // 정의되지 않은 쿼리 파라미터 확인
+    const hasInvalidParams = requestParams.some(
+      param => !allowedParams.includes(param)
+    );
 
+    if (hasInvalidParams) {
+      console.log('정의되지 않은 파라미터 감지, 빈 결과 반환');
+      return NextResponse.json([], { status: 200 });
+    }
 
     // 메인 카테고리 ID 필터 (categories 테이블)
     const categoryIdsParam = searchParams.get('categoryIds');

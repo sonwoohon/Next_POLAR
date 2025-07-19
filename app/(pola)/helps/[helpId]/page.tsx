@@ -4,21 +4,13 @@ import { useState, useEffect } from 'react';
 import { use } from 'react';
 import { useSeniorHelpCompletion } from '@/lib/hooks/useSeniorHelpCompletion';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useHelpList } from '@/lib/hooks/help/useHelpList';
+import { useHelpDetail } from '@/lib/hooks/help/useHelpDetail';
 import TopBar from './_components/top-bar/TopBar';
 import ImageCarousel from './_components/image-carousel/ImageCarousel';
 import HelpContent from './_components/help-content/HelpContent';
 import ActionButtons from './_components/action-buttons/ActionButtons';
 import UserInfoSection from '@/app/_components/commons/common-sections/user-info/UserInfoSection';
 import styles from './HelpDetail.module.css';
-
-interface UserProfile {
-  nickname: string;
-  name: string;
-  age: number;
-  profileImgUrl: string;
-  address: string;
-}
 
 export default function HelpDetailPage({
   params,
@@ -28,12 +20,7 @@ export default function HelpDetailPage({
   const { helpId } = use(params);
 
   // React Query를 사용하여 헬프 데이터 가져오기
-  const { data: helpList, isLoading, error: helpError } = useHelpList({
-    id: parseInt(helpId),
-  });
-
-  // 첫 번째 헬프 데이터 사용 (helpId로 필터링된 결과)
-  const helpData = helpList && helpList.length > 0 ? helpList[0] : null;
+  const { data: helpData, isLoading, error: helpError } = useHelpDetail(parseInt(helpId));
 
   // 시니어 완료 요청 훅 사용
   const { requestCompletion, isPending: isCompleting } = useSeniorHelpCompletion();
