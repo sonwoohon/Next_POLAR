@@ -31,14 +31,7 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const filter: HelpFilterDto = {};
 
-    // 특정 헬프 ID 필터
-    const idParam = searchParams.get('id');
-    if (idParam) {
-      const id = parseInt(idParam);
-      if (!isNaN(id)) {
-        filter.id = id;
-      }
-    }
+
 
     // 메인 카테고리 ID 필터 (categories 테이블)
     const categoryIdsParam = searchParams.get('categoryIds');
