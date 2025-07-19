@@ -90,7 +90,6 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
-    console.log({hasReviewAccess});
     // 리뷰 생성 페이지에서 권한이 없으면 홈으로 리다이렉트
     if (isReviewCreatePage && !reviewLoading && hasReviewAccess !== true) {
       alert('리뷰를 작성할 권한이 없습니다.');

@@ -11,7 +11,7 @@ interface UserInfoSectionProps {
 const UserInfoSection: React.FC<UserInfoSectionProps> = ({
   data,
 }) => {
-  console.log(data);
+
   const { nickname, name, profileImgUrl, age } = data;
 
   const userType = age >= 60 ? "Sr." : "Jr.";

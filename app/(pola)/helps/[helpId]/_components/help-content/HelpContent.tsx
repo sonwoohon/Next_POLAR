@@ -1,0 +1,53 @@
+import Image from 'next/image';
+import styles from './HelpContent.module.css';
+import { HelpDetailResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
+
+interface UserProfile {
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
+  rating?: number;
+  job?: string;
+  jobIcon?: string;
+}
+
+interface HelpContentProps {
+  help: HelpDetailResponseDto | null;
+}
+
+export default function HelpContent({ help }: HelpContentProps) {
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  if (!help) return null;
+
+  return (
+    <div className={styles.mainContent}>
+      <h1 className={styles.helpTitle}>{help.title}</h1>
+
+      {/* Help Categories */}
+      {help.category && help.category.length > 0 && (
+        <div className={styles.helpCategories}>
+          {help.category.map((cat, index) => (
+            <span key={index} className={styles.categoryTag}>
+              {cat.id}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Help Period */}
+      <div className={styles.helpPeriod}>
+        {`${formatDate(help.startDate)} ~ ${formatDate(help.endDate)}`}
+      </div>
+
+      {/* Help Content */}
+      <div className={styles.helpContent}>{help.content}</div>
+    </div>
+  );
+} 
