@@ -6,6 +6,7 @@
   /* margin: 32px 0 16px 0; */
   margin: 2rem 0;
   flex: 1;
+  width: 100%;;
 }
 
 .category {

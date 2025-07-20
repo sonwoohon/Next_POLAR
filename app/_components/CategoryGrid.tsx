@@ -20,7 +20,7 @@ export default function CategoryGrid({
   onCategoryClick,
   selectedCategoryId,
 }: CategoryGridProps) {
-  const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState(true);
 
   // 카테고리 데이터 생성 (전체 + 실제 sub_category_id: 6-19번)
   const categoryData: CategoryItem[] = [
