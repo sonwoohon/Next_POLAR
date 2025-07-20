@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { use } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./CreateReview.module.css";
 import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
 import Button from "./_components/Button";
@@ -19,6 +20,7 @@ export default function CreateReviewPage({
 }: {
   params: Promise<{ helpId: string }>;
 }) {
+  const router = useRouter();
   const { helpId } = use(params);
   const [form, setForm] = useState<{ text: string }>({
     text: "",
@@ -26,7 +28,6 @@ export default function CreateReviewPage({
   const [starRating, setStarRating] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
   const { data: reviewReceiver } = useReviewReceiver(
@@ -46,8 +47,8 @@ export default function CreateReviewPage({
 
   const createReviewMutation = useCreateReview({
     onSuccess: () => {
-      setSuccess(true);
-      setLoading(false);
+      alert("리뷰가 성공적으로 등록되었습니다!");
+      router.push("/main");
     },
     onError: (err) => {
       setError(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -59,7 +60,6 @@ export default function CreateReviewPage({
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccess(false);
 
     if (!helpId) {
       setError("helpId가 없습니다.");
@@ -117,9 +117,6 @@ export default function CreateReviewPage({
             </Button>
           </form>
           {error && <p className={styles.error}>{error}</p>}
-          {success && (
-            <p className={styles.success}>리뷰가 성공적으로 등록되었습니다!</p>
-          )}
         </>
       )}
     </div>
