@@ -1,13 +1,12 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './ChatListItems.module.css';
-
-interface ChatRoom {
-  chatRoomId: number;
-  seniorNickname: string;
-}
+import { ChatRoomWithDetails } from '@/lib/api_front/chat.api';
+import { getCategoryName } from '@/lib/utils/categoryUtils';
+import DummyUser from '@/public/images/dummies/dummy_user.png';
 
 interface ChatListItemsProps {
-  chatRooms: ChatRoom[];
+  chatRooms: ChatRoomWithDetails[];
 }
 
 export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
@@ -19,19 +18,35 @@ export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
         chatRooms.map((room) => (
           <Link href={`/chats/${room.chatRoomId}`} key={room.chatRoomId}>
             <li className={styles.chatItem}>
-              <div className={styles.avatar}></div>
+              <div className={styles.avatar}>
+                <Image
+                  src={room.opponentProfile.profileImgUrl || DummyUser}
+                  alt='Profile'
+                  width={48}
+                  height={48}
+                  className={styles.profileImage}
+                />
+              </div>
               <div className={styles.info}>
-                <div className={styles.name}>{room.seniorNickname} 시니어</div>
+                <div className={styles.name}>{room.opponentProfile.name}</div>
                 <div className={styles.tags}>
-                  <span className={styles.tag}>방청소</span>
-                  <span className={styles.tag}>헬쓰기</span>
+                  {room.latestHelp?.category &&
+                  room.latestHelp.category.length > 0 ? (
+                    room.latestHelp.category.map((cat, index) => (
+                      <span key={index} className={styles.tag}>
+                        {getCategoryName(cat.id)}
+                      </span>
+                    ))
+                  ) : (
+                    <span className={styles.tag}>기타</span>
+                  )}
                 </div>
               </div>
-              <span className={styles.unread}>9</span>
+              {/* <span className={styles.unread}>9</span> */}
             </li>
           </Link>
         ))
       )}
     </ul>
   );
-} 
+}

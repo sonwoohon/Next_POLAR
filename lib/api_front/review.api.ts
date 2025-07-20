@@ -1,10 +1,15 @@
 import { API_ENDPOINTS } from '../constants/api';
 import apiClient from '../http.api';
-import { ReceivedReviewsResponse, WrittenReviewsResponse } from '../models/review.model';
+import {
+  ReceivedReviewsResponse,
+  WrittenReviewsResponse,
+} from '../models/review.model';
 import { CreateReviewResponse } from '../models/review.model';
 
 // 받은 리뷰 목록 조회
-export const getReceivedReviews = async (nickname: string): Promise<ReceivedReviewsResponse> => {
+export const getReceivedReviews = async (
+  nickname: string
+): Promise<ReceivedReviewsResponse> => {
   const response = await apiClient.get<ReceivedReviewsResponse>(
     `${API_ENDPOINTS.REVIEWS_RECEIVED}?nickname=${nickname}`
   );
@@ -14,15 +19,30 @@ export const getReceivedReviews = async (nickname: string): Promise<ReceivedRevi
 };
 
 // 쓴 리뷰 목록 조회
-export const getWrittenReviews = async (nickname: string): Promise<WrittenReviewsResponse> => {
+export const getWrittenReviews = async (
+  nickname: string
+): Promise<WrittenReviewsResponse> => {
   const response = await apiClient.get<WrittenReviewsResponse>(
     `${API_ENDPOINTS.REVIEWS_WRITTEN}?nickname=${nickname}`
   );
   return response.data;
 };
 
+// 사용자 리뷰 통계 조회
+export const getUserReviewStats = async (
+  nickname: string
+): Promise<{ averageRating: number; reviewCount: number }> => {
+  const response = await apiClient.get<{
+    averageRating: number;
+    reviewCount: number;
+  }>(`${API_ENDPOINTS.REVIEW_USER_STATS}?nickname=${nickname}`);
+  return response.data;
+};
+
 // 리뷰 생성
-export const createReview = async (formData: FormData): Promise<CreateReviewResponse> => {
+export const createReview = async (
+  formData: FormData
+): Promise<CreateReviewResponse> => {
   const response = await apiClient.post(
     `${API_ENDPOINTS.REVIEW_CREATE}`,
     formData,
@@ -36,7 +56,10 @@ export const createReview = async (formData: FormData): Promise<CreateReviewResp
 };
 
 // 리뷰 생성 권한 확인
-export const checkReviewCreateAccess = async (nickname: string, helpId: number): Promise<boolean> => {
+export const checkReviewCreateAccess = async (
+  nickname: string,
+  helpId: number
+): Promise<boolean> => {
   const response = await apiClient.get<{ hasAccess: boolean }>(
     `${API_ENDPOINTS.REVIEW_CREATE_AUTH_CHECK}?nickname=${nickname}&helpId=${helpId}`
   );
@@ -44,9 +67,13 @@ export const checkReviewCreateAccess = async (nickname: string, helpId: number):
 };
 
 // 리뷰 상대방 조회
-export const getReviewReceiver = async (nickname: string, helpId: number): Promise<{ receiverNickname: string; message: string }> => {
-  const response = await apiClient.get<{ receiverNickname: string; message: string }>(
-    `${API_ENDPOINTS.REVIEW_RECEIVER}?nickname=${nickname}&helpId=${helpId}`
-  );
+export const getReviewReceiver = async (
+  nickname: string,
+  helpId: number
+): Promise<{ receiverNickname: string; message: string }> => {
+  const response = await apiClient.get<{
+    receiverNickname: string;
+    message: string;
+  }>(`${API_ENDPOINTS.REVIEW_RECEIVER}?nickname=${nickname}&helpId=${helpId}`);
   return response.data;
-}; 
+};

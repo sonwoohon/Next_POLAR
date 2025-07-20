@@ -2,7 +2,6 @@
 import { supabase } from '@/backend/common/utils/supabaseClient';
 import { IChatRoomRepository } from '@/backend/chats/chatrooms/domains/repositories/IChatRoomRepository';
 import { ChatRoom } from '@/backend/chats/chatrooms/domains/entities/ChatRoom';
-import { ChatRoomMapper } from '@/backend/chats/chatrooms/infrastructures/mappers/ChatRoomMapper';
 import { getNicknameByUuid, getUuidByNickname } from '@/lib/getUserData';
 
 // ===== Repository 구현체 =====
@@ -16,7 +15,23 @@ export class SbChatRoomRepository implements IChatRoomRepository {
       .or(`junior_id.eq.${userId},senior_id.eq.${userId}`);
 
     if (error) throw error;
-    return ChatRoomMapper.toChatRooms(data ?? []);
+
+    // UUID를 nickname으로 변환하여 ChatRoom 객체 생성
+    const chatRooms: ChatRoom[] = [];
+    for (const row of data ?? []) {
+      const juniorNickname = await getNicknameByUuid(row.junior_id);
+      const seniorNickname = await getNicknameByUuid(row.senior_id);
+
+      chatRooms.push({
+        chatRoomId: row.id,
+        helpId: row.help_id,
+        juniorNickname: juniorNickname || '알 수 없음',
+        seniorNickname: seniorNickname || '알 수 없음',
+        createdAt: row.created_at,
+      });
+    }
+
+    return chatRooms;
   }
 
   // ===== chatRoomId로 특정 채팅방 조회 =====
@@ -36,7 +51,18 @@ export class SbChatRoomRepository implements IChatRoomRepository {
     }
 
     if (!data) return null;
-    return ChatRoomMapper.toChatRoom(data);
+
+    // UUID를 nickname으로 변환
+    const juniorNickname = await getNicknameByUuid(data.junior_id);
+    const seniorNickname = await getNicknameByUuid(data.senior_id);
+
+    return {
+      chatRoomId: data.id,
+      helpId: data.help_id,
+      juniorNickname: juniorNickname || '알 수 없음',
+      seniorNickname: seniorNickname || '알 수 없음',
+      createdAt: data.created_at,
+    };
   }
 
   // ===== chatRoomId로 특정 채팅방 조회 (nickname 포함) =====
@@ -85,7 +111,10 @@ export class SbChatRoomRepository implements IChatRoomRepository {
   }
 
   // ===== nickname이 특정 채팅방에 접근 권한이 있는지 확인 =====
-  async checkUserAccessToChatRoom(nickname: string, chatRoomId: number): Promise<boolean> {
+  async checkUserAccessToChatRoom(
+    nickname: string,
+    chatRoomId: number
+  ): Promise<boolean> {
     try {
       // 1. nickname을 UUID로 변환
       const userId = await getUuidByNickname(nickname);
@@ -111,7 +140,8 @@ export class SbChatRoomRepository implements IChatRoomRepository {
       if (!data) return false;
 
       // 3. 사용자가 해당 채팅방의 참여자인지 확인
-      const isParticipant = data.junior_id === userId || data.senior_id === userId;
+      const isParticipant =
+        data.junior_id === userId || data.senior_id === userId;
       return isParticipant;
     } catch (error) {
       console.error('checkUserAccessToChatRoom error:', error);

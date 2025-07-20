@@ -3,6 +3,7 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
+import { useAuthStore } from './stores/authStore';
 
 // API 기본 설정
 const API_BASE_URL =
@@ -47,8 +48,26 @@ apiClient.interceptors.response.use(
 
       switch (status) {
         case 401:
-          console.error('[API] 인증 실패');
-          // 로그인 페이지로 리다이렉트 등의 처리
+          console.error('[API] 인증 실패 - 세션 만료');
+
+          // 브라우저 환경에서만 실행
+          if (typeof window !== 'undefined') {
+            // 1. 쿠키 삭제
+            document.cookie =
+              'access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie =
+              'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+            // 2. authStore 초기화
+            const logout = useAuthStore.getState().logout;
+            logout();
+
+            // 3. 사용자에게 알림
+            alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+
+            // 4. 로그인 페이지로 리다이렉트
+            window.location.href = '/login';
+          }
           break;
         case 403:
           console.error('[API] 권한 없음');

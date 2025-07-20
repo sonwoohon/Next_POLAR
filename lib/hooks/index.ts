@@ -5,6 +5,7 @@ export { useHelpDetail } from './help/useHelpDetail';
 export { useLogin } from './useLogin';
 export { useAuth } from './useAuth';
 export { useAuthStore } from '../stores/authStore';
+export { useUserProfile } from './useUserProfile';
 
 // 온보딩 관련 훅들
 export { useOnboardingAuth } from './onboarding/useOnboardingAuth';
@@ -21,6 +22,7 @@ export { useNavigation } from './useNavigation';
 
 // 채팅 관련 훅들
 export { useChatRooms } from './chats/useChatRooms';
+export { useChatRoomsWithDetails } from './chats/useChatRoomsWithDetails';
 export { useChatMessages } from './chats/useChatMessages';
 export { useSendMessage } from './chats/useSendMessage';
 export { useRealtimeChat } from './chats/useRealtimeChat';
@@ -39,3 +41,10 @@ export {
   useSeasonRankings,
   useCategoryRankings,
 } from './useScore';
+
+// 리뷰 관련 훅들
+export { useReceivedReviews } from './review/useReceivedReviews';
+export { useWrittenReviews } from './review/useWrittenReviews';
+export { useCreateReview } from './review/useCreateReview';
+export { useReviewReceiver } from './review/useReviewReceiver';
+export { useUserReviewStats } from './review/useUserReviewStats';

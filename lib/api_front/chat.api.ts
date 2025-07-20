@@ -8,6 +8,31 @@ import {
   ChatRoomDetailWithHelps,
 } from '../models/chatDto';
 
+// 채팅방 상세 정보 타입
+export interface ChatRoomWithDetails {
+  chatRoomId: number;
+  helpId?: number;
+  juniorNickname: string;
+  seniorNickname: string;
+  createdAt: string;
+  opponentProfile: {
+    nickname: string;
+    name: string;
+    profileImgUrl: string;
+  };
+  latestHelp?: {
+    id: number;
+    title: string;
+    category: { id: number; point: number }[];
+    representativeImage: string;
+  };
+}
+
+export interface ChatRoomListWithDetailsResponse {
+  rooms: ChatRoomWithDetails[];
+  totalCount: number;
+}
+
 // 채팅방 접근 권한 확인 응답 인터페이스
 export interface ChatRoomAccessResponse {
   hasAccess: boolean;
@@ -20,6 +45,15 @@ export const getChatRooms = async (): Promise<GetChatRoomsResponse> => {
   );
   return response.data;
 };
+
+// 채팅방 목록 조회 (상세 정보 포함)
+export const getChatRoomsWithDetails =
+  async (): Promise<ChatRoomListWithDetailsResponse> => {
+    const response = await apiClient.get<ChatRoomListWithDetailsResponse>(
+      API_ENDPOINTS.CHAT_ROOMS_WITH_DETAILS
+    );
+    return response.data;
+  };
 
 // 채팅방 메시지 조회
 export const getChatMessages = async (
@@ -55,7 +89,6 @@ export const getChatRoomDetailWithHelps = async (
 };
 
 // 채팅방 접근 권한 확인
-
 
 // // 채팅방 접근 권한 확인 에러 응답 인터페이스
 // export interface ChatRoomAccessErrorResponse {
