@@ -5,7 +5,10 @@ import {
   GetHelpListWithPaginationUseCase,
 } from '@/backend/helps/applications/usecases/CommonHelpUseCases';
 import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
-import { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
+import { SbHelpImageRepository } from '@/backend/images/infrastructures/repositories/SbHelpImageRepository';
+import { GetUserByIdUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
+import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
+import { HelpResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 import { HelpFilterDto } from '@/backend/helps/applications/dtos/HelpFilterDto';
 import { HelpPaginationResponseDto } from '@/backend/helps/applications/dtos/HelpPaginationDto';
 
@@ -19,7 +22,7 @@ const createHelpListUseCase = () => {
 export async function GET(
   request: NextRequest
 ): Promise<
-  NextResponse<HelpListResponseDto[] | HelpPaginationResponseDto | null>
+  NextResponse<HelpResponseDto[] | HelpPaginationResponseDto | null>
 > {
   console.log('[API] GET /api/helps 호출됨');
 
@@ -27,6 +30,38 @@ export async function GET(
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url);
     const filter: HelpFilterDto = {};
+  
+    // 허용된 쿼리 파라미터 목록
+    const allowedParams = [
+      'categoryIds',
+      'subCategoryIds', 
+      'startDate',
+      'endDate',
+      'status',
+      'page',
+      'limit',
+      'offset',
+      'pagination'
+    ];
+
+    // 쿼리 파라미터 확인
+    const requestParams = Array.from(searchParams.keys());
+    
+    // 파라미터가 없으면 빈 결과 반환
+    if (requestParams.length === 0) {
+      console.log('쿼리 파라미터가 없음, 빈 결과 반환');
+      return NextResponse.json([], { status: 200 });
+    }
+    
+    // 정의되지 않은 쿼리 파라미터 확인
+    const hasInvalidParams = requestParams.some(
+      param => !allowedParams.includes(param)
+    );
+
+    if (hasInvalidParams) {
+      console.log('정의되지 않은 파라미터 감지, 빈 결과 반환');
+      return NextResponse.json([], { status: 200 });
+    }
 
     // 메인 카테고리 ID 필터 (categories 테이블)
     const categoryIdsParam = searchParams.get('categoryIds');
@@ -99,21 +134,87 @@ export async function GET(
       const paginationUseCase = new GetHelpListWithPaginationUseCase(
         new SbCommonHelpRepository()
       );
-      const result: HelpPaginationResponseDto | null =
-        await paginationUseCase.execute(filter);
+      const result = await paginationUseCase.execute(filter);
 
       if (result) {
-        return NextResponse.json(result, { status: 200 });
+        // 엔티티를 DTO로 변환
+        const helpResponseDtos = await Promise.all(
+          result.data.map(async (help) => {
+            // 시니어 정보 가져오기
+            const getUserUseCase = new GetUserByIdUseCase(new SbUserRepository());
+            const seniorUser = await getUserUseCase.execute(help.seniorId);
+            
+            // 이미지 URL 가져오기
+            const imageRepository = new SbHelpImageRepository();
+            const images = await imageRepository.getHelpImageUrlsByHelpId(help.id);
+
+            return {
+              id: help.id,
+              seniorInfo: {
+                nickname: seniorUser?.nickname || '알 수 없음',
+                name: seniorUser?.name || '이름 없음',
+                userType: 'senior' as const,
+                profileImgUrl: seniorUser?.profileImgUrl || '',
+                address: '', // 기본값 설정
+              },
+              title: help.title,
+              startDate: help.startDate,
+              endDate: help.endDate,
+              category: help.category,
+              content: help.content,
+              status: help.status,
+              createdAt: help.createdAt,
+              images: images,
+            };
+          })
+        );
+
+        const paginationResponse: HelpPaginationResponseDto = {
+          data: helpResponseDtos,
+          pagination: result.pagination,
+        };
+
+        return NextResponse.json(paginationResponse, { status: 200 });
       }
     } else {
       // 기존 모드 (페이지네이션 없음)
       const useCase = createHelpListUseCase();
-      const helpList: HelpListResponseDto[] | null = await useCase.execute(
-        filter
-      );
+      const helpEntities = await useCase.execute(filter);
 
-      if (helpList) {
-        return NextResponse.json(helpList, { status: 200 });
+      if (helpEntities) {
+        // 엔티티를 DTO로 변환
+        const helpResponseDtos = await Promise.all(
+          helpEntities.map(async (help) => {
+            // 시니어 정보 가져오기
+            const getUserUseCase = new GetUserByIdUseCase(new SbUserRepository());
+            const seniorUser = await getUserUseCase.execute(help.seniorId);
+            
+            // 이미지 URL 가져오기
+            const imageRepository = new SbHelpImageRepository();
+            const images = await imageRepository.getHelpImageUrlsByHelpId(help.id);
+
+            return {
+              id: help.id,
+              seniorInfo: {
+                nickname: seniorUser?.nickname || '알 수 없음',
+                name: seniorUser?.name || '이름 없음',
+                userType: 'senior' as const,
+                profileImgUrl: seniorUser?.profileImgUrl || '',
+                address: '', // 기본값 설정
+              },
+              title: help.title,
+              startDate: help.startDate,
+              endDate: help.endDate,
+              category: help.category,
+              content: help.content,
+              status: help.status,
+              createdAt: help.createdAt,
+              images: images,
+            };
+          })
+        );
+
+        return NextResponse.json(helpResponseDtos, { status: 200 });
       }
     }
 

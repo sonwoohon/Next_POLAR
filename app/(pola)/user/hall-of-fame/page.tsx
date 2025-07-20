@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '@/lib/constants/api';
 import styles from './Ranking.module.css';
 
 interface UserRanking {
@@ -35,7 +36,7 @@ useEffect(() => {
         setError(null);
 
         // 실제 API 호출 (axios 사용)
-        const response = await axios.get('/api/scores/season?season=1');
+        const response = await axios.get(`${API_ENDPOINTS.SEASON_SCORES_WITH_PARAM}?season=1`);
         const scores: ScoreData[] = response.data;
 
         // 임시 카테고리 데이터 

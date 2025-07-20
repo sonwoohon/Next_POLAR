@@ -1,6 +1,7 @@
 // 기존 훅들
 export { useApiQuery, useApiMutation } from './useApi';
 export { useCreateHelp } from './help/useCreateHelp';
+export { useHelpDetail } from './help/useHelpDetail';
 export { useLogin } from './useLogin';
 export { useAuthStore } from '../stores/authStore';
 

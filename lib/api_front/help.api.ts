@@ -31,10 +31,20 @@ export const postHelp = async (formData: FormData) => {
 
 export const getHelpParticipants = async (helpId: number) => {
   try {
-    const response = await axios.get(`/api/helps/${helpId}/participants`);
+    const response = await axios.get(API_ENDPOINTS.HELP_PARTICIPANTS(helpId));
     return response.data;
   } catch (error) {
     console.error('Help 참여자 정보 조회 오류:', error);
+    throw error;
+  }
+};
+
+export const getHelpById = async (helpId: number) => {
+  try {
+    const response = await axios.get(API_ENDPOINTS.HELP_DETAIL(helpId));
+    return response.data;
+  } catch (error) {
+    console.error('Help 상세 조회 오류:', error);
     throw error;
   }
 };
