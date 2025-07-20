@@ -1,13 +1,13 @@
 'use client';
 
-import { useChatRooms } from '@/lib/hooks';
+import { useChatRoomsWithDetails } from '@/lib/hooks';
 import styles from './ChatList.module.css';
 import ChatListTopBar from './_components/ChatListTopBar';
 import ChatListSearch from './_components/ChatListSearch';
 import ChatListItems from './_components/ChatListItems';
 
 export default function JuniorChatListPage() {
-  const { data: chatRoomsData, isLoading, error } = useChatRooms();
+  const { data: chatRoomsData, isLoading, error } = useChatRoomsWithDetails();
 
   if (isLoading) {
     return (
