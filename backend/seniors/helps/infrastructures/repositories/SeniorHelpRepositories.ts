@@ -5,6 +5,7 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { SeniorHelp } from '@/backend/seniors/helps/domains/entities/SeniorHelp';
 import { ISeniorHelpRepositoryInterface } from '@/backend/seniors/helps/domains/repositories/SeniorHelpRepositoryInterface';
 import { UpdateHelpRequestWithHelpId } from '@/backend/seniors/helps/SeniorHelpModel';
+import { CommonHelpEntity } from '@/backend/helps/domains/entities/CommonHelpEntity';
 
 type CategoryInput = number | number[];
 
@@ -223,5 +224,87 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
     }
 
     return true;
+  }
+
+  async getHelpsBySeniorNickname(seniorNickname: string): Promise<CommonHelpEntity[] | null> {
+    try {
+      // 1. 닉네임으로 UUID 조회
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('nickname', seniorNickname)
+        .single();
+
+      if (userError) {
+        console.error('[SeniorHelpRepository] 사용자 조회 오류:', userError);
+        return null;
+      }
+
+      if (!userData) {
+        console.error('[SeniorHelpRepository] 사용자를 찾을 수 없습니다:', seniorNickname);
+        return null;
+      }
+
+      const seniorId = userData.id;
+
+      // 2. 시니어가 작성한 헬프 조회
+      const { data: helpsData, error: helpsError } = await supabase
+        .from('helps')
+        .select(`
+          *,
+          help_categories (
+            sub_category_id,
+            sub_categories (
+              id,
+              name,
+              point,
+              category_id,
+              categories (
+                id,
+                name
+              )
+            )
+          ),
+          help_images (
+            image_url
+          )
+        `)
+        .eq('senior_id', seniorId)
+        .order('created_at', { ascending: false });
+
+      if (helpsError) {
+        console.error('[SeniorHelpRepository] 헬프 조회 오류:', helpsError);
+        return null;
+      }
+
+      if (!helpsData || helpsData.length === 0) {
+        return [];
+      }
+
+      // 3. CommonHelpEntity로 변환
+      const helps = helpsData.map((help: any) => {
+        const categories = help.help_categories?.map((hc: any) => ({
+          id: hc.sub_categories.id,
+          point: hc.sub_categories.point
+        })) || [];
+
+        return new CommonHelpEntity(
+          help.id,
+          help.senior_id,
+          help.title,
+          new Date(help.start_date),
+          new Date(help.end_date),
+          categories,
+          help.content,
+          help.status,
+          new Date(help.created_at)
+        );
+      });
+
+      return helps;
+    } catch (error) {
+      console.error('[SeniorHelpRepository] 시니어 헬프 조회 오류:', error);
+      return null;
+    }
   }
 }
