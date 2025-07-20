@@ -76,6 +76,7 @@
   align-items: center;
   gap: 1rem;
   width: 50%;
+  flex: 1;;
 }
 
 .userHelpsDataContainer .subTitle {
@@ -88,9 +89,11 @@
 }
 
 .helpsDataContainer {
-  display: flex;
   align-items: center;
   gap: 1rem;
+  display: flex;
+  width: 100%;
+  padding: 0 0 0 1.5rem;
 }
 
 .helpsCategory {
@@ -103,6 +106,7 @@
 
 .helpsCategoryPoint {
   font-size: 1.5rem;
+  margin-left: auto;
 }
 
 .userHelpList {

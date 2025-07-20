@@ -17,8 +17,8 @@ export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
         <li className={styles.emptyState}>채팅방이 없습니다.</li>
       ) : (
         chatRooms.map((room) => (
-          <Link href={`/chats/${room.chatRoomId}`} key={room.chatRoomId}>
-            <li className={styles.chatItem}>
+          <li key={room.chatRoomId}>
+              <Link href={`/chats/${room.chatRoomId}`} className={styles.chatItem}>
               <div className={styles.avatar}></div>
               <div className={styles.info}>
                 <div className={styles.name}>{room.seniorNickname} 시니어</div>
@@ -28,8 +28,8 @@ export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
                 </div>
               </div>
               <span className={styles.unread}>9</span>
-            </li>
           </Link>
+            </li>
         ))
       )}
     </ul>
