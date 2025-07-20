@@ -45,6 +45,7 @@ export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
               {/* <span className={styles.unread}>9</span> */}
             </li>
           </Link>
+            </li>
         ))
       )}
     </ul>
