@@ -6,7 +6,12 @@ import Footer from './Footer';
 import AuthWrapper from './layout/AuthWrapper';
 
 // Header를 숨길 페이지들
-const hideHeaderPaths = ["/login", "/sign-up", "/find-password"];
+const hideHeaderPaths = [
+  "/login",
+  "/sign-up",
+  "/find-password",
+  "/"
+];
 
 // Footer를 숨길 페이지들
 const hideFooterPaths = [
@@ -14,6 +19,7 @@ const hideFooterPaths = [
   "/sign-up",
   "/user/hall-of-fame",
   "/find-password",
+  "/",
 ];
 
 interface LayoutWrapperProps {
