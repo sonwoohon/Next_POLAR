@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, QUERY_KEYS } from '../constants/api';
+import { API_ENDPOINTS } from '../constants/api';
 import apiClient from '../http.api';
 import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
 import { ApiResponse } from '../http.api';
@@ -17,7 +17,7 @@ export interface PasswordChangeRequest {
 
 // 프로필 이미지 업데이트 응답 타입
 export interface ProfileImageUpdateResponse {
-  profileImgUrl: string;
+  url: string;
 }
 
 // 프로필 정보 조회
@@ -40,7 +40,7 @@ export const updateUserProfile = async (
   return response.data.data!;
 };
 
-// 프로필 이미지 업데이트
+// 프로필 이미지 업데이트 (기존 이미지 업로드 API 사용)
 export const updateUserProfileImage = async (
   nickname: string,
   imageFile: File
@@ -48,8 +48,8 @@ export const updateUserProfileImage = async (
   const formData = new FormData();
   formData.append('image', imageFile);
 
-  const response = await apiClient.patch<ApiResponse<ProfileImageUpdateResponse>>(
-    API_ENDPOINTS.USER_PROFILE_UPDATE(nickname),
+  const response = await apiClient.post<ProfileImageUpdateResponse>(
+    API_ENDPOINTS.PROFILE_IMAGE,
     formData,
     {
       headers: {
@@ -57,7 +57,7 @@ export const updateUserProfileImage = async (
       },
     }
   );
-  return response.data.data!;
+  return response.data;
 };
 
 // 비밀번호 변경

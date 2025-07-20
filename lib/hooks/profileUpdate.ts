@@ -76,7 +76,7 @@ export const useUpdateUserProfileImage = () => {
           if (oldData) {
             return {
               ...oldData,
-              profileImgUrl: data.profileImgUrl,
+              profileImgUrl: data.url,
             };
           }
           return oldData;
@@ -89,7 +89,7 @@ export const useUpdateUserProfileImage = () => {
           if (oldData) {
             return {
               ...oldData,
-              profileImgUrl: data.profileImgUrl,
+              profileImgUrl: data.url,
             };
           }
           return oldData;

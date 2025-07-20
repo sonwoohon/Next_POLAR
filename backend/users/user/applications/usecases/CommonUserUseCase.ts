@@ -94,6 +94,13 @@ export class UserValidator {
   static validateProfileImageUrl(url: string): void {
     console.log(`[Validator] 프로필 이미지 URL 검증 시작: ${url}`);
 
+    // 빈 URL은 허용 (프로필 이미지가 없는 경우)
+    if (!url || url.trim() === '') {
+      console.log(`[Validator] 프로필 이미지 URL 검증 성공: 빈 URL 허용`);
+      return;
+    }
+
+    // Supabase Storage URL 형식 확인
     if (url && !url.startsWith('http') && !url.startsWith('https')) {
       console.error(
         `[Validator] 프로필 이미지 URL 검증 실패: 프로토콜 오류 - ${url}`
@@ -229,7 +236,6 @@ export class CommonUserUseCase {
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        existingUser.uuid,
         existingUser.phoneNumber,
         existingUser.password,
         existingUser.email,
@@ -324,7 +330,6 @@ export class CommonUserUseCase {
       // 업데이트된 사용자 Entity 생성
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        existingUser.uuid,
         updates.phoneNumber ?? existingUser.phoneNumber,
         updates.password ?? existingUser.password,
         updates.email ?? existingUser.email,
