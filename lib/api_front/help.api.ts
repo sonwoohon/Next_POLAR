@@ -80,7 +80,21 @@ export const getHelpList = async (
     const url = `${API_ENDPOINTS.HELPS}${
       params.toString() ? `?${params.toString()}` : ''
     }`;
+
+    console.log('[API] getHelpList 호출:', {
+      filter,
+      url,
+      params: params.toString(),
+    });
+
     const response = await apiClient.get<HelpListResponseDto[]>(url);
+
+    console.log('[API] getHelpList 응답:', {
+      status: response.status,
+      dataLength: response.data?.length || 0,
+      data: response.data,
+    });
+
     return response.data;
   } catch (error) {
     console.error('Help 리스트 조회 오류:', error);
@@ -149,9 +163,14 @@ export const applyHelp = async (helpId: number) => {
   }
 };
 
-export const acceptHelpApplicant = async (helpId: number, juniorNickname: string) => {
+export const acceptHelpApplicant = async (
+  helpId: number,
+  juniorNickname: string
+) => {
   try {
-    const response = await axios.post(API_ENDPOINTS.HELP_ACCEPT_APPLICANT(helpId, juniorNickname));
+    const response = await axios.post(
+      API_ENDPOINTS.HELP_ACCEPT_APPLICANT(helpId, juniorNickname)
+    );
     return response.data;
   } catch (error) {
     console.error('Help 지원자 수락 오류:', error);
@@ -161,7 +180,9 @@ export const acceptHelpApplicant = async (helpId: number, juniorNickname: string
 
 export const checkHelpApplicationStatus = async (helpId: number) => {
   try {
-    const response = await axios.get(API_ENDPOINTS.HELP_APPLICATION_STATUS(helpId));
+    const response = await axios.get(
+      API_ENDPOINTS.HELP_APPLICATION_STATUS(helpId)
+    );
     return response.data;
   } catch (error) {
     console.error('Help 지원 상태 확인 오류:', error);

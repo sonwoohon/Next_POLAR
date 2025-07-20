@@ -7,33 +7,29 @@ import styles from './SwiperSection.module.css';
 import CategoryGrid from '@/app/_components/CategoryGrid';
 import Calendar from './Calendar';
 
-interface Help {
-  id: number;
-  title: string;
-  content: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  seniorNickname: string;
-  category: number[];
-}
+import { HelpResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 interface SwiperSectionProps {
   currentYear: number;
   currentMonth: number;
-  mockHelps: Help[];
+  allHelps: HelpResponseDto[]; // 캘린더용 전체 리스트
   selectedDate: Date | null;
+  selectedCategoryId: number | null;
   onDateClick: (date: Date) => void;
+  onCategoryClick: (categoryId: number) => void;
   onSwiperRef: (swiper: SwiperType) => void;
+  isLoading?: boolean;
 }
 
-export default function SwiperSection({ 
-  currentYear, 
-  currentMonth, 
-  mockHelps, 
-  selectedDate, 
-  onDateClick, 
-  onSwiperRef 
+export default function SwiperSection({
+  currentYear,
+  currentMonth,
+  allHelps,
+  selectedDate,
+  selectedCategoryId,
+  onDateClick,
+  onCategoryClick,
+  onSwiperRef,
 }: SwiperSectionProps) {
   return (
     <div className={styles.swiperWrapper}>
@@ -47,13 +43,16 @@ export default function SwiperSection({
         onSwiper={onSwiperRef}
       >
         <SwiperSlide className={styles.swiperSlide}>
-          <CategoryGrid />
+          <CategoryGrid
+            onCategoryClick={onCategoryClick}
+            selectedCategoryId={selectedCategoryId}
+          />
         </SwiperSlide>
         <SwiperSlide className={styles.swiperSlide}>
-          <Calendar 
-            year={currentYear} 
-            month={currentMonth} 
-            helps={mockHelps} 
+          <Calendar
+            year={currentYear}
+            month={currentMonth}
+            helps={allHelps}
             onDateClick={onDateClick}
             selectedDate={selectedDate || undefined}
           />
@@ -61,4 +60,4 @@ export default function SwiperSection({
       </Swiper>
     </div>
   );
-} 
+}

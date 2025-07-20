@@ -36,7 +36,14 @@ export class SbReviewRepository implements IReviewRepository {
 
   // nickname 기반 리뷰 생성
   async createByNicknames(request: CreateReviewRequest): Promise<ReviewEntity> {
-    const { helpId, writerNickname, receiverNickname, rating, text, reviewImgUrl } = request;
+    const {
+      helpId,
+      writerNickname,
+      receiverNickname,
+      rating,
+      text,
+      reviewImgUrl,
+    } = request;
 
     // 1. writerNickname을 users 테이블에서 writerId(uuid)로 변환
     const writerId = await getUuidByNickname(writerNickname);
@@ -78,25 +85,34 @@ export class SbReviewRepository implements IReviewRepository {
     return ReviewMapper.toEntity(data);
   }
 
-
-
   // 리뷰 상대방 nickname 조회
-  async findReceiverNickname(writerNickname: string, helpId: number): Promise<string> {
+  async findReceiverNickname(
+    writerNickname: string,
+    helpId: number
+  ): Promise<string> {
     // 1. writerNickname을 users 테이블에서 writerId(uuid)로 변환
     const writerId = await getUuidByNickname(writerNickname);
     if (!writerId) {
       throw new Error('writerId를 찾을 수 없습니다.');
     }
 
-    // 2. helps 테이블에서 helpId로 seniorId(uuid) 조회
+    // 2. helps 테이블에서 helpId로 seniorId(uuid)와 status 조회
     const { data: help, error: helpError } = await supabase
       .from('helps')
-      .select('senior_id')
+      .select('senior_id, status')
       .eq('id', helpId)
       .single();
     if (helpError || !help) {
       throw new Error('헬프의 seniorId를 찾을 수 없습니다.');
     }
+
+    // 3. Help 상태가 'completed'인지 확인
+    if (help.status !== 'completed') {
+      throw new Error(
+        'Help가 완료되지 않았습니다. 리뷰는 Help 완료 후에만 작성할 수 있습니다.'
+      );
+    }
+
     const seniorId = help.senior_id;
 
     let receiverId: string;
@@ -109,7 +125,9 @@ export class SbReviewRepository implements IReviewRepository {
         .eq('is_accepted', true)
         .single();
       if (applicantError || !applicant) {
-        throw new Error('help_applicants에서 매칭된 주니어의 uuid를 찾을 수 없습니다.');
+        throw new Error(
+          'help_applicants에서 매칭된 주니어의 uuid를 찾을 수 없습니다.'
+        );
       }
       receiverId = applicant.junior_id;
     } else {
