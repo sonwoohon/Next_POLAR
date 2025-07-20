@@ -41,6 +41,14 @@ export const useUserScoresBySeason = (season: number) => {
   });
 };
 
+export const useUserScoresWithSeason = (season: number) => {
+  return useQuery({
+    queryKey: ['scores', 'user', 'season-scores', season],
+    queryFn: () => scoreApi.getUserScoresWithSeason(season),
+    enabled: !!season,
+  });
+};
+
 export const useScoresByCategoryAndSeason = (
   categoryId: number,
   season: number

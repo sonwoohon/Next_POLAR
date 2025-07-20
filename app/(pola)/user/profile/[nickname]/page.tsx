@@ -45,14 +45,7 @@ const UserProfilePage: React.FC = () => {
       <h1>주니어 프로필</h1>
       {userData && <UserInfoSection data={userData} />}
 
-      <UserTierSection
-        season="2025 - 1시즌"
-        tierName="SILVER"
-        currentScore={765000}
-        maxScore={800000}
-        nextTierScore={35000}
-        progressPercentage={95}
-      />
+      <UserTierSection seasonNumber={1} />
 
       <UserArchivmentSection
         nickname={params.nickname as string}
@@ -167,14 +160,7 @@ const UserProfilePage: React.FC = () => {
         <h1>유저프로필</h1>
         {userData && <UserInfoSection data={userData} />}
 
-        <UserTierSection
-          season="2025 - 1시즌"
-          tierName="SILVER"
-          currentScore={765000}
-          maxScore={800000}
-          nextTierScore={35000}
-          progressPercentage={95}
-        />
+        <UserTierSection seasonNumber={1} />
 
         <UserArchivmentSection
           nickname={params.nickname as string}
