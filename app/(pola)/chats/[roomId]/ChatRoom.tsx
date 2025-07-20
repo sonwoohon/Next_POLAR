@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import Link from 'next/link';
 
 import styles from './ChatRoom.module.css';
 import { useChatInput } from '@/lib/hooks/chats/useChatInput';
@@ -78,7 +79,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
                 className={isMine ? styles.myMessageRow : styles.messageRow}
               >
                 {!isMine && (
-                  <div className={styles.avatar}>
+                  <Link href={`/user/profile/${opponentNickname}`} className={styles.avatar}>
                     {opponentProfile?.data?.profileImgUrl ? (
                       <img 
                         src={opponentProfile.data.profileImgUrl} 
@@ -98,7 +99,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
                         </svg>
                       </div>
                     )}
-                  </div>
+                  </Link>
                 )}
                 <div
                   className={
