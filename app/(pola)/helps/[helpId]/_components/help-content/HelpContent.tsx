@@ -1,6 +1,7 @@
 import styles from "./HelpContent.module.css";
 import { HelpDetailResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
 import { useHelpApplicants } from "@/lib/hooks/help/useHelpApplicants";
+import { getCategoryName } from "@/lib/utils/categoryUtils";
 
 interface HelpContentProps {
   help: HelpDetailResponseDto | null;
@@ -44,7 +45,7 @@ export default function HelpContent({ help }: HelpContentProps) {
         <div className={styles.helpCategories}>
           {help.category.map((cat, index) => (
             <span key={index} className={styles.categoryTag}>
-              {cat.id}
+              {getCategoryName(cat.id)}
             </span>
           ))}
         </div>
