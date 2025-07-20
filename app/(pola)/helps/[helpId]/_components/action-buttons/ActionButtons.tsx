@@ -5,6 +5,12 @@ interface ActionButtonsProps {
   help: HelpDetailResponseDto | null;
   role: 'junior' | 'senior' | null;
   isCompleting: boolean;
+  isApplying: boolean;
+  applicationStatus?: {
+    hasApplied: boolean;
+    isAccepted: boolean;
+    appliedAt?: string;
+  };
   onCompleteHelp: () => void;
   onApplyHelp: () => void;
   onCheckApplicants: () => void;
@@ -14,6 +20,8 @@ export default function ActionButtons({
   help,
   role,
   isCompleting,
+  isApplying,
+  applicationStatus,
   onCompleteHelp,
   onApplyHelp,
   onCheckApplicants,
@@ -21,9 +29,18 @@ export default function ActionButtons({
   return (
     <div className={styles.bottomButtonContainer}>
       {role === 'junior' ? (
-        <button className={styles.applyButton} onClick={onApplyHelp}>
+        <button 
+          className={`${styles.applyButton} ${applicationStatus?.hasApplied ? styles.appliedButton : ''}`}
+          onClick={onApplyHelp}
+          disabled={isApplying || applicationStatus?.hasApplied}
+        >
           <span className={styles.plusIcon}>+</span>
-          헬프 지원하기
+          {applicationStatus?.hasApplied 
+            ? '이미 지원한 헬프' 
+            : isApplying 
+              ? '지원 중...' 
+              : '헬프 지원하기'
+          }
         </button>
       ) : role === 'senior' ? (
         <div className={styles.seniorButtons}>

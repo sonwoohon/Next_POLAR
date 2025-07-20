@@ -4,7 +4,7 @@ import { getHelpApplicants } from '@/lib/api_front/help.api';
 interface HelpApplicant {
   id: number;
   helpId: number;
-  juniorId: string;
+  juniorNickname: string;
   isAccepted: boolean;
   appliedAt: string;
 }
