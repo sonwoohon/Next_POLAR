@@ -11,8 +11,6 @@ import { useNavigation } from "@/lib/hooks/useNavigation";
 import { useOnboardingData } from "@/lib/hooks/onboarding/useOnboardingData";
 
 export default function Home() {
-  const router = useRouter();
-  
   // 온보딩 페이지 전용 인증 확인
   const { shouldRender } = useOnboardingAuth();
 
