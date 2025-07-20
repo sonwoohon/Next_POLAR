@@ -25,3 +25,6 @@ export { useSendMessage } from './chats/useSendMessage';
 export { useRealtimeChat } from './chats/useRealtimeChat';
 export { useChatInput } from './chats/useChatInput';
 export { useChatRoomDetailWithHelps } from './chats/useChatRoomDetailWithHelps';
+
+// 회원 탈퇴 관련 훅들
+export { useWithdrawal } from './useWithdrawal';
