@@ -96,9 +96,28 @@
 .helpsCategory {
   padding: 0.5rem 1rem;
   color: #fff;
-  background-color: #40f03d;
   border-radius: 0.75rem;
   font-family: var(--font-gangwon);
+}
+
+.helpsCategoryStrength {
+  background-color: #ff0000; /* 힘 - 빨강 */
+}
+
+.helpsCategoryAgility {
+  background-color: #90ee90; /* 민첩 - 연두 */
+}
+
+.helpsCategoryIntelligence {
+  background-color: #0000ff; /* 지능 - 파랑 */
+}
+
+.helpsCategoryCharm {
+  background-color: #ffc0cb; /* 매력 - 분홍 */
+}
+
+.helpsCategoryEndurance {
+  background-color: #800080; /* 인내 - 보라 */
 }
 
 .helpsCategoryPoint {

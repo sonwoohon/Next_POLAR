@@ -15,6 +15,7 @@ import UserRecivedReviewsPreview from "./_components/sections/reviews-preview/Us
 import { useReceivedReviews } from "@/lib/hooks/review/useReceivedReviews";
 import { useAuthStore } from "@/lib/stores/authStore";
 
+
 const UserProfilePage: React.FC = () => {
   const params = useParams();
   const nickname = params.nickname as string;
@@ -77,16 +78,7 @@ const UserProfilePage: React.FC = () => {
       <UserHelpsSection
         title="나의 헬프 기록"
         nickname={params.nickname as string}
-        chartLabels={["청소", "요리", "운전", "상담", "기타"]}
-        chartData={[90, 70, 80, 60, 50]}
         representativeTitle="환경미화원"
-        helpCategories={[
-          { name: "청소", points: 1200000 },
-          { name: "요리", points: 800000 },
-          { name: "운전", points: 600000 },
-          { name: "상담", points: 400000 },
-          { name: "기타", points: 200000 },
-        ]}
       />
 
       <UserRecivedReviewsPreview
@@ -116,16 +108,7 @@ const UserProfilePage: React.FC = () => {
       <UserHelpsSection
         title="나의 헬프 기록"
         nickname={params.nickname as string}
-        chartLabels={["청소", "요리", "운전", "상담", "기타"]}
-        chartData={[95, 85, 90, 80, 75]}
         representativeTitle="베테랑 헬퍼"
-        helpCategories={[
-          { name: "청소", points: 1500000 },
-          { name: "요리", points: 1200000 },
-          { name: "운전", points: 1000000 },
-          { name: "상담", points: 800000 },
-          { name: "기타", points: 600000 },
-        ]}
       />
 
       <UserRecivedReviewsPreview
@@ -192,16 +175,7 @@ const UserProfilePage: React.FC = () => {
         <UserHelpsSection
           title="나의 헬프 기록"
           nickname={params.nickname as string}
-          chartLabels={["청소", "요리", "운전", "상담", "기타"]}
-          chartData={[90, 70, 80, 60, 50]}
           representativeTitle="환경미화원"
-          helpCategories={[
-            { name: "청소", points: 1200000 },
-            { name: "요리", points: 800000 },
-            { name: "운전", points: 600000 },
-            { name: "상담", points: 400000 },
-            { name: "기타", points: 200000 },
-          ]}
         />
 
         <UserRecivedReviewsPreview

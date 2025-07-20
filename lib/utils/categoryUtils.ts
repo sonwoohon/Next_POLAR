@@ -63,12 +63,12 @@ export const getBigCategory = (categoryId: number): string => {
   if (categoryId >= 6 && categoryId <= 10) return '힘';
   // 대분류 2: 지능 (11-13)
   if (categoryId >= 11 && categoryId <= 13) return '지능';
-  // 대분류 3: 매력 (14-16)
-  if (categoryId >= 14 && categoryId <= 16) return '매력';
-  // 대분류 4: 인내 (17-18)
-  if (categoryId >= 17 && categoryId <= 18) return '인내';
-  // 대분류 5: 신속 (19)
-  if (categoryId === 19) return '신속';
+  // 대분류 3: 민첩 (14-16)
+  if (categoryId >= 14 && categoryId <= 16) return '민첩';
+  // 대분류 4: 매력 (17-18)
+  if (categoryId >= 17 && categoryId <= 18) return '매력';
+  // 대분류 5: 인내 (19)
+  if (categoryId === 19) return '인내';
   return '기타';
 };
 
@@ -77,11 +77,11 @@ export const getBigCategoryId = (categoryId: number): number => {
   if (categoryId >= 6 && categoryId <= 10) return 1;
   // 대분류 2: 지능 (11-13)
   if (categoryId >= 11 && categoryId <= 13) return 2;
-  // 대분류 3: 매력 (14-16)
+  // 대분류 3: 민첩 (14-16)
   if (categoryId >= 14 && categoryId <= 16) return 3;
-  // 대분류 4: 인내 (17-18)
+  // 대분류 4: 매력 (17-18)
   if (categoryId >= 17 && categoryId <= 18) return 4;
-  // 대분류 5: 신속 (19)
+  // 대분류 5: 인내 (19)
   if (categoryId === 19) return 5;
   return 0;
 };
