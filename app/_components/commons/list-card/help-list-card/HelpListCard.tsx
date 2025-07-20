@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './HelpListCard.module.css';
 import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
@@ -42,43 +43,45 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
   };
 
   return (
-    <div className={styles.card}>
-      <div className={styles.thumbnail}>
-        <Image
-          src={seniorInfo.profileImgUrl || '/images/dummies/dummy_user.png'}
-          alt='썸네일'
-          width={100}
-          height={100}
-          className={styles.thumbnailImg}
-          style={{ objectFit: 'cover', borderRadius: '0.8rem' }}
-          priority={true}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = '/images/dummies/dummy_user.png';
-          }}
-        />
-      </div>
-      <div className={styles.info}>
-        <div className={styles.topRow}>
-          <CategoryBadge category={category[0]?.id} />
-          <span className={`${styles.status} ${styles[status] || ''}`}>
-            {getStatusText(status)}
-          </span>
+    <Link href={`/helps/${help.id}`} className={styles.cardLink}>
+      <div className={styles.card}>
+        <div className={styles.thumbnail}>
+          <Image
+            src={seniorInfo.profileImgUrl || '/images/dummies/dummy_user.png'}
+            alt='썸네일'
+            width={100}
+            height={100}
+            className={styles.thumbnailImg}
+            style={{ objectFit: 'cover', borderRadius: '0.8rem' }}
+            priority={true}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = '/images/dummies/dummy_user.png';
+            }}
+          />
         </div>
-        <div className={styles.title}>{title}</div>
-        <div className={styles.subInfo}>
-          <span className={styles.nickname}>
-            {seniorInfo.name || seniorInfo.nickname}
-          </span>
-          <span className={styles.date}>
-            {formatDate(startDate)} ~ {formatDate(endDate)}
-          </span>
-          <span className={styles.reward}>
-            {getRewardByCategory(category).toLocaleString()}점
-          </span>
+        <div className={styles.info}>
+          <div className={styles.topRow}>
+            <CategoryBadge category={category[0]?.id} />
+            <span className={`${styles.status} ${styles[status] || ''}`}>
+              {getStatusText(status)}
+            </span>
+          </div>
+          <div className={styles.title}>{title}</div>
+          <div className={styles.subInfo}>
+            <span className={styles.nickname}>
+              {seniorInfo.name || seniorInfo.nickname}
+            </span>
+            <span className={styles.date}>
+              {formatDate(startDate)} ~ {formatDate(endDate)}
+            </span>
+            <span className={styles.reward}>
+              {getRewardByCategory(category).toLocaleString()}점
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

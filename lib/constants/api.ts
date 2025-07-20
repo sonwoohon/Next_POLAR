@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
   HELP_ACCEPT_APPLICANT: (helpId: number, juniorNickname: string) => `/api/helps/${helpId}/applicants/${juniorNickname}/accept`,
   JUNIOR_HELPS: '/api/helps/junior',
   SENIOR_HELPS: '/api/seniors/help',
+  SENIOR_HELPS_LIST: '/api/seniors/helps',
   SENIOR_HELP_DETAIL: (id: string) => `/api/seniors/help/${id}`,
 
   // 리뷰 관련
@@ -73,6 +74,7 @@ export const QUERY_KEYS = {
   HELP_DETAIL: (id: string) => ['helps', 'detail', id] as const,
   JUNIOR_HELPS: ['helps', 'junior'] as const,
   SENIOR_HELPS: ['helps', 'senior'] as const,
+  SENIOR_HELPS_LIST: ['helps', 'senior', 'list'] as const,
   SENIOR_HELP_DETAIL: (id: string) =>
     ['helps', 'senior', 'detail', id] as const,
 

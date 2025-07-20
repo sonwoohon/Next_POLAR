@@ -189,3 +189,13 @@ export const checkHelpApplicationStatus = async (helpId: number) => {
     throw error;
   }
 };
+
+export const getSeniorHelps = async () => {
+  try {
+    const response = await axios.get(API_ENDPOINTS.SENIOR_HELPS_LIST);
+    return response.data;
+  } catch (error) {
+    console.error('시니어 헬프 리스트 조회 오류:', error);
+    throw error;
+  }
+};
