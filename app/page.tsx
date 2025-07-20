@@ -1,5 +1,6 @@
 // 온보딩 페이지 (루트 경로) - 첫 진입 페이지, 로그인/회원가입 버튼 및 앱 소개 슬라이드
 "use client";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
