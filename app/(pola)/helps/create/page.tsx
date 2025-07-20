@@ -154,7 +154,7 @@ const CreateHelpPage: React.FC = () => {
       clearImages();
 
       alert('도움 요청이 성공적으로 생성되었습니다!');
-      router.push('/main');
+      router.push(`/helps/${createdHelpId}`);
     } catch (error) {
       console.error('도움 요청 생성 실패:', error);
     }
