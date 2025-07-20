@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GetSeniorHelpsUseCase } from '@/backend/seniors/helps/applications/usecases/GetSeniorHelpsUseCase';
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
 import { getNicknameFromCookie } from '@/lib/jwt';
-import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
+// import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
 import { SbHelpImageRepository } from '@/backend/images/infrastructures/repositories/SbHelpImageRepository';
 import { GetUserByIdUseCase } from '@/backend/users/user/applications/usecases/CommonUserUseCase';
 import { SbUserRepository } from '@/backend/users/user/infrastructures/repositories/SbUserRepository';
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
     }
 
     // CommonHelpEntity를 HelpResponseDto로 변환
-    const helpRepository = new SbCommonHelpRepository();
+    // const helpRepository = new SbCommonHelpRepository();
     const imageRepository = new SbHelpImageRepository();
     const userRepository = new SbUserRepository();
     const getUserUseCase = new GetUserByIdUseCase(userRepository);
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
       try {
         // 시니어 정보 조회
         const seniorInfo = await getUserUseCase.execute(helpEntity.seniorId);
-        
+
         // 이미지 URL 조회
         const images = await imageRepository.getHelpImageUrlsByHelpId(helpEntity.id);
 
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
             nickname: seniorInfo?.nickname || '',
             name: seniorInfo?.name || '',
             profileImgUrl: seniorInfo?.profileImgUrl || '',
-            userType: 'senior' as const,
+            userRole: 'senior' as const,
             address: seniorInfo?.address || '',
           },
           title: helpEntity.title,
@@ -84,8 +84,8 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         data: helpDtos,
         message: '시니어 헬프 리스트 조회 성공'
       },
@@ -94,10 +94,10 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
   } catch (error) {
     console.error('시니어 헬프 리스트 조회 오류:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        data: [], 
-        message: '서버 오류가 발생했습니다.' 
+      {
+        success: false,
+        data: [],
+        message: '서버 오류가 발생했습니다.'
       },
       { status: 500 }
     );
