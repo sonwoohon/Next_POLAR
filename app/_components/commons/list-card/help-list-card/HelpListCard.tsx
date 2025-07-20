@@ -23,7 +23,7 @@ const getStatusText = (status: string) => {
       return '연결중';
     case 'completed':
       return '완료';
-    case 'cancelled':
+    case 'close':
       return '취소됨';
     default:
       return status;

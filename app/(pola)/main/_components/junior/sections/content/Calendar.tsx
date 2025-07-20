@@ -14,16 +14,7 @@ interface CalendarProps {
   selectedDate?: Date;
 }
 
-// Big Category 매핑 (sub_category_id -> big_category)
-const getBigCategory = (subCategoryId: number): string => {
-  // 힘 (6-9), 지능 (10-13), 매력 (14-16), 인내 (17-18), 신속 (19)
-  if (subCategoryId >= 6 && subCategoryId <= 9) return '힘';
-  if (subCategoryId >= 10 && subCategoryId <= 13) return '지능';
-  if (subCategoryId >= 14 && subCategoryId <= 16) return '매력';
-  if (subCategoryId >= 17 && subCategoryId <= 18) return '인내';
-  if (subCategoryId === 19) return '신속';
-  return '기타';
-};
+import { getBigCategory } from '@/lib/utils/categoryUtils';
 
 // Big Category 색상 매핑
 const getBigCategoryColor = (bigCategory: string): string => {

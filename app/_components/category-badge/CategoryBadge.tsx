@@ -6,6 +6,8 @@ interface CategoryBadgeProps {
   className?: string;
 }
 
+import { getCategoryEmoji } from '@/lib/utils/categoryUtils';
+
 const categoryMap: Record<number, string> = {
   0: '전체',
   6: '짐 나르기',
@@ -44,20 +46,20 @@ const categoryClassMap: Record<number, string> = {
 
 const categoryEmojiMap: Record<number, string> = {
   0: '📋',
-  6: '📦',
-  7: '🧹',
-  8: '🌾',
-  9: '🚨',
-  10: '🥬',
-  11: '📱',
-  12: '💼',
-  13: '🎨',
-  14: '📦',
-  15: '🛒',
-  16: '🎫',
-  17: '💬',
-  18: '💭',
-  19: '🎫',
+  6: getCategoryEmoji(6),
+  7: getCategoryEmoji(7),
+  8: getCategoryEmoji(8),
+  9: getCategoryEmoji(9),
+  10: getCategoryEmoji(10),
+  11: getCategoryEmoji(11),
+  12: getCategoryEmoji(12),
+  13: getCategoryEmoji(13),
+  14: getCategoryEmoji(14),
+  15: getCategoryEmoji(15),
+  16: getCategoryEmoji(16),
+  17: getCategoryEmoji(17),
+  18: getCategoryEmoji(18),
+  19: getCategoryEmoji(19),
 };
 
 const CategoryBadge: React.FC<CategoryBadgeProps> = ({
