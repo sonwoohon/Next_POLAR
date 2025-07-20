@@ -4,34 +4,24 @@ import { useState, useEffect } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import styles from './Calendar.module.css';
 import Calendar from 'react-calendar';
-
-interface Help {
-  id: number;
-  title: string;
-  content: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  seniorNickname: string;
-  category: number[]; // sub_category의 id 배열
-}
+import { HelpResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 interface CalendarProps {
   year: number;
   month: number;
-  helps?: Help[];
+  helps?: HelpResponseDto[];
   onDateClick?: (date: Date) => void;
   selectedDate?: Date;
 }
 
 // Big Category 매핑 (sub_category_id -> big_category)
 const getBigCategory = (subCategoryId: number): string => {
-  // 힘 (1-4), 지능 (5-8), 민첩 (9-12), 매력 (13-16), 인내 (17-20)
-  if (subCategoryId >= 1 && subCategoryId <= 4) return '힘';
-  if (subCategoryId >= 5 && subCategoryId <= 8) return '지능';
-  if (subCategoryId >= 9 && subCategoryId <= 12) return '민첩';
-  if (subCategoryId >= 13 && subCategoryId <= 16) return '매력';
-  if (subCategoryId >= 17 && subCategoryId <= 20) return '인내';
+  // 힘 (6-9), 지능 (10-13), 매력 (14-16), 인내 (17-18), 신속 (19)
+  if (subCategoryId >= 6 && subCategoryId <= 9) return '힘';
+  if (subCategoryId >= 10 && subCategoryId <= 13) return '지능';
+  if (subCategoryId >= 14 && subCategoryId <= 16) return '매력';
+  if (subCategoryId >= 17 && subCategoryId <= 18) return '인내';
+  if (subCategoryId === 19) return '신속';
   return '기타';
 };
 
@@ -39,29 +29,27 @@ const getBigCategory = (subCategoryId: number): string => {
 const getBigCategoryColor = (bigCategory: string): string => {
   switch (bigCategory) {
     case '힘':
-      return '#ff4444'; // 빨강
+      return '#ff6b6b'; // 빨강
     case '지능':
-      return '#4444ff'; // 파랑
-    case '민첩':
-      return '#44ff44'; // 연두
+      return '#4ecdc4'; // 청록색
     case '매력':
-      return '#ff44ff'; // 분홍
+      return '#45b7d1'; // 파란색
     case '인내':
-      return '#8844ff'; // 보라
+      return '#96ceb4'; // 초록색
+    case '신속':
+      return '#feca57'; // 노란색
     default:
-      return '#888888'; // 회색
+      return '#a18cd1'; // 보라색
   }
 };
 
 export default function CustomCalendar({
-  year,
-  month,
   helps = [], // 기본값으로 빈 배열 사용
   onDateClick,
   selectedDate,
 }: CalendarProps) {
   const [value, setValue] = useState<Date>(selectedDate || new Date());
-  const [allHelps, setAllHelps] = useState<Help[]>(helps);
+  const [allHelps, setAllHelps] = useState<HelpResponseDto[]>(helps);
 
   // 컴포넌트 마운트 시 helps 데이터 설정
   useEffect(() => {
@@ -69,24 +57,13 @@ export default function CustomCalendar({
   }, [helps]);
 
   // 특정 날짜의 help 목록 가져오기 (start_date인 help만)
-  const getHelpsForDate = (date: Date): Help[] => {
+  const getHelpsForDate = (date: Date): HelpResponseDto[] => {
     return allHelps.filter((help) => {
-      const helpStart = new Date(help.startDate);
-      const targetDate = new Date(date);
+      // startDate는 이미 YYYY-MM-DD 형식의 문자열
+      const helpStartDate = help.startDate;
+      const targetDateStr = date.toISOString().split('T')[0];
 
-      // 날짜 비교 (시간 제외) - start_date와 정확히 일치하는 것만
-      const startDate = new Date(
-        helpStart.getFullYear(),
-        helpStart.getMonth(),
-        helpStart.getDate()
-      );
-      const currentDate = new Date(
-        targetDate.getFullYear(),
-        targetDate.getMonth(),
-        targetDate.getDate()
-      );
-
-      return currentDate.getTime() === startDate.getTime();
+      return helpStartDate === targetDateStr;
     });
   };
 
@@ -99,8 +76,10 @@ export default function CustomCalendar({
         return (
           <div className={styles.tileContent}>
             {dayHelps.slice(0, 5).map((help) => {
-              const bigCategory = getBigCategory(help.category[0] || 0);
+              const categoryId = help.category[0]?.id || 0;
+              const bigCategory = getBigCategory(categoryId);
               const color = getBigCategoryColor(bigCategory);
+
               return (
                 <div
                   key={help.id}
@@ -139,7 +118,7 @@ export default function CustomCalendar({
     return '';
   };
 
-  const handleDateChange = (value: unknown, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleDateChange = (value: unknown) => {
     // 타입 안전성을 위한 런타임 체크
     if (value instanceof Date) {
       setValue(value);

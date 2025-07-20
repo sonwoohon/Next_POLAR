@@ -11,21 +11,43 @@ interface CategoryItem {
   isMore?: boolean;
 }
 
-export default function CategoryGrid() {
+interface CategoryGridProps {
+  onCategoryClick?: (categoryId: number) => void;
+  selectedCategoryId?: number | null;
+}
+
+export default function CategoryGrid({
+  onCategoryClick,
+  selectedCategoryId,
+}: CategoryGridProps) {
   const [showMore, setShowMore] = useState(false);
 
-  // 카테고리 데이터 생성 (1-19번까지)
-  const categoryData: CategoryItem[] = Array.from({ length: 19 }, (_, i) => ({
-    id: i + 1,
-    text: getCategoryName(i + 1),
-    emoji: getCategoryEmoji(i + 1),
-  }));
+  // 카테고리 데이터 생성 (전체 + 실제 sub_category_id: 6-19번)
+  const categoryData: CategoryItem[] = [
+    // 전체 카테고리 추가
+    {
+      id: 0, // 0은 전체를 의미
+      text: '전체',
+      emoji: '📋',
+    },
+    // 기존 카테고리들 (6-19번)
+    ...Array.from({ length: 14 }, (_, i) => ({
+      id: i + 6, // 6번부터 19번까지
+      text: getCategoryName(i + 6),
+      emoji: getCategoryEmoji(i + 6),
+    })),
+  ];
 
   const shownCategories = showMore
     ? categoryData
-    : categoryData
-        .slice(0, 4)
-        .concat([{ id: 0, img: '', text: '더보기', isMore: true }]);
+    : [
+        // 전체 카테고리는 항상 첫 번째에 표시
+        categoryData[0],
+        // 나머지 카테고리 3개만 표시
+        ...categoryData.slice(1, 4),
+        // 더보기 버튼
+        { id: 0, img: '', text: '더보기', isMore: true },
+      ];
 
   return (
     <div className={styles.categoryRow}>
@@ -67,16 +89,24 @@ export default function CategoryGrid() {
             </div>
           </div>
         ) : (
-          <div className={styles.category} key={i}>
+          <div
+            className={`${styles.category} ${
+              selectedCategoryId === cat.id ||
+              (cat.id === 0 && selectedCategoryId === null)
+                ? styles.selected
+                : ''
+            }`}
+            key={i}
+            onClick={() => onCategoryClick?.(cat.id)}
+            style={{ cursor: onCategoryClick ? 'pointer' : 'default' }}
+          >
             <div className={styles.categoryIcon}>
               {/* <img
                 src={cat.img}
                 alt={cat.text}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               /> */}
-              <div className={styles.iconPlaceholder}>
-                {cat.emoji}
-              </div>
+              <div className={styles.iconPlaceholder}>{cat.emoji}</div>
             </div>
             <div className={styles.categoryText}>{cat.text}</div>
           </div>
