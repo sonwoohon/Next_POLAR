@@ -7,7 +7,11 @@ export const useHeaderScroll = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      // 스크롤 가능한 컨테이너 찾기
+      const scrollContainer = document.querySelector('.main-container');
+      if (!scrollContainer) return;
+      
+      const currentScrollY = scrollContainer.scrollTop;
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
         setHidden(true); // 아래로 스크롤하면 숨김
       } else {
@@ -22,9 +26,16 @@ export const useHeaderScroll = () => {
       }, 300);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // 스크롤 가능한 컨테이너에 이벤트 리스너 추가
+    const scrollContainer = document.querySelector('.main-container');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+    }
+    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
   }, []);

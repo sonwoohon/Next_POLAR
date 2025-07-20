@@ -10,6 +10,7 @@
   min-height: 7rem;
   transition: box-shadow 0.2s;
   cursor: pointer;
+  align-items: center;
 }
 .card:hover {
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.16);
@@ -140,7 +141,7 @@
   }
   .thumbnail {
     width: 4.4rem;
-    height: 4.4rem;
+    /* height: 4.4rem; */
     margin: 0.45rem;
   }
   .info {
@@ -151,6 +152,7 @@
   }
   .subInfo{  
     flex-direction: column;
+    align-items: flex-end;
   }
   .date{
     margin-left: 0;
