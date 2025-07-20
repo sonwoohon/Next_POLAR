@@ -114,11 +114,6 @@ const CreateHelpPage: React.FC = () => {
       // help 데이터 추가
       formData.append('title', helpData.title);
       formData.append('content', helpData.content);
-      
-      // userNickname 추가
-      if (user?.nickname) {
-        formData.append('userNickname', user.nickname);
-      }
 
       // 선택된 타입들을 subCategoryId로 직접 사용
       helpData.types.forEach((type) => {

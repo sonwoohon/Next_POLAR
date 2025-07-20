@@ -7,9 +7,20 @@ import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/re
 import { UploadHelpImageUseCase } from '@/backend/images/applications/usecases/ImageUseCase';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
 import { NextRequest, NextResponse } from 'next/server';
+import { getNicknameFromCookie } from '@/lib/jwt';
 
 // 시니어 헬프 생성 API (FormData 처리, 트랜잭션 포함)
 export async function POST(req: NextRequest) {
+  // 쿠키에서 사용자 정보 가져오기
+  const userData = getNicknameFromCookie(req);
+  const { nickname } = userData || {};
+
+  if (!nickname) {
+    return NextResponse.json(
+      { error: '로그인이 필요합니다.' },
+      { status: 401 }
+    );
+  }
 
   try {
     const formData = await req.formData();
@@ -17,7 +28,6 @@ export async function POST(req: NextRequest) {
     // FormData에서 help 데이터 추출
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    const userNickname = formData.get('userNickname') as string;
     const subCategoryIds = formData
       .getAll('subCategoryId')
       .map((id) => Number(id));
@@ -25,11 +35,11 @@ export async function POST(req: NextRequest) {
     const endDate = formData.get('endDate') as string;
 
     // 필수 필드 검증
-    if (!title || !startDate || subCategoryIds.length === 0 || !userNickname) {
+    if (!title || !startDate || subCategoryIds.length === 0) {
       return NextResponse.json(
         {
           error:
-            '필수 필드가 누락되었습니다. (title, startDate, subCategoryId, userNickname)',
+            '필수 필드가 누락되었습니다. (title, startDate, subCategoryId)',
         },
         { status: 400 }
       );
@@ -55,7 +65,7 @@ export async function POST(req: NextRequest) {
       // 1. 이미지 파일들 업로드
       if (imageFiles.length > 0) {
         const uploadPromises = imageFiles.map(async (file) => {
-          const result = await uploadUseCase.execute(file, userNickname);
+          const result = await uploadUseCase.execute(file, nickname);
           return result.url;
         });
         uploadedImageUrls = await Promise.all(uploadPromises);
@@ -72,7 +82,7 @@ export async function POST(req: NextRequest) {
         imageFiles: uploadedImageUrls,
       };
 
-      const help = await seniorHelpUseCase.createHelp(userNickname, helpReqCreate);
+      const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
 
       console.log('Help 생성 성공:', help);
       return NextResponse.json(help, { status: 201 });
