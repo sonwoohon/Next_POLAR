@@ -4,10 +4,9 @@
 .rankingWrap {
   background: #1f1f1f;
   width: 100%;
-  /* border-radius: 24px;padding: 32px 24px;box-shadow: 0 4px 24px #0003; */
 }
 .rankingTopWrap {
-  padding-top: 3rem;
+  margin-top: 3rem;
   position: relative;
   overflow: hidden;
   min-height: 16rem;
@@ -168,7 +167,6 @@
 .rankingTopWrap ul li {
   flex: 1;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   transform: translateY(10px);
   list-style: none;
@@ -176,15 +174,16 @@
   color: #fff;
   position: relative;
   margin: 0 10px;
+  justify-content: flex-start;
 }
 
-.rankingTopWrap ul li .imgwrap{
-  border-radius: 50%;
+/* .rankingTopWrap ul li .imgwrap{
   width: 50%;
-  border: 1px solid #3d3d3d;
-}
+} */
+
 .rankingTopWrap ul li .imgwrap img{
-  width: 100%;
+  max-width: 120px;
+  max-height: 120px;
 }
 @keyframes spotlight{
   0%{opacity: 0; bottom: -10%;}
@@ -215,8 +214,8 @@
 .rankingTopWrap ul li:nth-child(1):before {
   content: "";
   background-image: url('/images/ranking/num_1.png');
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .rankingTopWrap ul li:nth-child(2):before {
@@ -377,7 +376,7 @@
   justify-content: space-between;
   color: #fff;
   list-style: none;
-  padding:1.2rem 2rem 1.2rem 1.2rem;
+  padding:1.2rem 0 1.2rem 0rem;
   align-items: center;
 }
 
@@ -753,10 +752,6 @@
   border-radius: 50% !important;
   animation: none !important;
   transition: none !important;
-}
-
-.skipAnim .rankingTopWrap ul li:before {
-  animation: none !important;
 }
 
 .skipAnim .neonFlash {
