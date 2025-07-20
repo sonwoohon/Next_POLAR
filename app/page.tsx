@@ -1,5 +1,7 @@
 // 온보딩 페이지 (루트 경로) - 첫 진입 페이지, 로그인/회원가입 버튼 및 앱 소개 슬라이드
 "use client";
+
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -25,6 +27,13 @@ export default function Home() {
   }
 
   // 비인증 사용자만 온보딩 페이지 표시
+  // 로그인/회원가입 버튼 클릭 시 각 페이지로 이동
+  const handleLogin = () => {
+    router.push('/login');
+  };
+  const handleSignup = () => {
+    router.push('/sign-up');
+  };
 
   return (
     <div className={styles.onboardingWrap}>

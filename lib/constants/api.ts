@@ -14,8 +14,9 @@ export const API_ENDPOINTS = {
 
   // 도움 요청 관련
   HELPS: '/api/helps',
-  HELP_DETAIL: (id: string) => `/api/helps/${id}`,
-  HELP_STATUS: (id: string) => `/api/helps/${id}/status`,
+  HELP_DETAIL: (id: number) => `/api/helps/${id}`,
+  HELP_STATUS: (id: number) => `/api/helps/${id}/status`,
+  HELP_PARTICIPANTS: (id: number) => `/api/helps/${id}/participants`,
   JUNIOR_HELPS: '/api/helps/junior',
   SENIOR_HELPS: '/api/seniors/help',
   SENIOR_HELP_DETAIL: (id: string) => `/api/seniors/help/${id}`,
@@ -27,6 +28,7 @@ export const API_ENDPOINTS = {
   REVIEWS_RECEIVED: '/api/reviews/received',
   REVIEWS_WRITTEN: '/api/reviews/written',
   REVIEW_CREATE_AUTH_CHECK: '/api/reviews/create/auth-check',
+  REVIEW_RECEIVER: '/api/reviews/receiver',
 
   // 채팅 관련
   CHAT_ROOMS: '/api/chats/rooms',
@@ -48,6 +50,7 @@ export const API_ENDPOINTS = {
   USER_CATEGORY_SCORES: '/api/scores/user-with-category',
   USER_SEASON_SCORES: '/api/scores/user-with-season',
   CATEGORY_SEASON_SCORES: '/api/scores/category-with-season',
+  SEASON_SCORES_WITH_PARAM: '/api/scores/season',
 } as const;
 
 // 쿼리 키 상수들
