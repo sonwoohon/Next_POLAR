@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import ChatRoom from './ChatRoom';
-import HelpInfo from './_components/HelpInfo';
-import styles from './page.module.css';
-import { useAuthStore } from '@/lib/stores/authStore';
-import Link from 'next/link';
-import { useChatRoomDetailWithHelps } from '@/lib/hooks/chats/useChatRoomDetailWithHelps';
+import { useState, useEffect } from "react";
+// import { useRouter } from "next/navigation";
+import ChatRoom from "./ChatRoom";
+import HelpInfo from "./_components/HelpInfo";
+import styles from "./page.module.css";
+import { useAuthStore } from "@/lib/stores/authStore";
+import Link from "next/link";
+import { useChatRoomDetailWithHelps } from "@/lib/hooks/chats/useChatRoomDetailWithHelps";
 
 interface PageProps {
   params: Promise<{ roomId: string }>;
@@ -24,10 +24,10 @@ export default function ChatRoomPage({ params }: PageProps) {
 
   const helpData = chatRoomWithHelps?.helps?.[0] || null;
   const loading = isLoading;
-  const error = queryError ? 'Help 정보를 불러오는데 실패했습니다.' : null;
+  const error = queryError ? "Help 정보를 불러오는데 실패했습니다." : null;
 
   const nickname = user?.nickname;
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     const initializePage = async () => {
@@ -51,7 +51,7 @@ export default function ChatRoomPage({ params }: PageProps) {
             <span className={styles.tag}>로딩</span>
           </div>
         </div>
-        <span className={styles.prevHelp}>이전 help 보기 {'>'}</span>
+        <span className={styles.prevHelp}>이전 help 보기 {">"}</span>
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function ChatRoomPage({ params }: PageProps) {
           </div>
         </div>
         <Link href={`/chats/${roomId}/history`} className={styles.prevHelp}>
-          이전 help 보기 {'>'}
+          이전 help 보기 {">"}
         </Link>
       </div>
     );

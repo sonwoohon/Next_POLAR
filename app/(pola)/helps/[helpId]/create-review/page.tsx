@@ -1,23 +1,27 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { use } from 'react';
-import styles from './CreateReview.module.css';
-import UserInfoSection from '@/app/_components/commons/common-sections/user-info/UserInfoSection';
-import Button from './_components/Button';
-import Input from './_components/Input';
-import { useCreateReview } from '@/lib/hooks/review/useCreateReview';
-import { useAuthStore } from '@/lib/stores/authStore';
-import StarRating from '@/app/_components/commons/ui/StarRating';
-import ImageUploader from '@/app/_components/commons/imageUploader/ImageUploader';
-import { useReviewReceiver } from '@/lib/hooks/review/useReviewReceiver';
-import { useUserProfile } from '@/lib/hooks/useUserProfile';
-import { useImageContext } from '@/lib/contexts/ImageContext';
+import { useState } from "react";
+import { use } from "react";
+import styles from "./CreateReview.module.css";
+import UserInfoSection from "@/app/_components/commons/common-sections/user-info/UserInfoSection";
+import Button from "./_components/Button";
+import Input from "./_components/Input";
+import { useCreateReview } from "@/lib/hooks/review/useCreateReview";
+import { useAuthStore } from "@/lib/stores/authStore";
+import StarRating from "@/app/_components/commons/ui/StarRating";
+import ImageUploader from "@/app/_components/commons/imageUploader/ImageUploader";
+import { useReviewReceiver } from "@/lib/hooks/review/useReviewReceiver";
+import { useUserProfile } from "@/lib/hooks/useUserProfile";
+import { useImageContext } from "@/lib/contexts/ImageContext";
 
-export default function CreateReviewPage({ params }: { params: Promise<{ helpId: string }> }) {
+export default function CreateReviewPage({
+  params,
+}: {
+  params: Promise<{ helpId: string }>;
+}) {
   const { helpId } = use(params);
   const [form, setForm] = useState<{ text: string }>({
-    text: '',
+    text: "",
   });
   const [starRating, setStarRating] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,11 +29,18 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
   const [success, setSuccess] = useState<boolean>(false);
 
   const nickname = useAuthStore.getState().user?.nickname;
-  const { data: reviewReceiver, isLoading: receiverLoading, isError: receiverError } = useReviewReceiver(nickname || '', Number(helpId));
-  const { data: receiverProfile, isLoading: profileLoading, isError: profileError } = useUserProfile(reviewReceiver?.receiverNickname || '');
+  const { data: reviewReceiver } = useReviewReceiver(
+    nickname || "",
+    Number(helpId)
+  );
+  const { data: receiverProfile } = useUserProfile(
+    reviewReceiver?.receiverNickname || ""
+  );
   const { imageFiles, clearImages } = useImageContext();
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -39,7 +50,7 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
       setLoading(false);
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : '알 수 없는 오류');
+      setError(err instanceof Error ? err.message : "알 수 없는 오류");
       setLoading(false);
     },
   });
@@ -51,18 +62,18 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
     setSuccess(false);
 
     if (!helpId) {
-      setError('helpId가 없습니다.');
+      setError("helpId가 없습니다.");
       setLoading(false);
       return;
     }
 
     const formData = new FormData();
-    formData.append('helpId', helpId);
-    formData.append('rating', String(starRating));
-    formData.append('text', form.text);
-    formData.append('writerNickname', nickname!);
+    formData.append("helpId", helpId);
+    formData.append("rating", String(starRating));
+    formData.append("text", form.text);
+    formData.append("writerNickname", nickname!);
     if (imageFiles.length > 0) {
-      formData.append('reviewImgFile', imageFiles[0]);
+      formData.append("reviewImgFile", imageFiles[0]);
     }
 
     createReviewMutation.mutate(formData);
@@ -102,13 +113,15 @@ export default function CreateReviewPage({ params }: { params: Promise<{ helpId:
               <ImageUploader maxFiles={1} maxFileSize={5} />
             </div>
             <Button type="submit" disabled={loading}>
-              {loading ? '등록 중...' : '리뷰 등록'}
+              {loading ? "등록 중..." : "리뷰 등록"}
             </Button>
           </form>
           {error && <p className={styles.error}>{error}</p>}
-          {success && <p className={styles.success}>리뷰가 성공적으로 등록되었습니다!</p>}
+          {success && (
+            <p className={styles.success}>리뷰가 성공적으로 등록되었습니다!</p>
+          )}
         </>
       )}
     </div>
   );
-} 
+}

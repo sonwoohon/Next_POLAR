@@ -29,3 +29,13 @@ export { useChatRoomDetailWithHelps } from './chats/useChatRoomDetailWithHelps';
 
 // 회원 탈퇴 관련 훅들
 export { useWithdrawal } from './useWithdrawal';
+
+// 점수 관련 훅들
+export {
+  useUserScores,
+  useUserScoresByCategory,
+  useUserScoresBySeason,
+  useUserScoresByCategoryAndSeason,
+  useSeasonRankings,
+  useCategoryRankings,
+} from './useScore';

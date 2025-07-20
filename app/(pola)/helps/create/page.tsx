@@ -1,46 +1,47 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './createHelp.module.css';
-import Step1HelpType from './components/Step1HelpType';
-import Step2TimeSelection from './components/Step2TimeSelection';
-import Step3HelpDetails from './components/Step3HelpDetails';
-import { useCreateHelp } from '@/lib/hooks/help/useCreateHelp';
-import { useImageContext } from '@/lib/contexts/ImageContext';
-import { HelpFunnelData } from '@/lib/models/createHelpDto';
-import { useAuthStore } from '@/lib/stores/authStore';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./createHelp.module.css";
+import Step1HelpType from "./components/Step1HelpType";
+import Step2TimeSelection from "./components/Step2TimeSelection";
+import Step3HelpDetails from "./components/Step3HelpDetails";
+import { useCreateHelp } from "@/lib/hooks/help/useCreateHelp";
+import { useImageContext } from "@/lib/contexts/ImageContext";
+import { HelpFunnelData } from "@/lib/models/createHelpDto";
+// import { useAuthStore } from '@/lib/stores/authStore';
 
 type Step = 1 | 2 | 3;
 
 const CreateHelpPage: React.FC = () => {
   const router = useRouter();
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [helpData, setHelpData] = useState<HelpFunnelData>({
     types: [], // 여러 타입을 선택할 수 있도록 배열로 변경
     timeType: null,
-    date: new Date().toISOString().split('T')[0],
-    startTime: '',
-    endTime: '',
-    title: '',
-    content: '',
+    date: new Date().toISOString().split("T")[0],
+    startTime: "",
+    endTime: "",
+    title: "",
+    content: "",
     imageFiles: [],
   });
   const { mutateAsync, isPending } = useCreateHelp();
   const { imageFiles, clearImages } = useImageContext();
 
   const handleTypeSelect = (type: string) => {
-    setHelpData((prev) => {
+    setHelpData((prev: HelpFunnelData) => {
       const currentTypes = prev.types || [];
-      const isSelected = currentTypes.includes(type);
+      const typeNumber = parseInt(type);
+      const isSelected = currentTypes.includes(typeNumber);
 
       if (isSelected) {
         // 이미 선택된 경우 제거
-        return { ...prev, types: currentTypes.filter((t) => t !== type) };
+        return { ...prev, types: currentTypes.filter((t) => t !== typeNumber) };
       } else {
         // 선택되지 않은 경우 추가
-        return { ...prev, types: [...currentTypes, type] };
+        return { ...prev, types: [...currentTypes, typeNumber] };
       }
     });
   };
@@ -75,14 +76,14 @@ const CreateHelpPage: React.FC = () => {
         return helpData.types.length > 0;
       case 2:
         if (
-          helpData.timeType === 'specific' ||
-          helpData.timeType === 'tomorrow'
+          helpData.timeType === "specific" ||
+          helpData.timeType === "tomorrow"
         ) {
           return helpData.date && helpData.startTime && helpData.endTime;
         }
         return helpData.timeType !== null;
       case 3:
-        return helpData.title.trim() !== '' && helpData.content.trim() !== '';
+        return helpData.title.trim() !== "" && helpData.content.trim() !== "";
       default:
         return false;
     }
@@ -112,23 +113,23 @@ const CreateHelpPage: React.FC = () => {
       const formData = new FormData();
 
       // help 데이터 추가
-      formData.append('title', helpData.title);
-      formData.append('content', helpData.content);
+      formData.append("title", helpData.title);
+      formData.append("content", helpData.content);
 
       // 선택된 타입들을 subCategoryId로 직접 사용
       helpData.types.forEach((type) => {
-        formData.append('subCategoryId', type);
+        formData.append("subCategoryId", type.toString());
       });
 
       formData.append(
-        'startDate',
-        helpData.timeType === 'now'
+        "startDate",
+        helpData.timeType === "now"
           ? new Date().toISOString()
           : `${helpData.date}T${helpData.startTime}:00`
       );
       formData.append(
-        'endDate',
-        helpData.timeType === 'now'
+        "endDate",
+        helpData.timeType === "now"
           ? new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString() // 2시간 후
           : `${helpData.date}T${helpData.endTime}:00`
       );
@@ -142,16 +143,16 @@ const CreateHelpPage: React.FC = () => {
       const createdHelpId = helpResult?.id || null;
 
       if (!createdHelpId) {
-        throw new Error('도움 요청 생성 후 ID를 받지 못했습니다.');
+        throw new Error("도움 요청 생성 후 ID를 받지 못했습니다.");
       }
 
       // 성공 시 이미지 컨텍스트 클리어
       clearImages();
 
-      alert('도움 요청이 성공적으로 생성되었습니다!');
+      alert("도움 요청이 성공적으로 생성되었습니다!");
       router.push(`/helps/${createdHelpId}`);
     } catch (error) {
-      console.error('도움 요청 생성 실패:', error);
+      console.error("도움 요청 생성 실패:", error);
     }
   };
 
@@ -170,13 +171,13 @@ const CreateHelpPage: React.FC = () => {
   const getButtonText = () => {
     switch (currentStep) {
       case 1:
-        return '다음 단계로!';
+        return "다음 단계로!";
       case 2:
-        return '다음 단계로!';
+        return "다음 단계로!";
       case 3:
-        return '도움 생성!';
+        return "도움 생성!";
       default:
-        return '다음';
+        return "다음";
     }
   };
 
@@ -199,7 +200,7 @@ const CreateHelpPage: React.FC = () => {
       {/* 단계별 컨텐츠 */}
       {currentStep === 1 && (
         <Step1HelpType
-          selectedTypes={helpData.types}
+          selectedTypes={helpData.types.map((type) => type.toString())}
           onTypeSelect={handleTypeSelect}
         />
       )}
@@ -221,6 +222,7 @@ const CreateHelpPage: React.FC = () => {
         <Step3HelpDetails
           title={helpData.title}
           content={helpData.content}
+          selectedCategories={helpData.types}
           onTitleChange={handleTitleChange}
           onContentChange={handleContentChange}
         />
@@ -238,17 +240,17 @@ const CreateHelpPage: React.FC = () => {
         {currentStep === 3 ? (
           <button
             className={`${styles.navButton} ${styles.navButtonPrimary} ${
-              !canGoNext() || isPending ? styles.navButtonDisabled : ''
+              !canGoNext() || isPending ? styles.navButtonDisabled : ""
             }`}
             onClick={handleSubmit}
             disabled={!canGoNext() || isPending}
           >
-            {isPending ? '생성 중...' : getButtonText()}
+            {isPending ? "생성 중..." : getButtonText()}
           </button>
         ) : (
           <button
             className={`${styles.navButton} ${styles.navButtonPrimary} ${
-              !canGoNext() ? styles.navButtonDisabled : ''
+              !canGoNext() ? styles.navButtonDisabled : ""
             }`}
             onClick={handleNext}
             disabled={!canGoNext()}

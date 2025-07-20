@@ -16,9 +16,10 @@ export class ChatRoomMapper {
   static toChatRoom(row: ContactRoomRow): ChatRoom {
     return {
       chatRoomId: row.id,
-      juniorId: row.junior_id,
-      seniorId: row.senior_id,
+      juniorNickname: row.junior_id, // UUID를 nickname으로 사용
+      seniorNickname: row.senior_id, // UUID를 nickname으로 사용
       createdAt: row.created_at,
+      
     };
   }
 

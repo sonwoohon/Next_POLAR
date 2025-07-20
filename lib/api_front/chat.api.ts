@@ -8,6 +8,11 @@ import {
   ChatRoomDetailWithHelps,
 } from '../models/chatDto';
 
+// 채팅방 접근 권한 확인 응답 인터페이스
+export interface ChatRoomAccessResponse {
+  hasAccess: boolean;
+}
+
 // 채팅방 목록 조회
 export const getChatRooms = async (): Promise<GetChatRoomsResponse> => {
   const response = await apiClient.get<GetChatRoomsResponse>(
@@ -50,11 +55,18 @@ export const getChatRoomDetailWithHelps = async (
 };
 
 // 채팅방 접근 권한 확인
+
+
+// // 채팅방 접근 권한 확인 에러 응답 인터페이스
+// export interface ChatRoomAccessErrorResponse {
+//   error: string;
+// }
+
 export const checkChatRoomAccess = async (
   nickname: string,
   chatRoomId: number
-): Promise<any> => {
-  const response = await apiClient.get(
+): Promise<ChatRoomAccessResponse> => {
+  const response = await apiClient.get<ChatRoomAccessResponse>(
     `${API_ENDPOINTS.CHAT_ROOM_AUTH_CHECK}?nickname=${nickname}&chatRoomId=${chatRoomId}`
   );
   return response.data;

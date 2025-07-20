@@ -1,21 +1,22 @@
-import styles from './ProfileCard.module.css';
-import defaultImg from '@/public/images/dongHyun.jpg';
-import Image from 'next/image';
-
+import styles from "./ProfileCard.module.css";
+import defaultImg from "@/public/images/dongHyun.jpg";
+import Image from "next/image";
 
 export default function ProfileCard() {
   return (
     <div className={styles.card}>
       <div className={styles.avatarWrapper}>
         <div className={styles.avatar}>
-          <Image src={defaultImg} alt='프로필' />
+          <Image src={defaultImg} alt="프로필" />
         </div>
         <div className={styles.roleBadge}>
           <div className={styles.iconCircle}>
-            <img
+            <Image
               className={styles.roleIcon}
-              src='https://via.placeholder.com/16/000000?text=🧹'
-              alt='아이콘'
+              src="https://via.placeholder.com/16/000000?text=🧹"
+              alt="아이콘"
+              width={16}
+              height={16}
             />
           </div>
           <span className={styles.roleText}>환경미화원</span>

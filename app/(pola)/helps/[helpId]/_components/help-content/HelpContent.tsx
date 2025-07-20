@@ -1,28 +1,19 @@
-import Image from 'next/image';
-import styles from './HelpContent.module.css';
-import { HelpDetailResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
-import { useHelpApplicants } from '@/lib/hooks/help/useHelpApplicants';
-
-interface UserProfile {
-  nickname: string;
-  name?: string;
-  profileImgUrl?: string;
-  rating?: number;
-  job?: string;
-  jobIcon?: string;
-}
+import styles from "./HelpContent.module.css";
+import { HelpDetailResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+import { useHelpApplicants } from "@/lib/hooks/help/useHelpApplicants";
 
 interface HelpContentProps {
   help: HelpDetailResponseDto | null;
 }
 
 export default function HelpContent({ help }: HelpContentProps) {
-  const { data: applicantsData, isLoading: isLoadingApplicants } = useHelpApplicants(help?.id || 0);
+  const { data: applicantsData, isLoading: isLoadingApplicants } =
+    useHelpApplicants(help?.id || 0);
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return new Date(date).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -40,7 +31,9 @@ export default function HelpContent({ help }: HelpContentProps) {
           <div className={styles.statusItem}>
             <span className={styles.statusLabel}>지원자</span>
             <span className={styles.statusValue}>
-              {isLoadingApplicants ? '로딩중...' : `${applicantsData?.applicants?.length || 0}명`}
+              {isLoadingApplicants
+                ? "로딩중..."
+                : `${applicantsData?.applicants?.length || 0}명`}
             </span>
           </div>
         </div>
@@ -59,11 +52,13 @@ export default function HelpContent({ help }: HelpContentProps) {
 
       {/* Help Period */}
       <div className={styles.helpPeriod}>
-        {`${formatDate(help.startDate)} ~ ${formatDate(help.endDate)}`}
+        {`${formatDate(new Date(help.startDate))} ~ ${formatDate(
+          new Date(help.endDate)
+        )}`}
       </div>
 
       {/* Help Content */}
       <div className={styles.helpContent}>{help.content}</div>
     </div>
   );
-} 
+}

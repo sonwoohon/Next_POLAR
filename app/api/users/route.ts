@@ -21,7 +21,7 @@ export async function GET(
   try {
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
-    const { nickname, role } = userData || {};
+    const { nickname } = userData || {};
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {
@@ -82,7 +82,7 @@ export async function PUT(
 
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
-    const { nickname, role } = userData || {};
+    const { nickname } = userData || {};
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {
@@ -138,7 +138,7 @@ export async function DELETE(
   try {
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
-    const { nickname, role } = userData || {};
+    const { nickname } = userData || {};
     console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {

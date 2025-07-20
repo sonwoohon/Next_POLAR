@@ -3,7 +3,11 @@ import { IReviewRepository } from '@/backend/reviews/domains/repositories/Review
 import { CreateReviewRequest } from '@/backend/reviews/applications/dtos/ReviewDtos';
 
 export class ReviewUseCases {
-  constructor(private readonly reviewRepository: IReviewRepository) {}
+  constructor(private readonly reviewRepository: IReviewRepository) { }
+
+  // async getReviewById(reviewId: number): Promise<ReviewEntity | null> {
+  //   return await this.reviewRepository.findById(reviewId);
+  // }
 
   // nickname으로 받은 리뷰 리스트 조회
   async getReviewsByReceiverNickname(nickname: string): Promise<ReviewEntity[]> {
@@ -19,13 +23,13 @@ export class ReviewUseCases {
   async createReview(request: CreateReviewRequest): Promise<ReviewEntity> {
     // 리뷰 상대방 nickname 조회
     const receiverNickname = await this.getReviewReceiverNickname(request.writerNickname, request.helpId);
-    
+
     // receiverNickname을 포함한 요청 객체 생성
     const reviewRequest = {
       ...request,
       receiverNickname
     };
-    
+
     // nickname 기반으로 repository에 전달
     return await this.reviewRepository.createByNicknames(reviewRequest);
   }
@@ -36,7 +40,7 @@ export class ReviewUseCases {
       // 리뷰 상대방 nickname 조회 시도
       await this.getReviewReceiverNickname(nickname, helpId);
       return true; // 상대방을 찾을 수 있으면 권한 있음
-    } catch (error) {
+    } catch {
       return false; // 상대방을 찾을 수 없으면 권한 없음
     }
   }

@@ -36,7 +36,6 @@ export class UpdateProfileImageUseCase {
       // 프로필 이미지 URL 업데이트
       const updatedUser = new CommonUserEntity(
         existingUser.id,
-        existingUser.uuid,
         existingUser.phoneNumber,
         existingUser.password,
         existingUser.email,

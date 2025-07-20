@@ -4,11 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { QUERY_KEYS } from '../constants/api';
 
-interface User {
-  role: 'junior' | 'senior';
-  nickname: string;
-  // 기타 사용자 정보...
-}
+
 
 export const useAuthRedirect = () => {
   const router = useRouter();

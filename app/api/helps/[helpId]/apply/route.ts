@@ -15,7 +15,7 @@ export async function POST(
 
     // JWT에서 사용자 닉네임 가져오기
     const userInfo = getNicknameFromCookie(request);
-    
+
     if (!userInfo) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
@@ -31,7 +31,7 @@ export async function POST(
     const repo = new SbHelpApplicantRepository();
     const usecase = new ApplyHelpUseCase(repo);
     const applicant = await usecase.execute(helpId, juniorId);
-    console.log('applicant',applicant);
+    console.log('applicant', applicant);
     // 응답 DTO
     const response: ApplyHelpResponseDto = {
       success: true,
@@ -39,19 +39,22 @@ export async function POST(
     };
 
     return NextResponse.json(response, { status: 201 });
-  } catch (e: any) {
-    console.error('헬프 지원 오류:', e);
-    
-    if (e.message === '이미 지원한 헬프입니다.') {
-      return NextResponse.json({ 
-        success: false, 
-        error: e.message 
-      }, { status: 409 });
+  } catch (error: unknown) {
+    console.error('헬프 지원 오류:', error);
+
+    // Error 객체인지 확인
+    if (error instanceof Error) {
+      if (error.message === '이미 지원한 헬프입니다.') {
+        return NextResponse.json({
+          success: false,
+          error: error.message
+        }, { status: 409 });
+      }
     }
 
-    return NextResponse.json({ 
-      success: false, 
-      error: '서버 오류' 
+    return NextResponse.json({
+      success: false,
+      error: '서버 오류'
     }, { status: 500 });
   }
 } 

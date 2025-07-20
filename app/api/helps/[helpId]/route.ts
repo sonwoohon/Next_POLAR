@@ -28,7 +28,7 @@ export async function GET(
       // 시니어 정보 가져오기
       const getUserUseCase = new GetUserByIdUseCase(new SbUserRepository());
       const seniorUser = await getUserUseCase.execute(helpEntity.seniorId);
-      
+
       // 이미지 URL 가져오기
       const imageRepository = new SbHelpImageRepository();
       const images = await imageRepository.getHelpImageUrlsByHelpId(helpEntity.id);
@@ -38,17 +38,17 @@ export async function GET(
         seniorInfo: {
           nickname: seniorUser?.nickname || '알 수 없음',
           name: seniorUser?.name || '이름 없음',
-          userType: 'senior' as const,
+          userRole: 'senior' as const,
           profileImgUrl: seniorUser?.profileImgUrl || '',
           address: '', // 기본값 설정
         },
         title: helpEntity.title,
-        startDate: helpEntity.startDate,
-        endDate: helpEntity.endDate,
+        startDate: helpEntity.startDate.toISOString(),
+        endDate: helpEntity.endDate.toISOString(),
         category: helpEntity.category,
         content: helpEntity.content,
         status: helpEntity.status,
-        createdAt: helpEntity.createdAt,
+        createdAt: helpEntity.createdAt.toISOString(),
         images: images,
       };
 
