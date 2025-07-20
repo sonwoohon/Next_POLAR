@@ -52,10 +52,32 @@
 }
 .status {
   font-size: 1.08rem;
-  color: #2d7cff;
   font-weight: 700;
   margin-left: auto;
   letter-spacing: 0.01em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.status.open {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #fff;
+}
+
+.status.connecting {
+  background: linear-gradient(90deg, #ff9ff3 0%, #f368e0 100%);
+  color: #fff;
+}
+
+.status.completed {
+  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+  color: #fff;
+}
+
+.status.cancelled {
+  background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+  color: #fff;
 }
 .title {
   font-size: 1.15rem;

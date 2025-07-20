@@ -21,41 +21,33 @@ const createHelpListUseCase = () => {
 // 헬프 리스트 조회 API (닉네임 기반 응답)
 export async function GET(
   request: NextRequest
-): Promise<
-  NextResponse<HelpResponseDto[] | HelpPaginationResponseDto | null>
-> {
+): Promise<NextResponse<HelpResponseDto[] | HelpPaginationResponseDto | null>> {
   console.log('[API] GET /api/helps 호출됨');
 
   try {
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url);
     const filter: HelpFilterDto = {};
-  
+
     // 허용된 쿼리 파라미터 목록
     const allowedParams = [
       'categoryIds',
-      'subCategoryIds', 
+      'subCategoryIds',
       'startDate',
       'endDate',
       'status',
       'page',
       'limit',
       'offset',
-      'pagination'
+      'pagination',
     ];
 
     // 쿼리 파라미터 확인
     const requestParams = Array.from(searchParams.keys());
-    
-    // 파라미터가 없으면 빈 결과 반환
-    if (requestParams.length === 0) {
-      console.log('쿼리 파라미터가 없음, 빈 결과 반환');
-      return NextResponse.json([], { status: 200 });
-    }
-    
+
     // 정의되지 않은 쿼리 파라미터 확인
     const hasInvalidParams = requestParams.some(
-      param => !allowedParams.includes(param)
+      (param) => !allowedParams.includes(param)
     );
 
     if (hasInvalidParams) {
@@ -127,7 +119,14 @@ export async function GET(
     const usePagination =
       searchParams.get('pagination') === 'true' || filter.page !== undefined;
 
-    console.log('[API] 필터 파라미터:', filter, '페이지네이션:', usePagination);
+    console.log(
+      '[API] 필터 파라미터:',
+      filter,
+      '페이지네이션:',
+      usePagination,
+      '쿼리 파라미터 개수:',
+      requestParams.length
+    );
 
     if (usePagination) {
       // 페이지네이션 모드
@@ -141,12 +140,16 @@ export async function GET(
         const helpResponseDtos = await Promise.all(
           result.data.map(async (help) => {
             // 시니어 정보 가져오기
-            const getUserUseCase = new GetUserByIdUseCase(new SbUserRepository());
+            const getUserUseCase = new GetUserByIdUseCase(
+              new SbUserRepository()
+            );
             const seniorUser = await getUserUseCase.execute(help.seniorId);
-            
+
             // 이미지 URL 가져오기
             const imageRepository = new SbHelpImageRepository();
-            const images = await imageRepository.getHelpImageUrlsByHelpId(help.id);
+            const images = await imageRepository.getHelpImageUrlsByHelpId(
+              help.id
+            );
 
             return {
               id: help.id,
@@ -158,12 +161,12 @@ export async function GET(
                 address: '', // 기본값 설정
               },
               title: help.title,
-              startDate: help.startDate,
-              endDate: help.endDate,
+              startDate: help.startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식
+              endDate: help.endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식
               category: help.category,
               content: help.content,
               status: help.status,
-              createdAt: help.createdAt,
+              createdAt: help.createdAt.toISOString(), // ISO 문자열
               images: images,
             };
           })
@@ -186,12 +189,16 @@ export async function GET(
         const helpResponseDtos = await Promise.all(
           helpEntities.map(async (help) => {
             // 시니어 정보 가져오기
-            const getUserUseCase = new GetUserByIdUseCase(new SbUserRepository());
+            const getUserUseCase = new GetUserByIdUseCase(
+              new SbUserRepository()
+            );
             const seniorUser = await getUserUseCase.execute(help.seniorId);
-            
+
             // 이미지 URL 가져오기
             const imageRepository = new SbHelpImageRepository();
-            const images = await imageRepository.getHelpImageUrlsByHelpId(help.id);
+            const images = await imageRepository.getHelpImageUrlsByHelpId(
+              help.id
+            );
 
             return {
               id: help.id,
@@ -203,12 +210,12 @@ export async function GET(
                 address: '', // 기본값 설정
               },
               title: help.title,
-              startDate: help.startDate,
-              endDate: help.endDate,
+              startDate: help.startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식
+              endDate: help.endDate.toISOString().split('T')[0], // YYYY-MM-DD 형식
               category: help.category,
               content: help.content,
               status: help.status,
-              createdAt: help.createdAt,
+              createdAt: help.createdAt.toISOString(), // ISO 문자열
               images: images,
             };
           })

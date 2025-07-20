@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 import styles from './Header.module.css';
 import Image from 'next/image';
 import Logo from '@/public/images/logos/POLAR.png';
@@ -28,15 +29,17 @@ const Header: React.FC = () => {
       <header className={`${styles.header} ${hidden ? styles.hide : ''}`}>
         <div className={styles.headerWrap}>
           <div className={styles.logo}>
-            <h1><a href="/main"><Image src={Logo} alt='POLAR' /></a></h1>
+            <h1><Link href="/main"><Image src={Logo} alt='POLAR' /></Link></h1>
           </div>
           <div className={styles.profile}>
-            <Image 
-              src={DummyUser} 
-              alt="User Profile" 
-              width={32}
-              height={32}
-            />
+            <Link href={`/user/profile/${currentUser?.nickname || ''}`}>
+              <Image 
+                src={DummyUser} 
+                alt="User Profile" 
+                width={32}
+                height={32}
+              />
+            </Link>
           </div>
         </div>
       </header>
@@ -51,16 +54,18 @@ const Header: React.FC = () => {
     <header className={`${styles.header} ${hidden ? styles.hide : ''}`}>
       <div className={styles.headerWrap}>
         <div className={styles.logo}>
-          <h1><a href="/main"><Image src={Logo} alt='POLAR' /></a></h1>
+          <h1><Link href="/main"><Image src={Logo} alt='POLAR' /></Link></h1>
         </div>
         <div className={styles.profile}>
-          <Image 
-            src={profileImageUrl} 
-            alt="User Profile" 
-            width={32}
-            height={32}
-            onError={handleImageError}
-          />
+          <Link href={`/user/profile/${currentUser?.nickname || ''}`}>
+            <Image 
+              src={profileImageUrl} 
+              alt="User Profile" 
+              width={32}
+              height={32}
+              onError={handleImageError}
+            />
+          </Link>
         </div>
       </div>
     </header>

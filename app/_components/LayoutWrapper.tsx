@@ -1,7 +1,9 @@
-"use client";
-import { usePathname } from "next/navigation";
-import Header from "./Header";
-import Footer from "./Footer";
+
+'use client';
+import { usePathname } from 'next/navigation';
+import Header from './Header';
+import Footer from './Footer';
+import AuthWrapper from './layout/AuthWrapper';
 
 // Header를 숨길 페이지들
 const hideHeaderPaths = ["/login", "/sign-up", "/find-password"];
@@ -25,10 +27,10 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const shouldShowFooter = !hideFooterPaths.includes(pathname);
 
   return (
-    <>
+    <AuthWrapper>
       {shouldShowHeader && <Header />}
       <main className="main-container">{children}</main>
       {shouldShowFooter && <Footer />}
-    </>
+    </AuthWrapper>
   );
 }

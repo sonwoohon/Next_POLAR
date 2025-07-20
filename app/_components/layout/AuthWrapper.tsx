@@ -72,14 +72,14 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
 
-    // 로그인/회원가입 페이지에서는 인증 체크 건너뛰기
-    if (isAuthPage) return;
+    // 로그인/회원가입 페이지나 온보딩 페이지에서는 인증 체크 건너뛰기
+    if (isAuthPage || isOnboardingPage) return;
 
     if (!isAuthenticated || !user) {
       router.replace('/login');
       return;
     }
-  }, [isInitialized, isAuthenticated, user, router, isAuthPage]);
+  }, [isInitialized, isAuthenticated, user, router, isAuthPage, isOnboardingPage]);
 
   useEffect(() => {
     if (!isInitialized) return; // 초기화 전에는 리다이렉트하지 않음
@@ -150,8 +150,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     return null;
   }
 
-  // 로그인/회원가입 페이지에서는 인증 체크 없이 렌더링
-  if (isAuthPage) {
+  // 로그인/회원가입 페이지나 온보딩 페이지에서는 인증 체크 없이 렌더링
+  if (isAuthPage || isOnboardingPage) {
     return <>{children}</>;
   }
 

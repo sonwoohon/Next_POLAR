@@ -12,7 +12,7 @@ export function generateAccessToken(payload: Record<string, unknown>) {
   if (!payload || typeof payload !== 'object') {
     throw new Error('유효하지 않은 페이로드입니다.');
   }
-  return jwt.sign(payload, ACCESS_SECRET as string, { expiresIn: '1h' });
+  return jwt.sign(payload, ACCESS_SECRET as string, { expiresIn: '10h' });
 }
 
 export function generateRefreshToken(payload: Record<string, unknown>) {

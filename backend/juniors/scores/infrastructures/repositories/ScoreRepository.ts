@@ -22,7 +22,10 @@ import {
   ScoreRequestDtoWithNicknameAndSeason,
   ScoreRequestDtoWithNicknameAndCategoryId,
 } from '@/backend/juniors/scores/applications/dtos/ScoreRequestDto';
-import { ScoreRankingDto, ScoreRankingRawDto } from '@/backend/juniors/scores/applications/dtos/ScoreRankingDto';
+import {
+  ScoreRankingDto,
+  ScoreRankingRawDto,
+} from '@/backend/juniors/scores/applications/dtos/ScoreRankingDto';
 
 export class ScoreRepository implements ScoreRepositoryInterface {
   private async queryScores(
@@ -33,12 +36,7 @@ export class ScoreRepository implements ScoreRepositoryInterface {
       category_id,
       season,
       category_score,
-      updated_at,
-      categories (
-        id,
-        name,
-        point
-      )
+      updated_at
       `;
 
     const { data, error } = await supabase
@@ -64,12 +62,7 @@ export class ScoreRepository implements ScoreRepositoryInterface {
       category_id,
       season,
       category_score,
-      updated_at,
-      categories (
-        id,
-        name,
-        point
-      )
+      updated_at
     `;
 
     // nickname으로 scores 조회 (JOIN 사용)
@@ -140,18 +133,20 @@ export class ScoreRepository implements ScoreRepositoryInterface {
   async getUserRankingsBySeason(season: number): Promise<ScoreRankingDto[]> {
     const { data, error } = await supabase
       .from('scores')
-      .select(`
+      .select(
+        `
         user_id,
         users(nickname, profile_img_url),
         category_id,
         category_score
-      `)
+      `
+      )
       .eq('season', season);
 
     if (error || !data) return [];
 
     // Supabase 응답을 ScoreRankingDto 형태로 변환
-    return (data as ScoreRankingRawDto[]).map(item => ({
+    return (data as ScoreRankingRawDto[]).map((item) => ({
       user_id: item.user_id,
       users: Array.isArray(item.users) ? item.users[0] : item.users, // 배열이면 첫 번째 요소, 아니면 그대로
       category_id: item.category_id,

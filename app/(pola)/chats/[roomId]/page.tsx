@@ -75,16 +75,7 @@ export default function ChatRoomPage({ params }: PageProps) {
 
   return (
     <div className={styles.container}>
-      {/* 헤더 */}
-      <div className={styles.header}>
-        <span className={styles.logo}>POLAR</span>
-        <span className={styles.spacer}></span>
-        <span className={styles.bell}>🔔</span>
-      </div>
       <div className={styles.topBar}>
-        <span className={styles.back} onClick={() => router.back()}>
-          {'<'}
-        </span>
         <span className={styles.seniorName}>
           {chatRoomWithHelps?.seniorNickname}
         </span>
