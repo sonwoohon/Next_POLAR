@@ -172,6 +172,10 @@ const Step2TimeSelection: React.FC<Step2TimeSelectionProps> = ({
                       }`}
                       onClick={() => {
                         onStartTimeChange(time);
+                        // 시작 시간이 변경되면 끝나는 시간이 시작 시간보다 작거나 같으면 초기화
+                        if (selectedEndTime && selectedEndTime <= time) {
+                          onEndTimeChange('');
+                        }
                         setShowTimeGrid(false);
                       }}
                     >
@@ -196,20 +200,27 @@ const Step2TimeSelection: React.FC<Step2TimeSelectionProps> = ({
               />
               {showEndTimeGrid && (
                 <div className={styles.timeGrid}>
-                  {timeSlots.map((time) => (
-                    <div
-                      key={time}
-                      className={`${styles.timeSlot} ${
-                        selectedEndTime === time ? styles.timeSlotSelected : ''
-                      }`}
-                      onClick={() => {
-                        onEndTimeChange(time);
-                        setShowEndTimeGrid(false);
-                      }}
-                    >
-                      {formatTimeDisplay(time)}
-                    </div>
-                  ))}
+                  {timeSlots
+                    .filter((time) => {
+                      // 시작 시간이 선택되지 않았으면 모든 시간 표시
+                      if (!selectedStartTime) return true;
+                      // 시작 시간보다 큰 시간만 표시
+                      return time > selectedStartTime;
+                    })
+                    .map((time) => (
+                      <div
+                        key={time}
+                        className={`${styles.timeSlot} ${
+                          selectedEndTime === time ? styles.timeSlotSelected : ''
+                        }`}
+                        onClick={() => {
+                          onEndTimeChange(time);
+                          setShowEndTimeGrid(false);
+                        }}
+                      >
+                        {formatTimeDisplay(time)}
+                      </div>
+                    ))}
                 </div>
               )}
             </div>

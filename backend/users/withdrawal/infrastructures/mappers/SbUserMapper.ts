@@ -15,14 +15,14 @@ export class SbUserMapper {
         try {
             const user: User = {
                 id: data.id,
-                phone_number: data.phoneNumber,
+                phone_number: data.phone_number,
                 password: data.password,
                 email: data.email,
                 age: data.age,
-                profile_img_url: data.profileImgUrl,
+                profile_img_url: data.profile_img_url,
                 address: data.address,
                 name: data.name,
-                created_at: new Date(data.createdAt)
+                created_at: new Date(data.created_at)
             };
 
             return user;

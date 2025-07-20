@@ -3,6 +3,8 @@ export const API_ENDPOINTS = {
   // 사용자 관련
   USERS: '/api/users',
   USER_PROFILE: (nickname: string) => `/api/users/${nickname}`,
+  USER_PROFILE_UPDATE: (nickname: string) => `/api/users/${nickname}/profile-update`,
+  USER_PASSWORD_CHANGE: (nickname: string) => `/api/users/${nickname}/password-change`,
   USER_SEARCH: '/api/users/search',
 
   // 인증 관련
@@ -17,6 +19,10 @@ export const API_ENDPOINTS = {
   HELP_DETAIL: (id: number) => `/api/helps/${id}`,
   HELP_STATUS: (id: number) => `/api/helps/${id}/status`,
   HELP_PARTICIPANTS: (id: number) => `/api/helps/${id}/participants`,
+  HELP_APPLICANTS: (id: number) => `/api/helps/${id}/applicants`,
+  HELP_APPLY: (id: number) => `/api/helps/${id}/apply`,
+  HELP_APPLICATION_STATUS: (id: number) => `/api/helps/${id}/application-status`,
+  HELP_ACCEPT_APPLICANT: (helpId: number, juniorNickname: string) => `/api/helps/${helpId}/applicants/${juniorNickname}/accept`,
   JUNIOR_HELPS: '/api/helps/junior',
   SENIOR_HELPS: '/api/seniors/help',
   SENIOR_HELP_DETAIL: (id: string) => `/api/seniors/help/${id}`,
@@ -58,6 +64,8 @@ export const QUERY_KEYS = {
   // 사용자 관련
   USERS: ['users'] as const,
   USER_PROFILE: (nickname: string) => ['users', 'profile', nickname] as const,
+  USER_PROFILE_UPDATE: (nickname: string) => ['users', 'profile-update', nickname] as const,
+  USER_PASSWORD_CHANGE: (nickname: string) => ['users', 'password-change', nickname] as const,
   USER_SEARCH: (query: string) => ['users', 'search', query] as const,
 
   // 도움 요청 관련

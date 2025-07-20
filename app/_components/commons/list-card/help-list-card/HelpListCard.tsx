@@ -15,6 +15,21 @@ const getRewardByCategory = (category: { id: number; point: number }[]) => {
   return (base + 1) * 10000;
 };
 
+const getStatusText = (status: string) => {
+  switch (status) {
+    case 'open':
+      return '모집중';
+    case 'connecting':
+      return '연결중';
+    case 'completed':
+      return '완료';
+    case 'close':
+      return '취소됨';
+    default:
+      return status;
+  }
+};
+
 const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
   const { seniorInfo, title, startDate, endDate, category, status } = help;
 
@@ -30,19 +45,25 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
     <div className={styles.card}>
       <div className={styles.thumbnail}>
         <Image
-          src={seniorInfo.profileImgUrl || '/default-profile.png'}
+          src={seniorInfo.profileImgUrl || '/images/dummies/dummy_user.png'}
           alt='썸네일'
           width={100}
           height={100}
           className={styles.thumbnailImg}
           style={{ objectFit: 'cover', borderRadius: '0.8rem' }}
           priority={true}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = '/images/dummies/dummy_user.png';
+          }}
         />
       </div>
       <div className={styles.info}>
         <div className={styles.topRow}>
           <CategoryBadge category={category[0]?.id} />
-          <span className={styles.status}>{status}</span>
+          <span className={`${styles.status} ${styles[status] || ''}`}>
+            {getStatusText(status)}
+          </span>
         </div>
         <div className={styles.title}>{title}</div>
         <div className={styles.subInfo}>

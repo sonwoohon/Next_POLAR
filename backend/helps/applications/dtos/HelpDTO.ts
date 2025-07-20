@@ -5,12 +5,12 @@ export interface HelpResponseDto {
   id: number;
   seniorInfo: UserProfileResponseDto;
   title: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string; // YYYY-MM-DD 형식의 문자열
+  endDate: string; // YYYY-MM-DD 형식의 문자열
   category: { id: number; point: number }[];
   content: string;
   status: string;
-  createdAt: Date;
+  createdAt: string; // ISO 문자열
   images?: string[]; // 헬프 이미지 URL 배열
 }
 

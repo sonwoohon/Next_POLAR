@@ -92,6 +92,7 @@ export async function POST(
 
     // 3. 사용자 테이블에 프로필 이미지 URL 업데이트
     if (user) {
+      console.log(`[API] 업데이트할 프로필 이미지 URL: ${result.url}`);
       const userUseCase = new CommonUserUseCase(userRepository);
       const updatedUser = await userUseCase.updateUserProfile(user.id, {
         profile_img_url: result.url,

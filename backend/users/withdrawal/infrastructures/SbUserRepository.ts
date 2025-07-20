@@ -51,8 +51,7 @@ export class SbWithdrawalUserRepository implements UserRepository {
                     profile_img_url: null,
                     address: null,
                     name: null,
-                    created_at: null,
-                    uuid: null
+                    created_at: null
                 })
                 .eq('id', id);
 
