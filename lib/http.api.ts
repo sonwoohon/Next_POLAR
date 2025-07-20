@@ -6,7 +6,10 @@ import axios, {
 
 // API 기본 설정
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  (typeof window !== 'undefined'
+    ? window.location.origin
+    : 'http://localhost:3000');
 
 // axios 인스턴스 생성
 const apiClient: AxiosInstance = axios.create({
