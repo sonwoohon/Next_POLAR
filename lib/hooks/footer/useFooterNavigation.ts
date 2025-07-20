@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from './useAuth';
+import { useAuth } from '../useAuth';
 
 interface MenuItem {
   name: string;

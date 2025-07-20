@@ -1,5 +1,5 @@
 'use client';
-import { useFooterNavigation } from '@/lib/hooks/useFooterNavigation';
+import { useFooterNavigation } from '@/lib/hooks/footer/useFooterNavigation';
 import styles from './Footer.module.css';
 
 const Footer: React.FC = () => {

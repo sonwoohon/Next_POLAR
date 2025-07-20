@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Header.module.css';
 import Image from 'next/image';
 import Logo from '@/public/images/logos/POLAR.png';
-import { useHeaderScroll } from '@/lib/hooks/useHeaderScroll';
+import { useHeaderScroll } from '@/lib/hooks/header/useHeaderScroll';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useProfileImage } from '@/lib/hooks/useProfileImage';

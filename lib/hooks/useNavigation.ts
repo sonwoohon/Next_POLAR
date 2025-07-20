@@ -11,14 +11,6 @@ export const useNavigation = () => {
     router.push('/sign-up');
   };
 
-  const navigateToJunior = () => {
-    router.push('/junior');
-  };
-
-  const navigateToSenior = () => {
-    router.push('/senior');
-  };
-
   const navigateToHelp = (helpId: string) => {
     router.push(`/helps/${helpId}`);
   };
@@ -30,8 +22,6 @@ export const useNavigation = () => {
   return {
     navigateToLogin,
     navigateToSignup,
-    navigateToJunior,
-    navigateToSenior,
     navigateToHelp,
     navigateToProfile,
   };
