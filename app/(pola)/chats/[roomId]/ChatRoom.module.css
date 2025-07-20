@@ -58,6 +58,13 @@
   justify-content: center;
 }
 
+.avatarImage {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 /* ── 말풍선 + 메타 래퍼 ── */
 .messageWrapper,
 .myMessageWrapper {
@@ -168,7 +175,6 @@
   background: #b6c6e3;
   cursor: not-allowed;
 }
-
 /* ── 로딩 ── */
 .loading {
   text-align: center;
@@ -176,3 +182,4 @@
   font-size: 1rem;
   padding: 24px;
 }
+

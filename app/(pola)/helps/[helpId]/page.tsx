@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { use } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSeniorHelpCompletion } from '@/lib/hooks/useSeniorHelpCompletion';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useHelpDetail } from '@/lib/hooks/help/useHelpDetail';
+import { useHelpDetail, useApplyHelp, useHelpApplicationStatus } from '@/lib/hooks/help';
 import TopBar from './_components/top-bar/TopBar';
 import ImageCarousel from './_components/image-carousel/ImageCarousel';
 import HelpContent from './_components/help-content/HelpContent';
@@ -18,6 +19,7 @@ export default function HelpDetailPage({
   params: Promise<{ helpId: string }>;
 }) {
   const { helpId } = use(params);
+  const router = useRouter();
 
   // React Query를 사용하여 헬프 데이터 가져오기
   const { data: helpData, isLoading, error: helpError } = useHelpDetail(parseInt(helpId));
@@ -25,11 +27,19 @@ export default function HelpDetailPage({
   // 시니어 완료 요청 훅 사용
   const { requestCompletion, isPending: isCompleting } = useSeniorHelpCompletion();
 
+  // 헬프 지원 훅 사용
+  const { mutate: applyHelp, isPending: isApplying } = useApplyHelp();
+
   // AuthStore에서 사용자 정보 가져오기
   const user = useAuthStore((state) => state.user);
 
   // 사용자 역할
   const userRole = user?.role as 'junior' | 'senior' | null;
+
+  // 지원 상태 확인 훅 사용 (주니어인 경우에만)
+  const { data: applicationStatus } = useHelpApplicationStatus(
+    userRole === 'junior' ? parseInt(helpId) : 0
+  );
   
   // Help 완료 요청 함수 (새로운 훅 사용)
   const handleCompleteHelp = () => {
@@ -43,14 +53,17 @@ export default function HelpDetailPage({
 
   // 헬프 지원 함수
   const handleApplyHelp = () => {
-    console.log('헬프 지원하기');
-    // TODO: 헬프 지원 로직 구현
+    if (!helpData) {
+      console.log('❌ Help 데이터가 없음');
+      return;
+    }
+    console.log('📋 헬프 지원:', helpData.id);
+    applyHelp(helpData.id);
   };
 
   // 지원자 확인 함수
   const handleCheckApplicants = () => {
-    console.log('지원자 확인하기');
-    // TODO: 지원자 확인 로직 구현
+    router.push(`/helps/${helpId}/applicants`);
   };
 
 
@@ -72,6 +85,8 @@ export default function HelpDetailPage({
         help={helpData || null}
         role={userRole}
         isCompleting={isCompleting}
+        isApplying={isApplying}
+        applicationStatus={applicationStatus}
         onCompleteHelp={handleCompleteHelp}
         onApplyHelp={handleApplyHelp}
         onCheckApplicants={handleCheckApplicants}

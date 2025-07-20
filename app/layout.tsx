@@ -3,6 +3,7 @@ import { gangwonEdu, pretendard } from '@/public/fonts/fonts';
 import './globals.css';
 import { QueryProvider } from '@/app/_components/QueryProvider';
 import { ImageProvider } from '@/lib/contexts/ImageContext';
+import { HelpVerificationProvider } from '@/lib/contexts/HelpVerificationContext';
 import LayoutWrapper from '@/app/_components/LayoutWrapper';
 
 export const metadata: Metadata = {
@@ -20,7 +21,9 @@ export default function RootLayout({
       <body className={`${gangwonEdu.variable} ${pretendard.variable}`}>
         <QueryProvider>
           <ImageProvider>
-            <LayoutWrapper>{children}</LayoutWrapper>
+            <HelpVerificationProvider>
+              <LayoutWrapper>{children}</LayoutWrapper>
+            </HelpVerificationProvider>
           </ImageProvider>
         </QueryProvider>
       </body>

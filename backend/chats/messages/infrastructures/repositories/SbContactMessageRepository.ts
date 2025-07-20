@@ -2,19 +2,23 @@ import { supabase } from '@/backend/common/utils/supabaseClient';
 import { ContactMessageEntity } from '@/backend/chats/messages/domains/entities/contactMessage';
 import { IContactMessageRepository } from '@/backend/chats/messages/domains/repositories/ContactMessageRepository';
 import { ContactMessageMapper } from '@/backend/chats/messages/infrastructures/mappers/ContactMessageMapper';
-import { ContactMessageUseCase } from '@/backend/chats/messages/applications/dtos/ContactMessageDtos';
+import { getUuidByNickname } from '@/lib/getUserData';
 
 export class SbContactMessageRepository implements IContactMessageRepository {
   // 메시지 저장
   async create(
     requestDto: { nickname: string; contactRoomId: number; message: string }
   ): Promise<ContactMessageEntity> {
+    // nickname으로 UUID 가져오기
+    const senderUuid = await getUuidByNickname(requestDto.nickname);
+    
     const { data, error } = await supabase
       .from('contact_messages')
       .insert({
         nickname: requestDto.nickname,
         contact_room_id: requestDto.contactRoomId,
         message: requestDto.message,
+        sender_id: senderUuid,
       })
       .select()
       .single();
@@ -48,6 +52,7 @@ export class SbContactMessageRepository implements IContactMessageRepository {
     return data.map(
       (row: {
         id: number;
+        sender_id: string;
         contact_room_id: number;
         nickname: string;
         message: string;

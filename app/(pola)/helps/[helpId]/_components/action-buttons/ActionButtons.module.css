@@ -33,6 +33,15 @@
   background-color: #0056b3;
 }
 
+.appliedButton {
+  background-color: #9E9E9E;
+  cursor: not-allowed;
+}
+
+.appliedButton:hover {
+  background-color: #9E9E9E;
+}
+
 .plusIcon {
   font-size: 1.25rem;
   font-weight: bold;

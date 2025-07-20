@@ -1,10 +1,5 @@
 export const getCategoryName = (categoryId: number) => {
   const categories: { [key: number]: string } = {
-    1: '청소',
-    2: '요리',
-    3: '운전',
-    4: '상담',
-    5: '기타',
     6: '짐 나르기',
     7: '청소',
     8: '수확(농경 보조)',
@@ -25,11 +20,6 @@ export const getCategoryName = (categoryId: number) => {
 
 export const getCategoryEmoji = (categoryId: number) => {
   const emojis: { [key: number]: string } = {
-    1: '🧹',
-    2: '🍳',
-    3: '🚗',
-    4: '💬',
-    5: '✨',
     6: '📦',
     7: '🧹',
     8: '🌾',

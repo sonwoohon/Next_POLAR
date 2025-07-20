@@ -1,0 +1,25 @@
+.topBar {
+  display: flex;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+  gap: 24px;
+  position: relative;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.edit {
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  left: 8px;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+} 

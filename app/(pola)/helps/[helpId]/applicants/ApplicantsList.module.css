@@ -1,0 +1,120 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.applicantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.applicantItem {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.applicantInfo {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.status {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.accepted {
+  color: #4CAF50;
+}
+
+.pending {
+  color: #FF9800;
+}
+
+.appliedAt {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.acceptButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.acceptButton:hover {
+  background-color: #45a049;
+}
+
+.acceptButton:active {
+  background-color: #3d8b40;
+}
+
+.acceptedButton {
+  background-color: #9E9E9E;
+  cursor: not-allowed;
+}
+
+.acceptedButton:hover {
+  background-color: #9E9E9E;
+}
+
+.acceptedButton:active {
+  background-color: #9E9E9E;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #e74c3c;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+.loadingItem {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.errorItem {
+  padding: 20px;
+  text-align: center;
+  color: #e74c3c;
+  font-size: 14px;
+} 
