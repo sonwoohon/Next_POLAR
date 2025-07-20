@@ -1,23 +1,22 @@
 // 온보딩 페이지 (루트 경로) - 첫 진입 페이지, 로그인/회원가입 버튼 및 앱 소개 슬라이드
 "use client";
-
-import { useRouter } from 'next/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import styles from './Onboarding.module.css';
-import { useOnboardingAuth } from '@/lib/hooks/onboarding/useOnboardingAuth';
-import { useNavigation } from '@/lib/hooks/useNavigation';
-import { useOnboardingData } from '@/lib/hooks/onboarding/useOnboardingData';
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import styles from "./Onboarding.module.css";
+import { useOnboardingAuth } from "@/lib/hooks/onboarding/useOnboardingAuth";
+import { useNavigation } from "@/lib/hooks/useNavigation";
+import { useOnboardingData } from "@/lib/hooks/onboarding/useOnboardingData";
 
 export default function Home() {
   // 온보딩 페이지 전용 인증 확인
   const { shouldRender } = useOnboardingAuth();
-  
+
   // 네비게이션 핸들러
   const { navigateToLogin, navigateToSignup } = useNavigation();
-  
+
   // 온보딩 데이터
   const { slides, swiperConfig } = useOnboardingData();
 
@@ -25,15 +24,6 @@ export default function Home() {
   if (!shouldRender) {
     return null;
   }
-
-  // 비인증 사용자만 온보딩 페이지 표시
-  // 로그인/회원가입 버튼 클릭 시 각 페이지로 이동
-  const handleLogin = () => {
-    router.push('/login');
-  };
-  const handleSignup = () => {
-    router.push('/sign-up');
-  };
 
   return (
     <div className={styles.onboardingWrap}>
@@ -52,7 +42,7 @@ export default function Home() {
             <SwiperSlide key={idx}>
               <div className={styles.slideContent}>
                 <h2 className={styles.slideTitle}>{slide.title}</h2>
-                
+
                 {/* 슬라이드별 인터랙션 요소 */}
                 <div className={styles.slideInteraction}>
                   {idx === 0 && (
@@ -62,7 +52,7 @@ export default function Home() {
                       <div className={styles.personJunior}>👨‍🎓</div>
                     </div>
                   )}
-                  
+
                   {idx === 1 && (
                     <div className={styles.interactionGrowth}>
                       <div className={styles.requestIcon}>📝</div>
@@ -70,16 +60,22 @@ export default function Home() {
                       <div className={styles.experienceIcon}>💡</div>
                     </div>
                   )}
-                  
+
                   {idx === 2 && (
                     <div className={styles.interactionReward}>
                       <div className={styles.helpIcon}>🤝</div>
                       <div className={styles.trophyIcon}>🏆</div>
                       <div className={styles.equalsIcon}>=</div>
-                      <img src="/images/logos/POLAR.png" alt="POLAR 로고" className={styles.polarLogo} />
+                      <Image
+                        src="/images/logos/POLAR.png"
+                        alt="POLAR 로고"
+                        width={120}
+                        height={40}
+                        className={styles.polarLogo}
+                      />
                     </div>
                   )}
-                  
+
                   {idx === 3 && (
                     <div className={styles.interactionSafety}>
                       <div className={styles.shieldIcon}>🛡️</div>
@@ -88,15 +84,19 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                
+
                 <p className={styles.slideDesc}>{slide.desc}</p>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
         <div className={styles.buttonWrap}>
-          <button className={styles.loginBtn} onClick={navigateToLogin}>로그인</button>
-          <button className={styles.signupBtn} onClick={navigateToSignup}>회원가입</button>
+          <button className={styles.loginBtn} onClick={navigateToLogin}>
+            로그인
+          </button>
+          <button className={styles.signupBtn} onClick={navigateToSignup}>
+            회원가입
+          </button>
         </div>
       </section>
     </div>
