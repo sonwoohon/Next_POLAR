@@ -1,86 +1,74 @@
-import { API_ENDPOINTS } from '@/lib/constants/api';
-import apiClient from '@/lib/http.api';
+import { API_ENDPOINTS } from '../constants/api';
+import apiClient from '../http.api';
 
-// Score 관련 타입 정의
+// 점수 조회 응답 인터페이스
 export interface Score {
+  id: string;
+  userId: string;
   nickname: string;
-  categoryId: number; // 소분류 ID (6-19)
+  categoryId: number;
+  categoryName: string;
   season: number;
-  categoryScore: number; // sub_categories의 point 값
+  score: number;
+  rank: number;
+  createdAt: string;
   updatedAt: string;
-  category?: {
-    id: number;
-    name: string;
-    point: number;
-  };
 }
 
+// 랭킹 조회 응답 인터페이스
 export interface ScoreRanking {
-  user_id: string;
-  users: {
-    nickname: string;
-    profile_img_url: string;
-  };
-  category_id: number; // 소분류 ID
-  category_score: number; // sub_categories의 point 값
+  nickname: string;
+  categoryName: string;
+  season: number;
+  score: number;
+  rank: number;
 }
 
-// Score API 함수들
-export const scoreApi = {
-  // 사용자별 전체 점수 조회
-  getUserScores: async (): Promise<Score[]> => {
-    const response = await apiClient.get(API_ENDPOINTS.USER_SCORES);
-    return response.data;
-  },
+// 사용자 점수 조회 (전체)
+export const getUserScores = async (): Promise<Score[]> => {
+  const response = await apiClient.get<Score[]>(API_ENDPOINTS.SCORES.USER);
+  return response.data;
+};
 
-  // 카테고리별 점수 조회
-  getScoresByCategory: async (categoryId: number): Promise<Score[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.CATEGORY_SCORES}?categoryId=${categoryId}`
-    );
-    return response.data;
-  },
+// 사용자 점수 조회 (카테고리별)
+export const getUserScoresByCategory = async (categoryId: number): Promise<Score[]> => {
+  const response = await apiClient.get<Score[]>(
+    `${API_ENDPOINTS.SCORES.USER_WITH_CATEGORY}?categoryId=${categoryId}`
+  );
+  return response.data;
+};
 
-  // 시즌별 점수 조회
-  getScoresBySeason: async (season: number): Promise<Score[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.SEASON_SCORES}?season=${season}`
-    );
-    return response.data;
-  },
+// 사용자 점수 조회 (시즌별)
+export const getUserScoresBySeason = async (season: number): Promise<Score[]> => {
+  const response = await apiClient.get<Score[]>(
+    `${API_ENDPOINTS.SCORES.USER_WITH_SEASON}?season=${season}`
+  );
+  return response.data;
+};
 
-  // 사용자별 카테고리 점수 조회
-  getUserScoresByCategory: async (categoryId: number): Promise<Score[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.USER_CATEGORY_SCORES}?categoryId=${categoryId}`
-    );
-    return response.data;
-  },
+// 사용자 점수 조회 (카테고리 + 시즌별)
+export const getUserScoresByCategoryAndSeason = async (
+  categoryId: number,
+  season: number
+): Promise<Score[]> => {
+  const response = await apiClient.get<Score[]>(
+    `${API_ENDPOINTS.SCORES.CATEGORY_WITH_SEASON}?categoryId=${categoryId}&season=${season}`
+  );
+  return response.data;
+};
 
-  // 사용자별 시즌 점수 조회
-  getUserScoresBySeason: async (season: number): Promise<Score[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.USER_SEASON_SCORES}?season=${season}`
-    );
-    return response.data;
-  },
+// 시즌별 랭킹 조회
+export const getSeasonRankings = async (season: number): Promise<ScoreRanking[]> => {
+  const response = await apiClient.get<ScoreRanking[]>(
+    `${API_ENDPOINTS.SCORES.SEASON}?season=${season}`
+  );
+  return response.data;
+};
 
-  // 카테고리별 시즌 점수 조회
-  getScoresByCategoryAndSeason: async (
-    categoryId: number,
-    season: number
-  ): Promise<Score[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.CATEGORY_SEASON_SCORES}?categoryId=${categoryId}&season=${season}`
-    );
-    return response.data;
-  },
-
-  // 시즌별 랭킹 조회 (Hall of Fame용)
-  getSeasonRankings: async (season: number): Promise<ScoreRanking[]> => {
-    const response = await apiClient.get(
-      `${API_ENDPOINTS.SEASON_SCORES_WITH_PARAM}?season=${season}`
-    );
-    return response.data;
-  },
+// 카테고리별 랭킹 조회
+export const getCategoryRankings = async (categoryId: number): Promise<ScoreRanking[]> => {
+  const response = await apiClient.get<ScoreRanking[]>(
+    `${API_ENDPOINTS.SCORES.CATEGORY}?categoryId=${categoryId}`
+  );
+  return response.data;
 };
