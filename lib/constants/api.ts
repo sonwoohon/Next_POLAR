@@ -3,8 +3,10 @@ export const API_ENDPOINTS = {
   // 사용자 관련
   USERS: '/api/users',
   USER_PROFILE: (nickname: string) => `/api/users/${nickname}`,
-  USER_PROFILE_UPDATE: (nickname: string) => `/api/users/${nickname}/profile-update`,
-  USER_PASSWORD_CHANGE: (nickname: string) => `/api/users/${nickname}/password-change`,
+  USER_PROFILE_UPDATE: (nickname: string) =>
+    `/api/users/${nickname}/profile-update`,
+  USER_PASSWORD_CHANGE: (nickname: string) =>
+    `/api/users/${nickname}/password-change`,
   USER_SEARCH: '/api/users/search',
 
   // 인증 관련
@@ -21,8 +23,10 @@ export const API_ENDPOINTS = {
   HELP_PARTICIPANTS: (id: number) => `/api/helps/${id}/participants`,
   HELP_APPLICANTS: (id: number) => `/api/helps/${id}/applicants`,
   HELP_APPLY: (id: number) => `/api/helps/${id}/apply`,
-  HELP_APPLICATION_STATUS: (id: number) => `/api/helps/${id}/application-status`,
-  HELP_ACCEPT_APPLICANT: (helpId: number, juniorNickname: string) => `/api/helps/${helpId}/applicants/${juniorNickname}/accept`,
+  HELP_APPLICATION_STATUS: (id: number) =>
+    `/api/helps/${id}/application-status`,
+  HELP_ACCEPT_APPLICANT: (helpId: number, juniorNickname: string) =>
+    `/api/helps/${helpId}/applicants/${juniorNickname}/accept`,
   JUNIOR_HELPS: '/api/helps/junior',
   SENIOR_HELPS: '/api/seniors/help',
   SENIOR_HELPS_LIST: '/api/seniors/helps',
@@ -36,9 +40,11 @@ export const API_ENDPOINTS = {
   REVIEWS_WRITTEN: '/api/reviews/written',
   REVIEW_CREATE_AUTH_CHECK: '/api/reviews/create/auth-check',
   REVIEW_RECEIVER: '/api/reviews/receiver',
+  REVIEW_USER_STATS: '/api/reviews/user-stats',
 
   // 채팅 관련
   CHAT_ROOMS: '/api/chats/rooms',
+  CHAT_ROOMS_WITH_DETAILS: '/api/chats/rooms/list-with-details',
   CHAT_ROOM_DETAIL: (roomId: number) => `/api/chats/rooms/${roomId}`,
   CHAT_ROOM_MESSAGES: (roomId: number) => `/api/chats/rooms/${roomId}/messages`,
   CHAT_ROOM_AUTH_CHECK: '/api/chats/rooms/auth-check',
@@ -72,8 +78,10 @@ export const QUERY_KEYS = {
   // 사용자 관련
   USERS: ['users'] as const,
   USER_PROFILE: (nickname: string) => ['users', 'profile', nickname] as const,
-  USER_PROFILE_UPDATE: (nickname: string) => ['users', 'profile-update', nickname] as const,
-  USER_PASSWORD_CHANGE: (nickname: string) => ['users', 'password-change', nickname] as const,
+  USER_PROFILE_UPDATE: (nickname: string) =>
+    ['users', 'profile-update', nickname] as const,
+  USER_PASSWORD_CHANGE: (nickname: string) =>
+    ['users', 'password-change', nickname] as const,
   USER_SEARCH: (query: string) => ['users', 'search', query] as const,
 
   // 도움 요청 관련
@@ -93,6 +101,7 @@ export const QUERY_KEYS = {
 
   // 채팅 관련
   CHAT_ROOMS: ['chats', 'rooms'] as const,
+  CHAT_ROOMS_WITH_DETAILS: ['chats', 'rooms', 'with-details'] as const,
   CHAT_MESSAGES: (roomId: number) =>
     ['chats', 'rooms', roomId, 'messages'] as const,
   CHAT_ROOM_DETAIL: (roomId: number) =>
