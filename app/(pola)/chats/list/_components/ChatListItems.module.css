@@ -8,10 +8,11 @@
 .chatItem {
   display: flex;
   align-items: center;
-  padding: 16px 0;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid #f1f1f1;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color .2s ease;
 }
 
 .chatItem:hover {
