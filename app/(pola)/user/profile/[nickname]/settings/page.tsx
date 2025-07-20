@@ -7,25 +7,25 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import DaumPostcode, { Address } from "react-daum-postcode";
 import styles from "./page.module.css";
 import { UserProfileResponseDto } from "@/backend/common/dtos/UserDto";
-import { useApiQuery } from "@/lib/hooks/useApi";
+
+import {
+  useUserProfileForUpdate,
+  useUpdateUserProfile,
+  useUpdateUserProfileImage,
+  useChangeUserPassword,
+} from "@/lib/hooks/profileUpdate";
 
 export default function UserSettingsPage() {
   const params = useParams();
   const nickname = params.nickname as string;
 
-  // API에서 사용자 프로필 데이터 가져오기
-  const { data: userProfile, isLoading } = useApiQuery<UserProfileResponseDto>(
-    ["userProfile", nickname],
-    `/api/users/${nickname}`,
-    {
-      enabled: !!nickname,
-    }
-  );
+  // API에서 사용자 프로필 데이터 가져오기 (새로운 훅 사용)
+  const { data: userProfile, isLoading } = useUserProfileForUpdate(nickname);
 
-  // 닉네임을 제외하고 프로필 이미지를 파일로 처리하는 타입 정의
+  // 닉네임과 나이를 제외하고 프로필 이미지를 파일로 처리하는 타입 정의
   type EditableUserData = Omit<
     UserProfileResponseDto,
-    "nickname" | "profileImgUrl"
+    "nickname" | "age" | "profileImgUrl"
   > & {
     profileImage?: File;
   };
@@ -33,23 +33,22 @@ export default function UserSettingsPage() {
   const { register, handleSubmit, setValue } = useForm<EditableUserData>({
     defaultValues: {
       name: "",
-      age: 0,
       address: "",
     },
   });
 
   // API 데이터가 로드되면 폼 데이터 업데이트
   useEffect(() => {
-    if (userProfile?.data) {
-      // 닉네임을 제외한 필드들만 폼에 설정
+    if (userProfile) {
+      // 닉네임과 나이를 제외한 필드들만 폼에 설정
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { nickname, ...editableData } = userProfile.data;
+      const { nickname, age, ...editableData } = userProfile;
       Object.entries(editableData).forEach(([key, value]) => {
         setValue(key as keyof EditableUserData, value);
       });
       // 주소 값도 설정
-      if (userProfile.data.address) {
-        setAddressValue(userProfile.data.address);
+      if (userProfile.address) {
+        setAddressValue(userProfile.address);
       }
     }
   }, [userProfile, setValue]);
@@ -77,32 +76,71 @@ export default function UserSettingsPage() {
     }));
   };
 
-  const onSubmit: SubmitHandler<EditableUserData> = (data) => {
-    // TODO: API 호출하여 프로필 정보 저장
-    console.log("프로필 정보 저장:", data);
+  // API 훅들
+  const updateProfileMutation = useUpdateUserProfile();
+  const updateImageMutation = useUpdateUserProfileImage();
+  const changePasswordMutation = useChangeUserPassword();
 
-    // FormData를 사용하여 파일과 함께 전송
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("age", data.age.toString());
-    formData.append("address", data.address);
+  const onSubmit: SubmitHandler<EditableUserData> = async (data) => {
+    try {
+      // 프로필 정보 업데이트
+      const profileData = {
+        name: data.name,
+        address: data.address,
+      };
 
-    if (data.profileImage) {
-      formData.append("profileImage", data.profileImage);
+      await updateProfileMutation.mutateAsync({
+        nickname,
+        profileData,
+      });
+
+      // 프로필 이미지가 있는 경우 별도로 업데이트
+      if (data.profileImage) {
+        await updateImageMutation.mutateAsync({
+          nickname,
+          imageFile: data.profileImage,
+        });
+      }
+
+      alert("프로필이 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      console.error("프로필 업데이트 실패:", error);
+      alert("프로필 업데이트에 실패했습니다.");
     }
-
-    console.log("FormData:", formData);
   };
 
-  const handleChangePassword = () => {
-    // TODO: API 호출하여 비밀번호 변경
-    console.log("비밀번호 변경:", passwordData);
-    setShowPasswordModal(false);
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+  const handleChangePassword = async () => {
+    // 비밀번호 확인 검증
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      alert("새 비밀번호는 최소 6자 이상이어야 합니다.");
+      return;
+    }
+
+    try {
+      await changePasswordMutation.mutateAsync({
+        nickname,
+        passwordData: {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        },
+      });
+
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+      setShowPasswordModal(false);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.error("비밀번호 변경 실패:", error);
+      alert("비밀번호 변경에 실패했습니다.");
+    }
   };
 
   const handleProfileImageChange = () => {
@@ -170,7 +208,7 @@ export default function UserSettingsPage() {
           <Image
             src={
               previewUrl ||
-              userProfile?.data?.profileImgUrl ||
+              userProfile?.profileImgUrl ||
               "/images/dummies/dummy_user.png"
             }
             alt="Profile"
@@ -223,7 +261,9 @@ export default function UserSettingsPage() {
           <input
             type="number"
             className={styles.input}
-            {...register("age", { valueAsNumber: true })}
+            value={userProfile?.age || 0}
+            readOnly
+            disabled
           />
         </div>
 
@@ -244,7 +284,7 @@ export default function UserSettingsPage() {
           <input
             type="text"
             className={styles.input}
-            value={userProfile?.data?.nickname || ""}
+            value={userProfile?.nickname || ""}
             readOnly
             disabled
           />
