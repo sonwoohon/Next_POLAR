@@ -3,6 +3,7 @@ export { useApiQuery, useApiMutation } from './useApi';
 export { useCreateHelp } from './help/useCreateHelp';
 export { useHelpDetail } from './help/useHelpDetail';
 export { useLogin } from './useLogin';
+export { useAuth } from './useAuth';
 export { useAuthStore } from '../stores/authStore';
 
 // 온보딩 관련 훅들
@@ -25,3 +26,6 @@ export { useSendMessage } from './chats/useSendMessage';
 export { useRealtimeChat } from './chats/useRealtimeChat';
 export { useChatInput } from './chats/useChatInput';
 export { useChatRoomDetailWithHelps } from './chats/useChatRoomDetailWithHelps';
+
+// 회원 탈퇴 관련 훅들
+export { useWithdrawal } from './useWithdrawal';
