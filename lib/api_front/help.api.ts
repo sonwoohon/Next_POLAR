@@ -128,3 +128,13 @@ export const getHelpListWithPagination = async (
     throw error;
   }
 };
+
+export const getHelpApplicants = async (helpId: number) => {
+  try {
+    const response = await axios.get(API_ENDPOINTS.HELP_APPLICANTS(helpId));
+    return response.data;
+  } catch (error) {
+    console.error('Help 지원자 리스트 조회 오류:', error);
+    throw error;
+  }
+};

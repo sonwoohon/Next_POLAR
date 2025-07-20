@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
   HELP_DETAIL: (id: number) => `/api/helps/${id}`,
   HELP_STATUS: (id: number) => `/api/helps/${id}/status`,
   HELP_PARTICIPANTS: (id: number) => `/api/helps/${id}/participants`,
+  HELP_APPLICANTS: (id: number) => `/api/helps/${id}/applicants`,
   JUNIOR_HELPS: '/api/helps/junior',
   SENIOR_HELPS: '/api/seniors/help',
   SENIOR_HELP_DETAIL: (id: string) => `/api/seniors/help/${id}`,
