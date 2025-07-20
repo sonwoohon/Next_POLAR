@@ -7,11 +7,12 @@
 
 .userTierSection h2 {
   font-family: var(--font-gangwon);
+  font-size: 1.5rem;
 }
 
 .userTierContainer {
   padding: 1rem;
-  width: calc(100% - 2rem);
+  width: 100%;
   border-radius: 0.5rem;
   background: linear-gradient(135deg, #e0e5ec 0%, #cfd8dc 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -96,7 +97,7 @@
 @media (max-width: 768px) {
   .userTierContainer {
     padding: 0.75rem;
-    width: calc(100% - 1.5rem);
+    /* width: calc(100% - 1.5rem); */
   }
 
   .userTierInfo {

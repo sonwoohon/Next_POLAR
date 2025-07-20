@@ -1,7 +1,7 @@
 .container {
-  max-width: 480px;
+ /*  max-width: 480px; */
   width: 100%;
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #ffffff;
   box-sizing: border-box;
 }
@@ -12,6 +12,7 @@
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  margin-top: 3rem;
 }
 
 .title {

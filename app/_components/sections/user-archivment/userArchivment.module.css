@@ -13,6 +13,7 @@
 
 .userArchiveSectionTitleContainer h2 {
   font-family: var(--font-gangwon);
+  font-size: 1.5rem;;
 }
 
 .userArchiveSectionTitleButton a {

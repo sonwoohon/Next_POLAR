@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useSeniorHelpCompletion } from '@/lib/hooks/useSeniorHelpCompletion';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useHelpDetail, useApplyHelp, useHelpApplicationStatus } from '@/lib/hooks/help';
-import TopBar from './_components/top-bar/TopBar';
+
 import ImageCarousel from './_components/image-carousel/ImageCarousel';
 import HelpContent from './_components/help-content/HelpContent';
 import ActionButtons from './_components/action-buttons/ActionButtons';
@@ -77,10 +77,11 @@ export default function HelpDetailPage({
 
   return (
     <div className={styles.helpDetailContainer}>
-      <TopBar />
-      <ImageCarousel images={helpData?.images || []} />
       {helpData?.seniorInfo && <UserInfoSection data={helpData.seniorInfo} />}
       <HelpContent help={helpData || null} />
+      <ImageCarousel images={helpData?.images || []} />
+      
+
       <ActionButtons
         help={helpData || null}
         role={userRole}
