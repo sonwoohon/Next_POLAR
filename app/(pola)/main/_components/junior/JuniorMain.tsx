@@ -82,6 +82,9 @@ export default function JuniorMainPage() {
     console.log("[Component] 전체 리스트 적용:", filteredHelps.length);
   }
 
+  // 주니어는 open 상태의 헬프만 볼 수 있도록 필터링
+  filteredHelps = filteredHelps.filter(help => help.status === 'open');
+
   // 통계 계산
   const totalHelps = allHelps.length;
   const openHelps = allHelps.filter((help) => help.status === "open").length;
