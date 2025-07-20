@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./JuniorMain.module.css";
 // import HeaderSection from './sections/header/HeaderSection';
-import ProfileSection from "./sections/profile/ProfileSection";
+import UserTierSection from "@/app/_components/sections/user-tier/UserTierSection";
 import StatsSection from "./sections/profile/StatsSection";
 import TabSection from "./sections/navigation/TabSection";
 import SwiperSection from "./sections/content/SwiperSection";
@@ -147,7 +147,7 @@ export default function JuniorMainPage() {
   return (
     <div className={styles.container}>
       {/* <HeaderSection /> */}
-      <ProfileSection />
+      <UserTierSection seasonNumber={1} />
       <StatsSection
         totalHelps={totalHelps}
         openHelps={openHelps}

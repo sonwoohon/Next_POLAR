@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './HelpListCard.module.css';
 import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
@@ -32,6 +32,7 @@ const getStatusText = (status: string) => {
 };
 
 const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
+  const router = useRouter();
   const { seniorInfo, title, startDate, endDate, category, status } = help;
 
   // 날짜 포맷
@@ -42,8 +43,12 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
       .padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}`;
   };
 
+  const handleClick = () => {
+    router.push(`/helps/${help.id}`);
+  };
+
   return (
-    <Link href={`/helps/${help.id}`} className={styles.cardLink}>
+    <div className={styles.cardLink} onClick={handleClick} style={{ cursor: 'pointer' }}>
       <div className={styles.card}>
         <div className={styles.thumbnail}>
           <Image
@@ -81,7 +86,7 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
