@@ -156,9 +156,9 @@ export async function GET(
               seniorInfo: {
                 nickname: seniorUser?.nickname || '알 수 없음',
                 name: seniorUser?.name || '이름 없음',
-                userType: 'senior' as const,
+                userRole: 'senior' as const,
                 profileImgUrl: seniorUser?.profileImgUrl || '',
-                address: '', // 기본값 설정
+                address: seniorUser?.address || '주소 정보 없음',
               },
               title: help.title,
               startDate: help.startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식
@@ -205,9 +205,9 @@ export async function GET(
               seniorInfo: {
                 nickname: seniorUser?.nickname || '알 수 없음',
                 name: seniorUser?.name || '이름 없음',
-                userType: 'senior' as const,
+                userRole: 'senior' as const,
                 profileImgUrl: seniorUser?.profileImgUrl || '',
-                address: '', // 기본값 설정
+                address: seniorUser?.address || '주소 정보 없음',
               },
               title: help.title,
               startDate: help.startDate.toISOString().split('T')[0], // YYYY-MM-DD 형식

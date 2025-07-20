@@ -1,12 +1,12 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import styles from './Step3HelpDetails.module.css';
-import ImageUploader from '../../../../_components/commons/imageUploader/ImageUploader';
-import { getCategoryName } from '@/lib/utils/categoryUtils';
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import styles from "./Step3HelpDetails.module.css";
+import ImageUploader from "../../../../_components/commons/imageUploader/ImageUploader";
+import { getCategoryName } from "@/lib/utils/categoryUtils";
 import {
   getRandomTitle,
   getRandomContent,
-} from '@/lib/constants/categoryTemplates';
+} from "@/lib/constants/categoryTemplates";
 
 interface Step3HelpDetailsProps {
   title: string;
@@ -37,7 +37,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
   // 카테고리별 템플릿은 이제 constants에서 가져옴
 
   // 랜덤 제목과 내용 생성
-  const generateRandomSuggestions = () => {
+  const generateRandomSuggestions = useCallback(() => {
     if (selectedCategories.length === 0) return;
 
     const newSuggestions: {
@@ -69,16 +69,16 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
     });
 
     setGeneratedSuggestions(newSuggestions);
-  };
+  }, [selectedCategories]);
 
   // 컴포넌트 마운트 시와 카테고리 변경 시 랜덤 제안 생성
   useEffect(() => {
     generateRandomSuggestions();
-  }, [selectedCategories]);
+  }, [generateRandomSuggestions]);
 
   // 제안된 제목이나 내용을 클릭했을 때 적용
-  const handleSuggestionClick = (type: 'title' | 'content', value: string) => {
-    if (type === 'title') {
+  const handleSuggestionClick = (type: "title" | "content", value: string) => {
+    if (type === "title") {
       onTitleChange(value);
     } else {
       onContentChange(value);
@@ -94,7 +94,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
       <div className={styles.toggleContainer}>
         <button
           className={`${styles.toggleButton} ${
-            !isDirectInput ? styles.toggleButtonActive : ''
+            !isDirectInput ? styles.toggleButtonActive : ""
           }`}
           onClick={() => setIsDirectInput(false)}
         >
@@ -102,7 +102,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
         </button>
         <button
           className={`${styles.toggleButton} ${
-            isDirectInput ? styles.toggleButtonActive : ''
+            isDirectInput ? styles.toggleButtonActive : ""
           }`}
           onClick={() => setIsDirectInput(true)}
         >
@@ -120,7 +120,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
                 <button
                   key={categoryId}
                   className={`${styles.tabButton} ${
-                    activeTab === categoryId ? styles.tabButtonActive : ''
+                    activeTab === categoryId ? styles.tabButtonActive : ""
                   }`}
                   onClick={() => setActiveTab(categoryId)}
                 >
@@ -142,7 +142,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
                         key={index}
                         className={styles.suggestionButton}
                         onClick={() =>
-                          handleSuggestionClick('title', suggestion)
+                          handleSuggestionClick("title", suggestion)
                         }
                       >
                         {suggestion}
@@ -161,7 +161,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
                         key={index}
                         className={styles.suggestionButton}
                         onClick={() =>
-                          handleSuggestionClick('content', suggestion)
+                          handleSuggestionClick("content", suggestion)
                         }
                       >
                         {suggestion}
@@ -196,11 +196,11 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>도움 제목</label>
             <input
-              type='text'
+              type="text"
               className={styles.textInput}
               value={title}
               onChange={(e) => onTitleChange(e.target.value)}
-              placeholder='요청 제목을 입력해주세요.'
+              placeholder="요청 제목을 입력해주세요."
               maxLength={50}
             />
           </div>
@@ -211,7 +211,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
               className={`${styles.textInput} ${styles.textArea}`}
               value={content}
               onChange={(e) => onContentChange(e.target.value)}
-              placeholder='도움이 필요한 시간, 장소, 이유를 자유롭게 적어주세요.'
+              placeholder="도움이 필요한 시간, 장소, 이유를 자유롭게 적어주세요."
               maxLength={500}
             />
             <div className={styles.charCount}>{content.length}/500</div>

@@ -40,7 +40,7 @@ export async function GET(
     };
 
     return NextResponse.json(response, { status: 200 });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error('헬프 지원 상태 확인 오류:', e);
     
     return NextResponse.json({ 

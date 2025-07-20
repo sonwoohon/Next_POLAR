@@ -72,3 +72,17 @@ export const getCategoryRankings = async (categoryId: number): Promise<ScoreRank
   );
   return response.data;
 };
+
+// scoreApi 객체로 모든 함수들을 export
+export const scoreApi = {
+  getUserScores,
+  getUserScoresByCategory,
+  getUserScoresBySeason,
+  getUserScoresByCategoryAndSeason,
+  getSeasonRankings,
+  getCategoryRankings,
+  // useScores.ts에서 사용하는 메서드명들 추가
+  getScoresByCategory: getUserScoresByCategory,
+  getScoresBySeason: getUserScoresBySeason,
+  getScoresByCategoryAndSeason: getUserScoresByCategoryAndSeason,
+};

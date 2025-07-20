@@ -33,4 +33,5 @@ export interface UserProfileResponseDto {
   age: number;
   profileImgUrl: string;
   address: string;
+  userRole: 'senior' | 'junior';
 }

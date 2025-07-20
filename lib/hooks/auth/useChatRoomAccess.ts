@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { checkChatRoomAccess } from '../../api_front/chat.api';
+import { checkChatRoomAccess, ChatRoomAccessResponse } from '../../api_front/chat.api';
 
 interface UseChatRoomAccessProps {
   nickname: string;
@@ -7,7 +7,7 @@ interface UseChatRoomAccessProps {
 }
 
 export const useChatRoomAccess = ({ nickname, chatRoomId }: UseChatRoomAccessProps) => {
-  return useQuery({
+  return useQuery<ChatRoomAccessResponse>({
     queryKey: ['chat-room-access', nickname, chatRoomId],
     queryFn: () => checkChatRoomAccess(nickname, chatRoomId),
     enabled: !!nickname && !!chatRoomId,

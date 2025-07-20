@@ -5,6 +5,31 @@ import { ReviewEntity } from '@/backend/reviews/domains/entities/review';
 import { CreateReviewRequest } from '@/backend/reviews/applications/dtos/ReviewDtos';
 import { getNicknameByUuid, getUuidByNickname } from '@/lib/getUserData';
 
+// Supabase reviews 테이블의 데이터 타입 정의
+interface SupabaseReview {
+  id: number;
+  help_id: number;
+  writer_id: string;
+  receiver_id: string;
+  writer_nickname: string;
+  receiver_nickname: string;
+  rating: number;
+  text: string;
+  review_img_url: string | null;
+  created_at: string;
+}
+
+// Supabase help_applicants 테이블의 데이터 타입 정의
+interface SupabaseHelpApplicant {
+  junior_id: string;
+}
+
+// Supabase helps 테이블의 데이터 타입 정의
+interface SupabaseHelp {
+  senior_id: string;
+  status: string;
+}
+
 export class SbReviewRepository implements IReviewRepository {
   // nickname으로 받은 리뷰 리스트 조회
   async findByReceiverNickname(nickname: string): Promise<ReviewEntity[]> {
@@ -17,7 +42,7 @@ export class SbReviewRepository implements IReviewRepository {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((review: any) => ReviewMapper.toEntity(review));
+    return data.map((review: SupabaseReview) => ReviewMapper.toEntity(review));
   }
 
   // nickname으로 내가 쓴(작성한) 리뷰 리스트 조회
@@ -31,7 +56,7 @@ export class SbReviewRepository implements IReviewRepository {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map((review: any) => ReviewMapper.toEntity(review));
+    return data.map((review: SupabaseReview) => ReviewMapper.toEntity(review));
   }
 
   // nickname 기반 리뷰 생성
@@ -107,13 +132,13 @@ export class SbReviewRepository implements IReviewRepository {
     }
 
     // 3. Help 상태가 'completed'인지 확인
-    if (help.status !== 'completed') {
+    if ((help as SupabaseHelp).status !== 'completed') {
       throw new Error(
         'Help가 완료되지 않았습니다. 리뷰는 Help 완료 후에만 작성할 수 있습니다.'
       );
     }
 
-    const seniorId = help.senior_id;
+    const seniorId = (help as SupabaseHelp).senior_id;
 
     let receiverId: string;
     if (writerId === seniorId) {
@@ -129,7 +154,7 @@ export class SbReviewRepository implements IReviewRepository {
           'help_applicants에서 매칭된 주니어의 uuid를 찾을 수 없습니다.'
         );
       }
-      receiverId = applicant.junior_id;
+      receiverId = (applicant as SupabaseHelpApplicant).junior_id;
     } else {
       // 4. writer가 junior일 때: seniorId가 receiverId
       receiverId = seniorId;

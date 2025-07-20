@@ -5,7 +5,7 @@ import { SbUserMapper } from '@/backend/users/withdrawal/infrastructures/mappers
 
 // Supabase 회원탈퇴 Repository 구현체 
 export class SbWithdrawalUserRepository implements UserRepository {
-    async findById(id: number): Promise<User | null> {
+    async findById(id: string): Promise<User | null> {
         console.log(`[Repository] 사용자 조회 시작 (findById) - ID: ${id}`);
 
         try {
@@ -37,7 +37,7 @@ export class SbWithdrawalUserRepository implements UserRepository {
         }
     }
 
-    async makeNullById(id: number): Promise<void> {
+    async makeNullById(id: string): Promise<void> {
         console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
 
         try {

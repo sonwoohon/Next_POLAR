@@ -6,8 +6,6 @@ import {
   getUserScoresByCategoryAndSeason,
   getSeasonRankings,
   getCategoryRankings,
-  Score,
-  ScoreRanking,
 } from '../api_front/score.api';
 import { QUERY_KEYS } from '../constants/api';
 

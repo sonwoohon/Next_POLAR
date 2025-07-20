@@ -13,7 +13,7 @@ export async function GET(
 
   try {
     const helpId = parseInt(helpIdParam);
-    
+
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(
         { error: '유효한 헬프 ID가 필요합니다.' },
@@ -23,7 +23,7 @@ export async function GET(
 
     const helpImageRepository = new SbHelpImageRepository();
     const getHelpImagesUseCase = new GetHelpImagesUseCase(helpImageRepository);
-    
+
     const result = await getHelpImagesUseCase.execute(helpId);
 
     console.log(`[API] 헬프 ${helpId} 이미지 리스트 조회 성공`);
@@ -47,7 +47,7 @@ export async function POST(
 
   try {
     const helpId = parseInt(helpIdParam);
-    
+
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(
         { error: '유효한 헬프 ID가 필요합니다.' },
@@ -56,7 +56,7 @@ export async function POST(
     }
 
     const formData = await request.formData();
-    
+
     // 여러 가능한 파일 필드명을 시도
     const possibleFileKeys = ['file', 'image', 'upload', 'photo', 'helpImage'];
     const files: File[] = [];
@@ -69,7 +69,7 @@ export async function POST(
     }
 
     // 여러 파일을 처리하기 위해 모든 파일 필드 확인
-    for (const [key, value] of formData.entries()) {
+    for (const [, value] of formData.entries()) {
       if (value instanceof File && !files.includes(value)) {
         files.push(value);
       }
@@ -88,7 +88,7 @@ export async function POST(
     const imageRepository = new SbImageRepository();
     const helpImageRepository = new SbHelpImageRepository();
     const uploadHelpImagesUseCase = new UploadHelpImagesUseCase(imageRepository, helpImageRepository);
-    
+
     const result = await uploadHelpImagesUseCase.execute(files, helpId);
 
     console.log(`[API] 헬프 이미지 업로드 성공 - 업로드된 파일 개수: ${result.urls.length}`);
@@ -112,7 +112,7 @@ export async function DELETE(
 
   try {
     const helpId = parseInt(helpIdParam);
-    
+
     if (!helpId || isNaN(helpId)) {
       return NextResponse.json(
         { error: '유효한 헬프 ID가 필요합니다.' },
@@ -125,7 +125,7 @@ export async function DELETE(
     const helpImageRepository = new SbHelpImageRepository();
     const imageRepository = new SbImageRepository();
     const deleteAllHelpImagesUseCase = new DeleteAllHelpImagesUseCase(helpImageRepository, imageRepository);
-    
+
     const success = await deleteAllHelpImagesUseCase.execute(helpId);
 
     if (success) {

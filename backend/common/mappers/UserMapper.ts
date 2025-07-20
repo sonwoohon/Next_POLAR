@@ -99,7 +99,9 @@ export function entityToUserProfileResponseDto(
     console.log(`[Mapper] 오류 발생으로 현재 시간 사용: ${createdAtString}`);
   }
 
-  const dto = {
+  const userRole = entity.age >= 60 ? 'senior' : 'junior';
+
+  const dto: UserProfileResponseDto = {
     //id: entity.id,
     name: entity.name,
     nickname: entity.nickname,
@@ -108,6 +110,7 @@ export function entityToUserProfileResponseDto(
     age: entity.age,
     profileImgUrl: entity.profileImgUrl || '',
     address: entity.address,
+    userRole: userRole,
     //createdAt: createdAtString,
   };
 

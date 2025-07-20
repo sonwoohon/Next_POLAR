@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewUseCases } from '@/backend/reviews/applications/usecases/ReviewUseCases';
 import { SbReviewRepository } from '@/backend/reviews/infrastructures/repositories/SbReviewRepository';
-import { ReviewCreateAccessRequestDto } from '@/backend/reviews/applications/dtos/ReviewDtos';
+
 
 const reviewUseCases = new ReviewUseCases(new SbReviewRepository());
 
@@ -19,12 +19,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const dto: ReviewCreateAccessRequestDto = {
+    const dto: { nickname: string, helpId: number } = {
       nickname,
       helpId: Number(helpId),
     };
 
-    const hasAccess = await reviewUseCases.checkCreateReviewAccess(dto);
+    const hasAccess = await reviewUseCases.checkCreateReviewAccess(dto.nickname, dto.helpId);
 
     return NextResponse.json({ hasAccess }, { status: 200 });
   } catch (error) {

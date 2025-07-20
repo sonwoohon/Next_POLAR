@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSeniorHelpCompletion } from '@/lib/hooks/useSeniorHelpCompletion';

@@ -101,7 +101,7 @@ export function entityToUserProfileResponseDto(
 
   const dto: UserProfileResponseDto = {
     name: entity.name,
-    userType: entity.age >= 60 ? 'senior' : 'junior',
+    userRole: entity.age >= 60 ? 'senior' : 'junior',
     profileImgUrl: entity.profileImgUrl || '',
     address: entity.address,
     nickname: entity.nickname,

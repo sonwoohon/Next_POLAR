@@ -10,7 +10,7 @@ const messageUseCases = new ContactMessageUseCases(
 // GET /api/chats/rooms/[chatRoomId]/messages
 export async function GET(
   request: NextRequest,
-  { params }: { params: { chatRoomId: string } }
+  { params }: { params: Promise<{ chatRoomId: string }> }
 ) {
   const { chatRoomId } = await params;
   const roomId = Number(chatRoomId);
@@ -75,7 +75,7 @@ export async function GET(
 // POST /api/chats/rooms/[chatRoomId]/messages
 export async function POST(
   request: NextRequest,
-  { params }: { params: { chatRoomId: string } }
+  { params }: { params: Promise<{ chatRoomId: string }> }
 ) {
   console.log(
     '[API][POST /api/chats/rooms/[chatRoomId]/messages] 메시지 생성 요청 시작'
@@ -85,7 +85,8 @@ export async function POST(
   const userData = getNicknameFromCookie(request);
   const { nickname: senderNickname } = userData || {};
 
-  const roomId = Number(params.chatRoomId);
+  const { chatRoomId } = await params;
+  const roomId = Number(chatRoomId);
 
   try {
     const { message } = await request.json();

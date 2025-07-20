@@ -14,7 +14,6 @@ import UserInfoSection from "@/app/_components/commons/common-sections/user-info
 import UserRecivedReviewsPreview from "./_components/sections/reviews-preview/UserRecivedReviewsPreview";
 import { useReceivedReviews } from "@/lib/hooks/review/useReceivedReviews";
 import { useAuthStore } from "@/lib/stores/authStore";
-import { useUserScores, useSeasonRankings } from "@/lib/hooks";
 
 const UserProfilePage: React.FC = () => {
   const params = useParams();
@@ -36,8 +35,6 @@ const UserProfilePage: React.FC = () => {
       enabled: !!nickname,
     }
   );
-
-  
 
   // ApiResponse에서 실제 데이터 추출
   const userData = extractData(userProfile);

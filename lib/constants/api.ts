@@ -49,7 +49,14 @@ export const API_ENDPOINTS = {
   REVIEW_IMAGE: '/api/images/review',
 
   // 점수 관련
-  SCORES: '/api/scores',
+  SCORES: {
+    USER: '/api/scores/user',
+    USER_WITH_CATEGORY: '/api/scores/user-with-category',
+    USER_WITH_SEASON: '/api/scores/user-with-season',
+    CATEGORY_WITH_SEASON: '/api/scores/category-with-season',
+    SEASON: '/api/scores/season',
+    CATEGORY: '/api/scores/category',
+  },
   USER_SCORES: '/api/scores/user',
   CATEGORY_SCORES: '/api/scores/category',
   SEASON_SCORES: '/api/scores/season',

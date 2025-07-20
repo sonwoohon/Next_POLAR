@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // 시니어 헬프 생성 API (닉네임 기반)
 export async function POST(req: NextRequest) {
   const userData = getNicknameFromCookie(req);
-  const { nickname, age } = userData || {};
+  const { nickname } = userData || {};
 
   if (!nickname) {
     return NextResponse.json(
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 // 시니어 헬프 수정 API (닉네임 기반)
 export async function PUT(req: NextRequest) {
   const userData = getNicknameFromCookie(req);
-  const { nickname, age } = userData || {};
+  const { nickname } = userData || {};
   const helpId = parseInt(req.nextUrl.pathname.split('/').pop() || '0');
 
   if (!nickname) {
@@ -98,7 +98,7 @@ export async function PUT(req: NextRequest) {
 // 시니어 헬프 삭제 API (닉네임 기반)
 export async function DELETE(req: NextRequest) {
   const userData = getNicknameFromCookie(req);
-  const { nickname, age } = userData || {};
+  const { nickname } = userData || {};
   const helpId = parseInt(req.nextUrl.pathname.split('/').pop() || '0');
 
   if (!nickname) {

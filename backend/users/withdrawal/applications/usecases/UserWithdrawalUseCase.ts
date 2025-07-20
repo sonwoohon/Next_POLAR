@@ -6,7 +6,7 @@ import { UserRepository } from '@/backend/users/withdrawal/domains/repository/Us
 export class UserWithdrawalUseCase {
     constructor(private userRepository: UserRepository) { }
 
-    async execute(userId: number): Promise<void> {
+    async execute(userId: string): Promise<void> {
         // 1. 사용자 존재 확인
         const user = await this.userRepository.findById(userId);
         if (!user) {
