@@ -2,12 +2,12 @@
   font-size: 0.95rem;
   font-weight: 600;
   border-radius: 1.2rem;
-  padding: 2px 14px 2px 10px;
+  padding: 0.125rem 0.875rem 0.125rem 0.625rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
   color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
   margin-right: 0.5rem;
 }
 
@@ -86,9 +86,9 @@
   background: linear-gradient(90deg, #feca57 0%, #ff9ff3 100%);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
   .category {
     font-size: 0.88rem;
-    padding: 2px 10px 2px 7px;
+    padding: 0.125rem 0.625rem 0.125rem 0.4375rem;
   }
 }

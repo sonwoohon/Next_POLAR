@@ -1,33 +1,33 @@
 .categoryRow {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 24px 0;
+  gap: 1.5rem 0;
   justify-items: center;
-  margin: 32px 0 16px 0;
+  margin: 2rem 0 1rem 0;
 }
 
 .category {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 72px;
+  width: 4.5rem;
   cursor: pointer;
   text-align: center;
 }
 
 .categoryIcon {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   background: #f6f8fa;
-  border-radius: 12px;
-  margin-bottom: 8px;
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .iconPlaceholder {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #666;
   display: flex;
@@ -38,8 +38,8 @@
 }
 
 .arrowOnly {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +54,7 @@
   font-size: 1rem;
   color: #222;
   text-align: center;
-  margin-top: 2px;
+  margin-top: 0.125rem;
 }
 
 .selected {
@@ -63,7 +63,7 @@
 
 .selected .categoryIcon {
   background: #007aff;
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 122, 255, 0.3);
 }
 
 .selected .iconPlaceholder {
