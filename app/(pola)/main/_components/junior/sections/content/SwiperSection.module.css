@@ -1,12 +1,13 @@
 .swiperWrapper {
   width: 100%;
-  height: 350px;
-  margin: 32px 0;
+  /* height: 350px; */
+  /* margin: 32px 0; */
 }
 
 .swiperContainer {
   width: 100%;
   height: 100%;
+  padding-bottom: .5rem;
 }
 
 .swiperContainer :global(.swiper) {
@@ -17,7 +18,7 @@
 .swiperSlide {
   width: 100%;
   height: 100%;
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -25,7 +26,7 @@
 }
 
 .swiperContainer :global(.swiper-pagination) {
-  bottom: 10px;
+  bottom: -5px;
 }
 
 .swiperContainer :global(.swiper-pagination-bullet) {

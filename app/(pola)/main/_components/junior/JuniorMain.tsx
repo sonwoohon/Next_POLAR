@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import styles from './JuniorMain.module.css';
 import { mockHelps } from './data/mockHelps';
-import HeaderSection from './sections/header/HeaderSection';
+/* import HeaderSection from './sections/header/HeaderSection'; 임시헤더 주석*/
 import ProfileSection from './sections/profile/ProfileSection';
 import StatsSection from './sections/profile/StatsSection';
 import TabSection from './sections/navigation/TabSection';
@@ -57,7 +57,7 @@ export default function JuniorMainPage() {
 
   return (
     <div className={styles.container}>
-      <HeaderSection />
+      {/* <HeaderSection /> */}
       <ProfileSection />
       <StatsSection 
         totalHelps={totalHelps}

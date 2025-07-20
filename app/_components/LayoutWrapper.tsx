@@ -8,6 +8,7 @@ const hideHeaderPaths = [
   '/login',
   '/sign-up',
   '/find-password',
+  '/',
 ];
 
 // Footer를 숨길 페이지들
@@ -16,6 +17,7 @@ const hideFooterPaths = [
   '/sign-up',
   '/user/hall-of-fame',
   '/find-password',
+  '/',
 ];
 
 interface LayoutWrapperProps {

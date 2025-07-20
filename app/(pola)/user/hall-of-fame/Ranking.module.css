@@ -4,12 +4,13 @@
 .rankingWrap {
   background: #1f1f1f;
   width: 100%;
+  margin-bottom: -5rem;
 }
 .rankingTopWrap {
   margin-top: 3rem;
   position: relative;
   overflow: hidden;
-  min-height: 16rem;
+  min-height: 18rem;
   /* box-shadow: 1px -10px 12px 3px #f0f0f0; */
 }
 
@@ -175,6 +176,7 @@
   position: relative;
   margin: 0 10px;
   justify-content: flex-start;
+  padding-top: 3rem;
 }
 
 /* .rankingTopWrap ul li .imgwrap{
@@ -202,7 +204,7 @@
 .rankingTopWrap ul li:before {
   content: '';
   position: absolute;
-  top: 10px;
+  top: 0;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -699,7 +701,25 @@
   left: 50%;
   transform: translateX(-50%);
   box-shadow: 0 2px 8px #0002;
+  animation: fadeOutAndSlideDown 10s ease-in-out forwards;
 }
+
+@keyframes fadeOutAndSlideDown {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
+
 /* ===== 애니메이션 스킵 기능 (animation, transition 모두 제거) ===== */
 .skipAnim .rankingTopWrap ul{
   opacity: 1 !important;

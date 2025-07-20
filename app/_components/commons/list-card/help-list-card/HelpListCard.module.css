@@ -75,6 +75,7 @@
   color: #666;
   margin-top: 0.25rem;
 }
+
 .nickname {
   font-weight: 500;
   color: #444;
@@ -125,5 +126,12 @@
   }
   .title {
     font-size: 1rem;
+  }
+  .subInfo{  
+    flex-direction: column;
+  }
+  .date{
+    margin-left: 0;
+    margin-right: 0;
   }
 }
