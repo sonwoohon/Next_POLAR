@@ -3,11 +3,8 @@ import { getUuidByNickname } from '@/lib/getUserData';
 import {
   ProfileUpdateUseCase,
   ProfileImageUpdateUseCase,
-  PasswordChangeUseCase,
-  GetUserProfileUseCase,
 } from '@/backend/users/profile-update/applications/usecases/ProfileUpdateUseCase';
 import { SbProfileUpdateRepository } from '@/backend/users/profile-update/infrastructures/repositories/SbProfileUpdateRepository';
-import { entityToUserProfileResponseDto } from '@/backend/common/mappers/UserMapper';
 
 // 의존성 주입을 위한 UseCase 인스턴스 생성
 const createProfileUpdateUseCase = () => {
@@ -20,51 +17,7 @@ const createProfileImageUpdateUseCase = () => {
   return new ProfileImageUpdateUseCase(repository);
 };
 
-const createPasswordChangeUseCase = () => {
-  const repository = new SbProfileUpdateRepository();
-  return new PasswordChangeUseCase(repository);
-};
 
-const createGetUserProfileUseCase = () => {
-  const repository = new SbProfileUpdateRepository();
-  return new GetUserProfileUseCase(repository);
-};
-
-// 프로필 정보 조회 API
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ nickname: string }> }
-) {
-  try {
-    const { nickname } = await params;
-
-    if (!nickname || nickname.trim() === '') {
-      return NextResponse.json({ error: 'nickname이 필요합니다.' }, { status: 400 });
-    }
-
-    // 닉네임을 userId로 변환
-    const userId = await getUuidByNickname(nickname);
-    if (!userId) {
-      return NextResponse.json({ error: '사용자를 찾을 수 없습니다.' }, { status: 404 });
-    }
-
-    const useCase = createGetUserProfileUseCase();
-    const user = await useCase.execute(userId);
-
-    if (!user) {
-      return NextResponse.json({ error: '사용자 정보를 찾을 수 없습니다.' }, { status: 404 });
-    }
-
-    const userDto = entityToUserProfileResponseDto(user);
-    return NextResponse.json({ success: true, data: userDto }, { status: 200 });
-  } catch (error) {
-    console.error('[API] 사용자 프로필 조회 중 오류 발생:', error);
-    return NextResponse.json(
-      { error: '사용자 프로필 조회 중 오류가 발생했습니다.' },
-      { status: 500 }
-    );
-  }
-}
 
 // 프로필 정보 업데이트 API
 export async function PUT(
@@ -120,11 +73,10 @@ export async function PUT(
       return NextResponse.json({ error: '프로필 업데이트에 실패했습니다.' }, { status: 500 });
     }
 
-    const userDto = entityToUserProfileResponseDto(updatedUser);
     return NextResponse.json({
       success: true,
       message: '프로필이 성공적으로 업데이트되었습니다.',
-      data: userDto
+      data: updatedUser
     }, { status: 200 });
   } catch (error) {
     console.error('[API] 프로필 업데이트 중 오류 발생:', error);

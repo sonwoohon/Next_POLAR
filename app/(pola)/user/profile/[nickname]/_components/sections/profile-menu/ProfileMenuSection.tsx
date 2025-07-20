@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { useWithdrawal } from "@/lib/hooks";
+// import { useState } from "react";
+// import { useWithdrawal } from "@/lib/hooks";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { getUuidByNickname } from "@/lib/getUserData";
+// import { getUuidByNickname } from "@/lib/getUserData";
 import styles from "./profileMenu.module.css";
 
 interface ProfileMenuSectionProps {
@@ -15,12 +15,12 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
   nickname,
   onLogout,
 }) => {
-  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [withdrawalReason, setWithdrawalReason] = useState("");
+  // const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  // const [withdrawalReason, setWithdrawalReason] = useState("");
 
-  const { mutate: withdraw, isPending } = useWithdrawal();
-  const { currentUser, logout } = useAuth();
+  // const { mutate: withdraw, isPending } = useWithdrawal();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -41,48 +41,48 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
     }
   };
 
-  const handleWithdrawalClick = () => {
-    setShowWithdrawalModal(true);
-  };
+  // const handleWithdrawalClick = () => {
+  //   setShowWithdrawalModal(true);
+  // };
 
-  const handleWithdrawalConfirm = async () => {
-    if (!confirmPassword.trim()) {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }
+  // const handleWithdrawalConfirm = async () => {
+  //   if (!confirmPassword.trim()) {
+  //     alert("비밀번호를 입력해주세요.");
+  //     return;
+  //   }
 
-    if (!currentUser?.nickname) {
-      alert("사용자 정보를 찾을 수 없습니다.");
-      return;
-    }
+  //   if (!currentUser?.nickname) {
+  //     alert("사용자 정보를 찾을 수 없습니다.");
+  //     return;
+  //   }
 
-    try {
-      const userId = await getUuidByNickname(currentUser.nickname);
-      if (!userId) {
-        alert("사용자 정보를 찾을 수 없습니다.");
-        return;
-      }
+  //   try {
+  //     const userId = await getUuidByNickname(currentUser.nickname);
+  //     if (!userId) {
+  //       alert("사용자 정보를 찾을 수 없습니다.");
+  //       return;
+  //     }
 
-      withdraw({
-        userId: userId,
-        confirmPassword: confirmPassword,
-        reason: withdrawalReason.trim() || undefined,
-      });
+  //     withdraw({
+  //       userId: userId,
+  //       confirmPassword: confirmPassword,
+  //       reason: withdrawalReason.trim() || undefined,
+  //     });
 
-      setShowWithdrawalModal(false);
-      setConfirmPassword("");
-      setWithdrawalReason("");
-    } catch (error) {
-      console.error("회원 탈퇴 처리 중 오류:", error);
-      alert("회원 탈퇴 처리 중 오류가 발생했습니다.");
-    }
-  };
+  //     setShowWithdrawalModal(false);
+  //     setConfirmPassword("");
+  //     setWithdrawalReason("");
+  //   } catch (error) {
+  //     console.error("회원 탈퇴 처리 중 오류:", error);
+  //     alert("회원 탈퇴 처리 중 오류가 발생했습니다.");
+  //   }
+  // };
 
-  const handleWithdrawalCancel = () => {
-    setShowWithdrawalModal(false);
-    setConfirmPassword("");
-    setWithdrawalReason("");
-  };
+  // const handleWithdrawalCancel = () => {
+  //   setShowWithdrawalModal(false);
+  //   setConfirmPassword("");
+  //   setWithdrawalReason("");
+  // };
 
   return (
     <section className={styles.profileMenuSection}>
@@ -104,15 +104,16 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
         </button>
 
         <button
-          onClick={handleWithdrawalClick}
           className={styles.withdrawalButton}
+          disabled
+          style={{ opacity: 0.5, cursor: "not-allowed" }}
         >
           <span className={styles.menuIcon}>❌</span>
           <span className={styles.menuText}>회원 탈퇴</span>
         </button>
       </div>
 
-      {/* 회원 탈퇴 모달 */}
+      {/* 회원 탈퇴 모달 - 보류
       {showWithdrawalModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -160,6 +161,7 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
           </div>
         </div>
       )}
+      */}
     </section>
   );
 };
