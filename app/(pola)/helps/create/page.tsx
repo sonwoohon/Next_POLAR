@@ -9,11 +9,13 @@ import Step3HelpDetails from './components/Step3HelpDetails';
 import { useCreateHelp } from '@/lib/hooks/help/useCreateHelp';
 import { useImageContext } from '@/lib/contexts/ImageContext';
 import { HelpFunnelData } from '@/lib/models/createHelpDto';
+import { useAuthStore } from '@/lib/stores/authStore';
 
 type Step = 1 | 2 | 3;
 
 const CreateHelpPage: React.FC = () => {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [helpData, setHelpData] = useState<HelpFunnelData>({
     types: [], // 여러 타입을 선택할 수 있도록 배열로 변경
@@ -112,25 +114,15 @@ const CreateHelpPage: React.FC = () => {
       // help 데이터 추가
       formData.append('title', helpData.title);
       formData.append('content', helpData.content);
+      
+      // userNickname 추가
+      if (user?.nickname) {
+        formData.append('userNickname', user.nickname);
+      }
 
-      // 선택된 타입들을 subCategoryId로 매핑
-      const typeToSubCategoryMap: { [key: string]: number } = {
-        heavy: 1, // 무거워요
-        difficult: 2, // 어려워요
-        clean: 3, // 정리해요
-        learn: 4, // 배워요
-        complex: 5, // 복잡해요
-        broken: 6, // 고장나요
-        errand: 7, // 심부름
-      };
-
-      const subCategoryIds = helpData.types
-        .map((type) => typeToSubCategoryMap[type])
-        .filter(Boolean);
-
-      // 각 subCategoryId를 개별적으로 추가
-      subCategoryIds.forEach((id) => {
-        formData.append('subCategoryId', id.toString());
+      // 선택된 타입들을 subCategoryId로 직접 사용
+      helpData.types.forEach((type) => {
+        formData.append('subCategoryId', type);
       });
 
       formData.append(
@@ -162,7 +154,7 @@ const CreateHelpPage: React.FC = () => {
       clearImages();
 
       alert('도움 요청이 성공적으로 생성되었습니다!');
-      router.push('/junior');
+      router.push('/main');
     } catch (error) {
       console.error('도움 요청 생성 실패:', error);
     }

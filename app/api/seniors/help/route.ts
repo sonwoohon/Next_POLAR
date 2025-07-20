@@ -6,20 +6,10 @@ import { SeniorHelpUseCase } from '@/backend/seniors/helps/applications/usecases
 import { SeniorHelpRepository } from '@/backend/seniors/helps/infrastructures/repositories/SeniorHelpRepositories';
 import { UploadHelpImageUseCase } from '@/backend/images/applications/usecases/ImageUseCase';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
-import { getNicknameFromCookie } from '@/lib/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
 // 시니어 헬프 생성 API (FormData 처리, 트랜잭션 포함)
 export async function POST(req: NextRequest) {
-  const userData = getNicknameFromCookie(req);
-  const { nickname } = userData || {};
-
-  if (!nickname) {
-    return NextResponse.json(
-      { error: '로그인이 필요합니다.' },
-      { status: 401 }
-    );
-  }
 
   try {
     const formData = await req.formData();
@@ -27,6 +17,7 @@ export async function POST(req: NextRequest) {
     // FormData에서 help 데이터 추출
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
+    const userNickname = formData.get('userNickname') as string;
     const subCategoryIds = formData
       .getAll('subCategoryId')
       .map((id) => Number(id));
@@ -34,11 +25,11 @@ export async function POST(req: NextRequest) {
     const endDate = formData.get('endDate') as string;
 
     // 필수 필드 검증
-    if (!title || !startDate || subCategoryIds.length === 0) {
+    if (!title || !startDate || subCategoryIds.length === 0 || !userNickname) {
       return NextResponse.json(
         {
           error:
-            '필수 필드가 누락되었습니다. (title, startDate, subCategoryId)',
+            '필수 필드가 누락되었습니다. (title, startDate, subCategoryId, userNickname)',
         },
         { status: 400 }
       );
@@ -64,7 +55,7 @@ export async function POST(req: NextRequest) {
       // 1. 이미지 파일들 업로드
       if (imageFiles.length > 0) {
         const uploadPromises = imageFiles.map(async (file) => {
-          const result = await uploadUseCase.execute(file, nickname);
+          const result = await uploadUseCase.execute(file, userNickname);
           return result.url;
         });
         uploadedImageUrls = await Promise.all(uploadPromises);
@@ -81,7 +72,7 @@ export async function POST(req: NextRequest) {
         imageFiles: uploadedImageUrls,
       };
 
-      const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
+      const help = await seniorHelpUseCase.createHelp(userNickname, helpReqCreate);
 
       console.log('Help 생성 성공:', help);
       return NextResponse.json(help, { status: 201 });
@@ -117,20 +108,19 @@ export async function POST(req: NextRequest) {
 
 // 시니어 헬프 수정 API (닉네임 기반)
 export async function PUT(req: NextRequest) {
-  const userData = getNicknameFromCookie(req);
-  const { nickname } = userData || {};
   const helpId = req.nextUrl.searchParams.get('helpId');
-
-  if (!nickname) {
-    return NextResponse.json(
-      { error: '로그인이 필요합니다.' },
-      { status: 401 }
-    );
-  }
+  const userNickname = req.nextUrl.searchParams.get('userNickname');
 
   if (!helpId) {
     return NextResponse.json(
       { error: 'Help ID를 입력해주세요.' },
+      { status: 400 }
+    );
+  }
+
+  if (!userNickname) {
+    return NextResponse.json(
+      { error: '사용자 닉네임이 필요합니다.' },
       { status: 400 }
     );
   }
@@ -149,7 +139,7 @@ export async function PUT(req: NextRequest) {
   try {
     const seniorHelpUseCase = new SeniorHelpUseCase(new SeniorHelpRepository());
     const help = await seniorHelpUseCase.updateHelp(
-      nickname,
+      userNickname,
       helpReqUpdate,
       Number(helpId)
     );
@@ -165,20 +155,19 @@ export async function PUT(req: NextRequest) {
 
 // 시니어 헬프 삭제 API (닉네임 기반)
 export async function DELETE(req: NextRequest) {
-  const userData = getNicknameFromCookie(req);
-  const { nickname } = userData || {};
   const helpId = req.nextUrl.searchParams.get('helpId');
-
-  if (!nickname) {
-    return NextResponse.json(
-      { error: '로그인이 필요합니다.' },
-      { status: 401 }
-    );
-  }
+  const userNickname = req.nextUrl.searchParams.get('userNickname');
 
   if (!helpId) {
     return NextResponse.json(
       { error: 'Help ID를 입력해주세요.' },
+      { status: 400 }
+    );
+  }
+
+  if (!userNickname) {
+    return NextResponse.json(
+      { error: '사용자 닉네임이 필요합니다.' },
       { status: 400 }
     );
   }

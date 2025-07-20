@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styles from './Step1HelpType.module.css';
+import { getCategoryName, getCategoryEmoji } from '@/lib/utils/categoryUtils';
 
 interface Step1HelpTypeProps {
   selectedTypes: string[];
@@ -14,60 +15,74 @@ const Step1HelpType: React.FC<Step1HelpTypeProps> = ({
 }) => {
   const helpTypes = [
     {
-      id: 'heavy',
-      label: '무거워요',
       description: '무거운 짐을 들거나, 젊은 친구가 힘을 써야 해요!',
-      icon: '💪',
       iconClass: styles.optionIconHeavy,
-      subCategoryId: 1,
+      subCategoryId: 6, // 짐 나르기
     },
     {
-      id: 'difficult',
-      label: '어려워요',
-      description: '나한텐 너무 어려워요. 누가 설명해주세요!',
-      icon: '🤔',
-      iconClass: styles.optionIconDifficult,
-      subCategoryId: 2,
-    },
-    {
-      id: 'clean',
-      label: '정리해요',
       description: '청소나 정리가 필요해요!',
-      icon: '🧹',
       iconClass: styles.optionIconClean,
-      subCategoryId: 3,
+      subCategoryId: 7, // 청소
     },
     {
-      id: 'learn',
-      label: '배워요',
-      description: '새로운 것을 배우고 싶어요!',
-      icon: '📚',
-      iconClass: styles.optionIconLearn,
-      subCategoryId: 4,
+      description: '농경 보조 작업을 도와주세요!',
+      iconClass: styles.optionIconHeavy,
+      subCategoryId: 8, // 수확(농경 보조)
     },
     {
-      id: 'complex',
-      label: '복잡해요',
-      description: '복잡한 일을 도와주세요!',
-      icon: '🔧',
+      description: '재난/재해 봉사 활동을 도와주세요!',
+      iconClass: styles.optionIconHeavy,
+      subCategoryId: 9, // 재난/재해 봉사
+    },
+    {
+      description: '김장 작업을 도와주세요!',
+      iconClass: styles.optionIconHeavy,
+      subCategoryId: 10, // 김장
+    },
+    {
+      description: '스마트폰 사용에 대해 질문이 있어요!',
+      iconClass: styles.optionIconDifficult,
+      subCategoryId: 11, // 스마트폰 질문
+    },
+    {
+      description: '대리 상담을 도와주세요!',
       iconClass: styles.optionIconComplex,
-      subCategoryId: 5,
+      subCategoryId: 12, // 대리 상담
     },
     {
-      id: 'broken',
-      label: '고장나요',
-      description: '무언가가 고장났어요!',
-      icon: '🔨',
-      iconClass: styles.optionIconBroken,
-      subCategoryId: 6,
+      description: '재능 기부를 도와주세요!',
+      iconClass: styles.optionIconLearn,
+      subCategoryId: 13, // 재능기부
     },
     {
-      id: 'errand',
-      label: '심부름',
-      description: '심부름을 도와주세요!',
-      icon: '🛒',
+      description: '가벼운 배달을 도와주세요!',
       iconClass: styles.optionIconErrand,
-      subCategoryId: 7,
+      subCategoryId: 14, // 가벼운 배달
+    },
+    {
+      description: '장보기를 도와주세요!',
+      iconClass: styles.optionIconErrand,
+      subCategoryId: 15, // 장보기(편의점 등)
+    },
+    {
+      description: '콘서트 예매를 도와주세요!',
+      iconClass: styles.optionIconErrand,
+      subCategoryId: 16, // 콘서트 예매
+    },
+    {
+      description: '가벼운 대화와 교감을 나누고 싶어요!',
+      iconClass: styles.optionIconLearn,
+      subCategoryId: 17, // 가벼운 대화(교감)
+    },
+    {
+      description: '간단한 상담을 받고 싶어요!',
+      iconClass: styles.optionIconComplex,
+      subCategoryId: 18, // 간단한 상담
+    },
+    {
+      description: '티켓팅 줄 서기를 도와주세요!',
+      iconClass: styles.optionIconErrand,
+      subCategoryId: 19, // 티켓팅 줄 서기
     },
   ];
 
@@ -79,18 +94,18 @@ const Step1HelpType: React.FC<Step1HelpTypeProps> = ({
       <div className={styles.optionGrid}>
         {helpTypes.map((type) => (
           <div
-            key={type.id}
+            key={type.subCategoryId}
             className={`${styles.optionCard} ${
-              selectedTypes.includes(type.id) ? styles.optionCardSelected : ''
+              selectedTypes.includes(type.subCategoryId.toString()) ? styles.optionCardSelected : ''
             }`}
-            onClick={() => onTypeSelect(type.id)}
+            onClick={() => onTypeSelect(type.subCategoryId.toString())}
           >
             <div className={styles.optionHeader}>
               <div className={`${styles.optionIcon} ${type.iconClass}`}>
-                {type.icon}
+                {getCategoryEmoji(type.subCategoryId)}
               </div>
-              <span className={styles.optionLabel}>{type.label}</span>
-              {selectedTypes.includes(type.id) && (
+              <span className={styles.optionLabel}>{getCategoryName(type.subCategoryId)}</span>
+              {selectedTypes.includes(type.subCategoryId.toString()) && (
                 <div className={styles.checkmark}>✓</div>
               )}
             </div>
