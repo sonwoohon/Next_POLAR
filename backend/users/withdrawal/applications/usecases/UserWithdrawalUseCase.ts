@@ -18,6 +18,6 @@ export class UserWithdrawalUseCase {
 
         // 3. 탈퇴 성공 로그 출력
         console.log(`사용자 ID ${userId} 탈퇴가 성공적으로 완료되었습니다.`);
-        
+
     }
 }

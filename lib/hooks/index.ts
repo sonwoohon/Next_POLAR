@@ -3,6 +3,7 @@ export { useApiQuery, useApiMutation } from './useApi';
 export { useCreateHelp } from './help/useCreateHelp';
 export { useHelpDetail } from './help/useHelpDetail';
 export { useLogin } from './useLogin';
+export { useAuth } from './useAuth';
 export { useAuthStore } from '../stores/authStore';
 
 // 온보딩 관련 훅들

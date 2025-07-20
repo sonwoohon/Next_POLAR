@@ -1,6 +1,6 @@
 // User 엔티티 (withdrawal 전용)
 export interface User {
-    id: number;
+    id: string;
     phone_number: string;
     password: string;
     email: string;
@@ -9,6 +9,5 @@ export interface User {
     address: string;
     name: string;
     created_at: Date;
-    uuid: string;
     // is_active?: boolean; // soft delete용(필요시)
 } 
