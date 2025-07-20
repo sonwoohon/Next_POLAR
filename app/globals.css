@@ -242,10 +242,14 @@ body {
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox /
+  -ms-overflow-style: none; / IE and Edge */
+  padding-bottom: 5rem !important;
 }
 
-.main-container > div {
-  padding: 5rem 1.5rem 2rem !important;
+.main-container > div{
+  flex: 1;
+  padding:5rem 1.5rem 0 !important;
 } /* 최하단 공통 레이아웃 */
+
+

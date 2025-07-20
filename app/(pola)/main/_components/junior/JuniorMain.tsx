@@ -146,7 +146,7 @@ export default function JuniorMainPage() {
 
   return (
     <div className={styles.container}>
-      <HeaderSection />
+      {/* <HeaderSection /> */}
       <ProfileSection />
       <StatsSection
         totalHelps={totalHelps}
