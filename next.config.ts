@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
       'images.unsplash.com',
       'example.com',
       'plus.unsplash.com',
+      'via.placeholder.com',
       // unplash 이미지로 더미 데이터 활용 위해 추가, 배포 시 삭제해도 됩니다
     ],
   },

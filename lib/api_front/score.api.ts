@@ -3,15 +3,16 @@ import apiClient from '../http.api';
 
 // 점수 조회 응답 인터페이스
 export interface Score {
-  id: string;
-  userId: string;
+  id?: string;
+  userId?: string;
   nickname: string;
   categoryId: number;
-  categoryName: string;
+  categoryName?: string;
   season: number;
-  score: number;
-  rank: number;
-  createdAt: string;
+  score?: number;
+  categoryScore: number;
+  rank?: number;
+  createdAt?: string;
   updatedAt: string;
 }
 
@@ -42,6 +43,14 @@ export const getUserScoresByCategory = async (categoryId: number): Promise<Score
 export const getUserScoresBySeason = async (season: number): Promise<Score[]> => {
   const response = await apiClient.get<Score[]>(
     `${API_ENDPOINTS.SCORES.USER_WITH_SEASON}?season=${season}`
+  );
+  return response.data;
+};
+
+// 사용자 점수 조회 (시즌별 - USER_SEASON_SCORES 엔드포인트 사용)
+export const getUserScoresWithSeason = async (season: number): Promise<Score[]> => {
+  const response = await apiClient.get<Score[]>(
+    `${API_ENDPOINTS.USER_SEASON_SCORES}?season=${season}`
   );
   return response.data;
 };
@@ -78,6 +87,7 @@ export const scoreApi = {
   getUserScores,
   getUserScoresByCategory,
   getUserScoresBySeason,
+  getUserScoresWithSeason,
   getUserScoresByCategoryAndSeason,
   getSeasonRankings,
   getCategoryRankings,
