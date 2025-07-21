@@ -18,15 +18,73 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+/* 티어별 배경색 */
+.userTierContaineriron {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  color: white;
+}
+
+.userTierContaineriron .userTierSeason {
+  color: white;
+}
+
+.userTierContaineriron .userTierName {
+  color: white;
+}
+
+.userTierContaineriron .userTierProgressInfo {
+  color: white;
+}
+
+.userTierContaineriron .userTierProgressInfo b {
+  color: white;
+}
+
+.userTierContaineriron .userTierProgressBarScore {
+  color: white;
+}
+
+.userTierContaineriron .userTierProgressBarScore span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.userTierContainerbronze {
+  background: linear-gradient(135deg, #cd7f32 0%, #b8860b 100%);
+}
+
+.userTierContainersilver {
+  background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+}
+
+.userTierContainergold {
+  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+}
+
+.userTierContainerplatinum {
+  background: linear-gradient(135deg, #e5e4e2 0%, #b8b8b8 100%);
+}
+
+.userTierContainerdiamond {
+  background: linear-gradient(135deg, #b9f2ff 0%, #87ceeb 100%);
+}
+
 .userTierInfo {
   display: flex;
   gap: 0.5rem;
 }
 
 .userTierImage {
-  width: 4rem;
-  height: 4rem;
-  background-color: grey;
+  width: 6rem;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userTierImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .userTierInfoTextContainer {
@@ -79,6 +137,51 @@
   transition: width 0.4s;
 }
 
+/* 프로그레스바 색상 (다음 티어 색상) */
+.userTierProgressBarFilliron {
+  background: linear-gradient(
+    90deg,
+    #cd7f32 0%,
+    #b8860b 100%
+  ); /* BRONZE 색상 */
+}
+
+.userTierProgressBarFillbronze {
+  background: linear-gradient(
+    90deg,
+    #c0c0c0 0%,
+    #a9a9a9 100%
+  ); /* SILVER 색상 */
+}
+
+.userTierProgressBarFillsilver {
+  background: linear-gradient(90deg, #ffd700 0%, #ffa500 100%); /* GOLD 색상 */
+}
+
+.userTierProgressBarFillgold {
+  background: linear-gradient(
+    90deg,
+    #e5e4e2 0%,
+    #b8b8b8 100%
+  ); /* PLATINUM 색상 */
+}
+
+.userTierProgressBarFillplatinum {
+  background: linear-gradient(
+    90deg,
+    #b9f2ff 0%,
+    #87ceeb 100%
+  ); /* DIAMOND 색상 */
+}
+
+.userTierProgressBarFilldiamond {
+  background: linear-gradient(
+    90deg,
+    #b9f2ff 0%,
+    #87ceeb 100%
+  ); /* DIAMOND 최고 티어 */
+}
+
 .userTierProgressBarScore {
   margin-top: 0.25rem;
   text-align: right;
@@ -105,8 +208,8 @@
   }
 
   .userTierImage {
-    width: 3rem;
-    height: 3rem;
+    width: 4.5rem;
+    height: 4.5rem;
   }
 
   .userTierName {
