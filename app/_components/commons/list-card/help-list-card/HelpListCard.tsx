@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import styles from './HelpListCard.module.css';
 import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
-import { findBigCategoryByCategoryId } from "@/lib/constants/categories";
 
 interface HelpListCardProps {
   help: HelpListResponseDto;

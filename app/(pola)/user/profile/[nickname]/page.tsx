@@ -104,12 +104,6 @@ const UserProfilePage: React.FC = () => {
       <h1>시니어 프로필</h1>
       {userData && <UserInfoSection data={userData} />}
 
-      <UserHelpsSection
-        title='나의 헬프 기록'
-        nickname={params.nickname as string}
-        representativeTitle='베테랑 헬퍼'
-      />
-
       <UserRecivedReviewsPreview
         nickname={nickname}
         reviews={receivedReviewsData?.reviews.slice(0, 3) || []}
