@@ -61,7 +61,7 @@ export const updateUserProfileImage = async (
 };
 
 // 프로필 이미지 삭제
-export const deleteUserProfileImage = async (nickname: string): Promise<void> => {
+export const deleteUserProfileImage = async (): Promise<void> => {
   await apiClient.delete(
     API_ENDPOINTS.PROFILE_IMAGE
   );
