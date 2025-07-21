@@ -1,8 +1,9 @@
-"use client";
-import Image from "next/image";
-import RatingStar from "@/public/images/icons/icon_star.svg";
-import styles from "./UserInfoSection.module.css";
-import { UserProfileResponseDto } from "@/backend/users/user/applications/dtos/UserDtos";
+'use client';
+import Image from 'next/image';
+import RatingStar from '@/public/images/icons/icon_star.svg';
+import styles from './UserInfoSection.module.css';
+import { UserProfileResponseDto } from '@/backend/users/user/applications/dtos/UserDtos';
+import { useUserReviewStats } from '@/lib/hooks/review/useUserReviewStats';
 
 interface UserInfoSectionProps {
   data: UserProfileResponseDto;
@@ -11,7 +12,9 @@ interface UserInfoSectionProps {
 const UserInfoSection: React.FC<UserInfoSectionProps> = ({ data }) => {
   const { nickname, name, profileImgUrl, userRole } = data;
 
-  const rating = 4.5;
+  // 실제 리뷰 평점 데이터 가져오기
+  const { data: reviewStats } = useUserReviewStats(nickname);
+  const rating = reviewStats?.averageRating || 0;
 
   return (
     <section className={styles.userInfoSection}>
@@ -30,16 +33,16 @@ const UserInfoSection: React.FC<UserInfoSectionProps> = ({ data }) => {
         {/* 유저 평점 */}
         <div className={styles.userRating}>
           <div className={styles.userRatingStar}>
-            <Image src={RatingStar} alt="ratingStar" />
+            <Image src={RatingStar} alt='ratingStar' />
           </div>
-          <span>{rating}</span>
+          <span>{rating.toFixed(1)}</span>
         </div>
 
         {/* 유저 이름 */}
         <div className={styles.userNameContainer}>
           <span>{name} 님</span>
           <div className={styles.userTypeBadge}>
-            {userRole === "senior" ? "Sr." : "Jr."}
+            {userRole === 'senior' ? 'Sr.' : 'Jr.'}
           </div>
         </div>
 
