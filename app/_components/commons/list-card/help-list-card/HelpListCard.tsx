@@ -33,7 +33,8 @@ const getStatusText = (status: string) => {
 
 const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
   const router = useRouter();
-  const { seniorInfo, title, startDate, endDate, category, status } = help;
+  const { seniorInfo, title, startDate, endDate, category, status, images } =
+    help;
 
   // 날짜 포맷
   const formatDate = (date: Date | string) => {
@@ -48,11 +49,15 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
   };
 
   return (
-    <div className={styles.cardLink} onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <div
+      className={styles.cardLink}
+      onClick={handleClick}
+      style={{ cursor: 'pointer' }}
+    >
       <div className={styles.card}>
         <div className={styles.thumbnail}>
           <Image
-            src={seniorInfo.profileImgUrl || '/images/dummies/dummy_user.png'}
+            src={images?.[0] || '/images/dummies/dummy_user.png'}
             alt='썸네일'
             width={100}
             height={100}
@@ -67,10 +72,17 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
         </div>
         <div className={styles.info}>
           <div className={styles.topRow}>
-            <CategoryBadge category={category[0]?.id} />
-            <span className={`${styles.status} ${styles[status] || ''}`}>
-              {getStatusText(status)}
-            </span>
+            <div className={styles.categoryContainer}>
+              {category.slice(0, 2).map((cate) => {
+                return <CategoryBadge key={cate.id} category={cate.id} />;
+              })}
+              {category.length > 2 && (
+                <span className={styles.moreCategories}>
+                  +{category.length - 2}
+                </span>
+              )}
+            </div>
+            <span className={styles.status}>{getStatusText(status)}</span>
           </div>
           <div className={styles.title}>{title}</div>
           <div className={styles.subInfo}>

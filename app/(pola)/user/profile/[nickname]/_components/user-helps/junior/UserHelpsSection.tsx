@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import { Radar } from "react-chartjs-2";
+'use client';
+import Link from 'next/link';
+import { Radar } from 'react-chartjs-2';
 import {
   Chart,
   RadialLinearScale,
@@ -9,11 +9,12 @@ import {
   Filler,
   Tooltip,
   Legend,
-} from "chart.js";
-import styles from "./userHelps.module.css";
-import HelpListCard from "@/app/_components/commons/list-card/help-list-card/HelpListCard";
-import type { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
-import { useScores } from "@/lib/hooks/useScores";
+} from 'chart.js';
+import styles from './userHelps.module.css';
+import HelpListCard from '@/app/_components/commons/list-card/help-list-card/HelpListCard';
+import { useScores } from '@/lib/hooks/useScores';
+import { useSeniorHelps } from '@/lib/hooks/help';
+import { useJuniorAcceptedHelps } from '@/lib/hooks';
 
 Chart.register(
   RadialLinearScale,
@@ -24,20 +25,35 @@ Chart.register(
   Legend
 );
 
-
 interface UserHelpsSectionProps {
   title?: string;
   nickname: string;
   representativeTitle?: string;
+  currentUserRole?: string;
 }
 
 const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
   title,
   nickname,
   representativeTitle,
+  currentUserRole,
 }) => {
   // 사용자 점수 데이터
   const { data: scores } = useScores();
+  // 사용자 역할에 따른 Help 데이터 조회
+  const { data: seniorHelps } = useSeniorHelps();
+  const { data: juniorHelps } = useJuniorAcceptedHelps(nickname);
+
+  console.log(currentUserRole);
+
+  // 로딩 상태 확인 (각각의 데이터가 로드되면 바로 사용)
+  if (!seniorHelps && !juniorHelps) {
+    return <div>Loading...</div>;
+  }
+
+  const currentHelps = seniorHelps
+    ? seniorHelps?.data
+    : juniorHelps?.helps || [];
 
   // 점수 데이터 타입 정의
   interface ScoreData {
@@ -62,18 +78,25 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
       const categoryId = score.categoryId;
       // categoryId가 이미 대분류 ID인 경우 (1-5)
       if (categoryId >= 1 && categoryId <= 5) {
-        bigCategoryScores[categoryId as keyof typeof bigCategoryScores] = score.categoryScore;
+        bigCategoryScores[categoryId as keyof typeof bigCategoryScores] =
+          score.categoryScore;
       }
     });
 
     return bigCategoryScores;
   };
 
-  const bigCategoryScores = scores ? calculateBigCategoryScores(scores) : {
-    1: 0, 2: 0, 3: 0, 4: 0, 5: 0
-  };
+  const bigCategoryScores = scores
+    ? calculateBigCategoryScores(scores)
+    : {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      };
 
-  const chartLabels = ["힘", "민첩", "지능", "매력", "인내"];
+  const chartLabels = ['힘', '민첩', '지능', '매력', '인내'];
   const chartData = [
     bigCategoryScores[1],
     bigCategoryScores[2],
@@ -82,11 +105,11 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
     bigCategoryScores[5],
   ];
   const helpCategories = [
-    { name: "힘", points: bigCategoryScores[1] },
-    { name: "민첩", points: bigCategoryScores[2] },
-    { name: "지능", points: bigCategoryScores[3] },
-    { name: "매력", points: bigCategoryScores[4] },
-    { name: "인내", points: bigCategoryScores[5] },
+    { name: '힘', points: bigCategoryScores[1] },
+    { name: '민첩', points: bigCategoryScores[2] },
+    { name: '지능', points: bigCategoryScores[3] },
+    { name: '매력', points: bigCategoryScores[4] },
+    { name: '인내', points: bigCategoryScores[5] },
   ];
   const chartOptions = {
     responsive: true,
@@ -120,91 +143,33 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
     labels: chartLabels,
     datasets: [
       {
-        label: "나의 헬프 능력치",
+        label: '나의 헬프 능력치',
         data: chartData,
         backgroundColor: [
-          "rgba(255, 0, 0, 0.2)",   // 힘 - 빨강
-          "rgba(144, 238, 144, 0.2)", // 민첩 - 연두
-          "rgba(0, 0, 255, 0.2)",     // 지능 - 파랑
-          "rgba(255, 192, 203, 0.2)", // 매력 - 분홍
-          "rgba(128, 0, 128, 0.2)",   // 인내 - 보라
+          'rgba(255, 0, 0, 0.2)', // 힘 - 빨강
+          'rgba(144, 238, 144, 0.2)', // 민첩 - 연두
+          'rgba(0, 0, 255, 0.2)', // 지능 - 파랑
+          'rgba(255, 192, 203, 0.2)', // 매력 - 분홍
+          'rgba(128, 0, 128, 0.2)', // 인내 - 보라
         ],
         borderColor: [
-          "rgba(255, 0, 0, 1)",      // 힘 - 빨강
-          "rgba(144, 238, 144, 1)",   // 민첩 - 연두
-          "rgba(0, 0, 255, 1)",       // 지능 - 파랑
-          "rgba(255, 192, 203, 1)",   // 매력 - 분홍
-          "rgba(128, 0, 128, 1)",     // 인내 - 보라
+          'rgba(255, 0, 0, 1)', // 힘 - 빨강
+          'rgba(144, 238, 144, 1)', // 민첩 - 연두
+          'rgba(0, 0, 255, 1)', // 지능 - 파랑
+          'rgba(255, 192, 203, 1)', // 매력 - 분홍
+          'rgba(128, 0, 128, 1)', // 인내 - 보라
         ],
         borderWidth: 2,
         pointBackgroundColor: [
-          "rgba(255, 0, 0, 1)",      // 힘 - 빨강
-          "rgba(144, 238, 144, 1)",   // 민첩 - 연두
-          "rgba(0, 0, 255, 1)",       // 지능 - 파랑
-          "rgba(255, 192, 203, 1)",   // 매력 - 분홍
-          "rgba(128, 0, 128, 1)",     // 인내 - 보라
+          'rgba(255, 0, 0, 1)', // 힘 - 빨강
+          'rgba(144, 238, 144, 1)', // 민첩 - 연두
+          'rgba(0, 0, 255, 1)', // 지능 - 파랑
+          'rgba(255, 192, 203, 1)', // 매력 - 분홍
+          'rgba(128, 0, 128, 1)', // 인내 - 보라
         ],
       },
     ],
   };
-
-  // 더미 데이터
-  const dummyHelps: HelpListResponseDto[] = [
-    {
-      id: 1,
-      seniorInfo: {
-        nickname: "cleanMaster",
-        name: "청소왕",
-        profileImgUrl:
-          "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=facearea&w=256&h=256&q=80",
-        address: "서울시 강남구",
-        userRole: "senior",
-      },
-      title: "여름맞이 대청소 도우미 모집",
-      startDate: "2024-08-10",
-      endDate: "2024-08-10",
-      category: [{ id: 1, point: 10 }],
-      content: "여름철 대청소를 함께해요!",
-      status: "완료",
-      createdAt: "2024-07-20T00:00:00.000Z",
-    },
-    {
-      id: 2,
-      seniorInfo: {
-        nickname: "cookQueen",
-        name: "요리여왕",
-        profileImgUrl:
-          "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=facearea&w=256&h=256&q=80",
-        address: "서울시 서초구",
-        userRole: "senior",
-      },
-      title: "쿠킹 클래스 & 점심 제공",
-      startDate: "2024-09-05",
-      endDate: "2024-09-05",
-      category: [{ id: 2, point: 15 }],
-      content: "함께 요리하고 식사해요!",
-      status: "모집중",
-      createdAt: "2024-08-15T00:00:00.000Z",
-    },
-    {
-      id: 3,
-      seniorInfo: {
-        nickname: "driveHero",
-        name: "운전영웅",
-        profileImgUrl:
-          "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=256&h=256&q=80",
-        address: "서울시 마포구",
-        userRole: "senior",
-      },
-      title: "병원 동행 운전 봉사",
-      startDate: "2024-10-01",
-      endDate: "2024-10-01",
-      category: [{ id: 3, point: 20 }],
-      content: "병원까지 안전하게 모셔다드려요.",
-      status: "진행중",
-      createdAt: "2024-09-20T00:00:00.000Z",
-    },
-  ];
 
   return (
     <section className={styles.userHelpsSection}>
@@ -225,24 +190,28 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
           {helpCategories.map((category, index) => {
             const getCategoryClass = (categoryName: string): string => {
               switch (categoryName) {
-                case "힘":
+                case '힘':
                   return styles.helpsCategoryStrength;
-                case "민첩":
+                case '민첩':
                   return styles.helpsCategoryAgility;
-                case "지능":
+                case '지능':
                   return styles.helpsCategoryIntelligence;
-                case "매력":
+                case '매력':
                   return styles.helpsCategoryCharm;
-                case "인내":
+                case '인내':
                   return styles.helpsCategoryEndurance;
                 default:
-                  return "";
+                  return '';
               }
             };
 
             return (
               <div className={styles.helpsDataContainer} key={index}>
-                <div className={`${styles.helpsCategory} ${getCategoryClass(category.name)}`}>
+                <div
+                  className={`${styles.helpsCategory} ${getCategoryClass(
+                    category.name
+                  )}`}
+                >
                   {category.name}
                 </div>
                 <span className={styles.helpsCategoryPoint}>
@@ -255,7 +224,7 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
       </div>
 
       <div className={styles.userHelpList}>
-        {dummyHelps.map((help) => (
+        {currentHelps.map((help) => (
           <HelpListCard key={help.id} help={help} />
         ))}
       </div>
