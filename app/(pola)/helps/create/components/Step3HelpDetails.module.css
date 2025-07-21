@@ -85,7 +85,6 @@
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
-  padding: 0 20px;
 }
 
 .toggleButton {
@@ -126,7 +125,6 @@
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
-  padding: 0 20px;
   overflow-x: auto;
 }
 
@@ -157,10 +155,6 @@
 .tabButtonActive:hover {
   background-color: #0056cc;
   color: white;
-}
-
-.suggestionsSection {
-  padding: 0 20px;
 }
 
 .suggestionGroup {
