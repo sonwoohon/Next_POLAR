@@ -120,3 +120,68 @@ export async function POST(
     );
   }
 }
+
+// 프로필 이미지 삭제 (DELETE)
+export async function DELETE(
+  request: NextRequest
+): Promise<NextResponse<{ success: boolean } | { error: string }>> {
+  console.log('[API] DELETE /api/images/profile 호출됨');
+
+  try {
+    // 사용자 인증 - 쿠키에서 nickname 추출
+    const userData = getNicknameFromCookie(request);
+    const { nickname } = userData || {};
+    if (!nickname) {
+      return NextResponse.json(
+        { error: '유효하지 않은 사용자입니다.' },
+        { status: 401 }
+      );
+    }
+
+    console.log(`[API] 프로필 이미지 삭제 시작 - 사용자: ${nickname}`);
+
+    // 1. 사용자 정보 조회
+    const userRepository = new SbUserRepository();
+    const user = await userRepository.getUserByNickname(nickname);
+    if (!user) {
+      return NextResponse.json(
+        { error: '사용자를 찾을 수 없습니다.' },
+        { status: 404 }
+      );
+    }
+
+    // 2. 기존 프로필 이미지가 있는 경우 삭제
+    if (user.profileImgUrl && user.profileImgUrl.trim() !== '') {
+      console.log(
+        `[API] 기존 프로필 이미지 삭제 시작 - URL: ${user.profileImgUrl}`
+      );
+
+      const imageRepository = new SbImageRepository();
+      await imageRepository.deleteImage(user.profileImgUrl, 'profile-images');
+      console.log('[API] 기존 프로필 이미지 삭제 완료');
+    }
+
+    // 3. 사용자 테이블에서 프로필 이미지 URL 제거
+    const userUseCase = new CommonUserUseCase(userRepository);
+    const updatedUser = await userUseCase.updateUserProfile(user.id, {
+      profile_img_url: '',
+    });
+
+    if (!updatedUser) {
+      console.error('[API] 사용자 정보 업데이트 실패');
+      return NextResponse.json(
+        { error: '사용자 정보 업데이트에 실패했습니다.' },
+        { status: 500 }
+      );
+    }
+
+    console.log('[API] 프로필 이미지 삭제 성공');
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error: unknown) {
+    console.error('[API] 프로필 이미지 삭제 중 오류 발생:', error);
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다.' },
+      { status: 500 }
+    );
+  }
+}

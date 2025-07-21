@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import DaumPostcode, { Address } from "react-daum-postcode";
@@ -12,11 +12,13 @@ import {
   useUserProfileForUpdate,
   useUpdateUserProfile,
   useUpdateUserProfileImage,
+  useDeleteUserProfileImage,
   useChangeUserPassword,
 } from "@/lib/hooks/profileUpdate";
 
 export default function UserSettingsPage() {
   const params = useParams();
+  const router = useRouter();
   const nickname = params.nickname as string;
 
   // API에서 사용자 프로필 데이터 가져오기 (새로운 훅 사용)
@@ -53,21 +55,27 @@ export default function UserSettingsPage() {
     }
   }, [userProfile, setValue]);
 
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [passwordData, setPasswordData] = useState({
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [passwordData, setPasswordData] = useState<{
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }>({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
   // DaumPostcode 관련 상태
-  const [isAddressOpen, setIsAddressOpen] = useState(false);
-  const [addressValue, setAddressValue] = useState("");
+  const [isAddressOpen, setIsAddressOpen] = useState<boolean>(false);
+  const [addressValue, setAddressValue] = useState<string>("");
   const daumPostcodeRef = useRef<HTMLDivElement>(null);
 
   // 프로필 이미지 관련 상태
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showImageMenu, setShowImageMenu] = useState<boolean>(false);
+  const imageMenuRef = useRef<HTMLDivElement>(null);
 
   const handlePasswordChange = (field: string, value: string) => {
     setPasswordData((prev) => ({
@@ -79,6 +87,7 @@ export default function UserSettingsPage() {
   // API 훅들
   const updateProfileMutation = useUpdateUserProfile();
   const updateImageMutation = useUpdateUserProfileImage();
+  const deleteImageMutation = useDeleteUserProfileImage();
   const changePasswordMutation = useChangeUserPassword();
 
   const onSubmit: SubmitHandler<EditableUserData> = async (data) => {
@@ -103,6 +112,7 @@ export default function UserSettingsPage() {
       }
 
       alert("프로필이 성공적으로 업데이트되었습니다.");
+      router.push(`/user/profile/${nickname}`);
     } catch (error) {
       console.error("프로필 업데이트 실패:", error);
       alert("프로필 업데이트에 실패했습니다.");
@@ -145,6 +155,18 @@ export default function UserSettingsPage() {
 
   const handleProfileImageChange = () => {
     fileInputRef.current?.click();
+    setShowImageMenu(false);
+  };
+
+  const handleRemoveProfileImage = async () => {
+    try {
+      await deleteImageMutation.mutateAsync(nickname);
+      alert("프로필 이미지가 삭제되었습니다.");
+      setShowImageMenu(false);
+    } catch (error) {
+      console.error("프로필 이미지 삭제 실패:", error);
+      alert("프로필 이미지 삭제에 실패했습니다.");
+    }
   };
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,6 +192,20 @@ export default function UserSettingsPage() {
       setValue("profileImage", file);
     }
   };
+
+  // 드롭다운 메뉴 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (imageMenuRef.current && !imageMenuRef.current.contains(event.target as Node)) {
+        setShowImageMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // DaumPostcode 관련 함수들
   const handleAddressClick = () => {
@@ -217,26 +253,45 @@ export default function UserSettingsPage() {
             className={styles.profileImage}
           />
           <button
-            className={styles.cameraButton}
-            onClick={handleProfileImageChange}
+            className={styles.editButton}
+            onClick={() => setShowImageMenu(!showImageMenu)}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path
-                d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z"
-                stroke="white"
+                d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
-                d="M12 17C14.2091 17 16 15.2091 16 13C16 10.7909 14.2091 9 12 9C9.79086 9 8 10.7909 8 13C8 15.2091 9.79086 17 12 17Z"
-                stroke="white"
+                d="M18.5 2.50023C18.8978 2.1025 19.4374 1.87891 20 1.87891C20.5626 1.87891 21.1022 2.1025 21.5 2.50023C21.8978 2.898 22.1214 3.43762 22.1214 4.00023C22.1214 4.56284 21.8978 5.10246 21.5 5.50023L12 15.0002L8 16.0002L9 12.0002L18.5 2.50023Z"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
+            <span>Edit</span>
           </button>
+          
+          {/* Image Menu Dropdown */}
+          {showImageMenu && (
+            <div className={styles.imageMenu} ref={imageMenuRef}>
+              <button
+                className={styles.menuItem}
+                onClick={handleProfileImageChange}
+              >
+                사진 업로드
+              </button>
+              <button
+                className={styles.menuItem}
+                onClick={handleRemoveProfileImage}
+              >
+                사진 삭제
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Hidden file input */}

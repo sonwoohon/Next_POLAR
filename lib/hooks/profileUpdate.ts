@@ -3,6 +3,7 @@ import {
   getUserProfileForUpdate,
   updateUserProfile,
   updateUserProfileImage,
+  deleteUserProfileImage,
   changeUserPassword,
   ProfileUpdateRequest,
   PasswordChangeRequest,
@@ -98,6 +99,54 @@ export const useUpdateUserProfileImage = () => {
     },
     onError: (error) => {
       console.error('프로필 이미지 업데이트 실패:', error);
+    },
+  });
+};
+
+// 프로필 이미지 삭제 훅
+export const useDeleteUserProfileImage = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (nickname: string) => deleteUserProfileImage(nickname),
+    onSuccess: (_, nickname) => {
+      // 프로필 업데이트 관련 쿼리 무효화
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.USER_PROFILE_UPDATE(nickname),
+      });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.USER_PROFILE(nickname),
+      });
+
+      // 기존 프로필 데이터에서 이미지 URL 제거
+      queryClient.setQueryData<UserProfileResponseDto>(
+        QUERY_KEYS.USER_PROFILE_UPDATE(nickname),
+        (oldData) => {
+          if (oldData) {
+            return {
+              ...oldData,
+              profileImgUrl: "",
+            };
+          }
+          return oldData;
+        }
+      );
+
+      queryClient.setQueryData<UserProfileResponseDto>(
+        QUERY_KEYS.USER_PROFILE(nickname),
+        (oldData) => {
+          if (oldData) {
+            return {
+              ...oldData,
+              profileImgUrl: "",
+            };
+          }
+          return oldData;
+        }
+      );
+    },
+    onError: (error) => {
+      console.error('프로필 이미지 삭제 실패:', error);
     },
   });
 };
