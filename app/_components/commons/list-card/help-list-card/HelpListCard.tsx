@@ -1,11 +1,10 @@
-'use client';
-import React from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import styles from './HelpListCard.module.css';
-import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
-import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
-import { findBigCategoryByCategoryId } from "@/lib/constants/categories";
+"use client";
+import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import styles from "./HelpListCard.module.css";
+import CategoryBadge from "@/app/_components/category-badge/CategoryBadge";
+import type { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
 
 interface HelpListCardProps {
   help: HelpListResponseDto;
@@ -18,14 +17,14 @@ const getRewardByCategory = (category: { id: number; point: number }[]) => {
 
 const getStatusText = (status: string) => {
   switch (status) {
-    case 'open':
-      return '모집중';
-    case 'connecting':
-      return '연결중';
-    case 'completed':
-      return '완료';
-    case 'close':
-      return '취소됨';
+    case "open":
+      return "모집중";
+    case "connecting":
+      return "연결중";
+    case "completed":
+      return "완료";
+    case "close":
+      return "취소됨";
     default:
       return status;
   }
@@ -41,7 +40,7 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
     const d = new Date(date);
     return `${d.getFullYear()}.${(d.getMonth() + 1)
       .toString()
-      .padStart(2, '0')}.${d.getDate().toString().padStart(2, '0')}`;
+      .padStart(2, "0")}.${d.getDate().toString().padStart(2, "0")}`;
   };
 
   const handleClick = () => {
@@ -52,21 +51,21 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
     <div
       className={styles.cardLink}
       onClick={handleClick}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: "pointer" }}
     >
       <div className={styles.card}>
         <div className={styles.thumbnail}>
           <Image
-            src={images?.[0] || '/images/dummies/dummy_user.png'}
-            alt='썸네일'
+            src={images?.[0] || "/images/dummies/dummy_user.png"}
+            alt="썸네일"
             width={100}
             height={100}
             className={styles.thumbnailImg}
-            style={{ objectFit: 'cover', borderRadius: '0.8rem' }}
+            style={{ objectFit: "cover", borderRadius: "0.8rem" }}
             priority={true}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = '/images/dummies/dummy_user.png';
+              target.src = "/images/dummies/dummy_user.png";
             }}
           />
         </div>
