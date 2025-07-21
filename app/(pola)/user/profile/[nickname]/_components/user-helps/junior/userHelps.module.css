@@ -14,7 +14,7 @@
 }
 
 .userHelpsTitleContainer h2 {
-  font-size: 1.5rem;;
+  font-size: 1.5rem;
   font-family: var(--font-gangwon);
 }
 
@@ -76,7 +76,7 @@
   align-items: center;
   gap: 1rem;
   width: 50%;
-  flex: 1;;
+  flex: 1;
 }
 
 .userHelpsDataContainer .subTitle {
@@ -158,4 +158,42 @@
   .helpsCategoryPoint {
     font-size: 1.25rem;
   }
+}
+
+.categoryBadgeRow {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.categoryBadge {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji", sans-serif;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #fff;
+}
+
+.categoryBadgeStrength {
+  background: linear-gradient(135deg, #ff5858 0%, #f09819 100%);
+}
+.categoryBadgeAgility {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+.categoryBadgeIntelligence {
+  background: linear-gradient(135deg, #396afc 0%, #2948ff 100%);
+}
+.categoryBadgeCharm {
+  background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+}
+.categoryBadgeEndurance {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
 }
