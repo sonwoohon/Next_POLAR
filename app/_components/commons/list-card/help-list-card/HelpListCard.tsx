@@ -1,10 +1,10 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import styles from "./HelpListCard.module.css";
-import CategoryBadge from "@/app/_components/category-badge/CategoryBadge";
-import type { HelpListResponseDto } from "@/backend/helps/applications/dtos/HelpDTO";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import styles from './HelpListCard.module.css';
+import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
+import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 
 interface HelpListCardProps {
   help: HelpListResponseDto;

@@ -102,19 +102,11 @@ const UserProfilePage: React.FC = () => {
     <div className={styles.container}>
       <h1>시니어 프로필</h1>
       {userData && <UserInfoSection data={userData} />}
-
-      {/* <UserHelpsSection
-        title='나의 헬프 기록'
-        nickname={params.nickname as string}
-        representativeTitle='베테랑 헬퍼'
-      /> */}
-
       <UserRecivedReviewsPreview
         nickname={nickname}
         reviews={receivedReviewsData?.reviews.slice(0, 3) || []}
         title="받은 리뷰"
       />
-
       {/* 마이페이지일 때만 설정 메뉴 섹션 표시 */}
       {isMyProfile && (
         <ProfileMenuSection
