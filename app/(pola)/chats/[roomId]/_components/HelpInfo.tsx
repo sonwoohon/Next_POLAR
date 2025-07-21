@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './HelpInfo.module.css';
 import { HelpDetail } from '@/lib/models/helpDetail';
-import { getCategoryName } from '@/lib/utils/categoryUtils';
+import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
+import DummyHelp from '@/public/images/dongHyun.jpg';
 
 interface HelpInfoProps {
   roomId: number;
@@ -22,12 +23,7 @@ export default function HelpInfo({ roomId, helpData }: HelpInfoProps) {
     <div className={styles.helpInfo}>
       <Image
         className={styles.helpImg}
-        src={
-          helpData.representativeImage &&
-          helpData.representativeImage.length > 0
-            ? helpData.representativeImage
-            : '/help-img.jpg'
-        }
+        src={helpData.representativeImage || DummyHelp}
         alt='help'
         width={64}
         height={64}
@@ -36,13 +32,22 @@ export default function HelpInfo({ roomId, helpData }: HelpInfoProps) {
         <h3 className={styles.helpTitle}>{helpData.title}</h3>
         <div className={styles.tags}>
           {helpData.category && helpData.category.length > 0 ? (
-            helpData.category.map((cat, index) => (
-              <span key={index} className={styles.tag}>
-                {getCategoryName(cat.id)}
-              </span>
-            ))
+            helpData.category
+              .slice(0, 2)
+              .map((cat, index) => (
+                <CategoryBadge
+                  key={index}
+                  category={cat.id}
+                  className={styles.helpCategoryBadge}
+                />
+              ))
           ) : (
-            <span className={styles.tag}>기타</span>
+            <CategoryBadge category={0} className={styles.helpCategoryBadge} />
+          )}
+          {helpData.category && helpData.category.length > 2 && (
+            <span className={styles.moreCategories}>
+              +{helpData.category.length - 2}
+            </span>
           )}
         </div>
       </div>

@@ -48,3 +48,6 @@ export { useWrittenReviews } from './review/useWrittenReviews';
 export { useCreateReview } from './review/useCreateReview';
 export { useReviewReceiver } from './review/useReviewReceiver';
 export { useUserReviewStats } from './review/useUserReviewStats';
+
+// 주니어 관련 훅들
+export { useJuniorAcceptedHelps } from './junior/useJuniorAcceptedHelps';

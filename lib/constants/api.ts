@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
   HELP_ACCEPT_APPLICANT: (helpId: number, juniorNickname: string) =>
     `/api/helps/${helpId}/applicants/${juniorNickname}/accept`,
   JUNIOR_HELPS: '/api/helps/junior',
+  JUNIOR_ACCEPTED_HELPS: '/api/juniors/helps/accepted',
   SENIOR_HELPS: '/api/seniors/help',
   SENIOR_HELPS_LIST: '/api/seniors/helps',
   SENIOR_HELP_DETAIL: (id: string) => `/api/seniors/help/${id}`,

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './ChatListItems.module.css';
 import { ChatRoomWithDetails } from '@/lib/api_front/chat.api';
-import { getCategoryName } from '@/lib/utils/categoryUtils';
+import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
 import DummyUser from '@/public/images/dummies/dummy_user.png';
 
 interface ChatListItemsProps {
@@ -16,36 +16,53 @@ export default function ChatListItems({ chatRooms }: ChatListItemsProps) {
         <li className={styles.emptyState}>채팅방이 없습니다.</li>
       ) : (
         chatRooms.map((room) => (
-        <li key={room.chatRoomId}>
-          <Link href={`/chats/${room.chatRoomId}`} className={styles.chatItem}>
-              <div className={styles.avatar}>
-                <Image
-                  src={room.opponentProfile.profileImgUrl || DummyUser}
-                  alt='Profile'
-                  width={48}
-                  height={48}
-                  className={styles.profileImage}
-                />
-              </div>
+          <li key={room.chatRoomId}>
+            <Link
+              href={`/chats/${room.chatRoomId}`}
+              className={styles.chatItem}
+            >
+              <Link href={`/user/profile/${room.opponentProfile.nickname}`}>
+                <div className={styles.avatar}>
+                  <Image
+                    src={room.opponentProfile.profileImgUrl || DummyUser}
+                    alt='Profile'
+                    width={48}
+                    height={48}
+                    className={styles.profileImage}
+                  />
+                </div>
+              </Link>
               <div className={styles.info}>
                 <div className={styles.name}>{room.opponentProfile.name}</div>
                 <div className={styles.tags}>
                   {room.latestHelp?.category &&
                   room.latestHelp.category.length > 0 ? (
-                    room.latestHelp.category.map((cat, index) => (
-                      <span key={index} className={styles.tag}>
-                        {getCategoryName(cat.id)}
-                      </span>
-                    ))
+                    room.latestHelp.category
+                      .slice(0, 2)
+                      .map((cat, index) => (
+                        <CategoryBadge
+                          key={index}
+                          category={cat.id}
+                          className={styles.chatCategoryBadge}
+                        />
+                      ))
                   ) : (
-                    <span className={styles.tag}>기타</span>
+                    <CategoryBadge
+                      category={0}
+                      className={styles.chatCategoryBadge}
+                    />
                   )}
+                  {room.latestHelp?.category &&
+                    room.latestHelp.category.length > 2 && (
+                      <span className={styles.moreCategories}>
+                        +{room.latestHelp.category.length - 2}
+                      </span>
+                    )}
                 </div>
               </div>
               {/* <span className={styles.unread}>9</span> */}
-          </Link>
-        </li>
-    
+            </Link>
+          </li>
         ))
       )}
     </ul>

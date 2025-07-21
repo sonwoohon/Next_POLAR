@@ -2,7 +2,7 @@
   text-decoration: none;
   color: inherit;
   display: block;
-  width:100%;
+  width: 100%;
 }
 
 .card {
@@ -57,15 +57,32 @@
   align-items: center;
   gap: 0.7rem;
   margin-bottom: 0.3em;
+  justify-content: space-between;
 }
+
+.categoryContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.moreCategories {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  background: #f0f0f0;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #ddd;
+}
+
 .status {
-  font-size: 1.08rem;
-  font-weight: 700;
-  margin-left: auto;
-  letter-spacing: 0.01em;
+  font-size: 0.9rem;
+  font-weight: 600;
   padding: 0.2rem 0.6rem;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  color: #fff;
+  background: #666;
 }
 
 .status.open {
@@ -157,11 +174,11 @@
   .title {
     font-size: 1rem;
   }
-  .subInfo{  
+  .subInfo {
     flex-direction: column;
     align-items: flex-end;
   }
-  .date{
+  .date {
     margin-left: 0;
     margin-right: 0;
   }
