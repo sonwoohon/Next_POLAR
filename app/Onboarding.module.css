@@ -2,7 +2,7 @@
   position: relative;
   max-width: 768px;
   width: 100%;
-  margin: -5rem auto -5rem;
+  /* margin: -5rem auto -5rem; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,6 +12,15 @@
   animation: subtleMove 15s ease-in-out infinite;
   box-sizing: border-box;
   overflow: hidden;
+  position: fixed;
+  height: 100%;
+  top: 0;;
+  
+}
+
+/* swiper-pagination 관련 모든 클래스에 bottom 적용 */
+.onboardingWrap :global(.swiper-pagination) {
+  bottom: -5px !important;
 }
 
 @keyframes subtleMove {
@@ -28,6 +37,7 @@
   flex-direction: column;
   justify-content: center;
 }
+
 
 /* 기존 컨텐츠 z-index 조정 */
 .onboardingWrap > * {
@@ -53,17 +63,14 @@
 }
 
 .slideContent {
-  max-width: 768px;
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 60vh;
-  padding: 2rem 1rem 1rem 1rem;
   box-sizing: border-box;
+  flex-direction: column;
   justify-content: space-around;
+  max-width: 768px;
+  height: 100%;
+  display: flex
+;
+  align-items: center;
 }
 
 .slideContent .slideImg {
@@ -166,7 +173,7 @@
   .slideDesc {
     font-size: 0.85rem;
   }
-} 
+}
 
 @media (max-width: 480px) {
   .slideTitle {
