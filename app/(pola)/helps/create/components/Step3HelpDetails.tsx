@@ -132,7 +132,7 @@ const Step3HelpDetails: React.FC<Step3HelpDetailsProps> = ({
 
           {/* 선택된 카테고리의 제안 */}
           {activeTab > 0 && generatedSuggestions[activeTab] && (
-            <div className={styles.suggestionsSection}>
+            <div>
               <div className={styles.suggestionGroup}>
                 <h3 className={styles.suggestionTitle}>제목 선택</h3>
                 <div className={styles.suggestionButtons}>
