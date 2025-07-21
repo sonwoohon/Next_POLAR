@@ -12,6 +12,7 @@ import Image from 'next/image';
 import DummyUser from '@/public/images/dummies/dummy_user.png';
 import HelpListCard from '@/app/_components/commons/list-card/help-list-card/HelpListCard';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
+import Link from 'next/link';
 
 interface PageProps {
   params: Promise<{ roomId: string }>;
@@ -74,15 +75,17 @@ export default function ChatHistoryPage({ params }: PageProps) {
         <span className={styles.title}>이전 help 기록</span>
       </div>
       <div className={styles.profileBox}>
-        <div className={styles.profileImg}>
-          <Image
-            src={opponentProfile?.data?.profileImgUrl || DummyUser}
-            alt='Profile'
-            width={64}
-            height={64}
-            className={styles.profileImage}
-          />
-        </div>
+        <Link href={`/user/profile/${opponentNickname}`}>
+          <div className={styles.profileImg}>
+            <Image
+              src={opponentProfile?.data?.profileImgUrl || DummyUser}
+              alt='Profile'
+              width={64}
+              height={64}
+              className={styles.profileImage}
+            />
+          </div>
+        </Link>
         <div className={styles.profileInfo}>
           <div className={styles.profileName}>
             {opponentProfile?.data?.name || opponentNickname}

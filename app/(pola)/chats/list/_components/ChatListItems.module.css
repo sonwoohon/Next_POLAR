@@ -11,7 +11,7 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid #f1f1f1;
   cursor: pointer;
-  transition: background-color .2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .chatItem:hover {
@@ -50,6 +50,23 @@
 .tags {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+.chatCategoryBadge {
+  margin-right: 0 !important;
+  font-size: 0.8rem !important;
+  padding: 0.1rem 0.6rem 0.1rem 0.4rem !important;
+}
+
+.moreCategories {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  background: #f0f0f0;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #ddd;
 }
 
 .tag {
