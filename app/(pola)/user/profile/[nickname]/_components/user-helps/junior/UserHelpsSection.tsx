@@ -1,6 +1,6 @@
-'use client';
-import Link from 'next/link';
-import { Radar } from 'react-chartjs-2';
+"use client";
+import Link from "next/link";
+import { Radar } from "react-chartjs-2";
 import {
   Chart,
   RadialLinearScale,
@@ -9,12 +9,12 @@ import {
   Filler,
   Tooltip,
   Legend,
-} from 'chart.js';
-import styles from './userHelps.module.css';
-import HelpListCard from '@/app/_components/commons/list-card/help-list-card/HelpListCard';
-import { useScores } from '@/lib/hooks/useScores';
-import { useSeniorHelps } from '@/lib/hooks/help';
-import { useJuniorAcceptedHelps } from '@/lib/hooks';
+} from "chart.js";
+import styles from "./userHelps.module.css";
+import HelpListCard from "@/app/_components/commons/list-card/help-list-card/HelpListCard";
+import { useScores } from "@/lib/hooks/useScores";
+import { useSeniorHelps } from "@/lib/hooks/help";
+import { useJuniorAcceptedHelps } from "@/lib/hooks";
 
 Chart.register(
   RadialLinearScale,
@@ -28,14 +28,12 @@ Chart.register(
 interface UserHelpsSectionProps {
   title?: string;
   nickname: string;
-  representativeTitle?: string;
   currentUserRole?: string;
 }
 
 const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
   title,
   nickname,
-  representativeTitle,
   currentUserRole,
 }) => {
   // 사용자 점수 데이터
@@ -96,7 +94,7 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
         5: 0,
       };
 
-  const chartLabels = ['힘', '민첩', '지능', '매력', '인내'];
+  const chartLabels = ["힘", "민첩", "지능", "매력", "인내"];
   const chartData = [
     bigCategoryScores[1],
     bigCategoryScores[2],
@@ -105,12 +103,90 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
     bigCategoryScores[5],
   ];
   const helpCategories = [
-    { name: '힘', points: bigCategoryScores[1] },
-    { name: '민첩', points: bigCategoryScores[2] },
-    { name: '지능', points: bigCategoryScores[3] },
-    { name: '매력', points: bigCategoryScores[4] },
-    { name: '인내', points: bigCategoryScores[5] },
+    { name: "힘", points: bigCategoryScores[1] },
+    { name: "민첩", points: bigCategoryScores[2] },
+    { name: "지능", points: bigCategoryScores[3] },
+    { name: "매력", points: bigCategoryScores[4] },
+    { name: "인내", points: bigCategoryScores[5] },
   ];
+
+  // 가장 높은 점수를 가진 카테고리 찾기
+  const getHighestCategory = () => {
+    let highestCategory = helpCategories[0];
+    helpCategories.forEach((category) => {
+      if (category.points > highestCategory.points) {
+        highestCategory = category;
+      }
+    });
+    return highestCategory;
+  };
+
+  // 카테고리별 재치있는 칭호 생성
+  const getRepresentativeTitle = (categoryName: string, points: number) => {
+    const titles = {
+      힘: [
+        "근육맨",
+        "헬스장의 왕",
+        "파워하우스",
+        "강철근육",
+        "힘의 화신",
+        "무쌍의 파워",
+        "근력의 지배자",
+        "강력한 수호자",
+      ],
+      민첩: [
+        "재빠른 손길",
+        "민첩한 고양이",
+        "스피드 데몬",
+        "날렵한 그림자",
+        "빠른 발",
+        "민첩의 달인",
+        "스피드 마스터",
+        "재빠른 도우미",
+      ],
+      지능: [
+        "똑똑한 두뇌",
+        "지혜의 샘",
+        "브레인 마스터",
+        "지적 거인",
+        "현명한 조언자",
+        "지혜로운 멘토",
+        "두뇌의 지배자",
+        "지능의 화신",
+      ],
+      매력: [
+        "매력의 화신",
+        "카리스마 리더",
+        "매력적인 친구",
+        "매력의 달인",
+        "사랑받는 사람",
+        "매력의 지배자",
+        "카리스마 마스터",
+        "매력의 샘",
+      ],
+      인내: [
+        "끈기의 화신",
+        "인내의 달인",
+        "끈기있는 지원자",
+        "인내의 지배자",
+        "끈기의 마스터",
+        "인내의 샘",
+        "끈기있는 동반자",
+        "인내의 화신",
+      ],
+    };
+
+    const categoryTitles =
+      titles[categoryName as keyof typeof titles] || titles["힘"];
+    const titleIndex = Math.floor(points / 1000) % categoryTitles.length;
+    return categoryTitles[titleIndex];
+  };
+
+  const highestCategory = getHighestCategory();
+  const dynamicRepresentativeTitle = getRepresentativeTitle(
+    highestCategory.name,
+    highestCategory.points
+  );
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -143,29 +219,29 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
     labels: chartLabels,
     datasets: [
       {
-        label: '나의 헬프 능력치',
+        label: "나의 헬프 능력치",
         data: chartData,
         backgroundColor: [
-          'rgba(255, 0, 0, 0.2)', // 힘 - 빨강
-          'rgba(144, 238, 144, 0.2)', // 민첩 - 연두
-          'rgba(0, 0, 255, 0.2)', // 지능 - 파랑
-          'rgba(255, 192, 203, 0.2)', // 매력 - 분홍
-          'rgba(128, 0, 128, 0.2)', // 인내 - 보라
+          "rgba(255, 0, 0, 0.2)", // 힘 - 빨강
+          "rgba(144, 238, 144, 0.2)", // 민첩 - 연두
+          "rgba(0, 0, 255, 0.2)", // 지능 - 파랑
+          "rgba(255, 192, 203, 0.2)", // 매력 - 분홍
+          "rgba(128, 0, 128, 0.2)", // 인내 - 보라
         ],
         borderColor: [
-          'rgba(255, 0, 0, 1)', // 힘 - 빨강
-          'rgba(144, 238, 144, 1)', // 민첩 - 연두
-          'rgba(0, 0, 255, 1)', // 지능 - 파랑
-          'rgba(255, 192, 203, 1)', // 매력 - 분홍
-          'rgba(128, 0, 128, 1)', // 인내 - 보라
+          "rgba(255, 0, 0, 1)", // 힘 - 빨강
+          "rgba(144, 238, 144, 1)", // 민첩 - 연두
+          "rgba(0, 0, 255, 1)", // 지능 - 파랑
+          "rgba(255, 192, 203, 1)", // 매력 - 분홍
+          "rgba(128, 0, 128, 1)", // 인내 - 보라
         ],
         borderWidth: 2,
         pointBackgroundColor: [
-          'rgba(255, 0, 0, 1)', // 힘 - 빨강
-          'rgba(144, 238, 144, 1)', // 민첩 - 연두
-          'rgba(0, 0, 255, 1)', // 지능 - 파랑
-          'rgba(255, 192, 203, 1)', // 매력 - 분홍
-          'rgba(128, 0, 128, 1)', // 인내 - 보라
+          "rgba(255, 0, 0, 1)", // 힘 - 빨강
+          "rgba(144, 238, 144, 1)", // 민첩 - 연두
+          "rgba(0, 0, 255, 1)", // 지능 - 파랑
+          "rgba(255, 192, 203, 1)", // 매력 - 분홍
+          "rgba(128, 0, 128, 1)", // 인내 - 보라
         ],
       },
     ],
@@ -180,39 +256,72 @@ const UserHelpsSection: React.FC<UserHelpsSectionProps> = ({
         </div>
       </div>
       <div className={styles.userHelpsContentContainer}>
+        {/* 카테고리 뱃지 라벨 */}
+        {/* <div className={styles.categoryBadgeRow}>
+          {categoryBadges.map((badge) => (
+            <div
+              key={badge.name}
+              className={`${styles.categoryBadge} ${badge.className}`}
+              title={badge.name}
+            >
+              {badge.emoji}
+            </div>
+          ))}
+        </div> */}
         {/* 오른쪽에 배너/기록 등 추가 */}
         <div className={styles.userHelpsChartContainer}>
           <Radar data={chartDataset} options={chartOptions} />
         </div>
         <div className={styles.userHelpsDataContainer}>
           <span className={styles.subTitle}>대표 칭호</span>
-          <span className={styles.mainTitle}>{representativeTitle}</span>
+          <span className={styles.mainTitle}>{dynamicRepresentativeTitle}</span>
           {helpCategories.map((category, index) => {
             const getCategoryClass = (categoryName: string): string => {
               switch (categoryName) {
-                case '힘':
-                  return styles.helpsCategoryStrength;
-                case '민첩':
-                  return styles.helpsCategoryAgility;
-                case '지능':
-                  return styles.helpsCategoryIntelligence;
-                case '매력':
-                  return styles.helpsCategoryCharm;
-                case '인내':
-                  return styles.helpsCategoryEndurance;
+                case "힘":
+                  return styles.categoryBadgeStrength;
+                case "민첩":
+                  return styles.categoryBadgeAgility;
+                case "지능":
+                  return styles.categoryBadgeIntelligence;
+                case "매력":
+                  return styles.categoryBadgeCharm;
+                case "인내":
+                  return styles.categoryBadgeEndurance;
                 default:
-                  return '';
+                  return "";
               }
             };
-
+            const getCategoryEmoji = (categoryName: string): string => {
+              switch (categoryName) {
+                case "힘":
+                  return "💪";
+                case "민첩":
+                  return "🏃‍♂️";
+                case "지능":
+                  return "🧠";
+                case "매력":
+                  return "✨";
+                case "인내":
+                  return "🏔️";
+                default:
+                  return "";
+              }
+            };
+            // 카테고리별 칭호 생성
+            const badgeTitle = getRepresentativeTitle(
+              category.name,
+              category.points
+            );
             return (
               <div className={styles.helpsDataContainer} key={index}>
                 <div
-                  className={`${styles.helpsCategory} ${getCategoryClass(
+                  className={`${styles.categoryBadge} ${getCategoryClass(
                     category.name
                   )}`}
+                  title={badgeTitle}
                 >
-                  {category.name}
+                  {getCategoryEmoji(category.name)}
                 </div>
                 <span className={styles.helpsCategoryPoint}>
                   {category.points.toLocaleString()}
