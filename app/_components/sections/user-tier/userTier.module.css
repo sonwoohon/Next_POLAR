@@ -120,6 +120,14 @@
   color: #222;
 }
 
+.totalContribution {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+
 .userTierProgressBarBg {
   width: 100%;
   height: 1.5rem;

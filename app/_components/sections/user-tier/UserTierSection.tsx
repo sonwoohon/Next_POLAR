@@ -131,6 +131,9 @@ const UserTierSection: React.FC<UserTierSectionProps> = ({
             <span>
               다음 티어까지 <b>{tierInfo.nextScore.toLocaleString()}</b>점
             </span>
+            <span className={styles.totalContribution}>
+              총 공경력 : {userScore.toLocaleString()}
+            </span>
           </div>
           <div className={styles.userTierProgressBarBg}>
             <div

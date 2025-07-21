@@ -50,10 +50,10 @@ export const SPEED_CATEGORIES: Category[] = [
 // 모든 대분류
 export const BIG_CATEGORIES: BigCategory[] = [
   { id: 1, name: '힘', categories: STRENGTH_CATEGORIES },
-  { id: 2, name: '지능', categories: INTELLIGENCE_CATEGORIES },
-  { id: 3, name: '매력', categories: CHARM_CATEGORIES },
-  { id: 4, name: '인내', categories: PATIENCE_CATEGORIES },
-  { id: 5, name: '신속', categories: SPEED_CATEGORIES },
+  { id: 2, name: '민첩', categories: INTELLIGENCE_CATEGORIES },
+  { id: 3, name: '지능', categories: CHARM_CATEGORIES },
+  { id: 4, name: '매력', categories: PATIENCE_CATEGORIES },
+  { id: 5, name: '인내', categories: SPEED_CATEGORIES },
 ];
 
 // 모든 카테고리 (평면화)
