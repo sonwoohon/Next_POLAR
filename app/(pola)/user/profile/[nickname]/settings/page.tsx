@@ -196,14 +196,17 @@ export default function UserSettingsPage() {
   // 드롭다운 메뉴 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (imageMenuRef.current && !imageMenuRef.current.contains(event.target as Node)) {
+      if (
+        imageMenuRef.current &&
+        !imageMenuRef.current.contains(event.target as Node)
+      ) {
         setShowImageMenu(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -253,28 +256,27 @@ export default function UserSettingsPage() {
             className={styles.profileImage}
           />
           <button
-            className={styles.editButton}
+            className={styles.cameraButton}
             onClick={() => setShowImageMenu(!showImageMenu)}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path
-                d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"
-                stroke="currentColor"
+                d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z"
+                stroke="white"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
-                d="M18.5 2.50023C18.8978 2.1025 19.4374 1.87891 20 1.87891C20.5626 1.87891 21.1022 2.1025 21.5 2.50023C21.8978 2.898 22.1214 3.43762 22.1214 4.00023C22.1214 4.56284 21.8978 5.10246 21.5 5.50023L12 15.0002L8 16.0002L9 12.0002L18.5 2.50023Z"
-                stroke="currentColor"
+                d="M12 17C14.2091 17 16 15.2091 16 13C16 10.7909 14.2091 9 12 9C9.79086 9 8 10.7909 8 13C8 15.2091 9.79086 17 12 17Z"
+                stroke="white"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
-            <span>Edit</span>
           </button>
-          
+
           {/* Image Menu Dropdown */}
           {showImageMenu && (
             <div className={styles.imageMenu} ref={imageMenuRef}>
