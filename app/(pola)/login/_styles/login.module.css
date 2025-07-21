@@ -4,11 +4,12 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  max-width: 768px;
   width: 100%;  
   height: 100%;
   background-color: #fff;
   position: fixed;
-  top: 0;;
+  top: 0;
 }
 
 .logoContainer {
@@ -18,12 +19,6 @@
   align-items: center;
   margin-bottom: 2rem;
 }
-/* @media screen and (-webkit-min-device-pixel-ratio:0) and (max-width: 400px) {
-  .loginContainer {
-    margin-top: -5rem;
-  }
-
-} */
 
 .logoContainer img {
   width: 100%;
