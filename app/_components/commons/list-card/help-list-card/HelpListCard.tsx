@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import styles from './HelpListCard.module.css';
 import CategoryBadge from '@/app/_components/category-badge/CategoryBadge';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
+import { findBigCategoryByCategoryId } from "@/lib/constants/categories";
 
 interface HelpListCardProps {
   help: HelpListResponseDto;
 }
 
 const getRewardByCategory = (category: { id: number; point: number }[]) => {
-  // 카테고리별로 고정된 seed로 임의의 점수 생성 (10,000~100,000, 10,000 단위)
-  const base = ((category[0]?.id ?? 1) * 23457) % 10;
-  return (base + 1) * 10000;
+  const total = category.reduce((sum, cur) => sum + cur.point, 0);
+  return `${total.toLocaleString()}점`;
 };
 
 const getStatusText = (status: string) => {
@@ -93,7 +93,7 @@ const HelpListCard: React.FC<HelpListCardProps> = ({ help }) => {
               {formatDate(startDate)} ~ {formatDate(endDate)}
             </span>
             <span className={styles.reward}>
-              {getRewardByCategory(category).toLocaleString()}점
+              {getRewardByCategory(category)}
             </span>
           </div>
         </div>
