@@ -52,6 +52,7 @@
 .formContainer {
   width: 100%;
   margin: 0 auto;
+  padding-bottom: 5rem;
 }
 
 .formField {
@@ -188,7 +189,7 @@
 /* Save Button */
 .saveButton {
   width: 100%;
-  padding: 1.5rem;
+  padding: .75rem;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
   border-radius: 1rem;
