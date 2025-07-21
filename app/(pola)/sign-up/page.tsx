@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { SignUpDto } from '@/backend/users/signup/applications/dtos/SignUpDto';
 import DaumPostcode, { Address } from 'react-daum-postcode';
 import { useState, useRef, useEffect } from 'react';
+import { useSignup } from '@/lib/hooks/useSignup';
 import styles from './_styles/signUp.module.css';
 
 interface SignupFormData extends SignUpDto {
@@ -17,16 +18,40 @@ const SignupPage: React.FC = () => {
   const [isAddressOpen, setIsAddressOpen] = useState(false);
   const [addressValue, setAddressValue] = useState('');
   const daumPostcodeRef = useRef<HTMLDivElement>(null);
+  const signupMutation = useSignup();
 
-  const signupSubmitHandler: SubmitHandler<SignUpDto> = (data) => {
-    //TODO: POST 회원가입 요청 구현
-    alert(`
-      이메일: ${data.email}
-      휴대폰번호: ${data.phone_number}
-      비밀번호: ${data.password}
-      나이: ${data.age}
-      주소: ${data.address}
-    `);
+  const signupSubmitHandler: SubmitHandler<SignupFormData> = (data) => {
+    // 비밀번호 확인 검증
+    if (data.password !== data.passwordConfirm) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    // 필수 필드 검증
+    if (
+      !data.name ||
+      !data.phone_number ||
+      !data.password ||
+      !data.age ||
+      !data.address
+    ) {
+      alert('필수 입력 사항을 모두 입력해주세요.');
+      return;
+    }
+
+    // SignUpDto 형식으로 변환
+    const signupData: SignUpDto = {
+      name: data.name,
+      nickname: '', // 서버에서 자동 생성
+      phone_number: data.phone_number,
+      password: data.password,
+      email: data.email,
+      age: data.age,
+      address: data.address,
+    };
+
+    // 회원가입 API 호출
+    signupMutation.mutate(signupData);
   };
 
   const handleAddressClick = () => {
@@ -61,6 +86,18 @@ const SignupPage: React.FC = () => {
         <p>
           <span>*</span>는 필수 입력 사항입니다.
         </p>
+        <div className={styles.inputContainer}>
+          <label htmlFor='name'>
+            <span>*</span>이름
+          </label>
+          <input
+            type='text'
+            id='name'
+            className={styles.commonInput}
+            {...register('name')}
+            required
+          />
+        </div>
         <div className={styles.inputContainer}>
           <label htmlFor='email'>이메일</label>
           <input
@@ -153,9 +190,19 @@ const SignupPage: React.FC = () => {
             </div>
           </div>
         )}
-        <button type='submit' className={styles.commonButton}>
-          회원가입
+        <button
+          type='submit'
+          className={styles.commonButton}
+          disabled={signupMutation.isPending}
+        >
+          {signupMutation.isPending ? '회원가입 중...' : '회원가입'}
         </button>
+
+        {signupMutation.isError && (
+          <div style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>
+            회원가입에 실패했습니다. 다시 시도해주세요.
+          </div>
+        )}
       </form>
     </div>
   );
