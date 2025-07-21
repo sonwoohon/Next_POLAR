@@ -23,7 +23,7 @@ export interface ProfileImageUpdateResponse {
 // 프로필 정보 조회
 export const getUserProfileForUpdate = async (nickname: string): Promise<UserProfileResponseDto> => {
   const response = await apiClient.get<ApiResponse<UserProfileResponseDto>>(
-    API_ENDPOINTS.USER_PROFILE_UPDATE(nickname)
+    API_ENDPOINTS.USER_PROFILE(nickname)
   );
   return response.data.data!;
 };
@@ -58,6 +58,13 @@ export const updateUserProfileImage = async (
     }
   );
   return response.data;
+};
+
+// 프로필 이미지 삭제
+export const deleteUserProfileImage = async (nickname: string): Promise<void> => {
+  await apiClient.delete(
+    API_ENDPOINTS.PROFILE_IMAGE
+  );
 };
 
 // 비밀번호 변경
