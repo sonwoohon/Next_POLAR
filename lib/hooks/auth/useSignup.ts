@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { signupApi } from '../api_front/auth.api';
+import { signupApi } from '@/lib/api_front/auth.api';
 import { SignUpDto } from '@/backend/users/signup/applications/dtos/SignUpDto';
 import { useRouter } from 'next/navigation';
 
@@ -8,8 +8,7 @@ export const useSignup = () => {
 
   return useMutation({
     mutationFn: (signupData: SignUpDto) => signupApi(signupData),
-    onSuccess: (data) => {
-      console.log('[useSignup] 회원가입 성공:', data);
+    onSuccess: () => {
       alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
       router.push('/login');
     },

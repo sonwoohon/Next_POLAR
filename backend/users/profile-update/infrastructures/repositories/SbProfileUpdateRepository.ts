@@ -12,7 +12,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       profileImgUrl: string;
     }>
   ): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 프로필 업데이트 시작 - ID: ${userId}`, profileData);
 
     try {
       // 업데이트할 데이터 준비 (snake_case로 변환)
@@ -26,7 +25,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       if (profileData.address !== undefined) updateData.address = profileData.address;
       if (profileData.profileImgUrl !== undefined) updateData.profile_img_url = profileData.profileImgUrl;
 
-      console.log(`[Repository] 프로필 업데이트 데이터 준비 완료:`, updateData);
 
       const { data, error } = await supabase
         .from('users')
@@ -41,16 +39,13 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 업데이트된 사용자 데이터가 없음 - ID: ${userId}`);
         return null;
       }
 
-      console.log(`[Repository] 프로필 업데이트 성공 - ID: ${userId}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] 업데이트된 Entity 변환 완료 - ID: ${userId}`,
         updatedEntity.toJSON()
       );
@@ -65,7 +60,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     imageFile: File
   ): Promise<{ profileImgUrl: string } | null> {
-    console.log(`[Repository] 프로필 이미지 업데이트 시작 - ID: ${userId}`);
 
     try {
       // 파일 업로드
@@ -102,7 +96,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
         return null;
       }
 
-      console.log(`[Repository] 프로필 이미지 업데이트 성공 - ID: ${userId}`, { profileImgUrl });
 
       return { profileImgUrl };
     } catch (error) {
@@ -115,7 +108,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     hashedNewPassword: string
   ): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 비밀번호 변경 시작 - ID: ${userId}`);
 
     try {
       const { data, error } = await supabase
@@ -131,16 +123,13 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 비밀번호 변경된 사용자 데이터가 없음 - ID: ${userId}`);
         return null;
       }
 
-      console.log(`[Repository] 비밀번호 변경 성공 - ID: ${userId}`);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] 비밀번호 변경 Entity 변환 완료 - ID: ${userId}`,
         updatedEntity.toJSON()
       );
@@ -155,7 +144,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     currentPassword: string
   ): Promise<boolean> {
-    console.log(`[Repository] 현재 비밀번호 확인 시작 - ID: ${userId}`);
 
     try {
       const { data, error } = await supabase
@@ -170,14 +158,12 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 사용자를 찾을 수 없음 - ID: ${userId}`);
         return false;
       }
 
       // 비밀번호 비교 (실제 구현에서는 해시 비교)
       const isMatch = data.password === currentPassword;
 
-      console.log(`[Repository] 비밀번호 확인 결과 - ID: ${userId}, 일치: ${isMatch}`);
       return isMatch;
     } catch (error) {
       console.error('[Repository] 비밀번호 확인 중 예외 발생:', error);
@@ -186,7 +172,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
   }
 
   async getUserById(userId: string): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 사용자 조회 시작 - ID: ${userId}`);
 
     try {
       const { data, error } = await supabase
@@ -201,16 +186,13 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 사용자를 찾을 수 없음 - ID: ${userId}`);
         return null;
       }
 
-      console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${userId}`, data);
 
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] Entity 변환 완료 - ID: ${userId}`,
         userEntity.toJSON()
       );

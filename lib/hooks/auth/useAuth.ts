@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '@/lib/stores/authStore';
 import { useRouter } from 'next/navigation';
-import { API_ENDPOINTS } from '../constants/api';
+import { API_ENDPOINTS } from '@/lib/constants/api';
 
 interface UserInfo {
   nickname: string;
@@ -60,8 +60,6 @@ export const useAuth = () => {
     };
 
     const handleAutoLogout = () => {
-      console.log('[useAuth] 자동 로그아웃 처리');
-
       // 쿠키 삭제
       document.cookie =
         'access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -80,8 +78,6 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      console.log('[useAuth] 로그아웃 시작');
-
       // 1. 서버에 로그아웃 요청
       const response = await fetch(API_ENDPOINTS.LOGOUT, {
         method: 'POST',
@@ -103,8 +99,6 @@ export const useAuth = () => {
 
       // 4. 로컬 상태 초기화
       setCurrentUser(null);
-
-      console.log('[useAuth] 로그아웃 완료');
 
       // 5. 홈페이지로 리다이렉트
       router.push('/');

@@ -12,14 +12,16 @@ export function useApplyHelp() {
     },
     onSuccess: (data, helpId) => {
       // 지원 성공 후 관련 쿼리 무효화
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HELP_DETAIL(helpId.toString()) });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.HELP_DETAIL(helpId.toString()),
+      });
       queryClient.invalidateQueries({ queryKey: ['helpApplicants', helpId] });
-      queryClient.invalidateQueries({ queryKey: ['helpApplicationStatus', helpId] });
-      
-      console.log('헬프 지원 성공:', data);
+      queryClient.invalidateQueries({
+        queryKey: ['helpApplicationStatus', helpId],
+      });
     },
     onError: (error) => {
       console.error('헬프 지원 실패:', error);
     },
   });
-} 
+}

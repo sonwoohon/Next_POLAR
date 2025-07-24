@@ -29,7 +29,6 @@ function normalizeCategoryIds(category: CategoryInput): number[] {
 
 // 카테고리 관계 생성 함수
 async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
-  console.log(
     `[createHelpCategories] 서브카테고리 관계 생성 시작 - HelpId: ${helpId}, SubCategoryIds: ${JSON.stringify(
       subCategoryIds
     )}`
@@ -40,7 +39,6 @@ async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
     sub_category_id: subCategoryId,
   }));
 
-  console.log(
     `[createHelpCategories] 삽입할 데이터: ${JSON.stringify(categoryData)}`
   );
 
@@ -54,7 +52,6 @@ async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
     handleSupabaseError(error, '서브카테고리 관계 생성');
   }
 
-  console.log(
     `[createHelpCategories] 서브카테고리 관계 생성 성공 - HelpId: ${helpId}, 삽입된 데이터: ${JSON.stringify(
       data
     )}`
@@ -114,13 +111,11 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
 
     try {
       // 2. 카테고리 관계 생성
-      console.log(
         `[SeniorHelpRepository] 카테고리 처리 시작 - 원본 category: ${JSON.stringify(
           help.category
         )}`
       );
       const categoryIds = normalizeCategoryIds(help.category);
-      console.log(
         `[SeniorHelpRepository] 정규화된 categoryIds: ${JSON.stringify(
           categoryIds
         )}`
@@ -129,7 +124,6 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
 
       // 3. 이미지 URL들이 있다면 help_images 테이블에 저장
       if (help.imageFiles && help.imageFiles.length > 0) {
-        console.log(
           `[SeniorHelpRepository] 이미지 URL들 저장 시작 - HelpId: ${helpId}, 개수: ${help.imageFiles.length}`
         );
 
@@ -155,12 +149,10 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
           );
         }
 
-        console.log(
           `[SeniorHelpRepository] 이미지 URL들 저장 성공 - HelpId: ${helpId}, 저장된 개수: ${help.imageFiles.length}`
         );
       }
 
-      console.log(`[SeniorHelpRepository] Help 생성 완료 - HelpId: ${helpId}`);
       return helpId;
     } catch (error) {
       // 카테고리 관계 생성 또는 이미지 저장 실패 시 help도 삭제 (롤백)
@@ -171,7 +163,6 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
       try {
         await supabase.from('help_categories').delete().eq('help_id', helpId);
         await supabase.from('helps').delete().eq('id', helpId);
-        console.log(`[SeniorHelpRepository] 롤백 완료 - HelpId: ${helpId}`);
       } catch (rollbackError) {
         console.error(
           `[SeniorHelpRepository] 롤백 중 오류 - HelpId: ${helpId}`,

@@ -65,21 +65,17 @@ export const ALL_CATEGORIES: Category[] = [
   ...SPEED_CATEGORIES,
 ];
 
-// 카테고리 ID로 카테고리 찾기
-export const findCategoryById = (id: number): Category | undefined => {
-  return ALL_CATEGORIES.find((category) => category.id === id);
-};
+export const CATEGORIES = [
+  '요리왕',
+  '배달왕',
+  '애견케어왕',
+  '돌봄왕',
+  '장보기왕',
+  '수리왕',
+  '청소왕',
+  '이사왕',
+  '노인케어왕',
+  '정원왕',
+] as const;
 
-// 대분류 ID로 대분류 찾기
-export const findBigCategoryById = (id: number): BigCategory | undefined => {
-  return BIG_CATEGORIES.find((bigCategory) => bigCategory.id === id);
-};
-
-// 카테고리 ID로 대분류 찾기
-export const findBigCategoryByCategoryId = (
-  categoryId: number
-): BigCategory | undefined => {
-  return BIG_CATEGORIES.find((bigCategory) =>
-    bigCategory.categories.some((category) => category.id === categoryId)
-  );
-};
+export type CategoryName = (typeof CATEGORIES)[number];

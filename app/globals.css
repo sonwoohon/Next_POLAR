@@ -125,7 +125,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -167,9 +167,9 @@ textarea {
   border: 0;
 }
 button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {
   /*-webkit-appearance:button;*/
   cursor: pointer;
   padding: 0;
@@ -180,23 +180,23 @@ button[disabled],
 html input[disabled] {
   cursor: default;
 }
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
-input[type="search"] {
+input[type='search'] {
   /*-webkit-appearance:textfield;*/
   box-sizing: content-box;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   height: auto;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   box-sizing: border-box;
   padding: 0;
 }
@@ -247,9 +247,7 @@ body {
   padding-bottom: 5rem !important;
 }
 
-.main-container > div{
+.main-container > div {
   flex: 1;
-  padding:5rem 1.5rem 0 !important;
+  padding: 5rem 1.5rem 0 !important;
 } /* 최하단 공통 레이아웃 */
-
-

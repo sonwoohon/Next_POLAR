@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { createClient, RealtimeChannel } from '@supabase/supabase-js';
-import { useAuthStore } from '../stores/authStore';
-import { getHelpParticipants } from '../api_front/help.api';
+import { useAuthStore } from '@/lib/stores/authStore';
+import { getHelpParticipants } from '@/lib/api_front/help.api';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -73,20 +73,16 @@ export function useVerificationRealtime({
         },
         async (payload) => {
           try {
-            console.log('🔄 DELETE 이벤트 수신:', payload);
             onLoadingChange?.(true);
 
             const helpId = payload.old.help_id;
             const helpParticipants = await getHelpParticipants(helpId);
-            console.log('👥 Help 참여자 정보:', helpParticipants);
 
             // 주니어가 인증번호를 입력했을 때만 완료 처리
             if (helpParticipants.isJunior) {
-              console.log('👨‍🎓 주니어 완료 처리');
               // 주니어에게는 완료 상태 표시
               onHelpCompleted?.(helpId, helpParticipants.helpTitle, 'junior');
             } else if (helpParticipants.isSenior) {
-              console.log('👴 시니어 완료 알림');
               // 시니어에게는 주니어가 인증번호를 입력했다는 알림
               onHelpCompleted?.(helpId, helpParticipants.helpTitle, 'senior');
             }
@@ -97,11 +93,7 @@ export function useVerificationRealtime({
           }
         }
       )
-      .subscribe((status) => {
-        if (status === 'CHANNEL_ERROR') {
-          console.error('❌ 인증번호 실시간 연결 오류');
-        }
-      });
+      .subscribe(() => {});
 
     channelRef.current = channel;
 

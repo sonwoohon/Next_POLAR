@@ -4,9 +4,10 @@ import Image from 'next/image';
 import Logo from '@/public/images/logos/POLAR.png';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
-import { useLogin } from '@/lib/hooks/useLogin';
+import { useLogin } from '@/lib/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { ROUTES } from '@/lib/constants/routes';
 
 interface loginData {
   loginId: string;
@@ -22,11 +23,9 @@ const LoginPage: React.FC = () => {
     loginMutation.mutate(data);
   };
 
-  // 로그인 성공 시 리다이렉트
   useEffect(() => {
     if (loginMutation.isSuccess) {
-      // 로그인 성공 시 /main으로 리다이렉트
-      router.push('/main');
+      router.push(ROUTES.MAIN);
     }
   }, [loginMutation.isSuccess, router]);
 
@@ -75,12 +74,11 @@ const LoginPage: React.FC = () => {
           </div>
         )}
         <div className={styles.subMenuContainer}>
-          {/* 회원가입, 비밀번호 찾기, 개인정보처리방침 링크, 추후 구현  */}
-          <Link href={'/sign-up'}>회원가입</Link>
+          <Link href={ROUTES.SIGN_UP}>회원가입</Link>
           <span>|</span>
-          <Link href={'/find-password'}>비밀번호 찾기</Link>
+          <Link href={ROUTES.FIND_PASSWORD}>비밀번호 찾기</Link>
           <span>|</span>
-          <Link href={'/find-id'}>개인정보처리방침</Link>
+          <Link href={ROUTES.FIND_ID}>개인정보처리방침</Link>
         </div>
       </form>
     </div>

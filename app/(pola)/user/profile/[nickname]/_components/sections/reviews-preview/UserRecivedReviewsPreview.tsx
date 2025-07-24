@@ -1,6 +1,6 @@
-import styles from "./UserRecivedReviewsPreview.module.css";
-import ReviewCard from "@/app/_components/commons/list-card/review-list-card/ReviewCard";
-import Link from "next/link";
+import styles from './UserRecivedReviewsPreview.module.css';
+import ReviewCard from '@/app/_components/commons/list-card/review-list-card/ReviewCard';
+import Link from 'next/link';
 
 interface ReviewPreview {
   id: number;
@@ -25,10 +25,8 @@ interface UserRecivedReviewsPreviewProps {
 const UserRecivedReviewsPreview: React.FC<UserRecivedReviewsPreviewProps> = ({
   nickname,
   reviews,
-  title = "받은 리뷰",
+  title = '받은 리뷰',
 }) => {
-  console.log(reviews);
-
   return (
     <section className={styles.section}>
       <div className={styles.headerRow}>
@@ -50,12 +48,12 @@ const UserRecivedReviewsPreview: React.FC<UserRecivedReviewsPreviewProps> = ({
               review={{
                 id: review.id ?? idx,
                 helpId: review.helpId ?? 0,
-                writerId: review.writerId ?? "",
-                receiverId: review.receiverId ?? "",
-                writerNickname: review.writerNickname ?? "익명",
+                writerId: review.writerId ?? '',
+                receiverId: review.receiverId ?? '',
+                writerNickname: review.writerNickname ?? '익명',
                 receiverNickname: review.receiverNickname ?? nickname,
                 rating: review.rating ?? 5,
-                text: review.text ?? "리뷰 내용이 없습니다.",
+                text: review.text ?? '리뷰 내용이 없습니다.',
                 reviewImgUrl: review.reviewImgUrl,
                 writerProfileImgUrl: review.writerProfileImgUrl,
                 createdAt: review.createdAt ?? new Date().toISOString(),

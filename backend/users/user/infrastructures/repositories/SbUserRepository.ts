@@ -6,7 +6,6 @@ import { fromDbObject } from '@/backend/common/mappers/UserMapper';
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
   async getUserById(id: string): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 사용자 조회 시작 - ID: ${id}`);
 
     try {
       const { data, error } = await supabase
@@ -21,16 +20,13 @@ export class SbUserRepository implements IUserRepository {
       }
 
       if (!data) {
-        console.log(`[Repository]사용자를 찾을 수 없음 - ID: ${id}`);
         return null;
       }
 
-      console.log(`[Repository] 사용자 데이터 조회 성공 - ID: ${id}`, data);
 
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] Entity 변환 완료 - ID: ${id}`,
         userEntity.toJSON()
       );
@@ -42,7 +38,6 @@ export class SbUserRepository implements IUserRepository {
   }
 
   async getUserByNickname(nickname: string): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 사용자 조회 시작 - nickname: ${nickname}`);
 
     try {
       const { data, error } = await supabase
@@ -57,16 +52,13 @@ export class SbUserRepository implements IUserRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 사용자를 찾을 수 없음 - nickname: ${nickname}`);
         return null;
       }
 
-      console.log(`[Repository] 사용자 데이터 조회 성공 - nickname: ${nickname}`, data);
 
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] Entity 변환 완료 - nickname: ${nickname}`,
         userEntity.toJSON()
       );
@@ -81,7 +73,6 @@ export class SbUserRepository implements IUserRepository {
     id: string,
     user: CommonUserEntity
   ): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 사용자 업데이트 시작 - ID: ${id}`, user.toJSON());
 
     try {
       // 업데이트할 데이터 준비
@@ -96,7 +87,6 @@ export class SbUserRepository implements IUserRepository {
         nickname: user.nickname,
       };
 
-      console.log(`[Repository] 업데이트 데이터 준비 완료:`, updateData);
 
       const { data, error } = await supabase
         .from('users')
@@ -111,16 +101,13 @@ export class SbUserRepository implements IUserRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 업데이트된 사용자 데이터가 없음 - ID: ${id}`);
         return null;
       }
 
-      console.log(`[Repository] 사용자 업데이트 성공 - ID: ${id}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`,
         updatedEntity.toJSON()
       );
@@ -134,7 +121,6 @@ export class SbUserRepository implements IUserRepository {
   // UserWithdrawalUseCase용 메서드들
 
   async deleteById(id: string): Promise<void> {
-    console.log(`[Repository] 사용자 삭제 시작 - ID: ${id}`);
 
     try {
       const { error } = await supabase.from('users').delete().eq('id', id);
@@ -144,7 +130,6 @@ export class SbUserRepository implements IUserRepository {
         throw new Error(`사용자 삭제 실패: ${error.message}`);
       }
 
-      console.log(`[Repository] 사용자 삭제 성공 - ID: ${id}`);
     } catch (error) {
       console.error('[Repository] 사용자 삭제 중 예외 발생:', error);
       throw error;
@@ -164,7 +149,6 @@ export class SbUserRepository implements IUserRepository {
       nickname: string;
     }>
   ): Promise<CommonUserEntity | null> {
-    console.log(`[Repository] 사용자 부분 업데이트 시작 - ID: ${id}`, updates);
 
     try {
       // 업데이트할 데이터 준비 (snake_case로 변환)
@@ -188,7 +172,6 @@ export class SbUserRepository implements IUserRepository {
       if (updates.name !== undefined) updateData.name = updates.name;
       if (updates.nickname !== undefined) updateData.nickname = updates.nickname;
 
-      console.log(`[Repository] 부분 업데이트 데이터 준비 완료:`, updateData);
 
       const { data, error } = await supabase
         .from('users')
@@ -203,16 +186,13 @@ export class SbUserRepository implements IUserRepository {
       }
 
       if (!data) {
-        console.log(`[Repository] 부분 업데이트된 사용자 데이터가 없음 - ID: ${id}`);
         return null;
       }
 
-      console.log(`[Repository] 사용자 부분 업데이트 성공 - ID: ${id}`, data);
 
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-      console.log(
         `[Repository] 부분 업데이트된 Entity 변환 완료 - ID: ${id}`,
         updatedEntity.toJSON()
       );

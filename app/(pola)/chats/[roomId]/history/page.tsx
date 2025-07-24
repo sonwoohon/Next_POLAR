@@ -1,11 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  useChatRoomDetailWithHelps,
-  useUserReviewStats,
-  useUserProfile,
-} from '@/lib/hooks';
+import { useUserProfile } from '@/lib/hooks';
 import { useAuthStore } from '@/lib/stores/authStore';
 import styles from './History.module.css';
 import Image from 'next/image';
@@ -13,6 +9,8 @@ import DummyUser from '@/public/images/dummies/dummy_user.png';
 import HelpListCard from '@/app/_components/commons/list-card/help-list-card/HelpListCard';
 import type { HelpListResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
 import Link from 'next/link';
+import { useChatRoomDetailWithHelps } from '@/lib/hooks/chats';
+import { useUserReviewStats } from '@/lib/hooks/review';
 
 interface PageProps {
   params: Promise<{ roomId: string }>;

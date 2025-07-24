@@ -3,9 +3,13 @@
 // import { useState, useEffect } from 'react';
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSeniorHelpCompletion } from '@/lib/hooks/useSeniorHelpCompletion';
+import { useSeniorHelpCompletion } from '@/lib/hooks';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useHelpDetail, useApplyHelp, useHelpApplicationStatus } from '@/lib/hooks/help';
+import {
+  useHelpDetail,
+  useApplyHelp,
+  useHelpApplicationStatus,
+} from '@/lib/hooks/help';
 
 import ImageCarousel from './_components/image-carousel/ImageCarousel';
 import HelpContent from './_components/help-content/HelpContent';
@@ -22,10 +26,15 @@ export default function HelpDetailPage({
   const router = useRouter();
 
   // React Query를 사용하여 헬프 데이터 가져오기
-  const { data: helpData, isLoading, error: helpError } = useHelpDetail(parseInt(helpId));
+  const {
+    data: helpData,
+    isLoading,
+    error: helpError,
+  } = useHelpDetail(parseInt(helpId));
 
   // 시니어 완료 요청 훅 사용
-  const { requestCompletion, isPending: isCompleting } = useSeniorHelpCompletion();
+  const { requestCompletion, isPending: isCompleting } =
+    useSeniorHelpCompletion();
 
   // 헬프 지원 훅 사용
   const { mutate: applyHelp, isPending: isApplying } = useApplyHelp();
@@ -40,24 +49,20 @@ export default function HelpDetailPage({
   const { data: applicationStatus } = useHelpApplicationStatus(
     userRole === 'junior' ? parseInt(helpId) : 0
   );
-  
+
   // Help 완료 요청 함수 (새로운 훅 사용)
   const handleCompleteHelp = () => {
     if (!helpData) {
-      console.log('❌ Help 데이터가 없음');
       return;
     }
-    console.log('📋 Help 데이터:', helpData);
     requestCompletion({ helpId: helpData.id, helpTitle: helpData.title });
   };
 
   // 헬프 지원 함수
   const handleApplyHelp = () => {
     if (!helpData) {
-      console.log('❌ Help 데이터가 없음');
       return;
     }
-    console.log('📋 헬프 지원:', helpData.id);
     applyHelp(helpData.id);
   };
 
@@ -66,13 +71,13 @@ export default function HelpDetailPage({
     router.push(`/helps/${helpId}/applicants`);
   };
 
-
-
   if (isLoading) {
     return <div className={styles.loadingContainer}>로딩 중...</div>;
   }
   if (helpError) {
-    return <div className={styles.errorContainer}>오류: {helpError?.message}</div>;
+    return (
+      <div className={styles.errorContainer}>오류: {helpError?.message}</div>
+    );
   }
 
   return (
@@ -80,7 +85,6 @@ export default function HelpDetailPage({
       {helpData?.seniorInfo && <UserInfoSection data={helpData.seniorInfo} />}
       <HelpContent help={helpData || null} />
       <ImageCarousel images={helpData?.images || []} />
-      
 
       <ActionButtons
         help={helpData || null}

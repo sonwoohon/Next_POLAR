@@ -16,13 +16,10 @@ const createUseCase = () => {
 export async function GET(
   request: NextRequest
 ): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
-  console.log('[API] GET /api/users 호출됨');
-
   try {
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
     const { nickname } = userData || {};
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
@@ -32,11 +29,7 @@ export async function GET(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
-    console.log('[API] UseCase 생성 완료');
-
-    console.log(`[API] 사용자 조회 시작 - ID: ${nickname}`);
     const user = await useCase.getUserById(nickname);
 
     if (!user) {
@@ -47,14 +40,9 @@ export async function GET(
       );
     }
 
-    console.log(`[API] 사용자 조회 완료 - ID: ${nickname}`);
-
     // Entity를 DTO로 변환
-    console.log('[API] DTO 변환 시작');
     const userDto = entityToUserProfileResponseDto(user);
-    console.log('[API] DTO 변환 완료', userDto);
 
-    console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
   } catch (error: unknown) {
     // 에러 타입 검증
@@ -74,16 +62,12 @@ export async function GET(
 export async function PUT(
   request: NextRequest
 ): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
-  console.log('[API] PUT /api/users 호출됨');
-
   try {
     const body = await request.json();
-    console.log('[API] 요청 본문:', body);
 
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
     const { nickname } = userData || {};
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
@@ -93,21 +77,14 @@ export async function PUT(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
-    console.log('[API] UseCase 생성 완료');
 
     // 모든 정보 수정 (비밀번호 포함)
-    console.log(`[API] 사용자 프로필 업데이트 시작 - ID: ${nickname}`);
     const updatedUser = await useCase.updateUserProfile(nickname, body);
-    console.log(`[API] 사용자 프로필 업데이트 완료 - ID: ${nickname}`);
 
     // Entity를 DTO로 변환하여 반환
-    console.log('[API] DTO 변환 시작');
     const userDto = entityToUserProfileResponseDto(updatedUser);
-    console.log('[API] DTO 변환 완료', userDto);
 
-    console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
   } catch (error: unknown) {
     // 에러 타입 검증
@@ -133,13 +110,10 @@ export async function PUT(
 export async function DELETE(
   request: NextRequest
 ): Promise<NextResponse<UserProfileResponseDto | { error: string }>> {
-  console.log('[API] DELETE /api/users 호출됨');
-
   try {
     // 쿠키에서 사용자 ID 추출
     const userData = getNicknameFromCookie(request);
     const { nickname } = userData || {};
-    console.log(`[API] 쿠키에서 추출한 사용자 ID: ${nickname}`);
 
     if (!nickname) {
       console.error('[API] 사용자 ID가 없음 - 로그인 필요');
@@ -149,21 +123,14 @@ export async function DELETE(
       );
     }
 
-    console.log(`[API] UseCase 생성 시작 - 사용자 ID: ${nickname}`);
     const useCase = createUseCase();
-    console.log('[API] UseCase 생성 완료');
 
     // 프로필 이미지 삭제
-    console.log(`[API] 프로필 이미지 삭제 시작 - ID: ${nickname}`);
     const updatedUser = await useCase.deleteProfileImage(nickname);
-    console.log(`[API] 프로필 이미지 삭제 완료 - ID: ${nickname}`);
 
     // Entity를 DTO로 변환하여 반환
-    console.log('[API] DTO 변환 시작');
     const userDto = entityToUserProfileResponseDto(updatedUser);
-    console.log('[API] DTO 변환 완료', userDto);
 
-    console.log('[API] 응답 반환');
     return NextResponse.json(userDto);
   } catch (error: unknown) {
     // 에러 타입 검증

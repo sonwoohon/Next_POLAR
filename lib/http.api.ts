@@ -24,7 +24,6 @@ const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
@@ -35,7 +34,6 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log(`[API Response] ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
@@ -94,18 +92,3 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
-
-// API 응답 타입 정의
-export interface ApiResponse<T = unknown> {
-  success?: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-}
-
-// API 에러 타입 정의
-export interface ApiError {
-  error: string;
-  detail?: string;
-  reason?: string;
-}

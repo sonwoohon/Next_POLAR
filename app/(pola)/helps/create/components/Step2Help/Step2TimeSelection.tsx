@@ -1,5 +1,6 @@
 'use client';
 
+import { timeSlots, timeTypes } from '@/lib/constants/helpCreateStepConstants';
 import React, { useState } from 'react';
 import styles from './Step2TimeSelection.module.css';
 
@@ -26,58 +27,6 @@ const Step2TimeSelection: React.FC<Step2TimeSelectionProps> = ({
 }) => {
   const [showTimeGrid, setShowTimeGrid] = useState(false);
   const [showEndTimeGrid, setShowEndTimeGrid] = useState(false);
-
-  const timeTypes = [
-    {
-      id: 'now',
-      label: '지금 당장',
-      description: '바로 도움이 필요해요',
-    },
-    {
-      id: 'tomorrow',
-      label: '내일',
-      description: '내일 도움이 필요해요',
-    },
-    {
-      id: 'specific',
-      label: '특정 날짜',
-      description: '원하는 날짜와 시간을 선택해요',
-    },
-  ];
-
-  const timeSlots = [
-    '07:00',
-    '07:30',
-    '08:00',
-    '08:30',
-    '09:00',
-    '09:30',
-    '10:00',
-    '10:30',
-    '11:00',
-    '11:30',
-    '12:00',
-    '12:30',
-    '13:00',
-    '13:30',
-    '14:00',
-    '14:30',
-    '15:00',
-    '15:30',
-    '16:00',
-    '16:30',
-    '17:00',
-    '17:30',
-    '18:00',
-    '18:30',
-    '19:00',
-    '19:30',
-    '20:00',
-    '20:30',
-    '21:00',
-    '21:30',
-    '22:00',
-  ];
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -211,7 +160,9 @@ const Step2TimeSelection: React.FC<Step2TimeSelectionProps> = ({
                       <div
                         key={time}
                         className={`${styles.timeSlot} ${
-                          selectedEndTime === time ? styles.timeSlotSelected : ''
+                          selectedEndTime === time
+                            ? styles.timeSlotSelected
+                            : ''
                         }`}
                         onClick={() => {
                           onEndTimeChange(time);

@@ -1,10 +1,17 @@
 // 날짜 포맷 유틸리티 함수들
 
 /**
+ * 문자열이나 Date 객체를 Date 객체로 변환하는 헬퍼 함수
+ */
+const toDateObject = (date: string | Date): Date => {
+  return typeof date === 'string' ? new Date(date) : date;
+};
+
+/**
  * 날짜를 "YYYY.MM.DD" 형식으로 포맷
  */
 export const formatDate = (date: string | Date): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = toDateObject(date);
 
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -17,7 +24,7 @@ export const formatDate = (date: string | Date): string => {
  * 날짜를 "MM.DD" 형식으로 포맷 (년도 제외)
  */
 export const formatDateShort = (date: string | Date): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = toDateObject(date);
 
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
@@ -55,7 +62,7 @@ export const formatDateRangeShort = (
  * 상대적 시간 표시 (예: "3일 전", "1주일 전")
  */
 export const formatRelativeDate = (date: string | Date): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = toDateObject(date);
   const now = new Date();
   const diffTime = now.getTime() - dateObj.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));

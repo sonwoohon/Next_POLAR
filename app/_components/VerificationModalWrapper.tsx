@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useVerificationRealtime } from '@/lib/hooks/useVerificationRealtime';
+import { useVerificationRealtime } from '@/lib/hooks';
 import { useHelpVerification } from '@/lib/contexts/HelpVerificationContext';
 
 import VerificationModal from './VerificationModal';
@@ -41,11 +41,8 @@ export default function VerificationModalWrapper() {
     helpTitle: string,
     userRole: 'senior' | 'junior'
   ) => {
-    console.log('🎯 Help 완료 처리:', { helpId, helpTitle, userRole });
-
     // 주니어가 인증번호를 입력했을 때만 처리
     if (userRole === 'junior') {
-      console.log('👨‍🎓 주니어 완료 처리');
       // 주니어 모달이 열려있으면 완료 상태로 변경
       if (modalState.isOpen && modalState.helpId === helpId) {
         setModalState((prev) => ({
@@ -54,7 +51,6 @@ export default function VerificationModalWrapper() {
         }));
       }
     } else if (userRole === 'senior') {
-      console.log('👴 시니어 완료 알림');
       // 시니어 모달이 열려있고, 해당 Help의 인증번호가 표시되어 있을 때만 완료 상태로 변경
       if (
         seniorModalState.isOpen &&

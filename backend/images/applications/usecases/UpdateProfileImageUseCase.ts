@@ -21,7 +21,6 @@ export class UpdateProfileImageUseCase {
     userId: string,
     imageUrl: string
   ): Promise<CommonUserEntity | null> {
-    console.log(
       `[UseCase] 프로필 이미지 업데이트 시작 - 사용자 ID: ${userId}, 이미지 URL: ${imageUrl}`
     );
 
@@ -47,7 +46,6 @@ export class UpdateProfileImageUseCase {
         existingUser.createdAt
       );
 
-      console.log(
         `[UseCase] 업데이트할 사용자 정보 - ID: ${userId}`,
         updatedUser.toJSON()
       );
@@ -59,7 +57,6 @@ export class UpdateProfileImageUseCase {
         return null;
       }
 
-      console.log(
         `[UseCase] 프로필 이미지 업데이트 성공 - ID: ${userId}`,
         result.toJSON()
       );

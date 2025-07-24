@@ -16,7 +16,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<HelpDetailResponseDto | null>> {
-  console.log('[API] GET /api/helps/[helpId] 호출됨');
   const { helpId } = await params;
   const helpIdNumber: number = parseInt(helpId);
 
@@ -31,7 +30,9 @@ export async function GET(
 
       // 이미지 URL 가져오기
       const imageRepository = new SbHelpImageRepository();
-      const images = await imageRepository.getHelpImageUrlsByHelpId(helpEntity.id);
+      const images = await imageRepository.getHelpImageUrlsByHelpId(
+        helpEntity.id
+      );
 
       const helpDetail: HelpDetailResponseDto = {
         id: helpEntity.id,
@@ -52,7 +53,6 @@ export async function GET(
         images: images,
       };
 
-      console.log('[API] 헬프 상세 조회 성공:', helpDetail);
       return NextResponse.json(helpDetail, { status: 200 });
     }
 
@@ -61,4 +61,4 @@ export async function GET(
     console.error('[API] 헬프 상세 조회 오류:', error);
     return NextResponse.json(null, { status: 500 });
   }
-} 
+}

@@ -4,7 +4,6 @@ import { IImageRepository } from '@/backend/images/domains/repositories/ImageRep
 // 이미지 파일 검증 클래스
 export class ImageValidator {
   static validateImageFile(file: File): void {
-    console.log(
       `[ImageValidator] 이미지 파일 검증 시작: ${file.name}, 크기: ${file.size} bytes`
     );
 
@@ -30,11 +29,9 @@ export class ImageValidator {
       );
     }
 
-    console.log(`[ImageValidator] 이미지 파일 검증 성공: ${file.name}`);
   }
 
   static validateBucketName(bucketName: string): void {
-    console.log(`[ImageValidator] 버킷명 검증 시작: ${bucketName}`);
 
     const allowedBuckets = ['profile-images', 'help-images', 'review-images'];
     if (!allowedBuckets.includes(bucketName)) {
@@ -42,11 +39,9 @@ export class ImageValidator {
       throw new ValidationError('지원하지 않는 이미지 버킷입니다.');
     }
 
-    console.log(`[ImageValidator] 버킷명 검증 성공: ${bucketName}`);
   }
 
   static validateImageUrl(imageUrl: string): void {
-    console.log(`[ImageValidator] 이미지 URL 검증 시작: ${imageUrl}`);
 
     if (!imageUrl || imageUrl.trim().length === 0) {
       console.error('[ImageValidator] 이미지 URL 검증 실패: 빈 값');
@@ -62,7 +57,6 @@ export class ImageValidator {
       );
     }
 
-    console.log(`[ImageValidator] 이미지 URL 검증 성공: ${imageUrl}`);
   }
 }
 
@@ -75,7 +69,6 @@ export class UploadImageUseCase {
     bucketName: string,
     nickname: string
   ): Promise<{ url: string }> {
-    console.log(
       `[UploadImageUseCase] 이미지 업로드 시작 - Bucket: ${bucketName}, Nickname: ${nickname}`
     );
 
@@ -93,7 +86,6 @@ export class UploadImageUseCase {
         nickname
       );
 
-      console.log(
         `[UploadImageUseCase] 이미지 업로드 성공 - URL: ${imageUrl.url}`
       );
       return imageUrl;
@@ -115,7 +107,6 @@ export class GetImageByUrlUseCase {
     imageUrl: string,
     bucketName: string
   ): Promise<{ url: string } | null> {
-    console.log(
       `[GetImageByUrlUseCase] 이미지 조회 시작 - URL: ${imageUrl}, Bucket: ${bucketName}`
     );
 
@@ -133,11 +124,9 @@ export class GetImageByUrlUseCase {
       );
 
       if (result) {
-        console.log(
           `[GetImageByUrlUseCase] 이미지 조회 성공 - URL: ${result.url}`
         );
       } else {
-        console.log(
           `[GetImageByUrlUseCase] 이미지를 찾을 수 없음 - URL: ${imageUrl}`
         );
       }
@@ -158,7 +147,6 @@ export class DeleteImageUseCase {
   constructor(private readonly imageRepository: IImageRepository) {}
 
   async execute(imageUrl: string, bucketName: string): Promise<boolean> {
-    console.log(
       `[DeleteImageUseCase] 이미지 삭제 시작 - URL: ${imageUrl}, Bucket: ${bucketName}`
     );
 
@@ -176,9 +164,7 @@ export class DeleteImageUseCase {
       );
 
       if (success) {
-        console.log(`[DeleteImageUseCase] 이미지 삭제 성공 - URL: ${imageUrl}`);
       } else {
-        console.log(`[DeleteImageUseCase] 이미지 삭제 실패 - URL: ${imageUrl}`);
       }
 
       return success;

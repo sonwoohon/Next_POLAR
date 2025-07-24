@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../api_front/user.api';
-import { UserProfile } from '../models/userProfile.model';
+import { getUserProfile } from '@/lib/api_front/user.api';
+import { UserProfile } from '@/lib/models/userProfile.model';
 
 // 사용자 프로필 조회 훅
 export function useUserProfile(nickname: string) {
@@ -11,4 +11,4 @@ export function useUserProfile(nickname: string) {
     retry: 1,
     staleTime: 5 * 60 * 1000, // 5분
   });
-} 
+}

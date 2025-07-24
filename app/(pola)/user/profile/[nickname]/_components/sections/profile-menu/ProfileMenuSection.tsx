@@ -1,10 +1,10 @@
-"use client";
-import Link from "next/link";
+'use client';
+import Link from 'next/link';
 // import { useState } from "react";
 // import { useWithdrawal } from "@/lib/hooks";
-import { useAuth } from "@/lib/hooks/useAuth";
+import { useAuth } from '@/lib/hooks';
 // import { getUuidByNickname } from "@/lib/getUserData";
-import styles from "./profileMenu.module.css";
+import styles from './profileMenu.module.css';
 
 interface ProfileMenuSectionProps {
   nickname: string;
@@ -24,8 +24,6 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
 
   const handleLogout = async () => {
     try {
-      console.log("[ProfileMenuSection] 로그아웃 시작");
-
       // 부모 컴포넌트의 onLogout 콜백 호출 (있다면)
       if (onLogout) {
         onLogout();
@@ -33,11 +31,9 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
 
       // useAuth의 logout 함수 호출
       await logout();
-
-      console.log("[ProfileMenuSection] 로그아웃 완료");
     } catch (error) {
-      console.error("[ProfileMenuSection] 로그아웃 중 오류:", error);
-      alert("로그아웃 처리 중 오류가 발생했습니다.");
+      console.error('[ProfileMenuSection] 로그아웃 중 오류:', error);
+      alert('로그아웃 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -106,7 +102,7 @@ const ProfileMenuSection: React.FC<ProfileMenuSectionProps> = ({
         <button
           className={styles.withdrawalButton}
           disabled
-          style={{ opacity: 0.5, cursor: "not-allowed" }}
+          style={{ opacity: 0.5, cursor: 'not-allowed' }}
         >
           <span className={styles.menuIcon}>❌</span>
           <span className={styles.menuText}>회원 탈퇴</span>

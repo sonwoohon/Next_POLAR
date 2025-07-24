@@ -22,8 +22,6 @@ const createHelpListUseCase = () => {
 export async function GET(
   request: NextRequest
 ): Promise<NextResponse<HelpResponseDto[] | HelpPaginationResponseDto | null>> {
-  console.log('[API] GET /api/helps 호출됨');
-
   try {
     // 쿼리 파라미터 파싱
     const { searchParams } = new URL(request.url);
@@ -51,7 +49,6 @@ export async function GET(
     );
 
     if (hasInvalidParams) {
-      console.log('정의되지 않은 파라미터 감지, 빈 결과 반환');
       return NextResponse.json([], { status: 200 });
     }
 
@@ -118,15 +115,6 @@ export async function GET(
     // 페이지네이션 모드 확인
     const usePagination =
       searchParams.get('pagination') === 'true' || filter.page !== undefined;
-
-    console.log(
-      '[API] 필터 파라미터:',
-      filter,
-      '페이지네이션:',
-      usePagination,
-      '쿼리 파라미터 개수:',
-      requestParams.length
-    );
 
     if (usePagination) {
       // 페이지네이션 모드
