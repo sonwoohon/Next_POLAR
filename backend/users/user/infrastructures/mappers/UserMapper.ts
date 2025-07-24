@@ -58,12 +58,9 @@ export function fromDbObject(dbObj: {
   );
 }
 
-// Entity를 UserProfileResponseDto로 변환
 export function entityToUserProfileResponseDto(
   entity: CommonUserEntity
 ): UserProfileResponseDto {
-
-  // createdAt을 안전하게 처리
   let createdAtString: string;
   try {
     if (
@@ -72,25 +69,17 @@ export function entityToUserProfileResponseDto(
     ) {
       createdAtString = entity.createdAt.toISOString();
     } else if (typeof entity.createdAt === 'string') {
-      // 문자열이 유효한 날짜인지 확인
       const date = new Date(entity.createdAt);
       if (!isNaN(date.getTime())) {
         createdAtString = date.toISOString();
-          `[Mapper] 문자열에서 Date 객체 생성 후 ISO 문자열 변환: ${createdAtString}`
-        );
       } else {
         createdAtString = new Date().toISOString();
-          `[Mapper] 유효하지 않은 날짜 문자열, 현재 시간 사용: ${createdAtString}`
-        );
       }
     } else {
-      createdAtString = new Date().toISOString(); // 기본값으로 현재 시간 사용
-        `[Mapper] 알 수 없는 날짜 형식, 현재 시간 사용: ${createdAtString}`
-      );
+      createdAtString = new Date().toISOString();
     }
-  } catch (error) {
-    console.error('[Mapper] createdAt 처리 중 오류:', error);
-    createdAtString = new Date().toISOString(); // 오류 시 현재 시간 사용
+  } catch {
+    createdAtString = new Date().toISOString();
   }
 
   const dto: UserProfileResponseDto = {

@@ -130,7 +130,7 @@ export default function UserSettingsPage() {
 
   const handleImageDelete = async () => {
     try {
-      await deleteImageMutation.mutateAsync(nickname);
+      await deleteImageMutation.mutateAsync();
       alert('프로필 이미지가 삭제되었습니다.');
     } catch (error) {
       console.error('프로필 이미지 삭제 실패:', error);

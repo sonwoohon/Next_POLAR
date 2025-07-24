@@ -12,7 +12,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       profileImgUrl: string;
     }>
   ): Promise<CommonUserEntity | null> {
-
     try {
       // 업데이트할 데이터 준비 (snake_case로 변환)
       const updateData: {
@@ -22,9 +21,10 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
       } = {};
 
       if (profileData.name !== undefined) updateData.name = profileData.name;
-      if (profileData.address !== undefined) updateData.address = profileData.address;
-      if (profileData.profileImgUrl !== undefined) updateData.profile_img_url = profileData.profileImgUrl;
-
+      if (profileData.address !== undefined)
+        updateData.address = profileData.address;
+      if (profileData.profileImgUrl !== undefined)
+        updateData.profile_img_url = profileData.profileImgUrl;
 
       const { data, error } = await supabase
         .from('users')
@@ -42,13 +42,9 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
         return null;
       }
 
-
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-        `[Repository] 업데이트된 Entity 변환 완료 - ID: ${userId}`,
-        updatedEntity.toJSON()
-      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 프로필 업데이트 중 예외 발생:', error);
@@ -60,7 +56,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     imageFile: File
   ): Promise<{ profileImgUrl: string } | null> {
-
     try {
       // 파일 업로드
       const fileExt = imageFile.name.split('.').pop();
@@ -96,7 +91,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
         return null;
       }
 
-
       return { profileImgUrl };
     } catch (error) {
       console.error('[Repository] 프로필 이미지 업데이트 중 예외 발생:', error);
@@ -108,7 +102,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     hashedNewPassword: string
   ): Promise<CommonUserEntity | null> {
-
     try {
       const { data, error } = await supabase
         .from('users')
@@ -126,13 +119,9 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
         return null;
       }
 
-
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
 
-        `[Repository] 비밀번호 변경 Entity 변환 완료 - ID: ${userId}`,
-        updatedEntity.toJSON()
-      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 비밀번호 변경 중 예외 발생:', error);
@@ -144,7 +133,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
     userId: string,
     currentPassword: string
   ): Promise<boolean> {
-
     try {
       const { data, error } = await supabase
         .from('users')
@@ -172,7 +160,6 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
   }
 
   async getUserById(userId: string): Promise<CommonUserEntity | null> {
-
     try {
       const { data, error } = await supabase
         .from('users')
@@ -189,17 +176,13 @@ export class SbProfileUpdateRepository implements IProfileUpdateRepository {
         return null;
       }
 
-
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
 
-        `[Repository] Entity 변환 완료 - ID: ${userId}`,
-        userEntity.toJSON()
-      );
       return userEntity;
     } catch (error) {
       console.error('[Repository] 사용자 조회 중 예외 발생:', error);
       return null;
     }
   }
-} 
+}

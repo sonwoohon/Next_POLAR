@@ -6,7 +6,6 @@ import { fromDbObject } from '@/backend/common/mappers/UserMapper';
 // Supabase 인증 Repository 구현체
 export class SbUserRepository implements IUserRepository {
   async getUserById(id: string): Promise<CommonUserEntity | null> {
-
     try {
       const { data, error } = await supabase
         .from('users')
@@ -23,13 +22,8 @@ export class SbUserRepository implements IUserRepository {
         return null;
       }
 
-
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
-
-        `[Repository] Entity 변환 완료 - ID: ${id}`,
-        userEntity.toJSON()
-      );
       return userEntity;
     } catch (error) {
       console.error('[Repository] 사용자 조회 중 예외 발생:', error);
@@ -38,12 +32,11 @@ export class SbUserRepository implements IUserRepository {
   }
 
   async getUserByNickname(nickname: string): Promise<CommonUserEntity | null> {
-
     try {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('nickname',  nickname)
+        .eq('nickname', nickname)
         .single();
 
       if (error) {
@@ -55,13 +48,8 @@ export class SbUserRepository implements IUserRepository {
         return null;
       }
 
-
       // 데이터를 Entity로 변환
       const userEntity = fromDbObject(data);
-
-        `[Repository] Entity 변환 완료 - nickname: ${nickname}`,
-        userEntity.toJSON()
-      );
       return userEntity;
     } catch (error) {
       console.error('[Repository] 사용자 조회 중 예외 발생:', error);
@@ -73,7 +61,6 @@ export class SbUserRepository implements IUserRepository {
     id: string,
     user: CommonUserEntity
   ): Promise<CommonUserEntity | null> {
-
     try {
       // 업데이트할 데이터 준비
       const updateData = {
@@ -86,7 +73,6 @@ export class SbUserRepository implements IUserRepository {
         name: user.name,
         nickname: user.nickname,
       };
-
 
       const { data, error } = await supabase
         .from('users')
@@ -104,13 +90,8 @@ export class SbUserRepository implements IUserRepository {
         return null;
       }
 
-
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
-
-        `[Repository] 업데이트된 Entity 변환 완료 - ID: ${id}`,
-        updatedEntity.toJSON()
-      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 사용자 업데이트 중 예외 발생:', error);
@@ -121,7 +102,6 @@ export class SbUserRepository implements IUserRepository {
   // UserWithdrawalUseCase용 메서드들
 
   async deleteById(id: string): Promise<void> {
-
     try {
       const { error } = await supabase.from('users').delete().eq('id', id);
 
@@ -129,7 +109,6 @@ export class SbUserRepository implements IUserRepository {
         console.error('[Repository] Supabase 사용자 삭제 오류:', error);
         throw new Error(`사용자 삭제 실패: ${error.message}`);
       }
-
     } catch (error) {
       console.error('[Repository] 사용자 삭제 중 예외 발생:', error);
       throw error;
@@ -149,7 +128,6 @@ export class SbUserRepository implements IUserRepository {
       nickname: string;
     }>
   ): Promise<CommonUserEntity | null> {
-
     try {
       // 업데이트할 데이터 준비 (snake_case로 변환)
       const updateData: {
@@ -163,15 +141,18 @@ export class SbUserRepository implements IUserRepository {
         nickname?: string;
       } = {};
 
-      if (updates.phoneNumber !== undefined) updateData.phone_number = updates.phoneNumber;
-      if (updates.password !== undefined) updateData.password = updates.password;
+      if (updates.phoneNumber !== undefined)
+        updateData.phone_number = updates.phoneNumber;
+      if (updates.password !== undefined)
+        updateData.password = updates.password;
       if (updates.email !== undefined) updateData.email = updates.email;
       if (updates.age !== undefined) updateData.age = updates.age;
-      if (updates.profileImgUrl !== undefined) updateData.profile_img_url = updates.profileImgUrl;
+      if (updates.profileImgUrl !== undefined)
+        updateData.profile_img_url = updates.profileImgUrl;
       if (updates.address !== undefined) updateData.address = updates.address;
       if (updates.name !== undefined) updateData.name = updates.name;
-      if (updates.nickname !== undefined) updateData.nickname = updates.nickname;
-
+      if (updates.nickname !== undefined)
+        updateData.nickname = updates.nickname;
 
       const { data, error } = await supabase
         .from('users')
@@ -181,7 +162,10 @@ export class SbUserRepository implements IUserRepository {
         .single();
 
       if (error) {
-        console.error('[Repository] Supabase 사용자 부분 업데이트 오류:', error);
+        console.error(
+          '[Repository] Supabase 사용자 부분 업데이트 오류:',
+          error
+        );
         return null;
       }
 
@@ -189,13 +173,8 @@ export class SbUserRepository implements IUserRepository {
         return null;
       }
 
-
       // 업데이트된 데이터를 Entity로 변환하여 반환
       const updatedEntity = fromDbObject(data);
-
-        `[Repository] 부분 업데이트된 Entity 변환 완료 - ID: ${id}`,
-        updatedEntity.toJSON()
-      );
       return updatedEntity;
     } catch (error) {
       console.error('[Repository] 사용자 부분 업데이트 중 예외 발생:', error);

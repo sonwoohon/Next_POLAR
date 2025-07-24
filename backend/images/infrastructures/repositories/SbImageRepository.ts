@@ -7,9 +7,6 @@ export class SbImageRepository implements IImageRepository {
     bucketName: string,
     nickname: string
   ): Promise<{ url: string }> {
-      `[SbImageRepository] 이미지 업로드 시작 - Bucket: ${bucketName}, Nickname: ${nickname}, 파일: ${file.name}`
-    );
-
     try {
       // 파일명 생성 (중복 방지)
       const fileExtension = file.name.split('.').pop();
@@ -52,9 +49,6 @@ export class SbImageRepository implements IImageRepository {
     imageUrl: string,
     bucketName: string
   ): Promise<{ url: string } | null> {
-      `[SbImageRepository] 이미지 조회 시작 - URL: ${imageUrl}, Bucket: ${bucketName}`
-    );
-
     try {
       // URL에서 파일명 추출
       const fileName = this.extractFileNameFromUrl(imageUrl);
@@ -77,13 +71,9 @@ export class SbImageRepository implements IImageRepository {
       }
 
       if (!data || data.length === 0) {
-          `[SbImageRepository] 이미지를 찾을 수 없음 - 파일명: ${fileName}, Bucket: ${bucketName}`
-        );
         return null;
       }
 
-        `[SbImageRepository] 이미지 조회 성공 - 파일명: ${fileName}, Bucket: ${bucketName}`
-      );
       return { url: imageUrl };
     } catch (error) {
       console.error(
@@ -95,9 +85,6 @@ export class SbImageRepository implements IImageRepository {
   }
 
   async deleteImage(imageUrl: string, bucketName: string): Promise<boolean> {
-      `[SbImageRepository] 이미지 삭제 시작 - URL: ${imageUrl}, Bucket: ${bucketName}`
-    );
-
     try {
       // URL에서 파일명 추출
       const fileName = this.extractFileNameFromUrl(imageUrl);
@@ -119,8 +106,6 @@ export class SbImageRepository implements IImageRepository {
         return false;
       }
 
-        `[SbImageRepository] 이미지 삭제 성공 - 파일명: ${fileName}, Bucket: ${bucketName}`
-      );
       return true;
     } catch (error) {
       console.error(

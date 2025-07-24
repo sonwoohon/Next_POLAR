@@ -4,7 +4,7 @@ import { IUserRepository } from '@/backend/common/repositories/IUserRepository';
 
 // 특정 사용자 조회 UseCase
 export class GetUserByIdUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(id: string): Promise<CommonUserEntity | null> {
     return this.userRepository.getUserById(id);
@@ -13,9 +13,12 @@ export class GetUserByIdUseCase {
 
 // 회원 정보 수정 UseCase
 export class UpdateUserInfoUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(id: string, updateData: CommonUserEntity): Promise<CommonUserEntity | null> {
+  async execute(
+    id: string,
+    updateData: CommonUserEntity
+  ): Promise<CommonUserEntity | null> {
     return this.userRepository.updateUser(id, updateData);
   }
 }
@@ -31,7 +34,6 @@ export class ValidationError extends Error {
 // 사용자 정보 검증 클래스
 export class UserValidator {
   static validatePhoneNumber(phoneNumber: string): void {
-
     if (!phoneNumber || phoneNumber.trim().length === 0) {
       console.error('[Validator] 전화번호 검증 실패: 빈 값');
       throw new ValidationError('전화번호는 비어있을 수 없습니다.');
@@ -50,41 +52,33 @@ export class UserValidator {
       );
       throw new ValidationError('전화번호는 10-11자리여야 합니다.');
     }
-
   }
 
   static validatePassword(password: string): void {
-
     if (!password || password.length < 6) {
       console.error(
         `[Validator] 비밀번호 검증 실패: 길이 부족 - ${password.length}자리`
       );
       throw new ValidationError('비밀번호는 최소 6자 이상이어야 합니다.');
     }
-
   }
 
   static validateEmail(email: string): void {
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       console.error(`[Validator] 이메일 검증 실패: 형식 오류 - ${email}`);
       throw new ValidationError('유효한 이메일 형식이 아닙니다.');
     }
-
   }
 
   static validateAge(age: number): void {
-
     if (age < 0 || age > 150) {
       console.error(`[Validator] 나이 검증 실패: 범위 오류 - ${age}`);
       throw new ValidationError('나이는 0-150 사이의 값이어야 합니다.');
     }
-
   }
 
   static validateProfileImageUrl(url: string): void {
-
     // 빈 URL은 허용 (프로필 이미지가 없는 경우)
     if (!url || url.trim() === '') {
       return;
@@ -99,20 +93,16 @@ export class UserValidator {
         '프로필 이미지 URL은 http 또는 https로 시작해야 합니다.'
       );
     }
-
   }
 
   static validateAddress(address: string): void {
-
     if (!address || address.trim().length === 0) {
       console.error('[Validator] 주소 검증 실패: 빈 값');
       throw new ValidationError('주소는 비어있을 수 없습니다.');
     }
-
   }
 
   static validateName(name: string): void {
-
     if (!name || name.trim().length === 0) {
       console.error('[Validator] 이름 검증 실패: 빈 값');
       throw new ValidationError('이름은 비어있을 수 없습니다.');
@@ -123,11 +113,9 @@ export class UserValidator {
       );
       throw new ValidationError('이름은 50자를 초과할 수 없습니다.');
     }
-
   }
 
   static validateNickname(nickname: string): void {
-
     if (!nickname || nickname.trim().length === 0) {
       console.error('[Validator] 닉네임 검증 실패: 빈 값');
       throw new ValidationError('닉네임은 비어있을 수 없습니다.');
@@ -138,7 +126,6 @@ export class UserValidator {
       );
       throw new ValidationError('닉네임은 30자를 초과할 수 없습니다.');
     }
-
   }
 }
 
@@ -156,11 +143,10 @@ export interface UserProfileUpdate {
 
 // 공용 사용자 Use Case
 export class CommonUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   // 특정 사용자 조회
   async getUserById(id: string): Promise<CommonUserEntity | null> {
-
     try {
       const user = await this.userRepository.getUserById(id);
 
@@ -177,7 +163,6 @@ export class CommonUserUseCase {
 
   // nickname으로 사용자 조회
   async getUserByNickname(nickname: string): Promise<CommonUserEntity | null> {
-
     try {
       const user = await this.userRepository.getUserByNickname(nickname);
 
@@ -187,14 +172,16 @@ export class CommonUserUseCase {
 
       return user;
     } catch (error) {
-      console.error(`[UseCase] 사용자 조회 중 오류 발생 - nickname: ${nickname}`, error);
+      console.error(
+        `[UseCase] 사용자 조회 중 오류 발생 - nickname: ${nickname}`,
+        error
+      );
       throw error;
     }
   }
 
   // 프로필 이미지 삭제 (빈 프로필로 설정)
   async deleteProfileImage(id: string): Promise<CommonUserEntity> {
-
     try {
       const existingUser = await this.userRepository.getUserById(id);
       if (!existingUser) {
@@ -203,10 +190,6 @@ export class CommonUserUseCase {
         );
         throw new ValidationError('사용자를 찾을 수 없습니다.');
       }
-
-        `[UseCase] 기존 사용자 정보 - ID: ${id}`,
-        existingUser.toJSON()
-      );
 
       // 프로필 이미지 URL을 빈 문자열로 설정
       const updatedUser = new CommonUserEntity(
@@ -222,10 +205,6 @@ export class CommonUserUseCase {
         existingUser.createdAt
       );
 
-        `[UseCase] 프로필 이미지 삭제용 Entity 생성 완료 - ID: ${id}`,
-        updatedUser.toJSON()
-      );
-
       const result = await this.userRepository.updateUser(id, updatedUser);
       if (!result) {
         console.error(
@@ -234,9 +213,6 @@ export class CommonUserUseCase {
         throw new ValidationError('프로필 이미지 삭제에 실패했습니다.');
       }
 
-        `[UseCase] 프로필 이미지 삭제 성공 - ID: ${id}`,
-        result.toJSON()
-      );
       return result;
     } catch (error) {
       console.error(
@@ -252,7 +228,6 @@ export class CommonUserUseCase {
     id: string,
     updates: UserProfileUpdate
   ): Promise<CommonUserEntity> {
-
     try {
       // 기존 사용자 조회
       const existingUser = await this.userRepository.getUserById(id);
@@ -262,11 +237,6 @@ export class CommonUserUseCase {
         );
         throw new ValidationError('사용자를 찾을 수 없습니다.');
       }
-
-        `[UseCase] 기존 사용자 정보 - ID: ${id}`,
-        existingUser.toJSON()
-      );
-
 
       // 업데이트할 필드 검증
       if (updates.phoneNumber) {
@@ -291,8 +261,6 @@ export class CommonUserUseCase {
         UserValidator.validateNickname(updates.nickname);
       }
       if (updates.password !== undefined) {
-          `[UseCase] 비밀번호 검증 - ID: ${id}, 길이: ${updates.password.length}`
-        );
         UserValidator.validatePassword(updates.password);
       }
 
@@ -310,10 +278,6 @@ export class CommonUserUseCase {
         existingUser.createdAt
       );
 
-        `[UseCase] 업데이트된 사용자 Entity 생성 완료 - ID: ${id}`,
-        updatedUser.toJSON()
-      );
-
       // Repository를 통해 업데이트
       const result = await this.userRepository.updateUser(id, updatedUser);
       if (!result) {
@@ -323,9 +287,6 @@ export class CommonUserUseCase {
         throw new ValidationError('프로필 업데이트에 실패했습니다.');
       }
 
-        `[UseCase] 프로필 업데이트 성공 - ID: ${id}`,
-        result.toJSON()
-      );
       return result;
     } catch (error) {
       console.error(
