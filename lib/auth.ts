@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { NextRequest } from 'next/server';
 import { getNicknameFromCookie } from '@/lib/jwt';
@@ -52,86 +51,6 @@ export function getAuthenticatedUser(request: NextRequest): AuthResult {
     console.error('Token verification error:', e);
     return { error: '토큰 검증 중 오류가 발생했습니다.' };
   }
-}
-
-/**
- * 쿠키에서 refresh token을 추출합니다.
- * @returns refresh token 또는 null
- */
-export async function getRefreshToken(): Promise<string | null> {
-  try {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refresh-token');
-    return refreshToken?.value || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * 토큰이 유효한지 검증합니다.
- * @param token - 검증할 JWT 토큰
- * @param secret - JWT 시크릿 키
- * @returns DecodedToken 또는 null
- */
-export function verifyToken(
-  token: string,
-  secret: string
-): DecodedToken | null {
-  try {
-    return jwt.verify(token, secret) as DecodedToken;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * 사용자가 다른 사용자의 데이터에 접근할 권한이 있는지 확인
- * @param currentUser - 현재 로그인한 사용자 정보
- * @param targetNickname - 조회하려는 대상 사용자의 nickname
- * @returns 권한이 있으면 true, 없으면 false
- */
-export function canAccessUserData(
-  currentUser: DecodedToken,
-  targetNickname: string
-): boolean {
-  // 1. 자신의 데이터는 항상 접근 가능
-  if (currentUser.nickname === targetNickname) {
-    return true;
-  }
-  return true;
-}
-
-/**
- * 점수 조회 권한 검증
- * @param request - NextRequest 객체
- * @param targetNickname - 조회하려는 대상 사용자의 nickname
- * @returns 검증 결과
- */
-export function validateScoreAccess(
-  request: NextRequest,
-  targetNickname: string
-): { authorized: boolean; user?: DecodedToken; error?: string } {
-  const authResult = getAuthenticatedUser(request);
-
-  if (authResult.error || !authResult.user) {
-    return {
-      authorized: false,
-      error: '로그인이 필요합니다.',
-    };
-  }
-
-  if (!canAccessUserData(authResult.user, targetNickname)) {
-    return {
-      authorized: false,
-      error: '해당 사용자의 점수에 접근할 권한이 없습니다.',
-    };
-  }
-
-  return {
-    authorized: true,
-    user: authResult.user,
-  };
 }
 
 /**

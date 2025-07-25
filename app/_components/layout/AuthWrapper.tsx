@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useReviewAccess } from '@/lib/hooks/auth/useReviewAccess';
 import { useChatRoomAccess } from '@/lib/hooks/auth/useChatRoomAccess';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { useAuth } from '@/lib/hooks';
 
 interface AuthWrapperProps {
   children: React.ReactNode;

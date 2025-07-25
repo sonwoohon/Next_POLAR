@@ -6,19 +6,19 @@ import {
   getUserScoresByCategoryAndSeason,
   getSeasonRankings,
   getCategoryRankings,
-} from '../api_front/score.api';
-import { QUERY_KEYS } from '../constants/api';
+} from '@/lib/api_front/score.api';
+import { QUERY_KEYS } from '@/lib/constants/api';
 
 /**
  * 사용자 전체 점수 조회 훅
- * 
+ *
  * @example
  * ```tsx
  * const { data: scores, isLoading, error } = useUserScores();
- * 
+ *
  * if (isLoading) return <div>로딩 중...</div>;
  * if (error) return <div>오류 발생</div>;
- * 
+ *
  * return (
  *   <div>
  *     {scores?.map(score => (
@@ -41,7 +41,7 @@ export const useUserScores = () => {
 
 /**
  * 사용자 카테고리별 점수 조회 훅
- * 
+ *
  * @example
  * ```tsx
  * const { data: scores, isLoading } = useUserScoresByCategory(6); // 카테고리 ID 6
@@ -59,7 +59,7 @@ export const useUserScoresByCategory = (categoryId: number) => {
 
 /**
  * 사용자 시즌별 점수 조회 훅
- * 
+ *
  * @example
  * ```tsx
  * const { data: scores, isLoading } = useUserScoresBySeason(1); // 시즌 1
@@ -77,7 +77,7 @@ export const useUserScoresBySeason = (season: number) => {
 
 /**
  * 사용자 카테고리 + 시즌별 점수 조회 훅
- * 
+ *
  * @example
  * ```tsx
  * const { data: scores, isLoading } = useUserScoresByCategoryAndSeason(6, 1);
@@ -88,7 +88,13 @@ export const useUserScoresByCategoryAndSeason = (
   season: number
 ) => {
   return useQuery({
-    queryKey: [...QUERY_KEYS.USER_SCORES, 'category', categoryId, 'season', season],
+    queryKey: [
+      ...QUERY_KEYS.USER_SCORES,
+      'category',
+      categoryId,
+      'season',
+      season,
+    ],
     queryFn: () => getUserScoresByCategoryAndSeason(categoryId, season),
     enabled: !!categoryId && !!season,
     staleTime: 5 * 60 * 1000, // 5분
@@ -98,11 +104,11 @@ export const useUserScoresByCategoryAndSeason = (
 
 /**
  * 시즌별 랭킹 조회 훅 (Hall of Fame용)
- * 
+ *
  * @example
  * ```tsx
  * const { data: rankings, isLoading } = useSeasonRankings(1);
- * 
+ *
  * return (
  *   <div>
  *     {rankings?.map((ranking, index) => (
@@ -126,7 +132,7 @@ export const useSeasonRankings = (season: number) => {
 
 /**
  * 카테고리별 랭킹 조회 훅
- * 
+ *
  * @example
  * ```tsx
  * const { data: rankings, isLoading } = useCategoryRankings(6);
@@ -140,4 +146,4 @@ export const useCategoryRankings = (categoryId: number) => {
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, // 10분
   });
-}; 
+};

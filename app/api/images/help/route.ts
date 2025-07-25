@@ -7,8 +7,6 @@ import { getNicknameFromCookie } from '@/lib/jwt';
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<{ url: string } | { error: string }>> {
-  console.log('[API] POST /api/images/help 호출됨');
-
   try {
     // 사용자 인증 - 쿠키에서 nickname 추출
     const userData = getNicknameFromCookie(request);
@@ -23,17 +21,6 @@ export async function POST(
 
     const formData = await request.formData();
 
-    // FormData 전체 내용 로깅
-    console.log('[API] FormData 전체 내용:');
-    for (const [key, value] of formData.entries()) {
-      console.log(`  ${key}:`, value);
-      if (value instanceof File) {
-        console.log(`    - 파일명: ${value.name}`);
-        console.log(`    - 크기: ${value.size} bytes`);
-        console.log(`    - 타입: ${value.type}`);
-      }
-    }
-
     // 여러 가능한 파일 필드명을 시도
     const possibleFileKeys = ['file', 'image', 'upload', 'photo', 'helpImage'];
     let file: File | null = null;
@@ -42,7 +29,6 @@ export async function POST(
       const value = formData.get(key);
       if (value instanceof File) {
         file = value;
-        console.log(`[API] 파일을 찾았습니다 - 키: ${key}`);
         break;
       }
     }
@@ -54,8 +40,6 @@ export async function POST(
         { status: 400 }
       );
     }
-
-    console.log(`[API] 도움 요청 이미지 업로드 시작 - 사용자: ${nickname}`);
 
     // 이미지 업로드
     const imageRepository = new SbImageRepository();
@@ -70,7 +54,6 @@ export async function POST(
       );
     }
 
-    console.log('[API] 도움 요청 이미지 업로드 성공:', result.url);
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error('[API] 도움 요청 이미지 업로드 중 오류 발생:', error);

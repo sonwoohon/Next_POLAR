@@ -25,7 +25,6 @@ export function useSeniorHelpCompletion() {
       helpId,
       helpTitle,
     }: CompletionRequest): Promise<CompletionResponse> => {
-      console.log('🚀 시니어 완료 요청 시작:', { helpId, helpTitle });
       setIsPending(true);
       setError(null);
 
@@ -38,24 +37,16 @@ export function useSeniorHelpCompletion() {
         });
 
         const data = await response.json();
-        console.log('📡 API 응답:', data);
 
         if (!response.ok) {
           throw new Error(data.error || '완료 요청에 실패했습니다.');
         }
 
         const verificationCode = data.verificationCode;
-        console.log('🎯 인증번호 받음:', verificationCode);
 
         if (verificationCode) {
-          console.log('🔓 시니어 모달 열기 시도:', {
-            helpId,
-            helpTitle,
-            verificationCode,
-          });
           // 시니어에게 인증번호 모달 열기
           openSeniorVerificationCodeModal(helpId, helpTitle, verificationCode);
-          console.log('✅ 시니어 모달 열기 완료');
         }
 
         return {

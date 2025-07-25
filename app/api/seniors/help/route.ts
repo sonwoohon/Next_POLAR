@@ -69,7 +69,6 @@ export async function POST(req: NextRequest) {
           return result.url;
         });
         uploadedImageUrls = await Promise.all(uploadPromises);
-        console.log('업로드된 이미지 URLs:', uploadedImageUrls);
       }
 
       // 2. Help 생성
@@ -84,7 +83,6 @@ export async function POST(req: NextRequest) {
 
       const help = await seniorHelpUseCase.createHelp(nickname, helpReqCreate);
 
-      console.log('Help 생성 성공:', help);
       return NextResponse.json(help, { status: 201 });
     } catch (error) {
       // 트랜잭션 실패 시 업로드된 이미지들 삭제
@@ -99,7 +97,6 @@ export async function POST(req: NextRequest) {
             await imageRepository.deleteImage(url, 'help-images');
           });
           await Promise.all(deletePromises);
-          console.log('업로드된 이미지들 삭제 완료');
         } catch (deleteError) {
           console.error('이미지 삭제 중 오류:', deleteError);
         }

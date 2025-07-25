@@ -16,9 +16,9 @@ const createGetSeniorHelpsUseCase = () => {
 };
 
 // 시니어가 작성한 헬프 리스트 조회 API
-export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelpsResponseDto>> {
-  console.log('[API] GET /api/seniors/helps 호출됨');
-
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<SeniorHelpsResponseDto>> {
   try {
     // 쿠키에서 사용자 정보 가져오기
     const userData = getNicknameFromCookie(request);
@@ -36,7 +36,11 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
 
     if (!helpEntities) {
       return NextResponse.json(
-        { success: false, data: [], message: '헬프 리스트 조회에 실패했습니다.' },
+        {
+          success: false,
+          data: [],
+          message: '헬프 리스트 조회에 실패했습니다.',
+        },
         { status: 500 }
       );
     }
@@ -55,7 +59,9 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
         const seniorInfo = await getUserUseCase.execute(helpEntity.seniorId);
 
         // 이미지 URL 조회
-        const images = await imageRepository.getHelpImageUrlsByHelpId(helpEntity.id);
+        const images = await imageRepository.getHelpImageUrlsByHelpId(
+          helpEntity.id
+        );
 
         const helpDto: HelpResponseDto = {
           id: helpEntity.id,
@@ -87,7 +93,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
       {
         success: true,
         data: helpDtos,
-        message: '시니어 헬프 리스트 조회 성공'
+        message: '시니어 헬프 리스트 조회 성공',
       },
       { status: 200 }
     );
@@ -97,9 +103,9 @@ export async function GET(request: NextRequest): Promise<NextResponse<SeniorHelp
       {
         success: false,
         data: [],
-        message: '서버 오류가 발생했습니다.'
+        message: '서버 오류가 발생했습니다.',
       },
       { status: 500 }
     );
   }
-} 
+}

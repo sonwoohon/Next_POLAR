@@ -42,11 +42,6 @@ export function HelpVerificationProvider({
 
   const openSeniorVerificationCodeModal = useCallback(
     (helpId: number, helpTitle: string, verificationCode: number) => {
-      console.log('🔓 시니어 모달 열기:', {
-        helpId,
-        helpTitle,
-        verificationCode,
-      });
       setSeniorModalState({
         isOpen: true,
         helpId,
@@ -71,7 +66,6 @@ export function HelpVerificationProvider({
   }, []);
 
   const setHelpCompleted = useCallback((helpId: number, helpTitle: string) => {
-    console.log('✅ Help 완료 상태 설정:', { helpId, helpTitle });
     setSeniorModalState((prev) => ({
       ...prev,
       isCompleted: true,

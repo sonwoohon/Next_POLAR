@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRef, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useRef, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-import styles from "./ChatRoom.module.css";
-import { useChatInput } from "@/lib/hooks/chats/useChatInput";
-import { useChatMessages } from "@/lib/hooks/chats/useChatMessages";
-import { useSendMessage } from "@/lib/hooks/chats/useSendMessage";
-import { useRealtimeChat } from "@/lib/hooks/chats/useRealtimeChat";
-import { useUserProfile } from "@/lib/hooks/useUserProfile";
+import styles from './ChatRoom.module.css';
+import { useChatInput } from '@/lib/hooks/chats/useChatInput';
+import { useChatMessages } from '@/lib/hooks/chats/useChatMessages';
+import { useSendMessage } from '@/lib/hooks/chats/useSendMessage';
+import { useRealtimeChat } from '@/lib/hooks/chats/useRealtimeChat';
+import { useUserProfile } from '@/lib/hooks';
 
 interface ChatRoomProps {
   roomId: number;
@@ -29,7 +29,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
     roomId,
     onMessageReceived: () => {
       // 새 메시지가 도착하면 스크롤을 맨 아래로
-      endRef.current?.scrollIntoView({ behavior: "smooth" });
+      endRef.current?.scrollIntoView({ behavior: 'smooth' });
     },
   });
 
@@ -50,7 +50,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
 
   // 스크롤 최하단
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messagesData?.messages]);
 
   // 메시지 데이터 변환
@@ -62,7 +62,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
 
   // 상대방 nickname 찾기 (내 nickname이 아닌 첫 번째 메시지의 nickname)
   const opponentNickname =
-    messages.find((msg) => msg.nickname !== loginUserNickname)?.nickname || "";
+    messages.find((msg) => msg.nickname !== loginUserNickname)?.nickname || '';
 
   // 상대방 프로필 정보 가져오기
   const { data: opponentProfile } = useUserProfile(opponentNickname);
@@ -96,18 +96,18 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
                     ) : (
                       <div className={styles.avatarIcon}>
                         <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
+                          width='24'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          fill='none'
                         >
-                          <circle cx="12" cy="9" r="4" fill="#b6d4fe" />
+                          <circle cx='12' cy='9' r='4' fill='#b6d4fe' />
                           <ellipse
-                            cx="12"
-                            cy="17"
-                            rx="7"
-                            ry="4"
-                            fill="#b6d4fe"
+                            cx='12'
+                            cy='17'
+                            rx='7'
+                            ry='4'
+                            fill='#b6d4fe'
                           />
                         </svg>
                       </div>
@@ -146,14 +146,14 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
       </div>
 
       <div className={styles.inputContainer}>
-        <button className={styles.plusBtn} type="button">
+        <button className={styles.plusBtn} type='button'>
           +
         </button>
         <textarea
           ref={textareaRef}
           className={styles.messageInput}
           rows={1}
-          placeholder="메시지 입력"
+          placeholder='메시지 입력'
           value={message}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -165,7 +165,7 @@ export default function ChatRoom({ roomId, loginUserNickname }: ChatRoomProps) {
           disabled={!canSend || isSending}
           onClick={handleSendMessage}
         >
-          {isSending ? "전송 중..." : "전송"}
+          {isSending ? '전송 중...' : '전송'}
         </button>
       </div>
     </div>

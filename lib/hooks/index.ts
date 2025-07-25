@@ -1,53 +1,26 @@
-// 기존 훅들
-export { useApiQuery, useApiMutation } from './useApi';
-export { useCreateHelp } from './help/useCreateHelp';
-export { useHelpDetail } from './help/useHelpDetail';
-export { useLogin } from './useLogin';
-export { useAuth } from './useAuth';
-export { useAuthStore } from '../stores/authStore';
-export { useUserProfile } from './useUserProfile';
+// Auth 관련 hooks
+export * from './auth';
 
-// 온보딩 관련 훅들
-export { useOnboardingAuth } from './onboarding/useOnboardingAuth';
-export { useOnboardingData } from './onboarding/useOnboardingData';
+// User 관련 hooks
+export * from './user';
 
-// 헤더 관련 훅들
-export { useHeaderScroll } from './header/useHeaderScroll';
+// Score 관련 hooks
+export * from './score';
 
-// 푸터 관련 훅들
-export { useFooterNavigation } from './footer/useFooterNavigation';
+// Common 관련 hooks
+export * from './common';
 
-// 네비게이션 관련 훅들
-export { useNavigation } from './useNavigation';
+// Verification 관련 hooks
+export * from './verification';
 
-// 채팅 관련 훅들
-export { useChatRooms } from './chats/useChatRooms';
-export { useChatRoomsWithDetails } from './chats/useChatRoomsWithDetails';
-export { useChatMessages } from './chats/useChatMessages';
-export { useSendMessage } from './chats/useSendMessage';
-export { useRealtimeChat } from './chats/useRealtimeChat';
-export { useChatInput } from './chats/useChatInput';
-export { useChatRoomDetailWithHelps } from './chats/useChatRoomDetailWithHelps';
+// Help 관련 hooks
+export * from './help';
 
-// 회원 탈퇴 관련 훅들
-export { useWithdrawal } from './useWithdrawal';
+// Chat 관련 hooks
+export * from './chats';
 
-// 점수 관련 훅들
-export {
-  useUserScores,
-  useUserScoresByCategory,
-  useUserScoresBySeason,
-  useUserScoresByCategoryAndSeason,
-  useSeasonRankings,
-  useCategoryRankings,
-} from './useScore';
+// Review 관련 hooks
+export * from './review';
 
-// 리뷰 관련 훅들
-export { useReceivedReviews } from './review/useReceivedReviews';
-export { useWrittenReviews } from './review/useWrittenReviews';
-export { useCreateReview } from './review/useCreateReview';
-export { useReviewReceiver } from './review/useReviewReceiver';
-export { useUserReviewStats } from './review/useUserReviewStats';
-
-// 주니어 관련 훅들
-export { useJuniorAcceptedHelps } from './junior/useJuniorAcceptedHelps';
+// Ranking 관련 hooks
+export { useHallOfFameRanking } from './useGetRanking';

@@ -4,7 +4,50 @@ import { SbChatRoomRepository } from '@/backend/chats/chatrooms/infrastructures/
 import { SbCommonHelpRepository } from '@/backend/helps/infrastructures/repositories/SbCommonHelpRepository';
 import { SbHelpImageRepository } from '@/backend/images/infrastructures/repositories/SbHelpImageRepository';
 import { getNicknameFromCookie } from '@/lib/jwt';
-import { getSeniorInfoByUuid, getUuidByNickname } from '@/lib/getUserData';
+import { getUuidByNickname } from '@/lib/getUserData';
+import { supabase } from '@/backend/common/utils/supabaseClient';
+
+// 시니어 정보를 가져오는 함수 (닉네임, 이름, 프로필 이미지 URL 포함)
+async function getSeniorInfoByUuid(uuid: string): Promise<{
+  nickname: string;
+  name?: string;
+  profileImgUrl?: string;
+} | null> {
+  try {
+    if (!uuid || uuid.trim().length === 0) {
+      console.error('[getSeniorInfoByUuid] UUID가 비어있습니다.');
+      return null;
+    }
+
+    // Supabase에서 users 테이블의 id 컬럼으로 검색 (unique이므로 single 사용)
+    const { data, error } = await supabase
+      .from('users')
+      .select('nickname, name, profile_img_url')
+      .eq('id', uuid.trim())
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null;
+      }
+      console.error('[getSeniorInfoByUuid] Supabase 조회 오류:', error);
+      return null;
+    }
+
+    if (!data) {
+      return null;
+    }
+
+    return {
+      nickname: data.nickname,
+      name: data.name,
+      profileImgUrl: data.profile_img_url,
+    };
+  } catch (error) {
+    console.error('[getSeniorInfoByUuid] 예외 발생:', error);
+    return null;
+  }
+}
 
 interface ChatRoomWithDetails {
   chatRoomId: number;

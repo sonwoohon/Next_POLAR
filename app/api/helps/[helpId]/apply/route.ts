@@ -11,13 +11,17 @@ export async function POST(
 ) {
   try {
     const { helpId } = await params;
-    if (!helpId) return NextResponse.json({ error: 'helpId 필요' }, { status: 400 });
+    if (!helpId)
+      return NextResponse.json({ error: 'helpId 필요' }, { status: 400 });
 
     // JWT에서 사용자 닉네임 가져오기
     const userInfo = getNicknameFromCookie(request);
 
     if (!userInfo) {
-      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+      return NextResponse.json(
+        { error: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
     }
 
     const { nickname: juniorNickname } = userInfo;
@@ -25,13 +29,15 @@ export async function POST(
     // 닉네임으로 UUID 조회
     const juniorId = await getUuidByNickname(juniorNickname);
     if (!juniorId) {
-      return NextResponse.json({ error: '존재하지 않는 사용자입니다.' }, { status: 404 });
+      return NextResponse.json(
+        { error: '존재하지 않는 사용자입니다.' },
+        { status: 404 }
+      );
     }
 
     const repo = new SbHelpApplicantRepository();
     const usecase = new ApplyHelpUseCase(repo);
-    const applicant = await usecase.execute(helpId, juniorId);
-    console.log('applicant', applicant);
+    await usecase.execute(helpId, juniorId);
     // 응답 DTO
     const response: ApplyHelpResponseDto = {
       success: true,
@@ -45,16 +51,22 @@ export async function POST(
     // Error 객체인지 확인
     if (error instanceof Error) {
       if (error.message === '이미 지원한 헬프입니다.') {
-        return NextResponse.json({
-          success: false,
-          error: error.message
-        }, { status: 409 });
+        return NextResponse.json(
+          {
+            success: false,
+            error: error.message,
+          },
+          { status: 409 }
+        );
       }
     }
 
-    return NextResponse.json({
-      success: false,
-      error: '서버 오류'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: '서버 오류',
+      },
+      { status: 500 }
+    );
   }
-} 
+}

@@ -2,15 +2,17 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { QUERY_KEYS } from '../constants/api';
-
-
+import { QUERY_KEYS } from '@/lib/constants/api';
 
 export const useAuthRedirect = () => {
   const router = useRouter();
 
   // 사용자 정보 조회
-  const { data: user, isLoading, error } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: QUERY_KEYS.USERS,
     queryFn: async () => {
       const res = await axios.get('/api/users', { withCredentials: true });
@@ -35,4 +37,4 @@ export const useAuthRedirect = () => {
     error,
     isAuthenticated: !!user,
   };
-}; 
+};

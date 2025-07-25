@@ -83,7 +83,6 @@ export function getNicknameFromCookie(
     const accessToken = request.cookies.get('access-token')?.value;
 
     if (!accessToken) {
-      console.log('[JWT] access-token 쿠키가 없습니다.');
       return null;
     }
 
@@ -93,11 +92,9 @@ export function getNicknameFromCookie(
     const role = payload.role as string;
 
     if (!nickname) {
-      console.log('[JWT] 토큰에서 nickname을 찾을 수 없습니다.');
       return null;
     }
 
-    console.log(`[JWT] 토큰에서 추출한 닉네임: ${nickname}`);
     return { nickname, role };
   } catch (error: unknown) {
     // 에러 타입 검증

@@ -21,10 +21,6 @@ export class UpdateProfileImageUseCase {
     userId: string,
     imageUrl: string
   ): Promise<CommonUserEntity | null> {
-    console.log(
-      `[UseCase] 프로필 이미지 업데이트 시작 - 사용자 ID: ${userId}, 이미지 URL: ${imageUrl}`
-    );
-
     try {
       // 기존 사용자 정보 조회
       const existingUser = await this.userRepository.getUserById(userId);
@@ -47,11 +43,6 @@ export class UpdateProfileImageUseCase {
         existingUser.createdAt
       );
 
-      console.log(
-        `[UseCase] 업데이트할 사용자 정보 - ID: ${userId}`,
-        updatedUser.toJSON()
-      );
-
       // 사용자 정보 업데이트
       const result = await this.userRepository.updateUser(userId, updatedUser);
       if (!result) {
@@ -59,10 +50,6 @@ export class UpdateProfileImageUseCase {
         return null;
       }
 
-      console.log(
-        `[UseCase] 프로필 이미지 업데이트 성공 - ID: ${userId}`,
-        result.toJSON()
-      );
       return result;
     } catch (error) {
       console.error(

@@ -29,20 +29,10 @@ function normalizeCategoryIds(category: CategoryInput): number[] {
 
 // 카테고리 관계 생성 함수
 async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
-  console.log(
-    `[createHelpCategories] 서브카테고리 관계 생성 시작 - HelpId: ${helpId}, SubCategoryIds: ${JSON.stringify(
-      subCategoryIds
-    )}`
-  );
-
   const categoryData = subCategoryIds.map((subCategoryId) => ({
     help_id: helpId,
     sub_category_id: subCategoryId,
   }));
-
-  console.log(
-    `[createHelpCategories] 삽입할 데이터: ${JSON.stringify(categoryData)}`
-  );
 
   const { data, error } = await supabase
     .from('help_categories')
@@ -53,12 +43,6 @@ async function createHelpCategories(helpId: number, subCategoryIds: number[]) {
     console.error(`[createHelpCategories] 서브카테고리 관계 생성 실패:`, error);
     handleSupabaseError(error, '서브카테고리 관계 생성');
   }
-
-  console.log(
-    `[createHelpCategories] 서브카테고리 관계 생성 성공 - HelpId: ${helpId}, 삽입된 데이터: ${JSON.stringify(
-      data
-    )}`
-  );
 }
 
 // 카테고리 관계 삭제 함수
@@ -114,25 +98,11 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
 
     try {
       // 2. 카테고리 관계 생성
-      console.log(
-        `[SeniorHelpRepository] 카테고리 처리 시작 - 원본 category: ${JSON.stringify(
-          help.category
-        )}`
-      );
       const categoryIds = normalizeCategoryIds(help.category);
-      console.log(
-        `[SeniorHelpRepository] 정규화된 categoryIds: ${JSON.stringify(
-          categoryIds
-        )}`
-      );
       await createHelpCategories(helpId, categoryIds);
 
       // 3. 이미지 URL들이 있다면 help_images 테이블에 저장
       if (help.imageFiles && help.imageFiles.length > 0) {
-        console.log(
-          `[SeniorHelpRepository] 이미지 URL들 저장 시작 - HelpId: ${helpId}, 개수: ${help.imageFiles.length}`
-        );
-
         const imageRecords = help.imageFiles.map((imageUrl) => ({
           help_id: helpId,
           image_url: imageUrl,
@@ -154,13 +124,8 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
             `이미지 URL들 저장에 실패했습니다: ${imageError.message}`
           );
         }
-
-        console.log(
-          `[SeniorHelpRepository] 이미지 URL들 저장 성공 - HelpId: ${helpId}, 저장된 개수: ${help.imageFiles.length}`
-        );
       }
 
-      console.log(`[SeniorHelpRepository] Help 생성 완료 - HelpId: ${helpId}`);
       return helpId;
     } catch (error) {
       // 카테고리 관계 생성 또는 이미지 저장 실패 시 help도 삭제 (롤백)
@@ -171,7 +136,6 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
       try {
         await supabase.from('help_categories').delete().eq('help_id', helpId);
         await supabase.from('helps').delete().eq('id', helpId);
-        console.log(`[SeniorHelpRepository] 롤백 완료 - HelpId: ${helpId}`);
       } catch (rollbackError) {
         console.error(
           `[SeniorHelpRepository] 롤백 중 오류 - HelpId: ${helpId}`,
@@ -226,7 +190,9 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
     return true;
   }
 
-  async getHelpsBySeniorNickname(seniorNickname: string): Promise<CommonHelpEntity[] | null> {
+  async getHelpsBySeniorNickname(
+    seniorNickname: string
+  ): Promise<CommonHelpEntity[] | null> {
     try {
       // 1. 닉네임으로 UUID 조회
       const { data: userData, error: userError } = await supabase
@@ -241,7 +207,10 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
       }
 
       if (!userData) {
-        console.error('[SeniorHelpRepository] 사용자를 찾을 수 없습니다:', seniorNickname);
+        console.error(
+          '[SeniorHelpRepository] 사용자를 찾을 수 없습니다:',
+          seniorNickname
+        );
         return null;
       }
 
@@ -250,7 +219,8 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
       // 2. 시니어가 작성한 헬프 조회
       const { data: helpsData, error: helpsError } = await supabase
         .from('helps')
-        .select(`
+        .select(
+          `
           *,
           help_categories (
             sub_category_id,
@@ -268,7 +238,8 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
           help_images (
             image_url
           )
-        `)
+        `
+        )
         .eq('senior_id', seniorId)
         .order('created_at', { ascending: false });
 
@@ -283,10 +254,11 @@ export class SeniorHelpRepository implements ISeniorHelpRepositoryInterface {
 
       // 3. CommonHelpEntity로 변환
       const helps = helpsData.map((help: any) => {
-        const categories = help.help_categories?.map((hc: any) => ({
-          id: hc.sub_categories.id,
-          point: hc.sub_categories.point
-        })) || [];
+        const categories =
+          help.help_categories?.map((hc: any) => ({
+            id: hc.sub_categories.id,
+            point: hc.sub_categories.point,
+          })) || [];
 
         return new CommonHelpEntity(
           help.id,

@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  console.log(
-    `[Middleware] 요청 경로: ${request.nextUrl.pathname}, 메서드: ${request.method}`
-  );
-
   // API 라우트에 대한 CORS 처리
   if (request.nextUrl.pathname.startsWith('/api/')) {
-    console.log(`[Middleware] API 라우트 감지: ${request.nextUrl.pathname}`);
-
     // OPTIONS 요청 처리 (preflight)
     if (request.method === 'OPTIONS') {
-      console.log('[Middleware] OPTIONS 요청 처리 (preflight)');
       return new NextResponse(null, {
         status: 200,
         headers: {
@@ -25,8 +18,6 @@ export function middleware(request: NextRequest) {
       });
     }
 
-    // 실제 요청에 대한 CORS 헤더 추가
-    console.log(`[Middleware] ${request.method} 요청에 CORS 헤더 추가`);
     const response = NextResponse.next();
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set(
@@ -42,7 +33,6 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  console.log(`[Middleware] API 라우트가 아님: ${request.nextUrl.pathname}`);
   return NextResponse.next();
 }
 

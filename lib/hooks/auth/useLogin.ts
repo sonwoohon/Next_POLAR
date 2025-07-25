@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginApi } from '../api/auth.api';
-import { useAuthStore } from '../stores/authStore';
+import { loginApi } from '@/lib/api/auth.api';
+import { useAuthStore } from '@/lib/stores/authStore';
 
 interface LoginCredentials {
   loginId: string;
