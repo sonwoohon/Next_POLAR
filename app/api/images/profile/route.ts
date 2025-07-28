@@ -9,8 +9,6 @@ import { getNicknameFromCookie } from '@/lib/jwt';
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<{ url: string } | { error: string }>> {
-  console.log('[API] POST /api/images/profile 호출됨');
-
   try {
     // 사용자 인증 - 쿠키에서 nickname 추출
     const userData = getNicknameFromCookie(request);
@@ -23,17 +21,6 @@ export async function POST(
     }
 
     const formData = await request.formData();
-
-    // FormData 전체 내용 로깅
-    console.log('[API] FormData 전체 내용:');
-    for (const [key, value] of formData.entries()) {
-      console.log(`  ${key}:`, value);
-      if (value instanceof File) {
-        console.log(`    - 파일명: ${value.name}`);
-        console.log(`    - 크기: ${value.size} bytes`);
-        console.log(`    - 타입: ${value.type}`);
-      }
-    }
 
     // 여러 가능한 파일 필드명을 시도
     const possibleFileKeys = [
@@ -49,7 +36,6 @@ export async function POST(
       const value = formData.get(key);
       if (value instanceof File) {
         file = value;
-        console.log(`[API] 파일을 찾았습니다 - 키: ${key}`);
         break;
       }
     }
@@ -62,19 +48,12 @@ export async function POST(
       );
     }
 
-    console.log(`[API] 프로필 이미지 업로드 시작 - 사용자: ${nickname}`);
-
     // 1. 기존 프로필 이미지 삭제
     const userRepository = new SbUserRepository();
     const user = await userRepository.getUserByNickname(nickname);
     if (user && user.profileImgUrl && user.profileImgUrl.trim() !== '') {
-      console.log(
-        `[API] 기존 프로필 이미지 삭제 시작 - URL: ${user.profileImgUrl}`
-      );
-
       const imageRepository = new SbImageRepository();
       await imageRepository.deleteImage(user.profileImgUrl, 'profile-images');
-      console.log('[API] 기존 프로필 이미지 삭제 완료');
     }
 
     // 2. 새 이미지 업로드
@@ -92,7 +71,6 @@ export async function POST(
 
     // 3. 사용자 테이블에 프로필 이미지 URL 업데이트
     if (user) {
-      console.log(`[API] 업데이트할 프로필 이미지 URL: ${result.url}`);
       const userUseCase = new CommonUserUseCase(userRepository);
       const updatedUser = await userUseCase.updateUserProfile(user.id, {
         profile_img_url: result.url,
@@ -107,10 +85,6 @@ export async function POST(
       }
     }
 
-    console.log(
-      '[API] 프로필 이미지 업로드 및 사용자 정보 업데이트 성공:',
-      result.url
-    );
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error('[API] 프로필 이미지 업로드 중 오류 발생:', error);
@@ -125,8 +99,6 @@ export async function POST(
 export async function DELETE(
   request: NextRequest
 ): Promise<NextResponse<{ success: boolean } | { error: string }>> {
-  console.log('[API] DELETE /api/images/profile 호출됨');
-
   try {
     // 사용자 인증 - 쿠키에서 nickname 추출
     const userData = getNicknameFromCookie(request);
@@ -137,8 +109,6 @@ export async function DELETE(
         { status: 401 }
       );
     }
-
-    console.log(`[API] 프로필 이미지 삭제 시작 - 사용자: ${nickname}`);
 
     // 1. 사용자 정보 조회
     const userRepository = new SbUserRepository();
@@ -152,13 +122,8 @@ export async function DELETE(
 
     // 2. 기존 프로필 이미지가 있는 경우 삭제
     if (user.profileImgUrl && user.profileImgUrl.trim() !== '') {
-      console.log(
-        `[API] 기존 프로필 이미지 삭제 시작 - URL: ${user.profileImgUrl}`
-      );
-
       const imageRepository = new SbImageRepository();
       await imageRepository.deleteImage(user.profileImgUrl, 'profile-images');
-      console.log('[API] 기존 프로필 이미지 삭제 완료');
     }
 
     // 3. 사용자 테이블에서 프로필 이미지 URL 제거
@@ -175,7 +140,6 @@ export async function DELETE(
       );
     }
 
-    console.log('[API] 프로필 이미지 삭제 성공');
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: unknown) {
     console.error('[API] 프로필 이미지 삭제 중 오류 발생:', error);

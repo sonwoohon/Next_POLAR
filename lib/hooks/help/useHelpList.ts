@@ -34,8 +34,6 @@ export const useHelpListByDate = (date: Date | null) => {
       }
     : undefined;
 
-  console.log('[Hook] useHelpListByDate 호출:', { date, filter });
-
   return useQuery({
     queryKey: ['helps', 'list', 'date', date?.toISOString().split('T')[0]],
     queryFn: () => getHelpList(filter),
@@ -62,13 +60,6 @@ export const useHelpListByCategory = (
         subCategoryIds: subCategoryIds?.filter((id) => id !== 0),
       }
     : undefined;
-
-  console.log('[Hook] useHelpListByCategory 호출:', {
-    categoryIds,
-    subCategoryIds,
-    filter,
-    hasCategoryFilter,
-  });
 
   return useQuery({
     queryKey: ['helps', 'list', 'category', categoryIds, subCategoryIds],

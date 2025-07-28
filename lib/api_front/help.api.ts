@@ -81,19 +81,7 @@ export const getHelpList = async (
       params.toString() ? `?${params.toString()}` : ''
     }`;
 
-    console.log('[API] getHelpList 호출:', {
-      filter,
-      url,
-      params: params.toString(),
-    });
-
     const response = await apiClient.get<HelpListResponseDto[]>(url);
-
-    console.log('[API] getHelpList 응답:', {
-      status: response.status,
-      dataLength: response.data?.length || 0,
-      data: response.data,
-    });
 
     return response.data;
   } catch (error) {

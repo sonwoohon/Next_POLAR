@@ -1,7 +1,7 @@
 import { API_ENDPOINTS } from '../constants/api';
 import apiClient from '../http.api';
 import { UserProfileResponseDto } from '@/backend/common/dtos/UserDto';
-import { ApiResponse } from '../http.api';
+import { ApiResponse } from '../models/common/ApiDto';
 
 // 프로필 업데이트 요청 타입
 export interface ProfileUpdateRequest {
@@ -21,7 +21,9 @@ export interface ProfileImageUpdateResponse {
 }
 
 // 프로필 정보 조회
-export const getUserProfileForUpdate = async (nickname: string): Promise<UserProfileResponseDto> => {
+export const getUserProfileForUpdate = async (
+  nickname: string
+): Promise<UserProfileResponseDto> => {
   const response = await apiClient.get<ApiResponse<UserProfileResponseDto>>(
     API_ENDPOINTS.USER_PROFILE(nickname)
   );
@@ -61,11 +63,9 @@ export const updateUserProfileImage = async (
 };
 
 // 프로필 이미지 삭제
-export const deleteUserProfileImage = async (nickname: string): Promise<void> => {
-  console.log(nickname);
-  await apiClient.delete(
-    API_ENDPOINTS.PROFILE_IMAGE
-  );
+export const deleteUserProfileImage = async (): Promise<string> => {
+  const response = await apiClient.delete(API_ENDPOINTS.PROFILE_IMAGE);
+  return response.data;
 };
 
 // 비밀번호 변경
@@ -77,4 +77,4 @@ export const changeUserPassword = async (
     API_ENDPOINTS.USER_PASSWORD_CHANGE(nickname),
     passwordData
   );
-}; 
+};

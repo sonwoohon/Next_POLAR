@@ -5,8 +5,7 @@ import { WithdrawalRequestDto } from '@/backend/users/withdrawal/applications/dt
 
 export async function POST(req: NextRequest) {
   try {
-
-    const { userId, confirmPassword, reason }: WithdrawalRequestDto = await req.json();
+    const { userId, confirmPassword }: WithdrawalRequestDto = await req.json();
 
     // 비밀번호 확인 로직 (실제 구현에서는 사용자 비밀번호와 비교)
     if (!confirmPassword) {
@@ -14,11 +13,6 @@ export async function POST(req: NextRequest) {
         { success: false, error: '비밀번호 확인이 필요합니다.' },
         { status: 400 }
       );
-    }
-
-    // 탈퇴 사유 로그 (선택사항)
-    if (reason) {
-      console.log(`회원 탈퇴 사유: ${reason}`);
     }
 
     const userRepository = new SbWithdrawalUserRepository();

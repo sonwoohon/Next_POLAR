@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GetHelpImagesUseCase, UploadHelpImagesUseCase, DeleteAllHelpImagesUseCase } from '@/backend/images/applications/usecases/HelpImageUseCase';
+import {
+  GetHelpImagesUseCase,
+  UploadHelpImagesUseCase,
+  DeleteAllHelpImagesUseCase,
+} from '@/backend/images/applications/usecases/HelpImageUseCase';
 import { SbHelpImageRepository } from '@/backend/images/infrastructures/repositories/SbHelpImageRepository';
 import { SbImageRepository } from '@/backend/images/infrastructures/repositories/SbImageRepository';
 
@@ -9,7 +13,6 @@ export async function GET(
   { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ images: string[] } | { error: string }>> {
   const { helpId: helpIdParam } = await params;
-  console.log(`[API] GET /api/images/help/${helpIdParam} 호출됨`);
 
   try {
     const helpId = parseInt(helpIdParam);
@@ -26,7 +29,6 @@ export async function GET(
 
     const result = await getHelpImagesUseCase.execute(helpId);
 
-    console.log(`[API] 헬프 ${helpId} 이미지 리스트 조회 성공`);
     return NextResponse.json(result, { status: 200 });
   } catch (error: unknown) {
     console.error('[API] 헬프 이미지 리스트 조회 중 오류 발생:', error);
@@ -43,7 +45,6 @@ export async function POST(
   { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ urls: string[] } | { error: string }>> {
   const { helpId: helpIdParam } = await params;
-  console.log(`[API] POST /api/images/help/${helpIdParam} 호출됨`);
 
   try {
     const helpId = parseInt(helpIdParam);
@@ -83,15 +84,15 @@ export async function POST(
       );
     }
 
-    console.log(`[API] 헬프 이미지 업로드 시작 - HelpId: ${helpId}, 파일 개수: ${files.length}`);
-
     const imageRepository = new SbImageRepository();
     const helpImageRepository = new SbHelpImageRepository();
-    const uploadHelpImagesUseCase = new UploadHelpImagesUseCase(imageRepository, helpImageRepository);
+    const uploadHelpImagesUseCase = new UploadHelpImagesUseCase(
+      imageRepository,
+      helpImageRepository
+    );
 
     const result = await uploadHelpImagesUseCase.execute(files, helpId);
 
-    console.log(`[API] 헬프 이미지 업로드 성공 - 업로드된 파일 개수: ${result.urls.length}`);
     return NextResponse.json(result, { status: 201 });
   } catch (error: unknown) {
     console.error('[API] 헬프 이미지 업로드 중 오류 발생:', error);
@@ -108,7 +109,6 @@ export async function DELETE(
   { params }: { params: Promise<{ helpId: string }> }
 ): Promise<NextResponse<{ success: boolean } | { error: string }>> {
   const { helpId: helpIdParam } = await params;
-  console.log(`[API] DELETE /api/images/help/${helpIdParam} 호출됨`);
 
   try {
     const helpId = parseInt(helpIdParam);
@@ -120,19 +120,18 @@ export async function DELETE(
       );
     }
 
-    console.log(`[API] 헬프의 모든 이미지 삭제 시작 - HelpId: ${helpId}`);
-
     const helpImageRepository = new SbHelpImageRepository();
     const imageRepository = new SbImageRepository();
-    const deleteAllHelpImagesUseCase = new DeleteAllHelpImagesUseCase(helpImageRepository, imageRepository);
+    const deleteAllHelpImagesUseCase = new DeleteAllHelpImagesUseCase(
+      helpImageRepository,
+      imageRepository
+    );
 
     const success = await deleteAllHelpImagesUseCase.execute(helpId);
 
     if (success) {
-      console.log(`[API] 헬프의 모든 이미지 삭제 성공 - HelpId: ${helpId}`);
       return NextResponse.json({ success: true }, { status: 200 });
     } else {
-      console.log(`[API] 헬프의 모든 이미지 삭제 실패 - HelpId: ${helpId}`);
       return NextResponse.json(
         { error: '이미지 삭제에 실패했습니다.' },
         { status: 500 }
@@ -145,4 +144,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}

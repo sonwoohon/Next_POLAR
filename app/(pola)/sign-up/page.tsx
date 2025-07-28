@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { SignUpDto } from '@/backend/users/signup/applications/dtos/SignUpDto';
 import DaumPostcode, { Address } from 'react-daum-postcode';
 import { useState, useRef, useEffect } from 'react';
-import { useSignup } from '@/lib/hooks/useSignup';
+import { useSignup } from '@/lib/hooks';
 import styles from './_styles/signUp.module.css';
 
 interface SignupFormData extends SignUpDto {
@@ -21,13 +21,11 @@ const SignupPage: React.FC = () => {
   const signupMutation = useSignup();
 
   const signupSubmitHandler: SubmitHandler<SignupFormData> = (data) => {
-    // 비밀번호 확인 검증
     if (data.password !== data.passwordConfirm) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    // 필수 필드 검증
     if (
       !data.name ||
       !data.phone_number ||
@@ -39,7 +37,6 @@ const SignupPage: React.FC = () => {
       return;
     }
 
-    // SignUpDto 형식으로 변환
     const signupData: SignUpDto = {
       name: data.name,
       nickname: '', // 서버에서 자동 생성
@@ -50,7 +47,6 @@ const SignupPage: React.FC = () => {
       address: data.address,
     };
 
-    // 회원가입 API 호출
     signupMutation.mutate(signupData);
   };
 
@@ -60,7 +56,7 @@ const SignupPage: React.FC = () => {
 
   const handleComplete = (data: Address) => {
     setAddressValue(data.address);
-    setValue('address', data.address); // react-hook-form 값도 동기화
+    setValue('address', data.address);
     setIsAddressOpen(false);
   };
 

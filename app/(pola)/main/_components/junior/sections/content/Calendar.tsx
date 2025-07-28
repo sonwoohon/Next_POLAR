@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import styles from './Calendar.module.css';
 import Calendar from 'react-calendar';
 import { HelpResponseDto } from '@/backend/helps/applications/dtos/HelpDTO';
+import { getBigCategoryById } from '@/lib/utils/categoryUtils';
 
 interface CalendarProps {
   year: number;
@@ -13,8 +14,6 @@ interface CalendarProps {
   onDateClick?: (date: Date) => void;
   selectedDate?: Date;
 }
-
-import { getBigCategory } from '@/lib/utils/categoryUtils';
 
 // Big Category 색상 매핑
 const getBigCategoryColor = (bigCategory: string): string => {
@@ -68,15 +67,15 @@ export default function CustomCalendar({
           <div className={styles.tileContent}>
             {dayHelps.slice(0, 5).map((help) => {
               const categoryId = help.category[0]?.id || 0;
-              const bigCategory = getBigCategory(categoryId);
-              const color = getBigCategoryColor(bigCategory);
+              const bigCategory = getBigCategoryById(categoryId);
+              const color = getBigCategoryColor(bigCategory?.name || '');
 
               return (
                 <div
                   key={help.id}
                   className={styles.categoryDot}
                   style={{ backgroundColor: color }}
-                  title={`${help.title} (${bigCategory})`}
+                  title={`${help.title} (${bigCategory?.name})`}
                 />
               );
             })}

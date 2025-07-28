@@ -15,10 +15,6 @@ export async function GET(
   const { chatRoomId } = await params;
   const roomId = Number(chatRoomId);
 
-  console.log('[API][GET /api/chats/rooms/[chatRoomId]/messages] 요청 시작:', {
-    roomId,
-  });
-
   if (!roomId) {
     console.warn(
       '[API][GET /api/chats/rooms/[chatRoomId]/messages] chatRoomId 파라미터 누락'
@@ -30,8 +26,7 @@ export async function GET(
   }
 
   // 쿠키에서 사용자 ID 가져오기
-  const userData = getNicknameFromCookie(request);
-  const { nickname } = userData || {};
+  const { nickname } = getNicknameFromCookie(request) || {};
 
   if (!nickname) {
     console.warn(
@@ -43,14 +38,6 @@ export async function GET(
   try {
     // 닉네임 기반으로 메시지 조회 (이미 닉네임이 포함된 응답)
     const result = await messageUseCases.getMessagesByContactRoomId(roomId);
-
-    console.log(
-      '[API][GET /api/chats/rooms/[chatRoomId]/messages] 메시지 조회 성공:',
-      {
-        roomId,
-        count: result.messages.length,
-      }
-    );
 
     return NextResponse.json(
       {
@@ -77,10 +64,6 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ chatRoomId: string }> }
 ) {
-  console.log(
-    '[API][POST /api/chats/rooms/[chatRoomId]/messages] 메시지 생성 요청 시작'
-  );
-
   // 쿠키에서 사용자 ID 가져오기
   const userData = getNicknameFromCookie(request);
   const { nickname: senderNickname } = userData || {};
@@ -90,15 +73,6 @@ export async function POST(
 
   try {
     const { message } = await request.json();
-
-    console.log(
-      '[API][POST /api/chats/rooms/[chatRoomId]/messages] 요청 데이터:',
-      {
-        message,
-        roomId,
-        senderNickname,
-      }
-    );
 
     if (!message) {
       console.warn(
@@ -119,10 +93,6 @@ export async function POST(
         { status: 404 }
       );
     }
-
-    console.log(
-      '[API][POST /api/chats/rooms/[chatRoomId]/messages] 메시지 생성 시작...'
-    );
 
     // 닉네임 기반으로 메시지 생성
     const created = await messageUseCases.createMessageByNickname(
